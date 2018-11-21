@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">module_lock</string>
+    <string name="title_lock">锁列表</string>
+</resources>

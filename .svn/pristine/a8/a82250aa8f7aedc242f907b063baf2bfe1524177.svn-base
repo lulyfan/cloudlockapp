@@ -1,0 +1,53 @@
+if (!isBuildLoginModule.toBoolean()){
+    apply plugin: 'com.android.application'
+}else{
+    apply plugin: 'com.android.library'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+
+
+    defaultConfig {
+        if (!isBuildLoginModule.toBoolean()) {
+            applicationId "com.ut.module_login"
+        }
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    if (isBuildLoginModule.toBoolean()) {
+        compileOnly project(':base')
+    } else {
+        implementation project(':base')
+    }
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha1'
+}

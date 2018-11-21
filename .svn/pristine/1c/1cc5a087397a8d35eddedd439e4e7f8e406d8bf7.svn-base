@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.ut.cloudlock"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        signkey {
+            keyAlias 'utwl'
+            keyPassword 'utwl2018'
+            storeFile file('../utwl.jks')
+            storePassword 'utwl2018'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signkey
+        }
+
+
+        debug {
+//            signingConfig signingConfigs.signkey
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':base')
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+//    if (isBuildLoginModule.toBoolean()) {
+//        implementation project(':module_login')
+//    }
+    if (isBuildLockModule.toBoolean()) {
+        implementation project(':module_lock')
+    }
+    if (isBuildMallModule.toBoolean()) {
+        implementation project(':module_mall')
+    }
+    if (isBuildMineModule.toBoolean()) {
+        implementation project(':module_mine')
+    }
+    if (isBuildMsgModule.toBoolean()) {
+        implementation project(':module_msg')
+    }
+}
