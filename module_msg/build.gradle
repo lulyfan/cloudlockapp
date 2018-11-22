@@ -28,19 +28,19 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
-//    sourceSets {
-//        main {
-////            if (!isBuildMsgModule.toBoolean()) {
-////                manifest.srcFile 'src/debug/AndroidManifest.xml'
-////            } else {
-//                manifest.srcFile 'src/main/AndroidManifest.xml'
-//                java {
-//                    //全部Module一起编译的时候剔除debug目录
-//                    exclude '**/debug/**'
-//                }
-////            }
-//        }
-//    }
+    sourceSets {
+        main {
+            if (!isBuildMsgModule.toBoolean()) {
+                manifest.srcFile 'src/debug/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                java {
+                    //全部Module一起编译的时候剔除debug目录
+                    exclude '/debug/**'
+                }
+            }
+        }
+    }
 
     dataBinding {
         enabled = true

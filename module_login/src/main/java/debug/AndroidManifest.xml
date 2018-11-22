@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ut.module_login">
+          package="com.ut.module_login">
 
     <application
         android:name="com.ut.base.BaseApplication"
@@ -12,12 +12,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN"/>
 
-            <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.RegisterActivity"/>
         <activity android:name=".ui.ForgetPasswordActivity"/>
         <activity android:name=".ui.SelectCountryActivity"/>
     </application>

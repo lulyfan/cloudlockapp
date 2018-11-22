@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         if (!isBuildMallModule.toBoolean()) {
-            applicationId "com.ut.module_login"
+            applicationId "com.ut.module_mall"
         }
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
