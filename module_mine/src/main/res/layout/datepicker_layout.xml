@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.aigestudio.wheelpicker.widgets.WheelYearPicker
+        android:id="@+id/wheelYearPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/wheelMonthPicker"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:wheel_atmospheric="true"
+        app:wheel_indicator="true"
+        app:wheel_indicator_color="@android:color/darker_gray"
+        app:wheel_indicator_size="1dp"
+        app:wheel_item_space="8dp"
+        app:wheel_item_text_size="20sp"
+        app:wheel_curved="true"
+        app:wheel_visible_item_count="9"
+        app:wheel_selected_item_text_color="@android:color/black"
+        app:wheel_item_align="center"/>
+
+    <com.aigestudio.wheelpicker.WheelPicker
+        android:id="@+id/wheelMonthPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/wheelYearPicker"
+        app:layout_constraintEnd_toStartOf="@+id/wheelDayPicker"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/wheelYearPicker"
+        app:layout_constraintTop_toTopOf="@+id/wheelYearPicker"
+        app:wheel_atmospheric="true"
+        app:wheel_indicator="true"
+        app:wheel_indicator_color="@android:color/darker_gray"
+        app:wheel_indicator_size="1dp"
+        app:wheel_item_space="8dp"
+        app:wheel_item_text_size="20sp"
+        app:wheel_curved="true"
+        app:wheel_visible_item_count="9"
+        app:wheel_selected_item_text_color="@android:color/black" />
+
+    <com.aigestudio.wheelpicker.WheelPicker
+        android:id="@+id/wheelDayPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/wheelMonthPicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/wheelMonthPicker"
+        app:layout_constraintTop_toTopOf="@+id/wheelMonthPicker"
+        app:wheel_atmospheric="true"
+        app:wheel_indicator="true"
+        app:wheel_indicator_color="@android:color/darker_gray"
+        app:wheel_indicator_size="1dp"
+        app:wheel_item_space="8dp"
+        app:wheel_item_text_size="20sp"
+        app:wheel_curved="true"
+        app:wheel_visible_item_count="9"
+        app:wheel_selected_item_text_color="@android:color/black"
+        app:wheel_item_align="center"/>
+
+</android.support.constraint.ConstraintLayout>

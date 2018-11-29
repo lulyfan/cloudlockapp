@@ -68,4 +68,7 @@ dependencies {
         implementation project(':base')
     }
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+
+    implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
 }

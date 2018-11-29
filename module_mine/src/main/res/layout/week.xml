@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RadioButton
+        android:id="@+id/sunday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/select_weekend"
+        android:button="@null"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="日"
+        android:textColor="@drawable/select_weekend_text" />
+
+    <RadioButton
+        android:id="@+id/monday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_week"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="一"
+        android:button="@null"
+        android:textColor="@drawable/select_week_text" />
+
+    <RadioButton
+        android:id="@+id/tuesday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_week"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="二"
+        android:button="@null"
+        android:textColor="@drawable/select_week_text" />
+
+    <RadioButton
+        android:id="@+id/wednessday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_week"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="三"
+        android:button="@null"
+        android:textColor="@drawable/select_week_text" />
+
+    <RadioButton
+        android:id="@+id/thursday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_week"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="四"
+        android:button="@null"
+        android:textColor="@drawable/select_week_text" />
+
+    <RadioButton
+        android:id="@+id/friday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_week"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="五"
+        android:button="@null"
+        android:textColor="@drawable/select_week_text" />
+
+    <RadioButton
+        android:id="@+id/saturday"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/select_weekend"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="六"
+        android:button="@null"
+        android:textColor="@drawable/select_weekend_text"
+        android:layout_marginRight="8dp"/>
+
+</RadioGroup>
