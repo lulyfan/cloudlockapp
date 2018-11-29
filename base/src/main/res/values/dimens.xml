@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="base_17sp">17sp</dimen>
+    <dimen name="base_20dp">20dp</dimen>
+    <dimen name="base_10dp">10dp</dimen>
+    <dimen name="base_35dp">35dp</dimen>
+    <dimen name="base_44dp">44dp</dimen>
+    <dimen name="base_79dp">79dp</dimen>
+</resources>

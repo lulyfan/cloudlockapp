@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_home"
-        android:icon="@mipmap/index"
+        android:icon="@mipmap/icon_home"
         android:title="@string/bottom_title_home"/>
     <item
         android:id="@+id/action_msg"
-        android:icon="@mipmap/index"
+        android:icon="@mipmap/icon_msg"
         android:title="@string/bottom_title_msg"/>
     <item
         android:id="@+id/action_mall"
-        android:icon="@mipmap/index"
+        android:icon="@mipmap/icon_mall"
         android:title="@string/bottom_title_mall"/>
     <item
         android:id="@+id/action_mime"
-        android:icon="@mipmap/index"
+        android:icon="@mipmap/icon_mime"
         android:title="@string/bottom_title_mime"/>
 </menu>

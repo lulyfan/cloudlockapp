@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="lockKey"
+            type="com.ut.module_lock.entity.LockKey"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/lock_10dp"
+        app:cardCornerRadius="@dimen/lock_10dp"
+        app:cardElevation="@dimen/lock_6dp"
+        app:cardPreventCornerOverlap="false"
+        tools:context=".MainActivity">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/lock_20dp"
+            >
+            <!--android:src="@mipmap/icon_user_manager"-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:imgSrc="@{lockKey.userType}"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_lock_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lock_30dp"
+                android:ellipsize="end"
+                android:maxEms="11"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@{lockKey.name}"
+                android:textSize="@dimen/lock_17sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_lock_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lock_20dp"
+                android:text="@{lockKey.statusStr}"
+                android:textColor="@{lockKey.status == 0 ? @color/lock_color_tv_normal: @color/lock_color_tv_red}"
+                android:textSize="@dimen/lock_14sp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lock_name"/>
+
+            <TextView
+                android:id="@+id/tv_lock_type"
+                style="@style/ItemLockListBottomTV"
+                android:drawableLeft="@mipmap/icon_bluetooth"
+                android:text="@{lockKey.lockTypeStr}"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lock_status"
+                />
+
+            <TextView
+                android:id="@+id/tv_key_type"
+                style="@style/ItemLockListBottomTV.LeftMargin"
+                android:drawableLeft="@mipmap/icon_key"
+                android:text="@{lockKey.keyTypeStr}"
+                app:layout_constraintStart_toEndOf="@+id/tv_lock_type"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lock_status"
+                />
+
+            <TextView
+                android:id="@+id/tv_electricity"
+                style="@style/ItemLockListBottomTV.LeftMargin"
+                android:drawableLeft="@mipmap/icon_electricity"
+                android:text="@{lockKey.electricityStr}"
+                app:layout_constraintStart_toEndOf="@+id/tv_key_type"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lock_status"
+                />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+
+</layout>

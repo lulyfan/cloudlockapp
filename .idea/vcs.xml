@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/unilink-release" vcs="svn" />
   </component>
 </project>

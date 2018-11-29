@@ -9,4 +9,6 @@ import com.ut.base.BaseApplication;
  * version: 1.0
  */
 public class MyApplication extends BaseApplication {
+
+
 }

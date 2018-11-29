@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.SetNameActivity">
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/toolbar_white"/>
+
+        <com.ut.commoncomponent.ClearEditText
+            android:id="@+id/clearEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/lock_20dp"
+            android:layout_marginTop="@dimen/lock_20dp"
+            android:layout_marginEnd="@dimen/lock_20dp"
+            android:background="@drawable/bg_edt"
+            android:drawableLeft="@drawable/ic_lockname_drawableleft"
+            android:drawablePadding="@dimen/lock_20dp"
+            android:gravity="center_vertical"
+            android:hint="@string/lock_hint_set_name"
+            android:paddingLeft="@dimen/lock_23sp"
+            android:paddingTop="@dimen/lock_17dp"
+            android:paddingRight="@dimen/lock_23dp"
+            android:paddingBottom="@dimen/lock_17dp"
+            android:singleLine="true"
+            android:textColor="@color/color_base_title"
+            android:textSize="@dimen/lock_14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"/>
+
+        <Button
+            android:id="@+id/btn_setName_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/lock_20dp"
+            android:layout_marginTop="@dimen/lock_30dp"
+            android:layout_marginEnd="@dimen/lock_20dp"
+            android:background="@drawable/bg_btn"
+            android:enabled="false"
+            android:maxLength="20"
+            android:onClick="onXmlClick"
+            android:text="@string/lock_btn_confirm"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/lock_17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clearEditText"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

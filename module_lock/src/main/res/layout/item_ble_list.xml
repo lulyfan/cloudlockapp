@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/lock_20dp"
+    android:paddingTop="@dimen/lock_20dp"
+    android:paddingRight="@dimen/lock_20dp"
+    android:paddingBottom="@dimen/lock_20dp">
+
+    <TextView
+        android:id="@+id/tv_ble_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/icon_lock_focuse"
+        android:drawablePadding="@dimen/lock_20dp"
+        android:gravity="center_vertical"
+        android:text="123854"
+        android:textColor="@color/color_base_title"
+        android:textSize="@dimen/lock_17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/iBtn_ble_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@mipmap/icon_add_light"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ble_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_ble_name"/>
+</android.support.constraint.ConstraintLayout>

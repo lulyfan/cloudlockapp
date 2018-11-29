@@ -1,6 +1,7 @@
 package com.ut.base;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -13,10 +14,17 @@ import com.orhanobut.logger.Logger;
  * version: 1.0
  */
 public class BaseApplication extends Application {
+    private static Context INSTANCE = null;
+
+    public static Context getAppContext() {
+        return INSTANCE;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        INSTANCE = this;
 
         //初始化Arouter
         initARouter();

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.NearLockActivity">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar_white"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lock_0_5dp"
+            android:background="@color/lock_color_btn_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/include"/>
+
+        <ListView
+            android:id="@+id/lv_ble_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/lock_color_btn_gray"
+            android:dividerHeight="@dimen/lock_0_5dp"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lock_0_5dp"
+            android:background="@color/lock_color_btn_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/lv_ble_device"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

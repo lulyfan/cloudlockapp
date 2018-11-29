@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorBackgroud"/>
+        </shape>
+    </item>
+    <item>
+        <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+                android:gravity="top"
+                android:src="@mipmap/bg_lock_main"
+                android:tileMode="disabled">
+        </bitmap>
+    </item>
+
+</layer-list>

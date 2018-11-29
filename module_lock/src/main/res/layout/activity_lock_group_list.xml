@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_lock_group_list"
+    android:paddingTop="@dimen/lock_35dp">
+
+    <TextView
+        android:id="@+id/lock_tv_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:drawableRight="@mipmap/icon_up_arrow_black"
+        android:drawablePadding="@dimen/lock_10dp"
+        android:focusable="true"
+        android:maxLength="6"
+        android:text="@string/lock_group_all"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/lock_23sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ListView
+        android:id="@+id/lv_group_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="@dimen/lock_20dp"
+        android:paddingRight="@dimen/lock_20dp"
+        android:divider="@color/lock_color_btn_gray"
+        android:dividerHeight="@dimen/lock_0_5dp"
+        app:layout_constraintTop_toBottomOf="@+id/lock_tv_group">
+
+    </ListView>
+
+</android.support.constraint.ConstraintLayout>

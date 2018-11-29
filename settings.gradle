@@ -1,1 +1,1 @@
-include ':app', ':base', ':module_login', ':commoncomponent', ':module_lock', ':module_msg', ':module_mall', ':module_mine'
+include ':app', ':base', ':module_login', ':commoncomponent', ':module_lock', ':module_msg', ':module_mall', ':module_mine', ':unilink-release'

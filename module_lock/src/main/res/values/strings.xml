@@ -1,4 +1,42 @@
 <resources>
     <string name="app_name">module_lock</string>
     <string name="title_lock">锁列表</string>
+
+    <string name="lock_group_all">全部分组</string>
+    <string name="lock_search">搜索</string>
+    <string name="lock_item_empty_tip_click">点击右上角的</string>
+    <string name="lock_item_empty_tip_add">添加设备</string>
+
+    <string name="lock_title_add_guide">添加智能锁</string>
+    <string name="lock_add_guide_content1">确定手机蓝牙、手机网络保持打开状态;</string>
+    <string name="lock_add_guide_content2">唤醒设备，确保指示灯处于闪烁状态;</string>
+    <string name="lock_add_guide_content3">点击下一步，手机自动搜索设备，距离最近信号最强的为当前设备;</string>
+    <string name="lock_add_guide_content4">点击列表绑定设备;</string>
+    <string name="lock_add_guide_btn_next">下一步</string>
+
+    <string name="lock_title_near_lock">附近的锁</string>
+    <string name="lock_title_set_name">设置名称</string>
+    <string name="lock_hint_set_name">请输入1-20位中文、字母或数字</string>
+
+    <string name="lock_group_current">当前分组</string>
+
+    <string name="lock_btn_confirm">确定</string>
+
+    <string-array name="lock_type">
+        <item>蓝牙门锁</item>
+    </string-array>
+
+    <string-array name="key_type">
+        <item>永久钥匙</item>
+        <item>限时钥匙</item>
+        <item>单次钥匙</item>
+        <item>循环钥匙</item>
+    </string-array>
+
+    <string-array name="key_status">
+        <item>正常</item>
+        <item>已冻结</item>
+        <item>已过期</item>
+        <item>已失效</item>
+    </string-array>
 </resources>

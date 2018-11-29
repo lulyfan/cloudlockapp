@@ -1,11 +1,33 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="ItemLockListBottomTV">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/lock_30dp</item>
+        <item name="android:drawablePadding">@dimen/lock_6dp</item>
+        <item name="android:textSize">@dimen/lock_12sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
+    <style name="ItemLockListBottomTV.LeftMargin">
+        <item name="android:layout_marginLeft">@dimen/lock_15dp</item>
+    </style>
+
+    <style name="AddGuideTV">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/base_10dp</item>
+        <item name="android:textColor">@color/lock_color_tv_gray</item>
+        <item name="android:textSize">@dimen/lock_14sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="AddGuideTV.drawableLeft">
+        <item name="android:drawableLeft">@mipmap/icon_oval</item>
+    </style>
+
+    <style name="animTranslate">
+        <item name="android:windowEnterAnimation">@anim/translate_topin</item>
+        <item name="android:windowExitAnimation">@anim/translate_topout</item>
+    </style>
 </resources>

@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/module_mall" />
             <option value="$PROJECT_DIR$/module_mine" />
             <option value="$PROJECT_DIR$/module_msg" />
+            <option value="$PROJECT_DIR$/unilink-release" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

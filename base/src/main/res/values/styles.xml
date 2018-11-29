@@ -1,0 +1,31 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ImmersiveAppTheme" parent="AppTheme">
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <!--&lt;!&ndash; 界面不沉浸到状态栏下方 &ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:fitsSystemWindows">true</item>&ndash;&gt;-->
+        <!--&lt;!&ndash; 虚拟按键不透明 &ndash;&gt;-->
+        <!--<item name="android:windowTranslucentNavigation">false</item>-->
+    </style>
+
+    <style name="AppTheme.AppBarOverlay.white" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:colorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="ToolbarStyle" parent="AppTheme.AppBarOverlay.white">
+        <item name="colorControlNormal">@android:color/black</item>
+    </style>
+
+
+</resources>

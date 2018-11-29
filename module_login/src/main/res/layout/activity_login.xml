@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:text="@string/login_title"
             android:textColor="#333333"
-            android:textSize="17sp" />
+            android:textSize="17sp"/>
     </FrameLayout>
 
 

@@ -26,30 +26,44 @@ public class MainActivity extends BaseActivity {
         initViewPager();
         initPageChangeListener();
         initNavigationItemSelectListener();
-
+        mBinding.bottomNavigation.setItemIconTintList(null);
+        resetBottomIcon();
+        mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home_pressed);
     }
 
     private void initNavigationItemSelectListener() {
         mBinding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                resetBottomIcon();
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
+                        menuItem.setIcon(R.mipmap.icon_home_pressed);
                         mBinding.vpMain.setCurrentItem(0);
                         break;
                     case R.id.action_msg:
+                        menuItem.setIcon(R.mipmap.icon_msg_pressed);
                         mBinding.vpMain.setCurrentItem(1);
                         break;
                     case R.id.action_mall:
+                        menuItem.setIcon(R.mipmap.icon_mall_pressed);
                         mBinding.vpMain.setCurrentItem(2);
                         break;
                     case R.id.action_mime:
+                        menuItem.setIcon(R.mipmap.icon_mime_pressed);
                         mBinding.vpMain.setCurrentItem(3);
                         break;
                 }
                 return true;
             }
         });
+    }
+
+    private void resetBottomIcon() {
+        mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home);
+        mBinding.bottomNavigation.getMenu().findItem(R.id.action_msg).setIcon(R.mipmap.icon_msg);
+        mBinding.bottomNavigation.getMenu().findItem(R.id.action_mall).setIcon(R.mipmap.icon_mall);
+        mBinding.bottomNavigation.getMenu().findItem(R.id.action_mime).setIcon(R.mipmap.icon_mime);
     }
 
     private void initPageChangeListener() {
