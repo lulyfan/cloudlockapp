@@ -60,6 +60,7 @@
             android:hint="@string/phone_hint"
             android:inputType="phone"
             android:maxLines="1"
+            android:textSize="14sp"
             android:textColorHint="#CCCCCC" />
 
         <ImageView
@@ -107,6 +108,7 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:textSize="14sp"
             android:textColorHint="#CCCCCC" />
 
         <CheckBox
@@ -117,21 +119,16 @@
             android:button="@null" />
     </LinearLayout>
 
-
-    <Button
+    <com.ut.commoncomponent.LoadingButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/selector_btn_login"
-        android:button="@null"
-        android:enabled="false"
-        android:gravity="center"
-        android:text="@string/login"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        app:button_label="@string/login"
+        app:button_label_color="@android:color/white"
+        app:button_label_text_size="17sp"
         app:layout_constraintTop_toBottomOf="@id/password_layout" />
 
     <TextView
@@ -153,8 +150,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:text="@string/forget_password"
-        android:transitionName="forgetPassword"
         android:textColor="#666666"
+        android:transitionName="forgetPassword"
         app:layout_constraintRight_toRightOf="@id/btn_login"
         app:layout_constraintTop_toBottomOf="@id/btn_login" />
 

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +16,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.commoncomponent.CLToast;
+import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 
@@ -23,6 +26,12 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
+
+/**
+ * author : chenjiajun
+ * time   : 2018/11/15
+ * desc   : 登录界面
+ */
 
 @Route(path = RouterUtil.LoginModulePath.Login)
 public class LoginActivity extends BaseActivity {
@@ -95,16 +104,32 @@ public class LoginActivity extends BaseActivity {
                 ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD).navigation();
             }
         });
+
+        findViewById(R.id.btn_login).setEnabled(false);
+        findViewById(R.id.btn_login).setOnClickListener(v->{
+            LoadingButton loadingButton = (LoadingButton) v;
+            loadingButton.startLoading();
+            onLogin();
+            mainHandler.postDelayed(()->loadingButton.endLoading(), 3000L);
+        });
+    }
+
+    private void onLogin() {
+        CLToast.showAtCenter(this, "hahahahahahahha");
     }
 
     private void subscribeEvent() {
         RxTextView.afterTextChangeEvents(phoneEdt).debounce(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).doOnNext((textViewAfterTextChangeEvent) -> {
             findViewById(R.id.img_clear).setSelected(!TextUtils.isEmpty(Objects.requireNonNull(textViewAfterTextChangeEvent.getEditable()).toString()));
-            mainHandler.sendEmptyMessage(CHECK_PHONE_PASSWORD);
+            if(phoneEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_PASSWORD);
+            }
         }).subscribe();
 
         RxTextView.afterTextChangeEvents(passwordEdt).debounce(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).doOnNext((textViewAfterTextChangeEvent) -> {
-            mainHandler.sendEmptyMessage(CHECK_PHONE_PASSWORD);
+            if(passwordEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_PASSWORD);
+            }
         }).subscribe();
     }
 

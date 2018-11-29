@@ -34,17 +34,7 @@
 
     <LinearLayout
         android:id="@+id/phone_layout"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/selector_highlight_case"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingTop="16dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="16dp"
+        style="@style/Form"
         app:layout_constraintTop_toBottomOf="@id/title_bar">
 
 
@@ -66,7 +56,8 @@
             android:hint="@string/phone_hint"
             android:inputType="phone"
             android:maxLines="1"
-            android:textColorHint="#CCCCCC" />
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/img_clear"
@@ -80,17 +71,7 @@
 
     <LinearLayout
         android:id="@+id/password_layout"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/selector_highlight_case"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingTop="16dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="16dp"
+        style="@style/Form"
         app:layout_constraintTop_toBottomOf="@id/phone_layout">
 
 
@@ -112,7 +93,8 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:textColorHint="#CCCCCC" />
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
 
         <CheckBox
             android:id="@+id/see_password"
@@ -140,14 +122,14 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:inputType="text"
+            android:inputType="number"
             android:lines="1" />
 
         <TextView
             android:id="@+id/tv_get_verify_code"
             android:layout_width="100dp"
             android:layout_height="36dp"
-            android:background="@drawable/selector_btn_login"
+            android:background="@drawable/selector_loading_button"
             android:elevation="2dp"
             android:enabled="false"
             android:gravity="center"
@@ -157,18 +139,16 @@
     </LinearLayout>
 
 
-    <Button
+    <com.ut.commoncomponent.LoadingButton
         android:id="@+id/sure"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/selector_btn_login"
-        android:enabled="false"
-        android:text="@string/sure"
-        android:textColor="@color/white"
-        android:textSize="17sp"
+        app:button_label="@string/sure"
+        app:button_label_color="@android:color/white"
+        app:button_label_text_size="17sp"
         app:layout_constraintTop_toBottomOf="@id/verify_code_layout" />
 
 

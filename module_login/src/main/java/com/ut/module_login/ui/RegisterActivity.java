@@ -16,9 +16,11 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.jakewharton.rxbinding3.view.RxView;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 
@@ -36,7 +38,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
-    private Button registerBtn = null;
+    private LoadingButton registerBtn = null;
 
     private Handler mainHandler = new Handler((this::handleMessage));
     private static final int DEFAULT_TIME_COUNT = 60;
@@ -52,6 +54,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initUI() {
+        countryAreaCode = getText(R.string.default_country_code).toString();
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
@@ -59,7 +62,9 @@ public class RegisterActivity extends BaseActivity {
             if (!isReciprocal) {
                 getVerifyCodeTv.setEnabled(!TextUtils.isEmpty(value));
             }
-            mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            if (phoneEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
         }).subscribe();
         phoneEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
@@ -72,7 +77,9 @@ public class RegisterActivity extends BaseActivity {
         });
         passwordEdt = (EditText) findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
-            mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            if (passwordEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
         }).subscribe();
         passwordEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) passwordEdt.getParent();
@@ -94,18 +101,24 @@ public class RegisterActivity extends BaseActivity {
             getVerifyCode(phoneEdt.getText().toString());
             mainHandler.sendEmptyMessage(RECIPROCAL);
         });
-        registerBtn = (Button) findViewById(R.id.register);
+        registerBtn = findViewById(R.id.register);
         registerBtn.setOnClickListener(v -> {
+            registerBtn.startLoading();
+            register();
 
         });
 
-        findViewById(R.id.icon_of_county).setOnClickListener(v ->
-                ARouter.getInstance().build(RouterUtil.LoginModulePath.SELECT_COUNTRY_AREA_CODE).navigation(RegisterActivity.this, REQ_COUNTRY_AREA_CODE)
+        findViewById(R.id.icon_of_county).setOnClickListener(v -> {
+                    ViewGroup parent = (ViewGroup) v.getParent();
+                    parent.requestFocus();
+                    ARouter.getInstance()
+                            .build(RouterUtil
+                                    .LoginModulePath.SELECT_COUNTRY_AREA_CODE)
+                            .navigation(RegisterActivity.this, REQ_COUNTRY_AREA_CODE);
+                }
         );
 
-        findViewById(R.id.location_layout).setOnFocusChangeListener((v, hasFocus) -> v.setSelected(hasFocus));
-        countryAreaCode = getText(R.string.default_country_code).toString();
-
+        findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
         findViewById(R.id.back).setOnClickListener(v -> supportFinishAfterTransition());
     }
 
@@ -150,5 +163,10 @@ public class RegisterActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         supportFinishAfterTransition();
+    }
+
+
+    private void register() {
+
     }
 }

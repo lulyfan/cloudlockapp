@@ -54,6 +54,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
+            android:textSize="14sp"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:text="@string/default_country_code" />
@@ -88,6 +89,7 @@
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/phone_hint"
+            android:textSize="14sp"
             android:inputType="phone"
             android:maxLines="1"
             android:textColorHint="#CCCCCC" />
@@ -119,15 +121,16 @@
             android:id="@+id/edt_password"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:textColorHint="#CCCCCC" />
+            android:textColorHint="#CCCCCC"
+            android:textSize="14sp" />
 
         <CheckBox
             android:id="@+id/see_password"
@@ -155,14 +158,14 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:inputType="text"
+            android:inputType="number"
             android:lines="1" />
 
         <TextView
             android:id="@+id/tv_get_verify_code"
             android:layout_width="100dp"
             android:layout_height="36dp"
-            android:background="@drawable/selector_btn_login"
+            android:background="@drawable/selector_loading_button"
             android:elevation="2dp"
             android:enabled="false"
             android:gravity="center"
@@ -171,19 +174,17 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-
-    <Button
+    <com.ut.commoncomponent.LoadingButton
         android:id="@+id/register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/selector_btn_login"
-        android:enabled="false"
-        android:text="@string/register"
-        android:textColor="@color/white"
-        android:textSize="17sp"
+        app:button_label="@string/register"
+        app:button_label_color="@android:color/white"
+        app:button_label_text_size="17sp"
         app:layout_constraintTop_toBottomOf="@id/verify_code_layout" />
+
 
 </android.support.constraint.ConstraintLayout>

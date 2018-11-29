@@ -22,7 +22,7 @@ public class SelectCountryActivity extends BaseActivity {
 
         findViewById(R.id.back).setOnClickListener(v -> finish());
         ListView listView = (ListView) findViewById(R.id.country_list);
-        String[] arrays = new String[]{"中国/+86", "中国/+86", "中国/+89", "中国/+86", "中国/+86", "中国/+86", "中国/+86"};
+        String[] arrays = getResources().getStringArray(R.array.CountryCodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_country, arrays);
         listView.setAdapter(adapter);
 

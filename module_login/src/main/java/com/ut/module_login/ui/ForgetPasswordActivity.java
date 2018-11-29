@@ -16,6 +16,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 
@@ -31,7 +32,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private EditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
-    private Button sureBtn = null;
+    private LoadingButton sureBtn = null;
 
     private Handler mainHandler = new Handler((this::handleMessage));
     private static final int DEFAULT_TIME_COUNT = 60;
@@ -53,7 +54,9 @@ public class ForgetPasswordActivity extends BaseActivity {
             if (!isReciprocal) {
                 getVerifyCodeTv.setEnabled(!TextUtils.isEmpty(value));
             }
-            mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+           if(phoneEdt.isFocused()) {
+               mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+           }
         }).subscribe();
         phoneEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
@@ -66,7 +69,10 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
         passwordEdt = (EditText) findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
-            mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            if(passwordEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
+
         }).subscribe();
         passwordEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) passwordEdt.getParent();
@@ -88,12 +94,18 @@ public class ForgetPasswordActivity extends BaseActivity {
             getVerifyCode(phoneEdt.getText().toString());
             mainHandler.sendEmptyMessage(RECIPROCAL);
         });
-        sureBtn = (Button) findViewById(R.id.sure);
+        sureBtn = findViewById(R.id.sure);
         sureBtn.setOnClickListener(v -> {
+            sureBtn.startLoading();
+            commit();
 
         });
 
-        findViewById(R.id.back).setOnClickListener(v ->  supportFinishAfterTransition());
+        findViewById(R.id.back).setOnClickListener(v -> supportFinishAfterTransition());
+    }
+
+    private void commit() {
+
     }
 
     private boolean handleMessage(Message msg) {
