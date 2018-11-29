@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="" vcs="svn" />
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/app" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/base" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/commoncomponent" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/module_lock" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/module_login" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/module_mall" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/module_mine" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/module_msg" vcs="svn" />
   </component>
 </project>
