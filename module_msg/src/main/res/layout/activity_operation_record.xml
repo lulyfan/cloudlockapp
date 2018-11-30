@@ -35,7 +35,7 @@
             android:layout_centerInParent="true"
             android:text="操作记录"
             android:textColor="#FFFFFF"
-            android:textSize="17sp" />
+            android:textSize="@dimen/base_17sp" />
 
     </RelativeLayout>
 

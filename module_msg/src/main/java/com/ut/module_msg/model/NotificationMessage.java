@@ -1,25 +1,19 @@
 package com.ut.module_msg.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import java.io.Serializable;
 
 /**
  * author : chenjiajun
  * time   : 2018/11/26
  * desc   :
  */
-@Entity
-public class MessageNotification {
+public class NotificationMessage implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
     private long id;
-    @ColumnInfo(name = "title")
     private String title;
-    @ColumnInfo(name = "content")
     private String content;
-    @ColumnInfo(name = "icon")
     private String icon;
+    private String time;
 
     public long getId() {
         return id;
@@ -51,5 +45,13 @@ public class MessageNotification {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

@@ -1,7 +1,5 @@
 package com.ut.module_msg.fragment;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,20 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ut.base.BaseFragment;
+import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
-import com.ut.module_msg.database.MessageBase;
+import com.ut.module_msg.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentApplyBinding;
-import com.ut.module_msg.model.MessageNotification;
-import com.ut.module_msg.viewmodel.NotificationViewModel;
+import com.ut.module_msg.model.ApplyMessage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : chenjiajun
@@ -33,38 +25,24 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ApplyFragment extends BaseFragment {
     private FragmentApplyBinding mApplyFgBinding = null;
+    private List<ApplyMessage> applyMessages = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mApplyFgBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_apply, container, false);
-        mApplyFgBinding.apply.setOnClickListener((v) -> {
-            insertNotifications();
-        });
+        initView();
         return mApplyFgBinding.getRoot();
     }
 
-    private void insertNotifications() {
-        List<MessageNotification> mns = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            MessageNotification nm = new MessageNotification();
-            nm.setContent("content " + i);
-            nm.setTitle("title " + i);
-            nm.setIcon("https://pic.92to.com/anv/201512/12/bl3yadmemy2.jpg");
-            mns.add(nm);
-        }
-        Disposable subscribe = Observable.just(mns)
-                .flatMap(messageNotifications -> {
-                    MessageBase.getInstance(getContext())
-                            .getMessageNotificationDao()
-                            .insert(messageNotifications.toArray(new MessageNotification[messageNotifications.size()]));
-                    return Observable.just(messageNotifications);
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(messageNotifications -> {
-                    NotificationViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotificationViewModel.class);
-                    viewModel.getNotifications().setValue(messageNotifications);
-                });
+    private void initView() {
+
+        ApplyMessage message = new ApplyMessage();
+        message.setHint("您收到一把电子钥匙【xxxx】，xxxxxxxxxxxx");
+        message.setName("活生生");
+        applyMessages.add(message);
+
+        ListAdapter<ApplyMessage> mAdapter = new ListAdapter<>(getContext(), R.layout.item_apply, applyMessages, BR.apply);
+        mApplyFgBinding.applyList.setAdapter(mAdapter);
     }
 }

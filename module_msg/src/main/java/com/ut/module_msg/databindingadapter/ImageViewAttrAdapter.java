@@ -22,8 +22,6 @@ public class ImageViewAttrAdapter {
                     .asBitmap()
                     .centerCrop()
                     .into(imageView);
-        } else {
-            imageView.setImageResource(R.mipmap.default_user_icon);
         }
     }
 }

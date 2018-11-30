@@ -4,10 +4,16 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.ut.module_msg.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
@@ -21,17 +27,15 @@ public class Section<T> extends StatelessSection {
 
     private List<T> itemsList = new ArrayList<>();
     private String headerTitle;
-    private int itemVariableId;
-    private int headerVariableId;
+    private int itemResourceId;
 
-    public Section(String headerTitle, List<T> list, int headerResourceId, int itemResourceId, int headerVariableId , int itemVariableId) {
-        super(SectionParameters.builder().headerResourceId(headerResourceId).itemResourceId(itemResourceId).build());
+    public Section(String headerTitle, List<T> list, int itemResourceId) {
+        super(SectionParameters.builder().headerResourceId(R.layout.item_section_header).itemResourceId(R.layout.item_section_child).build());
         if (list != null) {
             itemsList = list;
         }
         this.headerTitle = headerTitle;
-        this.headerVariableId = headerVariableId;
-        this.itemVariableId = itemVariableId;
+        this.itemResourceId = itemResourceId;
     }
 
     @Override
@@ -41,8 +45,8 @@ public class Section<T> extends StatelessSection {
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder) {
-      HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-      headerViewHolder.dataBinding.setVariable(headerVariableId, headerTitle);
+        HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+        headerViewHolder.headerTv.setText(headerTitle);
     }
 
     @Override
@@ -57,23 +61,26 @@ public class Section<T> extends StatelessSection {
 
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ItemViewHolder) holder).dataBinding.setVariable(itemVariableId, itemsList.get(position));
+        ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-        ViewDataBinding dataBinding = null;
+        TextView headerTv = null;
         public HeaderViewHolder(@NonNull View headerView) {
             super(headerView);
-            dataBinding = DataBindingUtil.getBinding(headerView);
+            headerTv = headerView.findViewById(R.id.tv_header);
         }
     }
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
+        ViewGroup container = null;
         ViewDataBinding dataBinding = null;
+
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            dataBinding = DataBindingUtil.getBinding(itemView);
+            container = itemView.findViewById(R.id.container);
+            dataBinding = DataBindingUtil.inflate(LayoutInflater.from(itemView.getContext()), itemResourceId, container, true);
         }
     }
 }

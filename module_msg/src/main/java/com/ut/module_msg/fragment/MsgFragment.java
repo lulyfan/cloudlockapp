@@ -43,6 +43,7 @@ public class MsgFragment extends BaseFragment {
         if (mView == null) {
             mMsgBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_msg, container, false);
             mView = mMsgBinding.getRoot();
+            mView.setFitsSystemWindows(true);
         }
         initView();
         return mView;
@@ -52,7 +53,7 @@ public class MsgFragment extends BaseFragment {
         mTabLayout = mMsgBinding.tabsBar;
         mViewPager = mMsgBinding.viewpager;
 
-        String[] titles = new String[]{"通知", "申请"};
+        String[] titles = new String[]{getString(R.string.msg_notification), getString(R.string.msg_apply)};
         mTabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
