@@ -22,6 +22,10 @@
         </activity>
         <activity android:name=".activity.SetNameActivity">
         </activity>
+        <activity android:name=".activity.KeyInfoActivity" />
+        <activity android:name=".activity.KeysManagerActivity" />
+        <activity android:name=".activity.EditKeyNameActivity" />
+        <activity android:name=".activity.EditLimitedTimeActivity" />
     </application>
 
 </manifest>

@@ -21,6 +21,16 @@
     <string name="lock_group_current">当前分组</string>
 
     <string name="lock_btn_confirm">确定</string>
+    <string name="lock_sender">发送人</string>
+    <string name="lock_send_time">发送时间</string>
+    <string name="lock_key_info">钥匙详情</string>
+    <string name="lock_key_manager">管理钥匙</string>
+    <string name="enable_time">生效时间</string>
+    <string name="invalid_time">失效时间</string>
+    <string name="lock_key_type">钥匙类型</string>
+    <string name="lock_key_name">钥匙名称</string>
+    <string name="lock_accept_time">接受时间</string>
+    <string name="lock_operation_record">操作记录</string>
 
     <string-array name="lock_type">
         <item>蓝牙门锁</item>

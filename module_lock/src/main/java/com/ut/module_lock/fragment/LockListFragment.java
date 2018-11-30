@@ -17,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
@@ -134,6 +135,8 @@ public class LockListFragment extends BaseFragment {
 
         public void onSearchClick(View view) {
             UTLog.i("onSearchClick");
+
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
         }
 
         public void onAddClick(View view) {
