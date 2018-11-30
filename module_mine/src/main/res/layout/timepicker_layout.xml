@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.aigestudio.wheelpicker.WheelPicker
+        android:id="@+id/hourPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/minutePicker"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:wheel_atmospheric="true"
+        app:wheel_indicator="true"
+        app:wheel_indicator_color="@android:color/darker_gray"
+        app:wheel_indicator_size="1dp"
+        app:wheel_item_space="8dp"
+        app:wheel_item_text_size="20sp"
+        app:wheel_curved="true"
+        app:wheel_selected_item_text_color="@android:color/black"
+        app:wheel_visible_item_count="9"
+        app:wheel_cyclic="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text=":"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/hourPicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/hourPicker" />
+
+    <com.aigestudio.wheelpicker.WheelPicker
+        android:id="@+id/minutePicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hourPicker"
+        app:layout_constraintTop_toTopOf="parent"
+        app:wheel_atmospheric="true"
+        app:wheel_indicator="true"
+        app:wheel_indicator_color="@android:color/darker_gray"
+        app:wheel_indicator_size="1dp"
+        app:wheel_item_space="8dp"
+        app:wheel_item_text_size="20sp"
+        app:wheel_curved="true"
+        app:wheel_selected_item_text_color="@android:color/black"
+        app:wheel_visible_item_count="9"
+        app:wheel_cyclic="true"/>
+</android.support.constraint.ConstraintLayout>

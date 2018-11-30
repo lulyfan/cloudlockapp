@@ -1,4 +1,29 @@
 <resources>
     <string name="app_name">module_mine</string>
     <string name="title_mine">我的</string>
+    <string name="webLoginPermission">WEB端登录权限</string>
+    <string name="openLockVoice">开锁声音</string>
+    <string name="lockUserManager">锁用户管理</string>
+    <string name="lockGroup">锁分组</string>
+    <string name="gateway">网关</string>
+    <string name="transformLock">转移智能锁</string>
+    <string name="custonService">客服</string>
+    <string name="aboutUs">关于我们</string>
+    <string name="setting">设置</string>
+    <string name="addLockGroup">添加锁组</string>
+    <string name="keyManage">钥匙管理</string>
+    <string name="mine_limitTime">限时</string>
+    <string name="mine_forever">永久</string>
+    <string name="mine_once">单次</string>
+    <string name="mine_loop">循环</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clearKey">清空钥匙</string>
+    <string name="resetKey">重置钥匙</string>
+    <string name="sendKey">发送钥匙</string>
+    <string name="batchAuth">批量授权</string>
+    <string name="editGroupName">编辑组名</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
 </resources>
