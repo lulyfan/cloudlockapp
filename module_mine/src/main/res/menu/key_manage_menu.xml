@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/clearKey"
+        android:title="@string/clearKey"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/resetKey"
+        android:title="@string/resetKey"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/sendKey"
+        android:title="@string/sendKey"
+        app:showAsAction="never"/>
+</menu>

@@ -29,11 +29,107 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8 (1)" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
   <component name="SvnBranchConfigurationManager">
     <option name="myConfigurationMap">
       <map>
-        <entry key="$PROJECT_DIR$">
+        <entry key="$PROJECT_DIR$/app">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/base">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/commoncomponent">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/module_lock">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/module_login">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/module_mall">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/module_mine">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/branches" />
+                  <option value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://192.168.75.177:8443/svn/CloudLockPlatform/app/android/trunk/CloudLock2_0/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/module_msg">
           <value>
             <SvnBranchConfiguration>
               <option name="branchUrls">
