@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">module_msg</string>
     <string name="title_msg">消息</string>
+    <string name="msg_notification">通知</string>
+    <string name="msg_apply">申请</string>
 </resources>
