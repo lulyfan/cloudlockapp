@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="operationRecord"
+            type="com.ut.module_lock.entity.OperationRecord" />
+    </data>
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_44dp"
+            android:layout_marginBottom="@dimen/base_2dp"
+            android:background="@android:color/white"
+            android:elevation="@dimen/base_2dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_back" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/operation_record"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/base_17sp" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/operation_record_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@null"
+            android:layout_marginBottom="@dimen/base_10dp"
+            android:listSelector="@android:color/transparent"/>
+
+    </LinearLayout>
+</layout>

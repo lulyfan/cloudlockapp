@@ -24,20 +24,11 @@
                 android:layout_centerVertical="true"
                 android:src="@mipmap/back_white" />
 
-            <ImageView
-                android:id="@+id/close"
-                android:layout_width="@dimen/base_22dp"
-                android:layout_height="@dimen/base_22dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/base_20dp"
-                android:layout_toRightOf="@id/back"
-                android:src="@mipmap/close_white" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="钥匙名称"
+                android:text="@string/lock_key_name"
                 android:textColor="#FFFFFF"
                 android:textSize="17sp" />
         </RelativeLayout>
@@ -58,11 +49,13 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:text="xxxxxxxxxxxxxxxxxxxxx"
+                android:imeActionLabel="@string/lock_save"
+                android:imeOptions="actionDone"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/base_17sp" />
 
             <ImageView
+                android:id="@+id/clear"
                 android:layout_width="@dimen/base_22dp"
                 android:layout_height="@dimen/base_22dp"
                 android:layout_gravity="center_vertical"
@@ -74,12 +67,17 @@
 
 
     <Button
+        android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginLeft="@dimen/base_20dp"
         android:layout_marginRight="@dimen/base_20dp"
         android:layout_marginBottom="@dimen/base_20dp"
-        android:text="保存" />
+        android:background="@drawable/selector_btn_save"
+        android:enabled="false"
+        android:text="@string/lock_save"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/lock_17sp" />
 
 </FrameLayout>

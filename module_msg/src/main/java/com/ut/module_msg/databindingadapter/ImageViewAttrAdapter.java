@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.ut.module_msg.R;
 
 /**
  * author : chenjiajun

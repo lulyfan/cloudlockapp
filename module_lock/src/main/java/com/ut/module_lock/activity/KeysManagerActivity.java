@@ -67,8 +67,7 @@ public class KeysManagerActivity extends AppCompatActivity {
             item.setEndTime("2018/11/11 12:00");
             items.add(item);
         }
-
-        mBinding.list.postDelayed(() -> kmVM.getKeys().postValue(items), 1500L);
+        kmVM.getKeys().postValue(items);
     }
 
 }

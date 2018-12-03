@@ -24,8 +24,9 @@
         </activity>
         <activity android:name=".activity.KeyInfoActivity" />
         <activity android:name=".activity.KeysManagerActivity" />
-        <activity android:name=".activity.EditKeyNameActivity" />
+        <activity android:name=".activity.EditKeyNameActivity" android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activity.EditLimitedTimeActivity" />
+        <activity android:name=".activity.OperationRecordAcitivity" />
     </application>
 
 </manifest>

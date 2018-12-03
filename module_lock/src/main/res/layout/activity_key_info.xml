@@ -85,6 +85,7 @@
                             android:drawableRight="@mipmap/more_black"
                             android:drawablePadding="@dimen/base_10dp"
                             android:text="@{keyItem.caption}"
+                            android:clickable="true"
                             android:textColor="#333333"
                             android:textSize="@dimen/base_17sp" />
                     </LinearLayout>
@@ -267,12 +268,14 @@
 
 
                 <LinearLayout
+                    android:id="@+id/operation_record"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_70dp"
                     android:layout_marginTop="@dimen/base_10dp"
                     android:background="@drawable/shape_bg_corner"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/base_20dp"
+                    android:clickable="true"
                     android:paddingRight="@dimen/base_20dp">
 
                     <TextView

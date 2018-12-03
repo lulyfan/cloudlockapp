@@ -31,6 +31,9 @@ public class RouterUtil {
         public static final String Fragment_Lock = "/lock/main";
         public static final String KEY_INFO =  "/lock/keyInfo";
         public static final String KEY_MANAGER = "/lock/keyManager";
+        public static final String OPERATION_RECORD = "/lock/operationRecord";
+        public static final String EDIT_KEY_NAME = "/lock/editKeyName";
+        public static final String EDIT_LIMITED_TIME = "/lock/editLimitedTime";
     }
 
     public static class MsgModulePath {

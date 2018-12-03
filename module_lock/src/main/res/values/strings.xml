@@ -31,6 +31,9 @@
     <string name="lock_key_name">钥匙名称</string>
     <string name="lock_accept_time">接受时间</string>
     <string name="lock_operation_record">操作记录</string>
+    <string name="operation_record">操作记录</string>
+    <string name="lock_save">保存</string>
+    <string name="lock_limited_time_key">限时钥匙</string>
 
     <string-array name="lock_type">
         <item>蓝牙门锁</item>
