@@ -7,8 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseFragment;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
 import com.ut.module_msg.adapter.ListAdapter;
@@ -30,19 +33,30 @@ public class ApplyFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mApplyFgBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_apply, container, false);
-        initView();
+        if(mApplyFgBinding == null) {
+            mApplyFgBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_apply, container, false);
+            initView();
+        }
         return mApplyFgBinding.getRoot();
     }
 
     private void initView() {
-
         ApplyMessage message = new ApplyMessage();
         message.setHint("您收到一把电子钥匙【xxxx】，xxxxxxxxxxxx");
         message.setName("活生生");
+        message.setApplicant("程佳佳");
+        message.setTime("9012/12/20");
+        List<String> askFor = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            askFor.add("我要申请一条钥匙");
+        }
+        message.setMessages(askFor);
         applyMessages.add(message);
-
         ListAdapter<ApplyMessage> mAdapter = new ListAdapter<>(getContext(), R.layout.item_apply, applyMessages, BR.apply);
         mApplyFgBinding.applyList.setAdapter(mAdapter);
+
+        mApplyFgBinding.applyList.setOnItemClickListener((parent, view, position, id) -> {
+            ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", applyMessages.get(position)).navigation();
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.ut.module_msg.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +9,24 @@ import java.util.List;
  * time   : 2018/11/30
  * desc   :
  */
-public class ApplyMessage {
+public class ApplyMessage implements Serializable {
 
     private String url;
     private String name;
     private String hint;
-
     private String time;
+    private String applicant;
+    private int keyType;
 
     private List<String> messages;
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public void setApplicant(String applicant) {
+        this.applicant = applicant;
+    }
 
     public String getUrl() {
         return url;
@@ -56,5 +66,27 @@ public class ApplyMessage {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getKeyType() {
+        return keyType;
+    }
+
+    public void setKeyType(int keyType) {
+        this.keyType = keyType;
+    }
+
+    public String keyTypeString() {
+        switch (keyType) {
+            case 0:
+                return "单次";
+            case 1:
+                return "限时";
+            case 2:
+                return "循环";
+            case 3:
+                return "永久";
+        }
+        return "";
     }
 }

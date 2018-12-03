@@ -31,8 +31,7 @@ public class NotificationInfoActivity extends BaseActivity {
     private ListAdapter<MessageContent> mAdapter = null;
     private List<MessageContent> messageContents = new ArrayList<>();
 
-//    @Autowired(name = "notificationInfo")
-    private NotificationMessage notificationMessage;
+    private NotificationMessage mNotificationMessage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,10 +44,10 @@ public class NotificationInfoActivity extends BaseActivity {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
-        notificationMessage = (NotificationMessage) getIntent().getSerializableExtra("notificationInfo");
-
+        mNotificationMessage = (NotificationMessage) getIntent().getSerializableExtra("notificationInfo");
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_notifi_info);
-        mBinding.setNotification(notificationMessage);
+
+        mBinding.setNotification(mNotificationMessage);
         mBinding.back.setOnClickListener((v) -> finish());
         for (int i = 0; i < 10; i++) {
             MessageContent content = new MessageContent();

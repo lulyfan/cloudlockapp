@@ -38,6 +38,7 @@ public class RouterUtil {
         public static final String Fragment_MSG = "/msg/main";
 
         public static final String NOTIFICATION_INFO = "/msg/notificationInfo";
+        public final static String APPLY_INFO = "/msg/applyInfo";
     }
 
     public static class MallModulePath {
