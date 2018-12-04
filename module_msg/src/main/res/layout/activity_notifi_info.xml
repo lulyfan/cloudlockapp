@@ -19,15 +19,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_44dp"
             android:background="@android:color/white"
-            android:paddingLeft="20dp"
+            android:paddingLeft="@dimen/base_20dp"
             android:elevation="@dimen/base_2dp"
             android:layout_marginBottom="@dimen/base_2dp"
-            android:paddingRight="20dp">
+            android:paddingRight="@dimen/base_20dp">
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/base_22dp"
+                android:layout_height="@dimen/base_22dp"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/icon_back" />
 
@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:divider="@null"
+            android:listSelector="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top"
             app:layout_constraintVertical_weight="1" />

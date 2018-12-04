@@ -33,7 +33,15 @@
     <string name="lock_operation_record">操作记录</string>
     <string name="operation_record">操作记录</string>
     <string name="lock_save">保存</string>
+    <string name="lock_clear_key">清空钥匙</string>
+    <string name="lock_send_key">发送钥匙</string>
+    <string name="lock_apply_key">申请钥匙</string>
+    <string name="lock_apply_ask_for_hint">我想对管理员说</string>
+    <string name="lock_permanent_key">永久钥匙</string>
+    <string name="lock_once_key">单次钥匙</string>
+    <string name="lock_loop_key">循环钥匙</string>
     <string name="lock_limited_time_key">限时钥匙</string>
+    <string name="lock_commit_apply">提交申请</string>
 
     <string-array name="lock_type">
         <item>蓝牙门锁</item>

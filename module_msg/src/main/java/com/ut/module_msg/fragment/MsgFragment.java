@@ -43,9 +43,8 @@ public class MsgFragment extends BaseFragment {
         if (mView == null) {
             mMsgBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_msg, container, false);
             mView = mMsgBinding.getRoot();
-            mView.setFitsSystemWindows(true);
+            initView();
         }
-        initView();
         return mView;
     }
 
@@ -105,10 +104,5 @@ public class MsgFragment extends BaseFragment {
             UTLog.i("present onclick");
             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
         }
-
-        public void onTabChanged(String tabId) {
-
-        }
     }
-
 }

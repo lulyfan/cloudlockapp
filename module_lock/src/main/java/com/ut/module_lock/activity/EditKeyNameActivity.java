@@ -1,6 +1,8 @@
 package com.ut.module_lock.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SimpleTextWatcher;
 import com.ut.module_lock.R;
@@ -23,13 +26,16 @@ import com.ut.module_lock.R;
  */
 
 @Route(path = RouterUtil.LockModulePath.EDIT_KEY_NAME)
-public class EditKeyNameActivity extends AppCompatActivity {
+public class EditKeyNameActivity extends BaseActivity {
 
     private EditText nameEdt = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.parseColor("#00BDCF"));
+        }
         setContentView(R.layout.activity_edit_name);
         initView();
     }

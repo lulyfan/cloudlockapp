@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/base_2dp"
-        android:elevation="@dimen/base_2dp"
         android:orientation="vertical"
         android:paddingLeft="@dimen/base_20dp"
         android:paddingRight="@dimen/base_20dp">
@@ -43,6 +42,8 @@
             android:paddingTop="@dimen/base_30dp"
             android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
+            android:elevation="@dimen/base_2dp"
+            android:layout_margin="@dimen/base_2dp"
             android:text="@{messageContent.content}"
             android:textColor="#666666"
             android:textSize="@dimen/base_14sp" />
