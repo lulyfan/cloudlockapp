@@ -19,4 +19,6 @@
     <dimen name="base_150dp">150dp</dimen>
     <dimen name="base_120dp">120dp</dimen>
     <dimen name="base_25dp">25dp</dimen>
+    <dimen name="base_53dp">53dp</dimen>
+    <dimen name="base_27dp">27dp</dimen>
 </resources>

@@ -28,6 +28,8 @@
         <activity android:name=".activity.EditLimitedTimeActivity" />
         <activity android:name=".activity.OperationRecordAcitivity" />
         <activity android:name=".activity.ApplyKeyActivity" />
+        <activity android:name=".activity.LockSettingActivity" />
+        <activity android:name=".activity.ChooseKeyGroupActivity" />
     </application>
 
 </manifest>

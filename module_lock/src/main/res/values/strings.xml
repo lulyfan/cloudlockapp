@@ -42,6 +42,13 @@
     <string name="lock_loop_key">循环钥匙</string>
     <string name="lock_limited_time_key">限时钥匙</string>
     <string name="lock_commit_apply">提交申请</string>
+    <string name="lock_device_id">设备ID</string>
+    <string name="lock_device_mac">设备地址</string>
+    <string name="lock_power">电量</string>
+    <string name="lock_valid_date">有效期</string>
+    <string name="lock_name">锁名称</string>
+    <string name="lock_setting">锁设置</string>
+    <string name="lock_choose_group">选择分组</string>
 
     <string-array name="lock_type">
         <item>蓝牙门锁</item>

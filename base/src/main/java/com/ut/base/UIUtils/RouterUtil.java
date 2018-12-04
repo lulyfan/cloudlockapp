@@ -34,6 +34,7 @@ public class RouterUtil {
         public static final String OPERATION_RECORD = "/lock/operationRecord";
         public static final String EDIT_KEY_NAME = "/lock/editKeyName";
         public static final String EDIT_LIMITED_TIME = "/lock/editLimitedTime";
+        public static final String CHOOSE_KEY_GROUP = "/lock/chooseKeyGroup";
     }
 
     public static class MsgModulePath {
