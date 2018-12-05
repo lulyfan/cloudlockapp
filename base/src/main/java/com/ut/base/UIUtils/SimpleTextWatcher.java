@@ -1,4 +1,4 @@
-package com.ut.module_login.common;
+package com.ut.base.UIUtils;
 
 import android.text.Editable;
 import android.text.TextWatcher;

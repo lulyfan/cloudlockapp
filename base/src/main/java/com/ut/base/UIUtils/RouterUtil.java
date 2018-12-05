@@ -29,11 +29,20 @@ public class RouterUtil {
     public static class LockModulePath {
         //锁模块的首页
         public static final String Fragment_Lock = "/lock/main";
+        public static final String KEY_INFO =  "/lock/keyInfo";
+        public static final String KEY_MANAGER = "/lock/keyManager";
+        public static final String OPERATION_RECORD = "/lock/operationRecord";
+        public static final String EDIT_KEY_NAME = "/lock/editKeyName";
+        public static final String EDIT_LIMITED_TIME = "/lock/editLimitedTime";
+        public static final String CHOOSE_KEY_GROUP = "/lock/chooseKeyGroup";
     }
 
     public static class MsgModulePath {
         //消息模块首页
         public static final String Fragment_MSG = "/msg/main";
+
+        public static final String NOTIFICATION_INFO = "/msg/notificationInfo";
+        public final static String APPLY_INFO = "/msg/applyInfo";
     }
 
     public static class MallModulePath {

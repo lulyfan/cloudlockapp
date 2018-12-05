@@ -1,4 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">module_msg</string>
     <string name="title_msg">消息</string>
+    <string name="msg_notification">通知</string>
+    <string name="msg_apply">申请</string>
+    <string name="applicant">申请人</string>
+    <string name="apply_time">申请时间</string>
+    <string name="key_name">钥匙名称</string>
+    <string name="key_type">钥匙类型</string>
+    <string name="ignore">忽略</string>
+    <string name="send_key">发送钥匙</string>
 </resources>

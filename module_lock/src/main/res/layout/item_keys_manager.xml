@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="keyItem"
+            type="com.ut.module_lock.entity.KeyItem" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_marginRight="@dimen/base_20dp">
+
+            <ImageView
+                android:id="@+id/tip"
+                android:layout_width="@dimen/base_40dp"
+                android:layout_height="@dimen/base_20dp"
+                android:background="@{keyItem.typeDrawable}"
+                app:layout_constraintTop_toTopOf="@id/caption" />
+
+            <TextView
+                android:id="@+id/caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/base_10dp"
+                android:text="@{keyItem.caption}"
+                android:textColor="#333333"
+                android:textSize="@dimen/base_14sp"
+                app:layout_constraintBottom_toTopOf="@id/memo"
+                app:layout_constraintLeft_toRightOf="@id/tip"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{keyItem.state}"
+                android:textSize="@dimen/base_12sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/caption"
+                app:layout_constraintRight_toRightOf="parent" />
+
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/memo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/caption">
+
+                <TextView
+                    android:id="@+id/limit_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/green_dot"
+                    android:drawablePadding="@dimen/base_10dp"
+                    android:gravity="center_vertical"
+                    android:text="@{keyItem.startTime}"
+                    android:textColor="#999999"
+                    android:textSize="@dimen/base_12sp" />
+
+
+                <TextView
+                    android:id="@+id/limit_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/base_20dp"
+                    android:drawableLeft="@mipmap/red_dot"
+                    android:drawablePadding="@dimen/base_10dp"
+                    android:text="@{keyItem.endTime}"
+                    android:textColor="#999999"
+                    android:textSize="@dimen/base_12sp"
+                    app:layout_constraintLeft_toRightOf="@id/limit_start_time"
+                    app:layout_constraintTop_toTopOf="@id/limit_start_time" />
+
+
+                <TextView
+                    android:id="@+id/desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/gray_dot"
+                    android:drawablePadding="@dimen/base_10dp"
+                    android:text="@{keyItem.desc}"
+                    android:textColor="#999999"
+                    android:visibility="@{keyItem.type==0 || keyItem.type==3 ? View.VISIBLE : View.GONE }"
+                    android:textSize="@dimen/base_12sp" />
+
+                <android.support.constraint.Group
+                    android:id="@+id/limit_time_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{keyItem.type==1 || keyItem.type==2 ? View.VISIBLE : View.GONE }"
+                    app:constraint_referenced_ids="limit_start_time, limit_end_time" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

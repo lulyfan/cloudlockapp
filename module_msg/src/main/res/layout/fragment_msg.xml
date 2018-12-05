@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true">
 
     <data>
 
         <variable
             name="presenter"
-            type="com.ut.module_msg.fragment.MsgFragment.Present"/>
+            type="com.ut.module_msg.fragment.MsgFragment.Present" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="@{presenter::onClick}"
-            android:text="@string/title_msg"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_44dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/base_2dp"
+            android:background="#FFFFFF"
+            android:elevation="@dimen/base_2dp"
+            app:tabGravity="center"
+            app:tabMinWidth="@dimen/base_80dp"
+            app:tabIndicatorColor="#00BBD2"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabSelectedTextColor="#00BBD2"
+            app:tabTextColor="@color/color_base_title">
+
+        </android.support.design.widget.TabLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tabs_bar"
+            app:layout_constraintVertical_weight="1">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

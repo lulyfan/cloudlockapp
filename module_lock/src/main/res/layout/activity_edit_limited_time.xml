@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="keyItem"
+            type="com.ut.module_lock.entity.KeyItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_44dp"
+            android:background="#00BDCF"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="@dimen/base_22dp"
+                android:layout_height="@dimen/base_22dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/back_white" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:text="@string/lock_limited_time_key"
+                android:textSize="@dimen/base_17sp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_70dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/enable_time"
+                android:textColor="#666666"
+                android:textSize="@dimen/base_14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_limited_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableRight="@mipmap/icon_right_arrow_black"
+                android:drawablePadding="@dimen/base_10dp"
+                android:gravity="center_vertical"
+                android:text="@{keyItem.startTime}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/base_17sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_70dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/invalid_time"
+                android:textColor="#666666"
+                android:textSize="@dimen/base_14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_limited_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawableRight="@mipmap/icon_right_arrow_black"
+                android:drawablePadding="@dimen/base_10dp"
+                android:gravity="center_vertical"
+                android:text="@{keyItem.endTime}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/base_17sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

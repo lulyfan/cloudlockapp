@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_44dp"
+        android:background="#00BCD1"
+        android:paddingLeft="@dimen/base_20dp"
+        android:paddingRight="@dimen/base_20dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/base_22dp"
+            android:layout_height="@dimen/base_22dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back_white" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="@dimen/base_22dp"
+            android:layout_height="@dimen/base_22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_toRightOf="@id/back"
+            android:src="@mipmap/close_white" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="操作记录"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/base_17sp" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="#F4F9FB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintVertical_weight="1" />
+
+</android.support.constraint.ConstraintLayout>

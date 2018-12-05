@@ -1,6 +1,5 @@
 package com.ut.module_lock.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -17,10 +16,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
@@ -134,6 +133,8 @@ public class LockListFragment extends BaseFragment {
 
         public void onSearchClick(View view) {
             UTLog.i("onSearchClick");
+
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
         }
 
         public void onAddClick(View view) {
