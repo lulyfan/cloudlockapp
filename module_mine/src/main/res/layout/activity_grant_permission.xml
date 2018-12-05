@@ -6,10 +6,10 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".GrantPermissionActivity">
+        tools:context=".activity.GrantPermissionActivity">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+            android:id="@+id/headContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_head"
@@ -21,20 +21,20 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar5"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.458"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/titleStyle"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/m"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="分配权限" />
+                    android:text="@string/grantPermission" />
             </android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout
@@ -45,7 +45,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar5"
-                app:tabTextColor="@color/white"
+                app:tabTextColor="@android:color/white"
                 app:tabTextAppearance="@style/tabStyle">
 
                 <android.support.design.widget.TabItem
@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"></android.support.v4.view.ViewPager>
+            app:layout_constraintTop_toBottomOf="@+id/headContainer"></android.support.v4.view.ViewPager>
 
         <Button
             android:id="@+id/button"
@@ -96,8 +96,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/bg_bt"
-            android:text="发送"
-            android:textColor="@color/white"
+            android:text="@string/send"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/m"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

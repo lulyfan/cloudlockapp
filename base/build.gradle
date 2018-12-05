@@ -52,6 +52,8 @@ dependencies {
     api('com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha1') {
         exclude group: 'androidx.annotation', module: 'annotation'
     }
+    //沉浸式状态栏
+    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     //测试依赖
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

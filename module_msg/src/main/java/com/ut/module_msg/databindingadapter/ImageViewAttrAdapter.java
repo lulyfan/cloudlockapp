@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.ut.module_msg.R;
 
 /**
  * author : chenjiajun
@@ -22,8 +21,6 @@ public class ImageViewAttrAdapter {
                     .asBitmap()
                     .centerCrop()
                     .into(imageView);
-        } else {
-            imageView.setImageResource(R.mipmap.default_user_icon);
         }
     }
 }

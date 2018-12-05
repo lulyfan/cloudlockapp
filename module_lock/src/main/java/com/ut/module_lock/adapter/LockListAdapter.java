@@ -112,7 +112,7 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
 //    }
 
 
-    @BindingAdapter("bind:imgSrc")
+    @BindingAdapter("imgSrc")
     public static void loadImage(ImageView imageView, int userType) {
         if (userType == 0) {
             imageView.setImageResource(R.mipmap.icon_user_manager);
@@ -123,7 +123,7 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
         }
     }
 
-    @BindingAdapter("bind:encryptText")
+    @BindingAdapter("encryptText")
     public static void loadText(TextView textView, String account) {
         textView.setText(TxtUtils.toEncryptAccount(account));
     }

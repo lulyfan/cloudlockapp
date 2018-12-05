@@ -13,8 +13,8 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingLeft="@dimen/base_20dp"
+        android:paddingRight="@dimen/base_20dp">
 
         <ImageView
             android:id="@+id/back"
@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:text="@string/new_user_register"
             android:textColor="@color/color_333333"
-            android:textSize="17sp"
+            android:textSize="@dimen/base_17sp"
             android:transitionName="register" />
     </FrameLayout>
 
@@ -51,18 +51,18 @@
             android:id="@+id/tel_belong_of_place"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/base_20dp"
+            android:layout_marginEnd="@dimen/base_20dp"
             android:layout_weight="1"
-            android:textSize="14sp"
+            android:textSize="@dimen/base_14sp"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:text="@string/default_country_code" />
 
         <ImageView
             android:id="@+id/icon_of_county"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/base_22dp"
+            android:layout_height="@dimen/base_22dp"
             android:src="@mipmap/china" />
     </LinearLayout>
 
@@ -83,21 +83,21 @@
             android:id="@+id/edt_phone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/base_20dp"
+            android:layout_marginEnd="@dimen/base_20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/phone_hint"
-            android:textSize="14sp"
+            android:textSize="@dimen/base_14sp"
             android:inputType="phone"
             android:maxLines="1"
             android:textColorHint="#CCCCCC" />
 
         <ImageView
             android:id="@+id/img_clear"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/base_20dp"
+            android:layout_height="@dimen/base_20dp"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/selector_clear" />
@@ -121,8 +121,8 @@
             android:id="@+id/edt_password"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_marginRight="@dimen/base_20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
@@ -134,8 +134,8 @@
 
         <CheckBox
             android:id="@+id/see_password"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/base_20dp"
+            android:layout_height="@dimen/base_20dp"
             android:background="@drawable/selector_eye"
             android:button="@null" />
     </LinearLayout>
@@ -154,8 +154,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_marginRight="@dimen/base_20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:inputType="number"
@@ -178,12 +178,12 @@
         android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="@dimen/base_20dp"
+        android:layout_marginTop="@dimen/base_30dp"
+        android:layout_marginRight="@dimen/base_20dp"
         app:button_label="@string/register"
         app:button_label_color="@android:color/white"
-        app:button_label_text_size="17sp"
+        app:button_label_text_size="@dimen/base_17sp"
         app:layout_constraintTop_toBottomOf="@id/verify_code_layout" />
 
 

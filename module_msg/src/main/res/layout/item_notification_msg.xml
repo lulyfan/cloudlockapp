@@ -3,24 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="notification"
-            type="com.ut.module_msg.model.MessageNotification"/>
+            type="com.ut.module_msg.model.NotificationMessage" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:layout_height="@dimen/base_80dp"
+        android:paddingLeft="@dimen/base_20dp"
+        android:background="@android:color/white">
 
-        <com.ut.module_msg.widget.CircleImageView
+        <ImageView
             android:id="@+id/icon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:url="@{notification.icon}"
+            android:layout_width="@dimen/base_40dp"
+            android:layout_height="@dimen/base_40dp"
+            android:src="@mipmap/default_icon_a"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:url="@{notification.icon}" />
 
         <TextView
             android:id="@+id/title"
@@ -28,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="@{notification.title}"
-            android:textColor="#333333"
-            android:textSize="16sp"
+            android:textColor="@color/color_base_title"
+            android:textSize="@dimen/base_14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/content"
             app:layout_constraintLeft_toRightOf="@id/icon"
@@ -40,12 +42,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{notification.content}"
-            android:textColor="#dfdfdf"
-            android:textSize="14sp"
+            android:textColor="#999999"
+            android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/base_20dp"
+            android:text="@{notification.time}"
+            android:textColor="#BBBBBB"
+            android:textSize="@dimen/base_10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#dfdfdf"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -6,4 +6,5 @@
     <color name="colorBackgroud">#F1F3F2</color>
     <color name="color_base_title">#ff333333</color>
     <color name="color_tv_blue">#ff00bbd2</color>
+    <color name="white">#FFFFFF</color>
 </resources>

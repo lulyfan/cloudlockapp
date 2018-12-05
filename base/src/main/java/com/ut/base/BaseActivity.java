@@ -1,5 +1,6 @@
 package com.ut.base;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.UIUtils.StatusBarUtil;
 
 /**
@@ -24,24 +26,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                // 透明状态栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                // 透明导航栏
-                //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-                getWindow().getDecorView().setFitsSystemWindows(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Window window = getWindow();
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    window.setStatusBarColor(Color.TRANSPARENT);
-                }
-            }
-
-        }
     }
 
     public void setLightStatusBar() {
@@ -50,6 +34,30 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setDarkStatusBar() {
         StatusBarUtil.setStatusTextColor(false, this);
+    }
+
+    /**
+     * 设置沉浸式状态栏
+     * @param stateBarColor 状态栏颜色, 为0时状态栏颜色不改变
+     * @param isEnableStatusBarDarkFont 是否启用深色字体，默认浅色
+     */
+    public void enableImmersive(int stateBarColor, boolean isEnableStatusBarDarkFont) {
+        ImmersionBar immersionBar =  ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarDarkFont(isEnableStatusBarDarkFont);
+
+        if (stateBarColor != 0) {
+            immersionBar.statusBarColor(stateBarColor);
+        }
+
+        immersionBar.init();
+    }
+
+    /**
+     * 设置沉浸式状态栏，布局内容会上移到状态栏（设置状态栏为图片背景时用）
+     */
+    public void enableImmersive() {
+        ImmersionBar.with(this).reset().init();
     }
 
     public void onXmlClick(View view) {

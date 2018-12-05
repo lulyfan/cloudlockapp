@@ -4,13 +4,13 @@
     <data>
         <variable
             name="lockGroupItem"
-            type="com.ut.module_mine.LockGroupActivity.LockGroupData"/>
+            type="com.ut.module_mine.activity.LockGroupActivity.LockGroupData"/>
     </data>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingLeft="@dimen/border_margin"
     android:paddingRight="@dimen/border_margin"
     android:background="@drawable/select_gray_e">
@@ -18,11 +18,12 @@
     <TextView
         android:id="@+id/lockGroupName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text='@{lockGroupItem.name + " (" + lockGroupItem.lockCount + ")"}'
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:drawableRight="@drawable/arrow_right"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/s"
+        android:textColor="@color/gray3"
+        android:text='@{lockGroupItem.name}'
+        android:drawableRight="@drawable/right_triangle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
