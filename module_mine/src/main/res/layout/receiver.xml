@@ -3,20 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/arc_border"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
-    android:background="@drawable/arc_border">
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="接收者"
-        android:textSize="14sp"
-        android:textColor="@color/gray3"
+        android:text="@string/receiver"
+        android:textColor="@color/gray6"
+        android:textSize="@dimen/s"
+        app:layout_constraintBottom_toTopOf="@+id/divider4"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,53 +26,51 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@null"
-        android:drawablePadding="16dp"
         android:ems="10"
         android:gravity="right"
         android:hint="请输入接收者手机号"
-        android:textSize="14sp"
-        android:textColorHint="@color/grayC"
         android:inputType="textPersonName"
+        android:textColorHint="@color/grayC"
+        android:textSize="@dimen/s"
         app:layout_constraintBottom_toBottomOf="@+id/textView14"
         app:layout_constraintEnd_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/textView14"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/divider4"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="名称"
-        android:textColor="@color/gray3"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/divider4"
+        android:layout_marginStart="16dp"
+        android:text="@string/name"
+        android:textColor="@color/gray6"
+        android:textSize="@dimen/s"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="请为钥匙命名"
-        android:textColorHint="@color/grayC"
         android:background="@null"
+        android:ems="10"
         android:gravity="right"
-        android:textSize="14sp"
+        android:hint="@string/nameKey"
+        android:textColorHint="@color/grayC"
+        android:textSize="@dimen/s"
         app:layout_constraintBottom_toBottomOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="@+id/editText"
         app:layout_constraintTop_toTopOf="@+id/textView15" />
@@ -80,10 +80,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText"
-        app:srcCompat="@drawable/points" />
+        app:srcCompat="@drawable/address_book" />
 
 </android.support.constraint.ConstraintLayout>

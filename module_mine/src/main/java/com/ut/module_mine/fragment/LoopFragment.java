@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ut.module_mine.DialogUtil;
+import com.ut.module_mine.util.DialogUtil;
 import com.ut.module_mine.R;
 import com.ut.module_mine.customView.DatePicker;
 import com.ut.module_mine.customView.TimePicker;

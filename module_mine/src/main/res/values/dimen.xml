@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="border_margin">16dp</dimen>
+    <dimen name="xxs">10sp</dimen>
     <dimen name="xs">12sp</dimen>
     <dimen name="s">14sp</dimen>
     <dimen name="m">17sp</dimen>

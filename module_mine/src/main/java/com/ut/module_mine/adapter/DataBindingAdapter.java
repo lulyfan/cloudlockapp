@@ -1,10 +1,12 @@
-package com.ut.module_mine;
+package com.ut.module_mine.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
     private int variableId;
     private List<T> data;
     private V selectedBinding;
+    private double percent = -1.0;
 
     /**
      *
@@ -40,11 +43,22 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
         this.data = data;
         notifyDataSetChanged();
     }
+
+    public void setItemHeightByPercent(double percent) {
+        this.percent = percent;
+    }
+
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View root = LayoutInflater.from(context).inflate(layoutId, parent, false);
         final ViewDataBinding binding = DataBindingUtil.bind(root);
+
+        if (percent > 0) {
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) root.getLayoutParams();
+            layoutParams.height = getHeightPxByDisplayPercent(context, percent);
+            root.setLayoutParams(layoutParams);
+        }
 
         if (initListener != null) {
             initListener.onInit(binding);
@@ -141,6 +155,14 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
             super(itemView);
             this.binding = binding;
         }
+    }
+
+    public static int getHeightPxByDisplayPercent(Context context, double percent) {
+
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        int height = dm.heightPixels;
+        return (int) (height * percent);
     }
 
 }

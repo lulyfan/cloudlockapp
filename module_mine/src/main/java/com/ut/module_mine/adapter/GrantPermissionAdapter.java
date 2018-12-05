@@ -1,4 +1,4 @@
-package com.ut.module_mine;
+package com.ut.module_mine.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

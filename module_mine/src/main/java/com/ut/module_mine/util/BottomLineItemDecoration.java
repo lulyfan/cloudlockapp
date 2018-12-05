@@ -1,4 +1,4 @@
-package com.ut.module_mine;
+package com.ut.module_mine.util;
 
 
 import android.content.Context;
@@ -45,6 +45,7 @@ public class BottomLineItemDecoration extends RecyclerView.ItemDecoration {
 
         for (int i=0; i<parent.getChildCount(); i++) {
 
+            //判断是否绘制最后一个item的下划线
             if (i == parent.getChildCount() - 1 && !isDrawLastLine) {
                 return;
             }

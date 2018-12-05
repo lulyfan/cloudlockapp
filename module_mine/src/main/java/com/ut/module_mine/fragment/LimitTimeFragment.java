@@ -2,7 +2,6 @@ package com.ut.module_mine.fragment;
 
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ut.module_mine.DialogUtil;
+import com.ut.module_mine.util.DialogUtil;
 import com.ut.module_mine.R;
 import com.ut.module_mine.customView.DateTimePicker;
 import com.ut.module_mine.databinding.FragmentLimitTimeBinding;

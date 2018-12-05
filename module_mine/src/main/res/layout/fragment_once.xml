@@ -9,6 +9,9 @@
     <include
         android:id="@+id/include3"
         layout="@layout/receiver"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1901"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="注:单次钥匙有效期为1小时,使用1次后失效"
+        android:text="@string/onceKeyTip"
         android:textSize="@dimen/xs"
         android:textColor="#F55D54"
         android:paddingLeft="16dp"

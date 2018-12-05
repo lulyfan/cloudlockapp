@@ -14,18 +14,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        style="@style/styleGrayE"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/title"
-        app:srcCompat="@drawable/points" />
+        app:srcCompat="@drawable/mine_close" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="生效时间"
+        android:text="@string/validTime"
         android:textColor="@color/gray3"
         android:textSize="@dimen/m"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +39,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="确定"
-        android:textSize="@dimen/s"
+        android:text="@string/confirm"
         android:textColor="@color/gray3"
+        android:textSize="@dimen/s"
+        style="@style/styleGrayE"
         app:layout_constraintBottom_toBottomOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/title" />

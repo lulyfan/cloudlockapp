@@ -1,4 +1,4 @@
-package com.ut.module_mine;
+package com.ut.module_mine.util;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.ut.module_mine.R;
 import com.ut.module_mine.customView.DatePicker;
 import com.ut.module_mine.customView.DateTimePicker;
 import com.ut.module_mine.customView.TimePicker;
