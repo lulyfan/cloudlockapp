@@ -28,10 +28,8 @@ public class EditLimitedTimeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#00BDCF"));
-        }
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_limited_time);
+        enableImmersive(R.color.title_bar_bg, false);
         keyInfo = (KeyItem) getIntent().getSerializableExtra("keyInfo");
         mBinding.setKeyItem(keyInfo);
         mBinding.back.setOnClickListener(v -> finish());

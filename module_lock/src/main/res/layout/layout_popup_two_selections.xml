@@ -16,9 +16,11 @@
 
         <ImageView
             android:id="@+id/close_window"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/base_32dp"
+            android:layout_height="@dimen/base_32dp"
+            android:padding="@dimen/base_6dp"
             android:layout_gravity="center_vertical|right"
+            android:background="@drawable/selector_btn_back"
             android:src="@mipmap/close_black" />
     </FrameLayout>
 

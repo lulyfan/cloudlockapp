@@ -36,11 +36,8 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#00BDCF"));
-        }
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        mBinding.getRoot().setFitsSystemWindows(true);
+        enableImmersive(R.color.title_bar_bg, false);
         mBinding.back.setOnClickListener(v -> finish());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -85,9 +82,14 @@ public class KeysManagerActivity extends BaseActivity {
             @Override
             protected void initWindow() {
                 super.initWindow();
-                getPopupWindow().setOnDismissListener(() -> setWindowAlpha(1f));
+                getPopupWindow().setOnDismissListener(() -> {
+                            setWindowAlpha(1f);
+                            enableImmersive(R.color.title_bar_bg, false);
+                        }
+                );
             }
         };
+        enableImmersive(R.color.white, true);
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 

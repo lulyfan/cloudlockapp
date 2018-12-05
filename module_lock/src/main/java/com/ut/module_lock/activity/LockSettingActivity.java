@@ -21,6 +21,7 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableImmersive(R.color.title_bar_bg, false);
         mBinding = DataBindingUtil.setContentView(this, R.layout.acitivity_lock_setting);
         mBinding.back.setOnClickListener(v -> finish());
         mBinding.layoutChooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_KEY_GROUP).navigation());

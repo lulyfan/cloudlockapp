@@ -37,11 +37,8 @@ public class KeyInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#00BDCF"));
-            getWindow().getDecorView().setFitsSystemWindows(true);
-        }
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
+        enableImmersive(R.color.title_bar_bg, false);
         keyInfo = (KeyItem) getIntent().getSerializableExtra("keyInfo");
         mBinding.setKeyItem(keyInfo);
         mBinding.back.setOnClickListener(v -> finish());
@@ -81,9 +78,13 @@ public class KeyInfoActivity extends BaseActivity {
             @Override
             protected void initWindow() {
                 super.initWindow();
-                getPopupWindow().setOnDismissListener(() -> setWindowAlpha(1f));
+                getPopupWindow().setOnDismissListener(() -> {
+                    setWindowAlpha(1f);
+                    enableImmersive(R.color.title_bar_bg, false);
+                });
             }
         };
+        enableImmersive(R.color.white, true);
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
