@@ -1,9 +1,8 @@
 package com.ut.module_lock.entity;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.module_lock.R;
 
@@ -13,7 +12,7 @@ import com.ut.module_lock.R;
  * desc   :
  * version: 1.0
  */
-public class LockKey extends BaseObservable {
+public class LockKey implements Parcelable {
     private String name;
     private int status;
     private String statusStr;
@@ -36,6 +35,7 @@ public class LockKey extends BaseObservable {
         this.electricity = electricity;
     }
 
+
     public void init() {
         statusStr = BaseApplication.getAppContext().getResources().getStringArray(R.array.key_status)[status];
         lockTypeStr = BaseApplication.getAppContext().getResources().getStringArray(R.array.lock_type)[lockType];
@@ -43,6 +43,29 @@ public class LockKey extends BaseObservable {
         electricityStr = String.valueOf(electricity) + "%";
     }
 
+    public int getLockType() {
+        return lockType;
+    }
+
+    public void setLockType(int lockType) {
+        this.lockType = lockType;
+    }
+
+    public int getKeyType() {
+        return keyType;
+    }
+
+    public void setKeyType(int keyType) {
+        this.keyType = keyType;
+    }
+
+    public int getElectricity() {
+        return electricity;
+    }
+
+    public void setElectricity(int electricity) {
+        this.electricity = electricity;
+    }
 
     public int getUserType() {
         return userType;
@@ -106,5 +129,52 @@ public class LockKey extends BaseObservable {
 
     public void setElectricityStr(String electricityStr) {
         this.electricityStr = electricityStr;
+    }
+
+
+    public static final Creator<LockKey> CREATOR = new Creator<LockKey>() {
+        @Override
+        public LockKey createFromParcel(Parcel in) {
+            return new LockKey(in);
+        }
+
+        @Override
+        public LockKey[] newArray(int size) {
+            return new LockKey[size];
+        }
+    };
+
+    protected LockKey(Parcel in) {
+        name = in.readString();
+        status = in.readInt();
+        statusStr = in.readString();
+        lockType = in.readInt();
+        lockTypeStr = in.readString();
+        keyType = in.readInt();
+        keyTypeStr = in.readString();
+        userType = in.readInt();
+        userTypeStr = in.readString();
+        electricity = in.readInt();
+        electricityStr = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(status);
+        dest.writeString(statusStr);
+        dest.writeInt(lockType);
+        dest.writeString(lockTypeStr);
+        dest.writeInt(keyType);
+        dest.writeString(keyTypeStr);
+        dest.writeInt(userType);
+        dest.writeString(userTypeStr);
+        dest.writeInt(electricity);
+        dest.writeString(electricityStr);
     }
 }

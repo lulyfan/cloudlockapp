@@ -27,16 +27,20 @@
             >
             <!--android:src="@mipmap/icon_user_manager"-->
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@mipmap/icon_user_manager"
                 app:imgSrc="@{lockKey.userType}"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintHeight_percent="1"
+                app:layout_constraintDimensionRatio="H,1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/tv_lock_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/lock_30dp"
                 android:ellipsize="end"
                 android:maxEms="11"
                 android:scrollHorizontally="true"
@@ -44,7 +48,10 @@
                 android:text="@{lockKey.name}"
                 android:textSize="@dimen/lock_17sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22"
+                />
 
             <TextView
                 android:id="@+id/tv_lock_status"
@@ -61,8 +68,10 @@
                 style="@style/ItemLockListBottomTV"
                 android:drawableLeft="@mipmap/icon_bluetooth"
                 android:text="@{lockKey.lockTypeStr}"
-                app:layout_constraintTop_toBottomOf="@+id/tv_lock_status"
-                />
+                android:layout_marginBottom="@dimen/base_10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lock_status"/>
 
             <TextView
                 android:id="@+id/tv_key_type"

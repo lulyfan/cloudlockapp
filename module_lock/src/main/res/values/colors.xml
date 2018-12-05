@@ -4,4 +4,5 @@
     <color name="lock_color_tv_red">#fff55d54</color>
     <color name="lock_color_tv_gray">#ff666666</color>
     <color name="lock_color_btn_gray">#DFDFDF</color>
+    <color name="lock_color_bg_gray">#fff4f9fb</color>
 </resources>

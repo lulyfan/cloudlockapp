@@ -22,6 +22,12 @@
 
     <string name="lock_btn_confirm">确定</string>
 
+    <string name="percentage_symbol">%</string>
+
+    <string name="func_send_key">发送钥匙</string>
+    <string name="func_manage_key">管理钥匙</string>
+    <string name="func_operate_record">操作记录</string>
+    <string name="func_lock_manage">锁管理</string>
     <string-array name="lock_type">
         <item>蓝牙门锁</item>
     </string-array>

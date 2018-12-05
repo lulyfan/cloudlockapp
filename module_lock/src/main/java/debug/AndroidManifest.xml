@@ -23,6 +23,8 @@
         </activity>
         <activity android:name=".activity.SetNameActivity">
         </activity>
+        <activity android:name=".activity.LockDetailActivity">
+        </activity>
     </application>
 
 </manifest>

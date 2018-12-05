@@ -2,8 +2,10 @@ package com.ut.module_lock.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -21,13 +24,16 @@ import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.TxtUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
+import com.ut.module_lock.activity.LockDetailActivity;
 import com.ut.module_lock.adapter.LockListAdapter;
+import com.ut.module_lock.adapter.OnRcvItemClickListener;
 import com.ut.module_lock.databinding.*;
 import com.ut.module_lock.entity.LockGroup;
 import com.ut.module_lock.entity.LockKey;
@@ -64,14 +70,22 @@ public class LockListFragment extends BaseFragment {
         //TODO 测试数据
         List<LockKey> lockKeys = new ArrayList<>();
         lockKeys.add(new LockKey("小锁Chan的锁/超过12位字符就", 0, 0, 0, 0, 80));
-        lockKeys.add(new LockKey("我是【授权用户】的门锁", 2, 0, 0, 1, 50));
-        lockKeys.add(new LockKey("我是【普通用户】的门锁", 3, 0, 1, 2, 80));
+        lockKeys.add(new LockKey("我是【授权用户】的门锁", 2, 0, 0, 1, 39));
+        lockKeys.add(new LockKey("我是【普通用户】的门锁", 3, 0, 1, 2, 10));
         User user = new User("13534673711");
         //
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mFragmentLocklistBinding.lockRvLock.setLayoutManager(linearLayoutManager);
         mLockListAdapter = new LockListAdapter(getContext(), lockKeys, user);
+        mLockListAdapter.setOnRcvItemClickListener(new OnRcvItemClickListener() {
+            @Override
+            public void onItemClick(View view, List<?> datas, int position) {
+                Intent intent = new Intent(getContext(), LockDetailActivity.class);
+                intent.putExtra(LockDetailActivity.EXTRA_LOCK_KEY, (Parcelable) datas.get(position));
+                startActivity(intent);
+            }
+        });
         mFragmentLocklistBinding.lockRvLock.setAdapter(mLockListAdapter);
         mFragmentLocklistBinding.setPresenter(new Present());
     }
@@ -141,4 +155,5 @@ public class LockListFragment extends BaseFragment {
             UTLog.i("onAddClick");
         }
     }
+
 }

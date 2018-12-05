@@ -29,7 +29,7 @@ import java.util.List;
  * Created by ZYB on 2017-03-24.
  */
 
-public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.LockKeyViewHolder> implements View.OnTouchListener {
+public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.LockKeyViewHolder> implements View.OnClickListener {
     private LayoutInflater mLayoutInflater = null;
     private List<LockKey> datas = new ArrayList<>();
     private OnRcvItemClickListener mOnRcvItemClickListener = null;
@@ -64,7 +64,7 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
         View view = null;
         if (viewType == VIEW_TYPE_ITEM) {
             view = mLayoutInflater.inflate(R.layout.item_lock_list, parent, false);
-            view.setOnTouchListener(this);
+            view.setOnClickListener(this);
         } else {
             view = mLayoutInflater.inflate(R.layout.item_lock_list_empty, parent, false);
         }
@@ -78,6 +78,7 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
             LockKey lockKey = datas.get(position);
             lockKey.init();
             holder.bind(lockKey);
+            holder.mView.setTag(position);
         } else {
             holder.bindEmpty(mUser);
         }
@@ -101,10 +102,15 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
         }
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
-    }
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_UP && mOnRcvItemClickListener != null) {
+//            mOnRcvItemClickListener.onItemClick(v, datas, (Integer) v.getTag());
+//            return true;
+//        }
+//        return false;
+//    }
+
 
     @BindingAdapter("bind:imgSrc")
     public static void loadImage(ImageView imageView, int userType) {
@@ -122,13 +128,20 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
         textView.setText(TxtUtils.toEncryptAccount(account));
     }
 
+    @Override
+    public void onClick(View v) {
+        mOnRcvItemClickListener.onItemClick(v, datas, (Integer) v.getTag());
+    }
+
     public static class LockKeyViewHolder extends RecyclerView.ViewHolder {
         private ItemLockListBinding mBinding;
         private ItemLockListEmptyBinding mEmptyBinding;
+        public View mView = null;
         public int viewType = 0;
 
         public LockKeyViewHolder(View itemView, int viewType) {
             super(itemView);
+            mView = itemView;
             this.viewType = viewType;
             if (viewType == VIEW_TYPE_ITEM) {
                 mBinding = DataBindingUtil.bind(itemView);
