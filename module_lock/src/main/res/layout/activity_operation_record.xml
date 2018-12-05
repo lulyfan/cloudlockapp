@@ -18,26 +18,26 @@
             android:id="@+id/top"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_44dp"
-            android:layout_marginBottom="@dimen/base_2dp"
-            android:background="@android:color/white"
-            android:elevation="@dimen/base_2dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:background="#00BDCF"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp">
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/base_32dp"
+                android:layout_height="@dimen/base_32dp"
+                android:padding="@dimen/base_6dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/icon_back" />
+                android:background="@drawable/selector_btn_back"
+                android:src="@mipmap/back_white" />
 
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/operation_record"
-                android:textColor="@color/color_base_title"
+                android:textColor="@android:color/white"
+                android:text="@string/lock_operation_record"
                 android:textSize="@dimen/base_17sp" />
         </RelativeLayout>
 
@@ -47,8 +47,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:divider="@null"
-            android:layout_marginBottom="@dimen/base_10dp"
-            android:listSelector="@android:color/transparent"/>
+            android:layout_marginBottom="@dimen/base_10dp" />
 
     </LinearLayout>
 </layout>

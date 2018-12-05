@@ -6,6 +6,7 @@ import android.content.Context;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+//import com.ut.database.database.CloudLockDatabaseHolder;
 
 /**
  * author : zhouyubin
@@ -31,6 +32,13 @@ public class BaseApplication extends Application {
 
         //初始化logger
         initLogger();
+
+        //初始化数据库
+        initDatabase();
+    }
+
+    private void initDatabase() {
+//        CloudLockDatabaseHolder.get().init(this);
     }
 
     private void initLogger() {

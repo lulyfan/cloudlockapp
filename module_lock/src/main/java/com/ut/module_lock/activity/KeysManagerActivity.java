@@ -36,12 +36,8 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#00BDCF"));
-        }
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        mBinding.getRoot().setFitsSystemWindows(true);
-        mBinding.back.setOnClickListener(v -> finish());
+        initToolbar();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mBinding.list.setLayoutManager(linearLayoutManager);
@@ -59,23 +55,34 @@ public class KeysManagerActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable("keyInfo", keyItem).navigation();
         });
 
-        mBinding.more.setOnClickListener(v -> popupMoreWindow());
 
         loadData();
     }
 
+    private void initToolbar() {
+        enableImmersive();
+        setTitle(R.string.func_manage_key);
+        showTitleMore();
+        setMoreClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupMoreWindow();
+            }
+        });
+    }
+
     private void popupMoreWindow() {
         setWindowAlpha(0.5f);
-        CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_key_send_or_clear,
+        CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
-                getView(R.id.clear_key).setOnClickListener(v -> {
+                getView(R.id.item1).setOnClickListener(v -> {
                     clearKey();
                     getPopupWindow().dismiss();
                 });
-                getView(R.id.send_key).setOnClickListener(v -> {
+                getView(R.id.item2).setOnClickListener(v -> {
                     sendKey();
                     getPopupWindow().dismiss();
                 });
@@ -85,9 +92,14 @@ public class KeysManagerActivity extends BaseActivity {
             @Override
             protected void initWindow() {
                 super.initWindow();
-                getPopupWindow().setOnDismissListener(() -> setWindowAlpha(1f));
+                getPopupWindow().setOnDismissListener(() -> {
+                            setWindowAlpha(1f);
+                            enableImmersive(R.color.title_bar_bg, false);
+                        }
+                );
             }
         };
+        enableImmersive(R.color.white, true);
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
@@ -106,12 +118,18 @@ public class KeysManagerActivity extends BaseActivity {
             item.setCaption("caption " + i);
             item.setDesc("Dexxxxxxxxx ");
             item.setType((i + 1) % 4);
+            item.setAuthorized((i + 2) % 2 == 0);
             item.setSender("大波阿哥");
             item.setSender("2018/09/08 10:55");
             item.setAcceptTime("2018/09/08 11:34");
-            item.setState("待接受");
             item.setStartTime("2018/09/09 11:12");
             item.setEndTime("2018/11/11 12:00");
+            if (i < 5) {
+                item.setState(2);
+            } else {
+                item.setState(0);
+            }
+            item.setAuthorizedType("普通用户");
             items.add(item);
         }
         kmVM.getKeys().postValue(items);

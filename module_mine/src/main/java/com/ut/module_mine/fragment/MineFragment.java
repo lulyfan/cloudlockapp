@@ -33,7 +33,6 @@ public class MineFragment extends BaseFragment {
     FragmentMineBinding mMineBinding = null;
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +43,7 @@ public class MineFragment extends BaseFragment {
         initUI();
         return mView;
     }
+
 
     private void initUI() {
         mMineBinding.lockGroup.setOnClickListener(new View.OnClickListener() {

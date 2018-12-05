@@ -6,24 +6,12 @@
         </shape>
     </item>
     <item
-        android:height="304dp">
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="0"
-                android:endColor="@color/color_tv_blue"
-                android:startColor="@color/colorAccent"/>
-            <corners
-                android:bottomLeftRadius="100dp"
-                android:bottomRightRadius="100dp"/>
-        </shape>
+        >
+        <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+                android:gravity="top"
+                android:src="@mipmap/bg_lock_detail"
+                android:tileMode="disabled">
+        </bitmap>
     </item>
-    <!--<item-->
-        <!--android:height="304dp">-->
-        <!--<bitmap xmlns:android="http://schemas.android.com/apk/res/android"-->
-                <!--android:gravity="top"-->
-                <!--android:src="@mipmap/bg_shading_detail"-->
-                <!--android:tileMode="disabled">-->
-        <!--</bitmap>-->
-    <!--</item>-->
 
 </layer-list>

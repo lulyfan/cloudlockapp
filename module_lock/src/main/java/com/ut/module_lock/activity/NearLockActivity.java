@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -25,10 +26,18 @@ public class NearLockActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_near_lock);
+        enableImmersive();
         mNearLockBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_lock);
         setLightStatusBar();
         setTitle(R.string.lock_title_near_lock);
         initTestData();
+        mNearLockBinding.lvBleDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(NearLockActivity.this, ApplyKeyActivity.class);
+                NearLockActivity.this.startActivity(intent);
+            }
+        });
     }
 
     private void initTestData() {

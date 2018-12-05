@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/editUesrInfo"
@@ -13,9 +14,10 @@
             android:layout_height="0dp"
             android:background="@drawable/select_half_arc_border"
             android:paddingLeft="16dp"
+            android:paddingTop="@dimen/base_35dp"
             android:paddingRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.136"
+            app:layout_constraintHeight_percent="0.185"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,7 +32,7 @@
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/m"
                 app:layout_constraintStart_toEndOf="@+id/headImg"
-                app:layout_constraintTop_toTopOf="@+id/headImg" />
+                app:layout_constraintTop_toTopOf="@+id/headImg"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -46,7 +48,7 @@
                 android:textColor="#00BBD2"
                 android:textSize="@dimen/xs"
                 app:layout_constraintBottom_toBottomOf="@+id/headImg"
-                app:layout_constraintStart_toStartOf="@+id/textView" />
+                app:layout_constraintStart_toStartOf="@+id/textView"/>
 
             <ImageView
                 android:id="@+id/headImg"
@@ -57,7 +59,7 @@
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintHeight_percent="0.65"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -66,7 +68,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_triangle" />
+                app:srcCompat="@drawable/right_triangle"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -93,7 +95,7 @@
                 android:textSize="@dimen/s"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <Switch
                 android:id="@+id/switch1"
@@ -101,7 +103,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/textView3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView3" />
+                app:layout_constraintTop_toTopOf="@+id/textView3"/>
 
             <TextView
                 android:id="@+id/textView4"
@@ -112,7 +114,7 @@
                 android:textSize="@dimen/s"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/divider"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/divider"/>
 
             <Switch
                 android:id="@+id/switch2"
@@ -120,7 +122,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/textView4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView4" />
+                app:layout_constraintTop_toTopOf="@+id/textView4"/>
 
             <View
                 android:id="@+id/divider"
@@ -131,7 +133,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -165,7 +167,7 @@
                 app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/lockGroup"
@@ -185,7 +187,7 @@
                 app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lockUserManage" />
+                app:layout_constraintTop_toBottomOf="@+id/lockUserManage"/>
 
             <TextView
                 android:id="@+id/changeLockPermission"
@@ -205,7 +207,7 @@
                 app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/divider3"/>
 
             <View
                 android:id="@+id/divider2"
@@ -216,7 +218,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/lockUserManage"
-                app:layout_constraintTop_toBottomOf="@+id/lockUserManage" />
+                app:layout_constraintTop_toBottomOf="@+id/lockUserManage"/>
 
             <View
                 android:id="@+id/divider3"
@@ -226,7 +228,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/lockGroup"
-                app:layout_constraintTop_toBottomOf="@+id/lockGroup" />
+                app:layout_constraintTop_toBottomOf="@+id/lockGroup"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -258,7 +260,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/divider5" />
+                app:layout_constraintTop_toTopOf="@+id/divider5"/>
 
             <TextView
                 android:id="@+id/textView9"
@@ -277,7 +279,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <View
                 android:id="@+id/divider5"
@@ -289,7 +291,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
         </android.support.constraint.ConstraintLayout>
 
 

@@ -92,17 +92,4 @@ public class MsgFragment extends BaseFragment {
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager, true);
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mMsgBinding.setPresenter(new Present());
-    }
-
-    public class Present {
-        public void onClick(View view) {
-            UTLog.i("present onclick");
-            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
-        }
-    }
 }

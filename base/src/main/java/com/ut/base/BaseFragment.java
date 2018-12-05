@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.Utils.UTLog;
 
 /**
@@ -19,6 +20,46 @@ import com.ut.base.Utils.UTLog;
  * version: 1.0
  */
 public class BaseFragment extends Fragment {
+
+    public void setLightStatusBarFont() {
+        if (getActivity() instanceof BaseActivity) {
+            BaseActivity activity = (BaseActivity) getActivity();
+            activity.setLightStatusBar();
+        }
+    }
+
+    public void setDarkStatusBarFont() {
+        if (getActivity() instanceof BaseActivity) {
+            BaseActivity activity = (BaseActivity) getActivity();
+            activity.setDarkStatusBar();
+        }
+    }
+
+    /**
+     * 设置沉浸式状态栏
+     *
+     * @param stateBarColor             状态栏颜色, 为0时状态栏颜色不改变
+     * @param isEnableStatusBarDarkFont 是否启用深色字体，默认浅色
+     */
+    public void enableImmersive(int stateBarColor, boolean isEnableStatusBarDarkFont) {
+        ImmersionBar immersionBar = ImmersionBar.with(this)
+                .fitsSystemWindows(true)
+                .statusBarDarkFont(isEnableStatusBarDarkFont);
+
+        if (stateBarColor != 0) {
+            immersionBar.statusBarColor(stateBarColor);
+        }
+
+        immersionBar.init();
+    }
+
+    /**
+     * 设置沉浸式状态栏，布局内容会上移到状态栏（设置状态栏为图片背景时用）
+     */
+    public void enableImmersive() {
+        ImmersionBar.with(this).reset().init();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

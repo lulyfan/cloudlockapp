@@ -3,7 +3,7 @@
     <style name="ItemLockListBottomTV">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/lock_20dp</item>
+        <item name="android:layout_marginTop">@dimen/lock_23dp</item>
         <item name="android:drawablePadding">@dimen/lock_6dp</item>
         <item name="android:textSize">@dimen/lock_12sp</item>
         <item name="android:gravity">center</item>

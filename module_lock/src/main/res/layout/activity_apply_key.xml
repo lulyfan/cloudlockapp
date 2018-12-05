@@ -12,32 +12,7 @@
         android:background="#F4F9FB"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_44dp"
-            android:layout_marginBottom="@dimen/base_2dp"
-            android:background="@android:color/white"
-            android:elevation="@dimen/base_2dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/icon_back" />
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/lock_apply_key"
-                android:textColor="@color/color_base_title"
-                android:textSize="@dimen/base_17sp" />
-        </RelativeLayout>
+        <include layout="@layout/toolbar_white"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +34,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_key_name"
                     android:textColor="#666666"
-                    android:textSize="@dimen/base_14sp" />
+                    android:textSize="@dimen/base_14sp"/>
 
                 <TextView
                     android:id="@+id/tv_key_name"
@@ -67,13 +42,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:textColor="#666666"
-                    android:textSize="@dimen/base_17sp" />
+                    android:textSize="@dimen/base_17sp"/>
             </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#DFDFDF" />
+                android:background="#DFDFDF"/>
 
             <EditText
                 android:id="@+id/edt_ask_for"
@@ -85,13 +60,15 @@
                 android:padding="@dimen/base_10dp"
                 android:textColor="@color/color_base_title"
                 android:textColorHint="#CCCCCC"
-                android:textSize="@dimen/base_14sp" />
+                android:textSize="@dimen/base_14sp"/>
         </LinearLayout>
 
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lock_20dp"
+            android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="@dimen/base_20dp"
             android:paddingRight="@dimen/base_20dp">
@@ -104,7 +81,12 @@
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_permanent_key"
                 android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
+                android:textSize="@dimen/base_14sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lock_0_5dp"
+                android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
                 android:layout_width="match_parent"
@@ -114,7 +96,12 @@
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_limited_time_key"
                 android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
+                android:textSize="@dimen/base_14sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lock_0_5dp"
+                android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
                 android:layout_width="match_parent"
@@ -124,7 +111,12 @@
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_once_key"
                 android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
+                android:textSize="@dimen/base_14sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lock_0_5dp"
+                android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
                 android:layout_width="match_parent"
@@ -134,14 +126,14 @@
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_loop_key"
                 android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
+                android:textSize="@dimen/base_14sp"/>
         </RadioGroup>
 
 
         <View
             android:layout_width="1px"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <Button
             android:layout_width="match_parent"
@@ -151,6 +143,6 @@
             android:layout_marginBottom="@dimen/base_10dp"
             android:background="@drawable/selector_btn_save"
             android:text="@string/lock_commit_apply"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 </layout>

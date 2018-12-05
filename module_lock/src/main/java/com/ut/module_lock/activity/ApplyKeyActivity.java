@@ -17,10 +17,12 @@ import com.ut.module_lock.databinding.ActivityApplyKeyBinding;
 public class ApplyKeyActivity extends BaseActivity {
 
     private ActivityApplyKeyBinding mBinding;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableImmersive();
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_apply_key);
-        mBinding.back.setOnClickListener(v -> finish());
+        setTitle(R.string.lock_apply_key);
     }
 }

@@ -9,45 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_44dp"
-            android:background="#00BDCF"
-            android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/base_22dp"
-                android:layout_height="@dimen/base_22dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/back_white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/lock_key_manager"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/base_17sp" />
-
-            <ImageView
-                android:id="@+id/more"
-                android:layout_width="@dimen/base_22dp"
-                android:layout_height="@dimen/base_22dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/more" />
-
-        </RelativeLayout>
+        <include
+            android:id="@+id/include9"
+            layout="@layout/toolbar_green"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top" />
+            app:layout_constraintTop_toBottomOf="@+id/include9"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

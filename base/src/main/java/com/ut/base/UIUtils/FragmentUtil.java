@@ -10,24 +10,33 @@ import com.ut.base.BaseFragment;
  * version: 1.0
  */
 public class FragmentUtil {
+    private static BaseFragment fragment_lock = null;
+    private static BaseFragment fragment_msg = null;
+    private static BaseFragment fragment_mall = null;
+    private static BaseFragment fragment_mine = null;
 
     public static BaseFragment getLockFragment() {
-        BaseFragment fragment = (BaseFragment) ARouter.getInstance().build(RouterUtil.LockModulePath.Fragment_Lock).navigation();
-        return fragment;
+        if (fragment_lock == null)
+            fragment_lock = (BaseFragment) ARouter.getInstance().build(RouterUtil.LockModulePath.Fragment_Lock).navigation();
+        return fragment_lock;
     }
 
     public static BaseFragment getMsgFragment() {
-        BaseFragment fragment = (BaseFragment) ARouter.getInstance().build(RouterUtil.MsgModulePath.Fragment_MSG).navigation();
-        return fragment;
+        if (fragment_msg == null)
+            fragment_msg = (BaseFragment) ARouter.getInstance().build(RouterUtil.MsgModulePath.Fragment_MSG).navigation();
+
+        return fragment_msg;
     }
 
     public static BaseFragment getMallFragment() {
-        BaseFragment fragment = (BaseFragment) ARouter.getInstance().build(RouterUtil.MallModulePath.Fragment_Mall).navigation();
-        return fragment;
+        if (fragment_mall == null)
+            fragment_mall = (BaseFragment) ARouter.getInstance().build(RouterUtil.MallModulePath.Fragment_Mall).navigation();
+        return fragment_mall;
     }
 
     public static BaseFragment getMineFragment() {
-        BaseFragment fragment = (BaseFragment) ARouter.getInstance().build(RouterUtil.MineModulePath.Fragment_Mine).navigation();
-        return fragment;
+        if (fragment_mine == null)
+            fragment_mine = (BaseFragment) ARouter.getInstance().build(RouterUtil.MineModulePath.Fragment_Mine).navigation();
+        return fragment_mine;
     }
 }

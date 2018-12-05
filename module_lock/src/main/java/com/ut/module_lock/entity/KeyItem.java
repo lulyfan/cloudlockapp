@@ -1,5 +1,6 @@
 package com.ut.module_lock.entity;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -20,10 +21,12 @@ public class KeyItem implements Serializable {
     private String startTime;
     private String endTime;
     private int type;//类型 0：单次， 1：限时， 2：循环，3：永久
-    private String state;//状态 0：失效，1，生效，2：待接受
+    private int state;//状态 0：失效，1，生效，2：待接受
     private String sender;
     private String sendTime;
     private String acceptTime;
+    private boolean isAuthorized; //是否授权
+    private String authorizedType;
 
     public String getCaption() {
         return caption;
@@ -65,11 +68,11 @@ public class KeyItem implements Serializable {
         this.type = type;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 
@@ -97,9 +100,45 @@ public class KeyItem implements Serializable {
         this.sendTime = sendTime;
     }
 
+    public boolean isAuthorized() {
+        return isAuthorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        isAuthorized = authorized;
+    }
+
+    public String getAuthorizedType() {
+        return authorizedType;
+    }
+
+    public void setAuthorizedType(String authorizedType) {
+        this.authorizedType = authorizedType;
+    }
+
     public String typeString() {
         //0：单次， 1：限时， 2：循环，3：永久
         return BaseApplication.getAppContext().getResources().getStringArray(R.array.key_type)[type].substring(0, 2);
+    }
+
+    public String getStateString() {
+//        0：失效，1，生效，2：待接受
+        switch (state) {
+            case 0:
+                return "已失效";
+
+            case 2:
+                return "待接受";
+        }
+        return "";
+    }
+
+    public int stateColor() {
+        return Color.parseColor(state == 0 ? "#999999" : "#F55D54");
+    }
+
+    public boolean isInvalid() {
+        return state == 0;
     }
 
     public Drawable getTypeDrawable() {

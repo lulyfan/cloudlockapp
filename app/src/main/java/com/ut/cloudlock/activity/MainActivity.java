@@ -1,6 +1,7 @@
 package com.ut.cloudlock.activity;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,10 +24,12 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        enableImmersive();
         initViewPager();
         initPageChangeListener();
         initNavigationItemSelectListener();
         mBinding.bottomNavigation.setItemIconTintList(null);
+        enableImmersive();
         resetBottomIcon();
         mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home_pressed);
     }
@@ -40,18 +43,22 @@ public class MainActivity extends BaseActivity {
                     case R.id.action_home:
                         menuItem.setIcon(R.mipmap.icon_home_pressed);
                         mBinding.vpMain.setCurrentItem(0);
+                        enableImmersive();
                         break;
                     case R.id.action_msg:
                         menuItem.setIcon(R.mipmap.icon_msg_pressed);
                         mBinding.vpMain.setCurrentItem(1);
+                        enableImmersive(R.color.white, true);
                         break;
                     case R.id.action_mall:
                         menuItem.setIcon(R.mipmap.icon_mall_pressed);
                         mBinding.vpMain.setCurrentItem(2);
+                        enableImmersive(R.color.transparent, true);
                         break;
                     case R.id.action_mime:
                         menuItem.setIcon(R.mipmap.icon_mime_pressed);
                         mBinding.vpMain.setCurrentItem(3);
+                        enableImmersive(R.color.white, true);
                         break;
                 }
                 return true;
@@ -86,6 +93,7 @@ public class MainActivity extends BaseActivity {
 
     private int getBottomNavigateIDByIndex(int index) {
         int id = R.id.action_home;
+
         switch (index) {
             case 1:
                 id = R.id.action_msg;

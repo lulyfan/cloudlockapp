@@ -16,14 +16,16 @@
 
         <ImageView
             android:id="@+id/close_window"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/base_32dp"
+            android:layout_height="@dimen/base_32dp"
+            android:padding="@dimen/base_6dp"
             android:layout_gravity="center_vertical|right"
+            android:background="@drawable/selector_btn_back"
             android:src="@mipmap/close_black" />
     </FrameLayout>
 
     <TextView
-        android:id="@+id/clear_key"
+        android:id="@+id/item1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
@@ -38,7 +40,7 @@
         android:background="#DFDFDF" />
 
     <TextView
-        android:id="@+id/send_key"
+        android:id="@+id/item2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"

@@ -21,15 +21,16 @@
             android:layout_height="@dimen/base_44dp"
             android:layout_marginBottom="@dimen/base_2dp"
             android:background="@android:color/white"
-            android:elevation="@dimen/base_2dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/base_32dp"
+                android:layout_height="@dimen/base_32dp"
                 android:layout_centerVertical="true"
+                android:background="@drawable/selector_btn_back"
+                android:padding="@dimen/base_6dp"
                 android:src="@mipmap/icon_back" />
 
             <TextView
@@ -146,6 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:textColor="#666666"
+                    android:text="@{applyMessage.name}"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
 
@@ -185,15 +187,19 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/ask_for"
+        <TextView
+            android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_120dp"
             android:layout_marginTop="@dimen/base_10dp"
-            android:layout_marginBottom="@dimen/base_2dp"
-            android:divider="@null"
-            android:dividerHeight="@dimen/base_10dp"
-            android:elevation="@dimen/base_2dp" />
+            android:background="@drawable/shape_bg_corner"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp"
+            android:paddingTop="@dimen/base_30dp"
+            android:paddingBottom="@dimen/base_30dp"
+            android:text="@{applyMessage.message}"
+            android:textColor="#999999"
+            android:textSize="@dimen/base_14sp" />
 
         <View
             android:layout_width="1px"

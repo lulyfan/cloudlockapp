@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
@@ -38,11 +39,12 @@ public class BaseActivity extends AppCompatActivity {
 
     /**
      * 设置沉浸式状态栏
-     * @param stateBarColor 状态栏颜色, 为0时状态栏颜色不改变
+     *
+     * @param stateBarColor             状态栏颜色, 为0时状态栏颜色不改变
      * @param isEnableStatusBarDarkFont 是否启用深色字体，默认浅色
      */
     public void enableImmersive(int stateBarColor, boolean isEnableStatusBarDarkFont) {
-        ImmersionBar immersionBar =  ImmersionBar.with(this)
+        ImmersionBar immersionBar = ImmersionBar.with(this)
                 .fitsSystemWindows(true)
                 .statusBarDarkFont(isEnableStatusBarDarkFont);
 
@@ -58,6 +60,19 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void enableImmersive() {
         ImmersionBar.with(this).reset().init();
+    }
+
+    public void showTitleMore() {
+        findViewById(R.id.iv_more).setVisibility(View.VISIBLE);
+    }
+
+    public void setMoreClickListener(View.OnClickListener onClickListener) {
+        findViewById(R.id.iv_more).setOnClickListener(onClickListener);
+    }
+
+    public void showTitleAdd() {
+        ImageView imageView = findViewById(R.id.iv_more);
+        imageView.setImageResource(R.mipmap.icon_add);
     }
 
     public void onXmlClick(View view) {

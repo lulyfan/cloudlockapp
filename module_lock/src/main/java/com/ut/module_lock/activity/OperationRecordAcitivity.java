@@ -33,12 +33,8 @@ public class OperationRecordAcitivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setStatusBarColor(Color.WHITE);
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_operation_record);
-        mBinding.getRoot().setFitsSystemWindows(true);
+        enableImmersive(R.color.title_bar_bg, false);
         mBinding.back.setOnClickListener(v -> finish());
         List<OperationRecord > oprs = new ArrayList<>();
         for (int i= 0; i<20;i++){

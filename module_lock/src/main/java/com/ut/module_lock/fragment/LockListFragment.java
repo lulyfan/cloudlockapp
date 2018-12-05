@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -28,7 +28,9 @@ import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
+import com.ut.module_lock.activity.LockDetailActivity;
 import com.ut.module_lock.adapter.LockListAdapter;
+import com.ut.module_lock.adapter.OnRcvItemClickListener;
 import com.ut.module_lock.databinding.*;
 import com.ut.module_lock.entity.LockGroup;
 import com.ut.module_lock.entity.LockKey;
@@ -57,6 +59,12 @@ public class LockListFragment extends BaseFragment {
             mView = mFragmentLocklistBinding.getRoot();
         }
         return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setLightStatusBarFont();
     }
 
     @Override
@@ -89,10 +97,7 @@ public class LockListFragment extends BaseFragment {
         public void onGroupClick(View view) {
             UTLog.i("onGroupClick");
 //            mLockListAdapter.notifyData(new ArrayList<>());
-            if (getActivity() instanceof BaseActivity) {
-                BaseActivity activity = (BaseActivity) getActivity();
-                activity.setLightStatusBar();
-            }
+            setLightStatusBarFont();
             List<LockGroup> list = new ArrayList<>();
             list.add(new LockGroup("全部分组", 0));
             list.add(new LockGroup("Chan的家", 1));
@@ -130,10 +135,7 @@ public class LockListFragment extends BaseFragment {
                             lp.alpha = 1.0f;
                             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                             getActivity().getWindow().setAttributes(lp);
-                            if (getActivity() instanceof BaseActivity) {
-                                BaseActivity activity = (BaseActivity) getActivity();
-                                activity.setDarkStatusBar();
-                            }
+                            setDarkStatusBarFont();
                         }
                     });
                 }
