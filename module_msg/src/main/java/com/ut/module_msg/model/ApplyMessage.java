@@ -18,7 +18,7 @@ public class ApplyMessage implements Serializable {
     private String applicant;
     private int keyType;
 
-    private List<String> messages;
+    private String message;
 
     public String getApplicant() {
         return applicant;
@@ -52,14 +52,6 @@ public class ApplyMessage implements Serializable {
         this.hint = hint;
     }
 
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
-    }
-
     public String getTime() {
         return time;
     }
@@ -74,6 +66,14 @@ public class ApplyMessage implements Serializable {
 
     public void setKeyType(int keyType) {
         this.keyType = keyType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String keyTypeString() {

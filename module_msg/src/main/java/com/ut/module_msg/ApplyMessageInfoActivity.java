@@ -37,8 +37,5 @@ public class ApplyMessageInfoActivity extends AppCompatActivity {
         mApplyMessage = (ApplyMessage) getIntent().getSerializableExtra("applyMessage");
         mBinding.setApplyMessage(mApplyMessage);
         mBinding.back.setOnClickListener(v -> finish());
-        String[] messages = new String[mApplyMessage.getMessages().size()];
-        mApplyMessage.getMessages().toArray(messages);
-        mBinding.askFor.setAdapter(new ArrayAdapter<String>(this, R.layout.item_ask_for, R.id.text1, messages));
     }
 }

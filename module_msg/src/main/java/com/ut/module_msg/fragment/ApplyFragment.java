@@ -43,14 +43,10 @@ public class ApplyFragment extends BaseFragment {
     private void initView() {
         ApplyMessage message = new ApplyMessage();
         message.setHint("您收到一把电子钥匙【xxxx】，xxxxxxxxxxxx");
-        message.setName("活生生");
+        message.setName("Chan的智能门锁");
         message.setApplicant("程佳佳");
         message.setTime("9012/12/20");
-        List<String> askFor = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            askFor.add("我要申请一条钥匙");
-        }
-        message.setMessages(askFor);
+        message.setMessage("你好！我是王撕葱，可以给我分配把钥匙吗？");
         applyMessages.add(message);
         ListAdapter<ApplyMessage> mAdapter = new ListAdapter<>(getContext(), R.layout.item_apply, applyMessages, BR.apply);
         mApplyFgBinding.applyList.setAdapter(mAdapter);

@@ -25,9 +25,11 @@
 
             <ImageView
                 android:id="@+id/back"
-                android:layout_width="@dimen/base_22dp"
-                android:layout_height="@dimen/base_22dp"
+                android:layout_width="@dimen/base_32dp"
+                android:layout_height="@dimen/base_32dp"
+                android:padding="@dimen/base_6dp"
                 android:layout_centerVertical="true"
+                android:background="@drawable/selector_btn_back"
                 android:src="@mipmap/icon_back" />
 
             <TextView
