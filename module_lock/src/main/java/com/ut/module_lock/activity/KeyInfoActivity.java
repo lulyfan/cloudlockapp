@@ -6,11 +6,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.common.CommonPopupWindow;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityKeyInfoBinding;
 import com.ut.module_lock.entity.KeyItem;
@@ -43,6 +48,43 @@ public class KeyInfoActivity extends BaseActivity {
         mBinding.operationRecord.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation());
         mBinding.tvKeyName.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_KEY_NAME).navigation(this, REQUEST_EDIT_KEY_NAME));
         mBinding.tvKeyType.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_LIMITED_TIME).withSerializable("keyInfo", keyInfo).navigation(this, REQUEST_EDIT_LIMITED_TIME));
+        mBinding.more.setOnClickListener(v -> popupMoreWindow());
+        mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
+    }
+
+    private void deleteKey() {
+
+    }
+
+    private void popupMoreWindow() {
+        setWindowAlpha(0.5f);
+        CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT) {
+            @Override
+            protected void initView() {
+                TextView item1 = getView(R.id.item1);
+                item1.setText("授权/取消授权");
+                item1.setOnClickListener(v -> {
+                    //ToDO
+                    getPopupWindow().dismiss();
+                });
+                TextView item2 = getView(R.id.item2);
+                item2.setText("冻结/解除冻结");
+                item2.setOnClickListener(v -> {
+                    //ToDO
+                    getPopupWindow().dismiss();
+                });
+                getView(R.id.close_window).setOnClickListener(v -> getPopupWindow().dismiss());
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                getPopupWindow().setOnDismissListener(() -> setWindowAlpha(1f));
+            }
+        };
+        popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
     @Override
@@ -58,5 +100,12 @@ public class KeyInfoActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    private void setWindowAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = alpha;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
     }
 }

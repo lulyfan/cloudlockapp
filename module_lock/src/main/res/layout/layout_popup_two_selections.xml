@@ -23,7 +23,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/clear_key"
+        android:id="@+id/item1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
@@ -38,7 +38,7 @@
         android:background="#DFDFDF" />
 
     <TextView
-        android:id="@+id/send_key"
+        android:id="@+id/item2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"

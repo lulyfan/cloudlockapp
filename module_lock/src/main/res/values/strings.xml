@@ -49,6 +49,8 @@
     <string name="lock_name">锁名称</string>
     <string name="lock_setting">锁设置</string>
     <string name="lock_choose_group">选择分组</string>
+    <string name="lock_authorize_type">权限类型</string>
+    <string name="lock_delete_key">删除钥匙</string>
 
     <string-array name="lock_type">
         <item>蓝牙门锁</item>

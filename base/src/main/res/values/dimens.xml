@@ -21,4 +21,8 @@
     <dimen name="base_25dp">25dp</dimen>
     <dimen name="base_53dp">53dp</dimen>
     <dimen name="base_27dp">27dp</dimen>
+    <dimen name="base_16dp">16dp</dimen>
+    <dimen name="base_100dp">100dp</dimen>
+    <dimen name="base_93dp">93dp</dimen>
+    <dimen name="base_5dp">5dp</dimen>
 </resources>

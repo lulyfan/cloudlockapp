@@ -21,7 +21,6 @@
             android:layout_height="@dimen/base_44dp"
             android:layout_marginBottom="@dimen/base_2dp"
             android:background="@android:color/white"
-            android:elevation="@dimen/base_2dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 

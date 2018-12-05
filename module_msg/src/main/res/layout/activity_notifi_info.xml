@@ -20,7 +20,6 @@
             android:layout_height="@dimen/base_44dp"
             android:background="@android:color/white"
             android:paddingLeft="@dimen/base_20dp"
-            android:elevation="@dimen/base_2dp"
             android:layout_marginBottom="@dimen/base_2dp"
             android:paddingRight="@dimen/base_20dp">
 

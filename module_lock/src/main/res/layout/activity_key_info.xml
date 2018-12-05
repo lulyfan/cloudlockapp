@@ -16,7 +16,7 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/top"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_44dp"
@@ -28,17 +28,24 @@
                 android:id="@+id/back"
                 android:layout_width="@dimen/base_22dp"
                 android:layout_height="@dimen/base_22dp"
-                android:layout_centerVertical="true"
+                android:layout_gravity="left|center_vertical"
                 android:src="@mipmap/back_white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:text="@string/lock_key_info"
                 android:textColor="#FFFFFF"
                 android:textSize="@dimen/base_17sp" />
-        </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:src="@mipmap/more" />
+        </FrameLayout>
 
 
         <ScrollView
@@ -83,10 +90,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:clickable="true"
                             android:drawableRight="@mipmap/more_black"
                             android:drawablePadding="@dimen/base_10dp"
                             android:text="@{keyItem.caption}"
-                            android:clickable="true"
                             android:textColor="#333333"
                             android:textSize="@dimen/base_17sp" />
                     </LinearLayout>
@@ -96,6 +103,39 @@
                         android:layout_height="1px"
                         android:layout_marginLeft="@dimen/base_20dp"
                         android:background="#C7C7CC" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/base_20dp"
+                        android:visibility="@{keyItem.type == 0 || keyItem.type == 1 ? View.VISIBLE : View.GONE}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_authorize_type"
+                            android:textColor="#666666"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_authorize_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_30dp"
+                            android:text="@{keyItem.authorizedType}"
+                            android:textColor="#666666"
+                            android:textSize="@dimen/base_17sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_gravity="bottom"
+                            android:background="#C7C7CC" />
+                    </FrameLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -172,12 +212,6 @@
                             android:textColor="#666666"
                             android:textSize="@dimen/base_17sp" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginLeft="@dimen/base_20dp"
-                        android:background="#C7C7CC" />
 
                 </LinearLayout>
 
@@ -258,13 +292,6 @@
                             android:textColor="#666666"
                             android:textSize="@dimen/base_17sp" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginLeft="@dimen/base_20dp"
-                        android:background="#C7C7CC" />
-
                 </LinearLayout>
 
 
@@ -274,9 +301,9 @@
                     android:layout_height="@dimen/base_70dp"
                     android:layout_marginTop="@dimen/base_10dp"
                     android:background="@drawable/shape_bg_corner"
+                    android:clickable="true"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/base_20dp"
-                    android:clickable="true"
                     android:paddingRight="@dimen/base_20dp">
 
                     <TextView
@@ -298,6 +325,19 @@
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/more_black" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_delete_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_50dp"
+                    android:layout_marginTop="@dimen/base_93dp"
+                    android:layout_marginBottom="@dimen/base_20dp"
+                    android:layout_marginLeft="@dimen/base_20dp"
+                    android:background="@drawable/shape_btn_delete_key"
+                    android:textColor="@android:color/white"
+                    android:text="@string/lock_delete_key"
+                    android:textSize="@dimen/base_17sp"
+                    android:layout_marginRight="@dimen/base_20dp"/>
 
             </LinearLayout>
         </ScrollView>

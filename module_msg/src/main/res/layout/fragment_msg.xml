@@ -22,7 +22,6 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/base_2dp"
             android:background="#FFFFFF"
-            android:elevation="@dimen/base_2dp"
             app:tabGravity="center"
             app:tabMinWidth="@dimen/base_80dp"
             app:tabIndicatorColor="#00BBD2"

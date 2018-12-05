@@ -66,16 +66,16 @@ public class KeysManagerActivity extends BaseActivity {
 
     private void popupMoreWindow() {
         setWindowAlpha(0.5f);
-        CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_key_send_or_clear,
+        CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
-                getView(R.id.clear_key).setOnClickListener(v -> {
+                getView(R.id.item1).setOnClickListener(v -> {
                     clearKey();
                     getPopupWindow().dismiss();
                 });
-                getView(R.id.send_key).setOnClickListener(v -> {
+                getView(R.id.item2).setOnClickListener(v -> {
                     sendKey();
                     getPopupWindow().dismiss();
                 });
@@ -104,14 +104,20 @@ public class KeysManagerActivity extends BaseActivity {
         for (int i = 0; i < 10; i++) {
             KeyItem item = new KeyItem();
             item.setCaption("caption " + i);
-            item.setDesc("Dexxxxxxxxx ");
+            item.setDesc("desc......... ");
             item.setType((i + 1) % 4);
+            item.setAuthorized((i + 2) % 2 == 0);
             item.setSender("大波阿哥");
             item.setSender("2018/09/08 10:55");
             item.setAcceptTime("2018/09/08 11:34");
-            item.setState("待接受");
             item.setStartTime("2018/09/09 11:12");
             item.setEndTime("2018/11/11 12:00");
+            if (i < 5) {
+                item.setState(2);
+            } else {
+                item.setState(0);
+            }
+            item.setAuthorizedType("普通用户");
             items.add(item);
         }
         kmVM.getKeys().postValue(items);
