@@ -119,7 +119,7 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            cropImageUri(photoURI, 800, 400, CROP_PICTURE);
+            cropImageUri(photoURI, 800, 800, CROP_PICTURE);
 
         } else if (requestCode == CROP_PICTURE && resultCode == RESULT_OK) {
             setPic();
@@ -147,7 +147,7 @@ public class EditUserInfoActivity extends BaseActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 2);
+        intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
@@ -182,6 +182,7 @@ public class EditUserInfoActivity extends BaseActivity {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        imageView.setImageBitmap(bitmap);
+        Bitmap circleBitmap = Util.toRoundBitmap(bitmap);
+        imageView.setImageBitmap(circleBitmap);
     }
 }
