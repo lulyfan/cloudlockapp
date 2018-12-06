@@ -110,7 +110,7 @@ public class KeysManagerActivity extends BaseActivity {
             item.setType((i + 1) % 4);
             item.setAuthorized((i + 2) % 2 == 0);
             item.setSender("大波阿哥");
-            item.setSender("2018/09/08 10:55");
+            item.setSendTime("2018/09/08 10:55");
             item.setAcceptTime("2018/09/08 11:34");
             item.setStartTime("2018/09/09 11:12");
             item.setEndTime("2018/11/11 12:00");

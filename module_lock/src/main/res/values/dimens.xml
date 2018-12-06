@@ -22,4 +22,5 @@
     <dimen name="lock_40dp">40dp</dimen>
     <dimen name="lock_50dp">50dp</dimen>
     <dimen name="lock_60dp">60dp</dimen>
+    <dimen name="lock_8dp">8dp</dimen>
 </resources>

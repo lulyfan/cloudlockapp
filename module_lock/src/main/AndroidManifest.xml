@@ -30,6 +30,7 @@
         <activity android:name=".activity.ApplyKeyActivity" />
         <activity android:name=".activity.LockSettingActivity" />
         <activity android:name=".activity.ChooseKeyGroupActivity" />
+        <activity android:name=".activity.EditLoopKeyActivity" />
     </application>
 
 </manifest>
