@@ -19,7 +19,6 @@
             android:id="@+id/top"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_44dp"
-            android:layout_marginBottom="@dimen/base_2dp"
             android:background="@android:color/white"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">

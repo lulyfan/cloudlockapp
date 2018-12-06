@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="keyItem"
+            type="com.ut.module_lock.entity.KeyItem" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_44dp"
+            android:background="#00BDCF"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="@dimen/base_32dp"
+                android:layout_height="@dimen/base_32dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_btn_back"
+                android:padding="@dimen/base_6dp"
+                android:src="@mipmap/back_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/lock_loop_key"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/arc_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2854"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/top">
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/repeat"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toTopOf="@+id/divider11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/include5"
+                layout="@layout/week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/divider11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.7296" />
+
+            <View
+                android:id="@+id/divider11"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/textView21"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3333" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/validTime"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toTopOf="@+id/divider12"
+                app:layout_constraintStart_toStartOf="@+id/divider11"
+                app:layout_constraintTop_toBottomOf="@+id/divider11" />
+
+            <TextView
+                android:id="@+id/validTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/right_triangle"
+                android:drawablePadding="16dp"
+                android:text="@{keyItem.startTime}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="@+id/textView22"
+                app:layout_constraintEnd_toEndOf="@+id/include5"
+                app:layout_constraintTop_toTopOf="@+id/textView22" />
+
+            <View
+                android:id="@+id/divider12"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/textView22"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.66666" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/invalidTime"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView22"
+                app:layout_constraintTop_toBottomOf="@+id/divider12" />
+
+            <TextView
+                android:id="@+id/invalidTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/right_triangle"
+                android:drawablePadding="16dp"
+                android:text="@{keyItem.endTime}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="@+id/textView24"
+                app:layout_constraintEnd_toEndOf="@+id/validTime"
+                app:layout_constraintTop_toTopOf="@+id/textView24" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/arc_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1901"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/startDate"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toTopOf="@+id/divider13"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:drawableRight="@drawable/right_triangle"
+                android:drawablePadding="16dp"
+                android:text="@{keyItem.startDate}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="@+id/textView26"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView26" />
+
+            <View
+                android:id="@+id/divider13"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/textView26"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/endDate"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/divider13"
+                app:layout_constraintTop_toBottomOf="@+id/divider13" />
+
+            <TextView
+                android:id="@+id/endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/right_triangle"
+                android:drawablePadding="16dp"
+                android:text="@{keyItem.endTime}"
+                android:textColor="@color/color_base_title"
+                android:textSize="@dimen/s"
+                app:layout_constraintBottom_toBottomOf="@+id/textView28"
+                app:layout_constraintEnd_toEndOf="@+id/startDate"
+                app:layout_constraintTop_toTopOf="@+id/textView28" />
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_marginRight="@dimen/base_20dp"
+            android:layout_marginBottom="@dimen/base_20dp"
+            android:background="@drawable/selector_btn_save"
+            android:text="@string/lock_save"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/base_17sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

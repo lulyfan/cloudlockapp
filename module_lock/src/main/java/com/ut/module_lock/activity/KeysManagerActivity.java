@@ -40,11 +40,12 @@ public class KeysManagerActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
         enableImmersive(R.color.title_bar_bg, false);
         init();
+        mBinding.more.setOnClickListener(v -> popupMoreWindow());
         loadData();
     }
 
     private void init() {
-        setMoreClickListener(v -> popupMoreWindow());
+        mBinding.back.setOnClickListener(v -> finish());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mBinding.list.setLayoutManager(linearLayoutManager);
@@ -58,8 +59,6 @@ public class KeysManagerActivity extends BaseActivity {
             KeyItem keyItem = keyItemList.get(position);
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
         });
-        showTitleMore();
-
     }
 
     private void popupMoreWindow() {
@@ -111,7 +110,7 @@ public class KeysManagerActivity extends BaseActivity {
             item.setType((i + 1) % 4);
             item.setAuthorized((i + 2) % 2 == 0);
             item.setSender("大波阿哥");
-            item.setSender("2018/09/08 10:55");
+            item.setSendTime("2018/09/08 10:55");
             item.setAcceptTime("2018/09/08 11:34");
             item.setStartTime("2018/09/09 11:12");
             item.setEndTime("2018/11/11 12:00");
