@@ -11,7 +11,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4F9FB"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -26,9 +27,9 @@
                 android:id="@+id/back"
                 android:layout_width="@dimen/base_32dp"
                 android:layout_height="@dimen/base_32dp"
-                android:padding="@dimen/base_6dp"
                 android:layout_centerVertical="true"
                 android:background="@drawable/selector_btn_back"
+                android:padding="@dimen/base_6dp"
                 android:src="@mipmap/back_white" />
 
             <TextView
@@ -36,76 +37,115 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="@android:color/white"
                 android:text="@string/lock_limited_time_key"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/base_17sp" />
         </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_70dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/enable_time"
-                android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1px"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tv_limited_start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:drawableRight="@mipmap/icon_right_arrow_black"
-                android:drawablePadding="@dimen/base_10dp"
-                android:gravity="center_vertical"
-                android:text="@{keyItem.startTime}"
-                android:textColor="@color/color_base_title"
-                android:textSize="@dimen/base_17sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/base_70dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp">
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_corner"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/invalid_time"
-                android:textColor="#666666"
-                android:textSize="@dimen/base_14sp" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_70dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/base_20dp">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1px"
-                android:layout_weight="1" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/enable_time"
+                    android:textColor="#666666"
+                    android:textSize="@dimen/base_14sp" />
 
-            <TextView
-                android:id="@+id/tv_limited_end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:drawableRight="@mipmap/icon_right_arrow_black"
-                android:drawablePadding="@dimen/base_10dp"
-                android:gravity="center_vertical"
-                android:text="@{keyItem.endTime}"
-                android:textColor="@color/color_base_title"
-                android:textSize="@dimen/base_17sp" />
+                <TextView
+                    android:id="@+id/tv_limited_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/base_50dp"
+                    android:gravity="center_vertical"
+                    android:text="@{keyItem.startTime}"
+                    android:textColor="@color/color_base_title"
+                    android:textSize="@dimen/base_17sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/base_20dp"
+                    android:src="@mipmap/more_black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_gravity="bottom"
+                    android:background="#DFDFDF" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_70dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/base_20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/invalid_time"
+                    android:textColor="#666666"
+                    android:textSize="@dimen/base_14sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_limited_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/base_50dp"
+                    android:gravity="center_vertical"
+                    android:text="@{keyItem.endTime}"
+                    android:textColor="@color/color_base_title"
+                    android:textSize="@dimen/base_17sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/base_20dp"
+                    android:src="@mipmap/more_black" />
+
+            </FrameLayout>
         </LinearLayout>
 
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_50dp"
+            android:layout_marginStart="@dimen/base_20dp"
+            android:layout_marginEnd="@dimen/base_20dp"
+            android:layout_marginBottom="@dimen/base_20dp"
+            android:background="@drawable/selector_btn_save"
+            android:text="@string/lock_save"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/base_17sp" />
 
     </LinearLayout>
 </layout>
