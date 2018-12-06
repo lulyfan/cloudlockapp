@@ -67,8 +67,11 @@ public class ListAdapter<T> extends BaseAdapter {
 
         assert binding != null;
         binding.setVariable(variableId, list.get(position));
-
+        addBadge(binding,position);
         return binding.getRoot();
+    }
+
+    public void addBadge(ViewDataBinding binding, int position){
     }
 }
 

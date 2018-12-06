@@ -15,14 +15,22 @@
         android:layout_height="@dimen/base_80dp"
         android:paddingLeft="@dimen/base_20dp">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="@dimen/base_40dp"
-            android:layout_height="@dimen/base_40dp"
-            android:src="@mipmap/default_icon_b"
+        <FrameLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="@dimen/base_62dp"
+            android:layout_height="@dimen/base_62dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:url="@{apply.url}" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/base_40dp"
+                android:layout_height="@dimen/base_40dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/default_icon_b"
+                app:url="@{apply.url}" />
+
+        </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,18 +40,18 @@
             android:textColor="#BBBBBB"
             android:textSize="@dimen/base_10dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/icon" />
+            app:layout_constraintTop_toTopOf="@id/icon_layout" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/base_22dp"
+            android:layout_marginStart="@dimen/base_2dp"
             android:text="@{apply.name}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             app:layout_constraintBottom_toTopOf="@id/hint"
-            app:layout_constraintLeft_toRightOf="@id/icon"
+            app:layout_constraintLeft_toRightOf="@id/icon_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLimitedTimeBinding;
 import com.ut.module_lock.entity.KeyItem;
 
@@ -30,7 +31,7 @@ public class EditLimitedTimeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_limited_time);
         enableImmersive(R.color.title_bar_bg, false);
-        keyInfo = (KeyItem) getIntent().getSerializableExtra("keyInfo");
+        keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
         mBinding.back.setOnClickListener(v -> finish());
     }

@@ -2,12 +2,15 @@ package com.ut.module_msg.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseFragment;
@@ -22,6 +25,9 @@ import com.ut.module_msg.viewmodel.NotificationViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 /**
  * author : chenjiajun
@@ -59,7 +65,31 @@ public class NotificationFragment extends BaseFragment {
         notification.setTime("2018/11/26 14:20");
         list.add(notification);
 
-        listAdapter = new ListAdapter<>(getActivity(), R.layout.item_notification_msg, list, BR.notification);
+        NotificationMessage notification1 = new NotificationMessage();
+        notification1.setTitle("公司门锁");
+        notification1.setContent("您收到了一把电子钥匙【公司门锁】，使用期限【永...");
+        notification1.setTime("2018/11/30 17:30");
+        list.add(notification1);
+
+        listAdapter = new ListAdapter<NotificationMessage>(getActivity(), R.layout.item_notification_msg, list, BR.notification){
+            @Override
+            public void addBadge(ViewDataBinding binding, int position) {
+                super.addBadge(binding, position);
+                Badge badge = null;
+                ImageView icon = binding.getRoot().findViewById(R.id.icon);
+                if (icon.getTag() == null) {
+                    badge = new QBadgeView(getActivity());
+                    icon.setTag(badge);
+                } else {
+                    badge = (Badge) icon.getTag();
+                }
+                badge.bindTarget((View) icon.getParent())
+                        .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
+                        .setBadgeTextColor(Color.WHITE)
+                        .setBadgeTextSize(9, true)
+                        .setBadgeNumber((int)(Math.random() * 120));
+            }
+        };
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotificationViewModel.class);
         notificationViewModel.getNotifications().observe(getActivity(), notifications -> {

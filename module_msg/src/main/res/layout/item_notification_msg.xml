@@ -15,26 +15,33 @@
         android:paddingLeft="@dimen/base_20dp"
         android:background="@android:color/white">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="@dimen/base_40dp"
-            android:layout_height="@dimen/base_40dp"
-            android:src="@mipmap/default_icon_a"
+        <FrameLayout
+            android:id="@+id/icon_layout"
+            android:layout_width="@dimen/base_52dp"
+            android:layout_height="@dimen/base_62dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:url="@{notification.icon}" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/base_40dp"
+                android:layout_height="@dimen/base_40dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/default_icon_a"
+                app:url="@{notification.icon}" />
+
+        </FrameLayout>
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="@dimen/msg_12dp"
             android:text="@{notification.title}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/content"
-            app:layout_constraintLeft_toRightOf="@id/icon"
+            app:layout_constraintLeft_toRightOf="@id/icon_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

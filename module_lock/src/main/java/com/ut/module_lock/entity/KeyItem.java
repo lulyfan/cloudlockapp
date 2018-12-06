@@ -27,6 +27,8 @@ public class KeyItem implements Serializable {
     private String acceptTime;
     private boolean isAuthorized; //是否授权
     private String authorizedType;
+    private String startDate;//循环钥匙的启动日期
+    private String endDate;//循环钥匙的停止日期
 
     public String getCaption() {
         return caption;
@@ -116,9 +118,35 @@ public class KeyItem implements Serializable {
         this.authorizedType = authorizedType;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     public String typeString() {
         //0：单次， 1：限时， 2：循环，3：永久
-        return BaseApplication.getAppContext().getResources().getStringArray(R.array.key_type)[type].substring(0, 2);
+        switch (type) {
+            case 0:
+                return BaseApplication.getAppContext().getString(R.string.once_time);
+            case 1:
+                return BaseApplication.getAppContext().getString(R.string.limit_time);
+            case 2:
+                return BaseApplication.getAppContext().getString(R.string.loop);
+            case 3:
+                return BaseApplication.getAppContext().getString(R.string.permanent);
+        }
+        return "";
     }
 
     public String getStateString() {

@@ -87,8 +87,12 @@ public class MsgFragment extends BaseFragment {
             public CharSequence getPageTitle(int position) {
                 return titles[position];
             }
-        };
 
+            @Override
+            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            }
+        };
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager, true);
     }

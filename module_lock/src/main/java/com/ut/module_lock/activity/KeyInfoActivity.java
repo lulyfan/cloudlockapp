@@ -2,10 +2,9 @@ package com.ut.module_lock.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,6 +16,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeyInfoBinding;
 import com.ut.module_lock.entity.KeyItem;
 
@@ -31,20 +31,34 @@ public class KeyInfoActivity extends BaseActivity {
 
     private KeyItem keyInfo;
     private ActivityKeyInfoBinding mBinding = null;
-    private static final int REQUEST_EDIT_KEY_NAME = 1111;
-    private static final int REQUEST_EDIT_LIMITED_TIME = 1112;
+    private static final int REQUEST_EDIT_KEY = 1111;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
         enableImmersive(R.color.title_bar_bg, false);
-        keyInfo = (KeyItem) getIntent().getSerializableExtra("keyInfo");
+        keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
+        initListener();
+    }
+
+    private void initListener() {
         mBinding.back.setOnClickListener(v -> finish());
+        mBinding.tvKeyName.setOnClickListener(v -> ARouter.getInstance()
+                .build(RouterUtil.LockModulePath.EDIT_KEY_NAME)
+                .withSerializable(Constance.KEY_INFO, keyInfo)
+                .navigation(this, REQUEST_EDIT_KEY));
+        mBinding.tvKeyType.setOnClickListener(v -> {
+            String url;
+            if (keyInfo.getType() == 1) {
+                url = RouterUtil.LockModulePath.EDIT_LIMITED_TIME;
+            } else {
+                url = RouterUtil.LockModulePath.EDIT_LOOP_TIME;
+            }
+            ARouter.getInstance().build(url).withSerializable(Constance.KEY_INFO, keyInfo).navigation(this, REQUEST_EDIT_KEY);
+        });
         mBinding.operationRecord.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation());
-        mBinding.tvKeyName.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_KEY_NAME).navigation(this, REQUEST_EDIT_KEY_NAME));
-        mBinding.tvKeyType.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_LIMITED_TIME).withSerializable("keyInfo", keyInfo).navigation(this, REQUEST_EDIT_LIMITED_TIME));
         mBinding.more.setOnClickListener(v -> popupMoreWindow());
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
     }
@@ -93,10 +107,19 @@ public class KeyInfoActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (RESULT_OK == resultCode) {
             switch (requestCode) {
-                case REQUEST_EDIT_KEY_NAME:
+                case REQUEST_EDIT_KEY:
                     if (data == null) return;
-                    String keyName = data.getStringExtra("edit_key_name");
-                    keyInfo.setCaption(keyName);
+                    if (data.hasExtra(Constance.KEY_INFO)) {
+                        KeyItem item = (KeyItem) data.getSerializableExtra(Constance.KEY_INFO);
+                        if (item != null) {
+                            keyInfo = item;
+                        }
+                    } else if (data.hasExtra(Constance.EDIT_KEY_NAME)) {
+                        String keyName = data.getStringExtra(Constance.EDIT_KEY_NAME);
+                        if (!TextUtils.isEmpty(keyName)) {
+                            keyInfo.setCaption(keyName);
+                        }
+                    }
                     mBinding.setKeyItem(keyInfo);
                     break;
             }
