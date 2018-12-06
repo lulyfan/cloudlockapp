@@ -18,6 +18,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SimpleTextWatcher;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 
 /**
  * author : chenjiajun
@@ -60,7 +61,7 @@ public class EditKeyNameActivity extends BaseActivity {
 
     private void saveName() {
         Intent intent = new Intent();
-        intent.putExtra("edit_key_name", nameEdt.getText().toString());
+        intent.putExtra(Constance.EDIT_KEY_NAME, nameEdt.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
     }

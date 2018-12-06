@@ -163,7 +163,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:clickable="@{keyItem.type == 1}"
+                            android:clickable="@{keyItem.type == 1 || keyItem.type == 2}"
                             android:text="@{keyItem.typeString()}"
                             android:textColor="#666666"
                             android:textSize="@dimen/base_17sp" />

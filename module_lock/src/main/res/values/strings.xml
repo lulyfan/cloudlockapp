@@ -68,6 +68,11 @@
         <item>循环钥匙</item>
     </string-array>
 
+    <string name="once_time">单次</string>
+    <string name="limit_time">限时</string>
+    <string name="loop">循环</string>
+    <string name="permanent">永久</string>
+
     <string-array name="key_status">
         <item>正常</item>
         <item>已冻结</item>

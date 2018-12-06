@@ -18,6 +18,7 @@ import com.ut.base.common.CommonPopupWindow;
 import com.ut.module_lock.BR;
 import com.ut.module_lock.R;
 import com.ut.module_lock.adapter.RecyclerListAdapter;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeysManagerBinding;
 import com.ut.module_lock.entity.KeyItem;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
@@ -37,38 +38,28 @@ public class KeysManagerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        initToolbar();
+        enableImmersive(R.color.title_bar_bg, false);
+        init();
+        loadData();
+    }
+
+    private void init() {
+        setMoreClickListener(v -> popupMoreWindow());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mBinding.list.setLayoutManager(linearLayoutManager);
-
         mAdapter = new RecyclerListAdapter<>(keyItemList, R.layout.item_keys_manager, BR.keyItem);
         mBinding.list.setAdapter(mAdapter);
-
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.getKeys().observe(this, (keyItems) -> {
             mAdapter.addData(keyItems);
         });
-
         mAdapter.setOnItemListener((v, position) -> {
             KeyItem keyItem = keyItemList.get(position);
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable("keyInfo", keyItem).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
         });
-
-
-        loadData();
-    }
-
-    private void initToolbar() {
-        enableImmersive();
-        setTitle(R.string.func_manage_key);
         showTitleMore();
-        setMoreClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupMoreWindow();
-            }
-        });
+
     }
 
     private void popupMoreWindow() {
@@ -116,7 +107,7 @@ public class KeysManagerActivity extends BaseActivity {
         for (int i = 0; i < 10; i++) {
             KeyItem item = new KeyItem();
             item.setCaption("caption " + i);
-            item.setDesc("Dexxxxxxxxx ");
+            item.setDesc("desc......... ");
             item.setType((i + 1) % 4);
             item.setAuthorized((i + 2) % 2 == 0);
             item.setSender("大波阿哥");
