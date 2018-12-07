@@ -4,13 +4,12 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import com.ut.base.BaseActivity;
 import com.ut.module_mine.adapter.GrantPermissionAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityGrantPermissionBinding;
-import com.ut.module_mine.util.Util;
+import com.ut.base.Utils.Util;
 
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;

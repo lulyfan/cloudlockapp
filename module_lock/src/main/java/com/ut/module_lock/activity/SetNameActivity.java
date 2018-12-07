@@ -19,10 +19,9 @@ public class SetNameActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_set_name);
-        enableImmersive();
         mSetNameBinding = DataBindingUtil.setContentView(this, R.layout.activity_set_name);
-        setLightStatusBar();
         setTitle(R.string.lock_title_set_name);
+        initLightToolbar();
         initView();
     }
 

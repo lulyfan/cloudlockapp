@@ -29,7 +29,6 @@ public class MainActivity extends BaseActivity {
         initPageChangeListener();
         initNavigationItemSelectListener();
         mBinding.bottomNavigation.setItemIconTintList(null);
-        enableImmersive();
         resetBottomIcon();
         mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home_pressed);
     }

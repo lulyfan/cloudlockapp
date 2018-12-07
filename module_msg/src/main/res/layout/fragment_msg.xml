@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <data>
-
-        <variable
-            name="presenter"
-            type="com.ut.module_msg.fragment.MsgFragment.Present"/>
-    </data>
-
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

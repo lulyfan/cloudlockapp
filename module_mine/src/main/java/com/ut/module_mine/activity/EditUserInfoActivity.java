@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.module_mine.R;
-import com.ut.module_mine.util.Util;
+import com.ut.base.Utils.Util;
 import com.ut.module_mine.databinding.ActivityEditUserInfoBinding;
 
 import java.io.File;

@@ -1,7 +1,6 @@
 package com.ut.module_lock.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,10 +12,9 @@ public class AddGuideActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive();
         setContentView(R.layout.activity_add_guide);
-        setLightStatusBar();
         setTitle(R.string.lock_title_add_guide);
+        initLightToolbar();
     }
 
     @Override

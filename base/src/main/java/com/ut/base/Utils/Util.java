@@ -1,4 +1,4 @@
-package com.ut.module_mine.util;
+package com.ut.base.Utils;
 
 import android.content.Context;
 import android.content.res.Resources;

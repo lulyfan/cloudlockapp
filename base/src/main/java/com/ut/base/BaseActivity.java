@@ -5,8 +5,13 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -14,6 +19,8 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.UIUtils.StatusBarUtil;
+import com.ut.base.Utils.TxtUtils;
+import com.ut.base.Utils.Util;
 
 /**
  * author : zhouyubin
@@ -26,15 +33,16 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public void setLightStatusBar() {
-        StatusBarUtil.setStatusTextColor(true, this);
+        ImmersionBar.with(this)
+                .statusBarDarkFont(true).init();
     }
 
     public void setDarkStatusBar() {
-        StatusBarUtil.setStatusTextColor(false, this);
+        ImmersionBar.with(this)
+                .statusBarDarkFont(false).init();
     }
 
     /**
@@ -86,5 +94,43 @@ public class BaseActivity extends AppCompatActivity {
         if (textView != null) {
             textView.setText(resId);
         }
+    }
+
+    public void initLightToolbar() {
+        setLightStatusBar();
+        initToolbar();
+    }
+
+    public void initDarkToolbar() {
+        setDarkStatusBar();
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        enableImmersive();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        ViewParent parent = toolbar.getParent();
+        if (parent instanceof View) {
+            ((View) parent).setPadding(0, Util.getStatusBarHeight(this), 0, 0);
+        }
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(null);
+            actionBar.setHomeButtonEnabled(true); //设置返回键可用
+            actionBar.setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // ToolBar左侧按键点击事件监听
+                finish();
+                break;
+        }
+        return true;
     }
 }

@@ -26,9 +26,8 @@ public class NearLockActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_near_lock);
-        enableImmersive();
         mNearLockBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_lock);
-        setLightStatusBar();
+        initLightToolbar();
         setTitle(R.string.lock_title_near_lock);
         initTestData();
         mNearLockBinding.lvBleDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {

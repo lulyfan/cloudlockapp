@@ -62,12 +62,6 @@ public class LockListFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        setLightStatusBarFont();
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //TODO 测试数据

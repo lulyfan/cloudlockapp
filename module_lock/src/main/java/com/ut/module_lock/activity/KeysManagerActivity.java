@@ -39,13 +39,18 @@ public class KeysManagerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
         enableImmersive(R.color.title_bar_bg, false);
+        initTitle();
         init();
-        mBinding.more.setOnClickListener(v -> popupMoreWindow());
         loadData();
+
+    }
+
+    private void initTitle() {
+        showTitleMore();
+        setMoreClickListener(v -> popupMoreWindow());
     }
 
     private void init() {
-        mBinding.back.setOnClickListener(v -> finish());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mBinding.list.setLayoutManager(linearLayoutManager);
