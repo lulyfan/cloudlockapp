@@ -12,12 +12,11 @@ import android.widget.TextView;
 
 import com.ut.base.BaseActivity;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
 import com.ut.module_lock.entity.LockKey;
 import com.ut.module_lock.entity.OperationRecord;
-import com.ut.module_mine.activity.GrantPermissionActivity;
-import com.ut.module_mine.adapter.GrantPermissionAdapter;
 
 public class LockDetailActivity extends BaseActivity {
     public static final String EXTRA_LOCK_KEY = "extra_lock_key";
