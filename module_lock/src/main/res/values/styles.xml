@@ -3,14 +3,14 @@
     <style name="ItemLockListBottomTV">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/lock_23dp</item>
-        <item name="android:drawablePadding">@dimen/lock_6dp</item>
-        <item name="android:textSize">@dimen/lock_12sp</item>
+        <item name="android:layout_marginTop">@dimen/base_23dp</item>
+        <item name="android:drawablePadding">@dimen/base_6dp</item>
+        <item name="android:textSize">@dimen/base_12sp</item>
         <item name="android:gravity">center</item>
     </style>
 
     <style name="ItemLockListBottomTV.LeftMargin">
-        <item name="android:layout_marginLeft">@dimen/lock_15dp</item>
+        <item name="android:layout_marginLeft">@dimen/base_15dp</item>
     </style>
 
     <style name="AddGuideTV">
@@ -18,7 +18,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">@dimen/base_10dp</item>
         <item name="android:textColor">@color/lock_color_tv_gray</item>
-        <item name="android:textSize">@dimen/lock_14sp</item>
+        <item name="android:textSize">@dimen/base_14sp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
@@ -32,7 +32,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:drawablePadding">@dimen/base_5dp</item>
-        <item name="android:textSize">@dimen/lock_12sp</item>
+        <item name="android:textSize">@dimen/base_12sp</item>
         <item name="android:textColor">@color/lock_color_tv_gray</item>
     </style>
 

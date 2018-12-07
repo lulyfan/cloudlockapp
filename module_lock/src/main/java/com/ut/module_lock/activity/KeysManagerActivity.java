@@ -38,14 +38,14 @@ public class KeysManagerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        enableImmersive(R.color.title_bar_bg, false);
         initTitle();
         init();
         loadData();
-
     }
 
     private void initTitle() {
+        setDarkStatusBar();
+        setTitle(R.string.lock_key_manager);
         showTitleMore();
         setMoreClickListener(v -> popupMoreWindow());
     }
@@ -89,13 +89,13 @@ public class KeysManagerActivity extends BaseActivity {
                 super.initWindow();
                 getPopupWindow().setOnDismissListener(() -> {
                             setWindowAlpha(1f);
-                            enableImmersive(R.color.title_bar_bg, false);
+                            setDarkStatusBar();
                         }
                 );
             }
         };
-        enableImmersive(R.color.white, true);
-        popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
+        setLightStatusBar();
+        popupWindow.showAtLocationWithAnim(getWindow().getDecorView(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
     private void sendKey() {
@@ -111,10 +111,16 @@ public class KeysManagerActivity extends BaseActivity {
         for (int i = 0; i < 10; i++) {
             KeyItem item = new KeyItem();
             item.setCaption("caption " + i);
-            item.setDesc("desc......... ");
             item.setType((i + 1) % 4);
             item.setAuthorized((i + 2) % 2 == 0);
-            item.setSender("大波阿哥");
+            if (item.getType() == 3) {
+                item.setDesc("此钥匙没有使用次数限制");
+            } else if (item.getType() == 2) {
+                item.setDesc("2018/11/26-2018/12/26  每天  9:00-17:00");
+            } else if (item.getType() == 0) {
+                item.setDesc("钥匙有效期为1小时，使用一次后失效");
+            }
+            item.setSender("曹哲君");
             item.setSendTime("2018/09/08 10:55");
             item.setAcceptTime("2018/09/08 11:34");
             item.setStartTime("2018/09/09 11:12");

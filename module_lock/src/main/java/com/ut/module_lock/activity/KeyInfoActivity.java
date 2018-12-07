@@ -37,19 +37,19 @@ public class KeyInfoActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
-        enableImmersive(R.color.title_bar_bg, false);
         keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
         initListener();
     }
 
     private void initListener() {
-        mBinding.back.setOnClickListener(v -> finish());
-        mBinding.tvKeyName.setOnClickListener(v -> ARouter.getInstance()
+        setTitle(R.string.lock_key_info);
+        setDarkStatusBar();
+        mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
                 .build(RouterUtil.LockModulePath.EDIT_KEY_NAME)
                 .withSerializable(Constance.KEY_INFO, keyInfo)
                 .navigation(this, REQUEST_EDIT_KEY));
-        mBinding.tvKeyType.setOnClickListener(v -> {
+        mBinding.keyTypeSelection.setOnClickListener(v -> {
             String url;
             if (keyInfo.getType() == 1) {
                 url = RouterUtil.LockModulePath.EDIT_LIMITED_TIME;
@@ -59,8 +59,8 @@ public class KeyInfoActivity extends BaseActivity {
             ARouter.getInstance().build(url).withSerializable(Constance.KEY_INFO, keyInfo).navigation(this, REQUEST_EDIT_KEY);
         });
         mBinding.operationRecord.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation());
-        mBinding.more.setOnClickListener(v -> popupMoreWindow());
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
+        setMoreClickListener(v -> popupMoreWindow());
     }
 
     private void deleteKey() {
@@ -94,11 +94,11 @@ public class KeyInfoActivity extends BaseActivity {
                 super.initWindow();
                 getPopupWindow().setOnDismissListener(() -> {
                     setWindowAlpha(1f);
-                    enableImmersive(R.color.title_bar_bg, false);
+                    setDarkStatusBar();
                 });
             }
         };
-        enableImmersive(R.color.white, true);
+        setLightStatusBar();
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 

@@ -20,7 +20,7 @@
         android:background="@drawable/bg_detail"
         android:paddingLeft="@dimen/base_20dp"
         android:paddingTop="@dimen/base_35dp"
-        android:paddingRight="@dimen/lock_20dp"
+        android:paddingRight="@dimen/base_20dp"
         tools:context=".activity.LockDetailActivity">
 
         <ImageView
@@ -33,14 +33,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/lock_20dp"
+            android:layout_marginTop="@dimen/base_20dp"
             android:ellipsize="end"
             android:maxEms="11"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@{lockKey.name}"
             android:textColor="@color/white"
-            android:textSize="@dimen/lock_23sp"
+            android:textSize="@dimen/base_23dp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/iv_back"/>
 
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/lock_color_bg_gray"
-                android:padding="@dimen/lock_30dp"
+                android:padding="@dimen/base_30dp"
                 >
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:gravity="center"
                     android:text="@{lockKey.electricity + @string/percentage_symbol}"
                     android:textColor="@color/color_base_title"
-                    android:textSize="@dimen/lock_14sp"
+                    android:textSize="@dimen/base_14sp"
                     app:electricityDrawable="@{lockKey.electricity}"
                     />
 

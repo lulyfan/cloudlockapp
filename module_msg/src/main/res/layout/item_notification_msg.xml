@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_80dp"
         android:paddingLeft="@dimen/base_20dp"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <FrameLayout
             android:id="@+id/icon_layout"
@@ -31,6 +32,7 @@
                 app:url="@{notification.icon}" />
 
         </FrameLayout>
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -52,6 +54,7 @@
             android:textColor="#999999"
             android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title" />

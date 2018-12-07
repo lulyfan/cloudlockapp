@@ -35,12 +35,12 @@ public class EditKeyNameActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_name);
-        enableImmersive(R.color.title_bar_bg, false);
         initView();
     }
 
     private void initView() {
-        findViewById(R.id.back).setOnClickListener(v -> finish());
+        setDarkStatusBar();
+        setTitle(R.string.lock_name);
         nameEdt = findViewById(R.id.edt_key_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {

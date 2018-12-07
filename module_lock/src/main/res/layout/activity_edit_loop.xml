@@ -2,7 +2,9 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="keyItem"
             type="com.ut.module_lock.entity.KeyItem" />
@@ -12,31 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_44dp"
-            android:background="#00BDCF"
-            android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/base_32dp"
-                android:layout_height="@dimen/base_32dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/selector_btn_back"
-                android:padding="@dimen/base_6dp"
-                android:src="@mipmap/back_white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/lock_loop_key"
-                android:textColor="#FFFFFF"
-                android:textSize="17sp" />
-        </RelativeLayout>
+        <include android:id="@+id/top" layout="@layout/toolbar_green"  />
 
 
         <android.support.constraint.ConstraintLayout
@@ -54,7 +32,7 @@
                 android:id="@+id/textView21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:text="@string/repeat"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
@@ -67,7 +45,7 @@
                 layout="@layout/week"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/base_16dp"
                 app:layout_constraintBottom_toTopOf="@+id/divider11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -76,7 +54,7 @@
             <View
                 android:id="@+id/divider11"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="1px"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.startTime}"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/s"
@@ -112,8 +90,8 @@
             <View
                 android:id="@+id/divider12"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="1px"
+                android:layout_marginTop="@dimen/base_16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.endTime}"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/s"
@@ -151,7 +129,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/base_16dp"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.1901"
@@ -163,7 +141,7 @@
                 android:id="@+id/textView26"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:text="@string/startDate"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
@@ -175,10 +153,10 @@
                 android:id="@+id/startDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="@dimen/base_16dp"
+                android:layout_marginRight="@dimen/base_16dp"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.startDate}"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/s"
@@ -189,7 +167,7 @@
             <View
                 android:id="@+id/divider13"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="1px"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -213,7 +191,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.endTime}"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/s"

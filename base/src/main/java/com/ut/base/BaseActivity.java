@@ -79,6 +79,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setMoreClickListener(View.OnClickListener onClickListener) {
+        showTitleMore();
         findViewById(R.id.iv_more).setOnClickListener(onClickListener);
     }
 

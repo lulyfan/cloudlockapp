@@ -16,7 +16,7 @@
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/lock_0_5dp"
+            android:layout_height="1px"
             android:background="@color/lock_color_btn_gray"
             app:layout_constraintBottom_toBottomOf="@+id/include"/>
 
@@ -25,12 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/lock_color_btn_gray"
-            android:dividerHeight="@dimen/lock_0_5dp"
+            android:dividerHeight="1px"
             app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/lock_0_5dp"
+            android:layout_height="1px"
             android:background="@color/lock_color_btn_gray"
             app:layout_constraintBottom_toBottomOf="@+id/lv_ble_device"/>
     </android.support.constraint.ConstraintLayout>

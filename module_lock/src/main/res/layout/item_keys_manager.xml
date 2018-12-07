@@ -98,7 +98,7 @@
                 android:text="@{keyItem.desc}"
                 android:textColor="#999999"
                 android:textSize="@dimen/base_12sp"
-                android:visibility="@{keyItem.type==0 || keyItem.type==3 || keyItem.invalid? View.VISIBLE : View.GONE }"
+                android:visibility="@{keyItem.type != 1 || keyItem.invalid? View.VISIBLE : View.GONE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +115,7 @@
                 android:id="@+id/limit_time_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{!keyItem.invalid  &amp;&amp; (keyItem.type==1|| keyItem.type == 2) ? View.VISIBLE : View.GONE }"
+                android:visibility="@{!keyItem.invalid  &amp;&amp; (keyItem.type==1) ? View.VISIBLE : View.GONE }"
                 app:constraint_referenced_ids="limit_start_time, limit_end_time" />
 
         </android.support.constraint.ConstraintLayout>

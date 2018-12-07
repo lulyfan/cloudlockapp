@@ -67,7 +67,7 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/lock_20dp"
+            android:layout_marginTop="@dimen/base_20dp"
             android:background="@color/white"
             android:orientation="vertical"
             android:paddingLeft="@dimen/base_20dp"
@@ -85,7 +85,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/lock_0_5dp"
+                android:layout_height="1px"
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
@@ -100,7 +100,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/lock_0_5dp"
+                android:layout_height="1px"
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
@@ -115,7 +115,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/lock_0_5dp"
+                android:layout_height="1px"
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton

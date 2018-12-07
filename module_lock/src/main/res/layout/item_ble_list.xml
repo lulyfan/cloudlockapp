@@ -6,21 +6,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/lock_20dp"
-    android:paddingTop="@dimen/lock_20dp"
-    android:paddingRight="@dimen/lock_20dp"
-    android:paddingBottom="@dimen/lock_20dp">
+    android:paddingLeft="@dimen/base_20dp"
+    android:paddingTop="@dimen/base_20dp"
+    android:paddingRight="@dimen/base_20dp"
+    android:paddingBottom="@dimen/base_20dp">
 
     <TextView
         android:id="@+id/tv_ble_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@mipmap/icon_lock_focuse"
-        android:drawablePadding="@dimen/lock_20dp"
+        android:drawablePadding="@dimen/base_20dp"
         android:gravity="center_vertical"
         android:text="123854"
         android:textColor="@color/color_base_title"
-        android:textSize="@dimen/lock_17sp"
+        android:textSize="@dimen/base_17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />

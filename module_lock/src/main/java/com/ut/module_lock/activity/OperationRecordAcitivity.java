@@ -34,8 +34,10 @@ public class OperationRecordAcitivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_operation_record);
-        enableImmersive(R.color.title_bar_bg, false);
-        mBinding.back.setOnClickListener(v -> finish());
+
+        setTitle(R.string.lock_operation_record);
+        setDarkStatusBar();
+
         List<OperationRecord > oprs = new ArrayList<>();
         for (int i= 0; i<20;i++){
             OperationRecord op = new OperationRecord();
@@ -43,8 +45,8 @@ public class OperationRecordAcitivity extends BaseActivity {
             List<OperationRecord.Record> records = new ArrayList<>();
             for (int j=0;j<3;j++) {
                 OperationRecord.Record record = new OperationRecord.Record();
-                record.setDesc("desc........");
-                record.setOperator("operatorx");
+                record.setDesc("11:19:20 使用APP开锁");
+                record.setOperator("曹哲君");
                 records.add(record);
             }
             op.setRecords(records);
