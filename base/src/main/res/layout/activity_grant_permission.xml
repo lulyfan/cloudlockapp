@@ -5,15 +5,15 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activity.GrantPermissionActivity">
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/headContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@drawable/bg_head"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.131"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -22,59 +22,73 @@
                 android:id="@+id/toolbar5"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintHeight_percent="0.458"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.458"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/m"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/grantPermission" />
+                    android:text="@string/grantPermission"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/m" />
             </android.support.v7.widget.Toolbar>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar5"
-                app:tabTextColor="@android:color/white"
-                app:tabTextAppearance="@style/tabStyle">
+                app:layout_constraintTop_toBottomOf="@+id/toolbar5">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mine_limitTime" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="#80DEE6"
+                    android:layout_gravity="bottom"/>
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mine_forever" />
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:tabIndicatorColor="@android:color/white"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabTextAppearance="@style/tabStyle"
+                    app:tabTextColor="@android:color/white">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mine_once" />
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItem5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mine_limitTime" />
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabItem8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mine_loop" />
-            </android.support.design.widget.TabLayout>
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItem6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mine_forever" />
+
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItem7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mine_once" />
+
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItem8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mine_loop" />
+                </android.support.design.widget.TabLayout>
+            </FrameLayout>
+
 
         </android.support.constraint.ConstraintLayout>
-
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
@@ -84,7 +98,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headContainer"></android.support.v4.view.ViewPager>
+            app:layout_constraintTop_toBottomOf="@+id/headContainer">
+
+        </android.support.v4.view.ViewPager>
 
         <Button
             android:id="@+id/button"

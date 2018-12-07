@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ut.base.BaseActivity;
+import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.util.BottomLineItemDecoration;
 import com.ut.module_mine.adapter.DataBindingAdapter;

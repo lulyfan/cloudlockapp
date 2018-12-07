@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.ut.module_mine.customView.DatePicker
+    <com.ut.base.customView.DatePicker
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/datePicker"
@@ -24,5 +24,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include7">
 
-    </com.ut.module_mine.customView.DatePicker>
+    </com.ut.base.customView.DatePicker>
 </android.support.constraint.ConstraintLayout>

@@ -1,19 +1,27 @@
 package com.ut.module_mine.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
@@ -22,6 +30,7 @@ import com.ut.base.BaseActivity;
 import com.ut.module_mine.R;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.databinding.ActivityEditUserInfoBinding;
+import com.ut.module_mine.util.ImgUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +45,8 @@ public class EditUserInfoActivity extends BaseActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int CROP_PICTURE = 2;
+    private static final int REQUEST_CHOOSE_PHOTO = 3;
+    private static final int REQUEST_WRITE_PERMISSION = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,7 @@ public class EditUserInfoActivity extends BaseActivity {
         enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_user_info);
         initUI();
+        requestWritePermission();
     }
 
     private void initUI() {
@@ -56,6 +68,13 @@ public class EditUserInfoActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 editImg();
+            }
+        });
+
+        binding.headImg.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                setHeadImg();
             }
         });
     }
@@ -73,16 +92,29 @@ public class EditUserInfoActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.arc_border)
+                .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         int i = view.getId();
                         if (i == R.id.takePhoto) {
-                            takePhoto();
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String imageFileName = "JPEG_" + timeStamp + "_";
+                            File photoFile = null;
+                            try {
+                                photoFile = ImgUtil.createImageFile(EditUserInfoActivity.this, imageFileName);
+                                mCurrentPhotoPath = photoFile.getAbsolutePath();
+                            } catch (IOException ex) {
+                                Toast.makeText(EditUserInfoActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            photoURI = ImgUtil.takePhoto(EditUserInfoActivity.this, "com.ut.module_mine.fileprovider",
+                                    photoFile, REQUEST_IMAGE_CAPTURE);
                             dialog.dismiss();
 
                         } else if (i == R.id.chooseLocalImg) {
+                            ImgUtil.choosePhoto(EditUserInfoActivity.this, REQUEST_CHOOSE_PHOTO);
                             dialog.dismiss();
                         } else {
                         }
@@ -93,94 +125,58 @@ public class EditUserInfoActivity extends BaseActivity {
         dialog.show();
     }
 
-    private void takePhoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(this,
-                        "com.ut.module_mine.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                takePictureIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+    private boolean checkWritePermission() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestWritePermission() {
+        if (!checkWritePermission()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            cropImageUri(photoURI, 800, 400, CROP_PICTURE);
+            ImgUtil.cropImageUri(EditUserInfoActivity.this, photoURI, 800, 800, CROP_PICTURE);
 
         } else if (requestCode == CROP_PICTURE && resultCode == RESULT_OK) {
-            setPic();
+            ImgUtil.setPic(binding.headImg, mCurrentPhotoPath);
+            saveHeadImgPath();
+
+        } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == RESULT_OK) {
+            if (!checkWritePermission()) {
+                Toast.makeText(this, getString(R.string.needWritePermission), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            mCurrentPhotoPath = cursor.getString(columnIndex);
+            cursor.close();
+
+            ImgUtil.setPic(binding.headImg, mCurrentPhotoPath);
+            saveHeadImgPath();
         }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
+    private void saveHeadImgPath() {
+        SharedPreferences sharedPreferences = getSharedPreferences("cloudLock", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("headImg", mCurrentPhotoPath);
+        editor.apply();
     }
 
-    private void cropImageUri(Uri uri, int outputX, int outputY, int requestCode){
-
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 2);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
-        intent.putExtra("scale", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true); // no face detection
-        intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, requestCode);
-    }
-
-    private void setPic() {
-        ImageView imageView = binding.headImg;
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        imageView.setImageBitmap(bitmap);
+    private void setHeadImg() {
+        SharedPreferences sharedPreferences = getSharedPreferences("cloudLock", Context.MODE_PRIVATE);
+        String headImgPath = sharedPreferences.getString("headImg", "");
+        File file = new File(headImgPath);
+        if (file.exists()) {
+            ImgUtil.setPic(binding.headImg, headImgPath);
+        }
     }
 }

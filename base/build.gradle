@@ -13,6 +13,10 @@ android {
 
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -54,6 +58,8 @@ dependencies {
     }
     //沉浸式状态栏
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+    api 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
+    api 'com.orhanobut:dialogplus:1.11@aar'
     //测试依赖
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

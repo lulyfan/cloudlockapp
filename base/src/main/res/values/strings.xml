@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">base</string>
+    <string name="grantPermission">分配权限</string>
+    <string name="mine_limitTime">限时</string>
+    <string name="mine_forever">永久</string>
+    <string name="mine_once">单次</string>
+    <string name="mine_loop">循环</string>
+    <string name="send">发送</string>
+    <string name="setGrantUser">设置为授权用户</string>
+    <string name="invalidTime">失效时间</string>
+    <string name="chooseTime">请选择时间</string>
+    <string name="validTime">生效时间</string>
+    <string name="repeat">重复</string>
+    <string name="startDate">启用日期</string>
+    <string name="endDate">停止日期</string>
+    <string name="onceKeyTip">注:单次钥匙有效期为1小时,使用1次后失效</string>
+    <string name="confirm">确定</string>
+    <string name="receiver">接收者</string>
+    <string name="name">名称</string>
+    <string name="nameKey">请为钥匙命名</string>
+    <string name="sunday">日</string>
+    <string name="monday">一</string>
+    <string name="tuesday">二</string>
+    <string name="wednesday">三</string>
+    <string name="thursday">四</string>
+    <string name="friday">五</string>
+    <string name="saturday">六</string>
 </resources>

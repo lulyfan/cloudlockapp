@@ -1,19 +1,16 @@
-package com.ut.module_mine.util;
+package com.ut.base.Utils;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.ut.base.Utils.Util;
-import com.ut.module_mine.R;
-import com.ut.module_mine.customView.DatePicker;
-import com.ut.module_mine.customView.DateTimePicker;
-import com.ut.module_mine.customView.TimePicker;
+import com.ut.base.R;
+import com.ut.base.customView.DatePicker;
+import com.ut.base.customView.DateTimePicker;
+import com.ut.base.customView.TimePicker;
 
 public class DialogUtil {
 
@@ -122,33 +119,6 @@ public class DialogUtil {
                 dialog.dismiss();
             }
         });
-
-        dialog.show();
-    }
-
-    public static void addLockGroup(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_addgroup, null);
-
-        DialogPlus dialog = DialogPlus.newDialog(context)
-                .setContentHolder(new ViewHolder(view))
-                .setGravity(Gravity.CENTER)
-                .setContentWidth(Util.getWidthPxByDisplayPercent(context, 0.8))
-                .setContentBackgroundResource(R.drawable.arc_border)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(DialogPlus dialog, View view) {
-                        int i = view.getId();
-                        if (i == R.id.cancel) {
-                            dialog.dismiss();
-
-                        } else if (i == R.id.confirm) {
-                            dialog.dismiss();
-
-                        } else {
-                        }
-                    }
-                })
-                .create();
 
         dialog.show();
     }
