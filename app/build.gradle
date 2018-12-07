@@ -56,9 +56,9 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(path: ':base')
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
-//    if (isBuildLoginModule.toBoolean()) {
-//        implementation project(':module_login')
-//    }
+    if (isBuildLoginModule.toBoolean()) {
+        implementation project(':module_login')
+    }
     if (isBuildLockModule.toBoolean()) {
         implementation project(':module_lock')
     }

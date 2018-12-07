@@ -5,33 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:id="@+id/root">
 
 
-    <FrameLayout
+    <include
         android:id="@+id/title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/new_user_register"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/base_17sp"
-            android:transitionName="register" />
-    </FrameLayout>
+        layout="@layout/toolbar_white"
+        android:transitionName="register" />
 
 
     <LinearLayout
@@ -43,8 +23,8 @@
         app:layout_constraintTop_toBottomOf="@id/title_bar">
 
         <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="@dimen/base_22dp"
+            android:layout_height="@dimen/base_22dp"
             android:src="@drawable/selector_location_icon" />
 
         <TextView
@@ -54,10 +34,10 @@
             android:layout_marginStart="@dimen/base_20dp"
             android:layout_marginEnd="@dimen/base_20dp"
             android:layout_weight="1"
-            android:textSize="@dimen/base_14sp"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:text="@string/default_country_code" />
+            android:text="@string/default_country_code"
+            android:textSize="@dimen/base_14sp" />
 
         <ImageView
             android:id="@+id/icon_of_county"
@@ -89,10 +69,10 @@
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/phone_hint"
-            android:textSize="@dimen/base_14sp"
             android:inputType="phone"
             android:maxLines="1"
-            android:textColorHint="#CCCCCC" />
+            android:textColorHint="#CCCCCC"
+            android:textSize="@dimen/base_14sp" />
 
         <ImageView
             android:id="@+id/img_clear"
@@ -130,7 +110,7 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:textColorHint="#CCCCCC"
-            android:textSize="14sp" />
+            android:textSize="@dimen/base_14sp" />
 
         <CheckBox
             android:id="@+id/see_password"
@@ -146,8 +126,8 @@
         app:layout_constraintTop_toBottomOf="@id/password_layout">
 
         <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="@dimen/base_22dp"
+            android:layout_height="@dimen/base_22dp"
             android:src="@drawable/selector_verify_code" />
 
         <EditText
@@ -163,21 +143,21 @@
 
         <TextView
             android:id="@+id/tv_get_verify_code"
-            android:layout_width="100dp"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/base_100dp"
+            android:layout_height="@dimen/base_30dp"
             android:background="@drawable/selector_loading_button"
-            android:elevation="2dp"
+            android:elevation="@dimen/base_2dp"
             android:enabled="false"
             android:gravity="center"
             android:text="@string/get_verify_code"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="@dimen/base_14sp" />
     </LinearLayout>
 
     <com.ut.commoncomponent.LoadingButton
         android:id="@+id/register"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_50dp"
         android:layout_marginLeft="@dimen/base_20dp"
         android:layout_marginTop="@dimen/base_30dp"
         android:layout_marginRight="@dimen/base_20dp"

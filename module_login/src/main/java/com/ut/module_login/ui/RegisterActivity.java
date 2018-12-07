@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding3.view.RxView;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
@@ -54,6 +55,8 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initUI() {
+        initLightToolbar();
+        setTitle(R.string.register);
         countryAreaCode = getText(R.string.default_country_code).toString();
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
@@ -119,7 +122,10 @@ public class RegisterActivity extends BaseActivity {
         );
 
         findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
-        findViewById(R.id.back).setOnClickListener(v -> supportFinishAfterTransition());
+
+        findViewById(R.id.root).setOnClickListener(v->{
+            SystemUtils.hideKeyboard(getBaseContext(), v);
+        });
     }
 
     private boolean handleMessage(Message msg) {

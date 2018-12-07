@@ -35,9 +35,13 @@ public class NotificationInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mNotificationMessage = (NotificationMessage) getIntent().getSerializableExtra("notificationInfo");
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_notifi_info);
-        enableImmersive(R.color.msg_app_statusbar_color, true);
         mBinding.setNotification(mNotificationMessage);
-        mBinding.back.setOnClickListener((v) -> finish());
+        setTitle(mNotificationMessage.getTitle());
+        initLightToolbar();
+        loadData();
+    }
+
+    private void loadData() {
         MessageContent content = new MessageContent();
         content.setDate("2018/09/10");
         content.setContent("您收到了一把电子钥匙【Chan的智能锁】，使用期限为【永久】。");

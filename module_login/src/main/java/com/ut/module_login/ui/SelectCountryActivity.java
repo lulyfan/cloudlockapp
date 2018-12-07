@@ -17,10 +17,9 @@ public class SelectCountryActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_select_country);
-
-        findViewById(R.id.back).setOnClickListener(v -> finish());
+        initLightToolbar();
+        setTitle(R.string.selected_country_title);
         ListView listView = (ListView) findViewById(R.id.country_list);
         String[] arrays = getResources().getStringArray(R.array.CountryCodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_country, arrays);

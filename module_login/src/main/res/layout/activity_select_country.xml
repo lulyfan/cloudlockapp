@@ -6,28 +6,7 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp"
-        android:layout_height="50dp">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/selected_country_title"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/base_17sp" />
-
-    </FrameLayout>
+    <include layout="@layout/toolbar_white" />
 
     <ListView
         android:id="@+id/country_list"

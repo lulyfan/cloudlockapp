@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
@@ -47,6 +47,8 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void initUI() {
+        initLightToolbar();
+        setTitle(R.string.login_forget_password);
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
@@ -98,10 +100,11 @@ public class ForgetPasswordActivity extends BaseActivity {
         sureBtn.setOnClickListener(v -> {
             sureBtn.startLoading();
             commit();
-
         });
 
-        findViewById(R.id.back).setOnClickListener(v -> supportFinishAfterTransition());
+        findViewById(R.id.root).setOnClickListener(v->{
+            SystemUtils.hideKeyboard(getBaseContext(), v);
+        });
     }
 
     private void commit() {

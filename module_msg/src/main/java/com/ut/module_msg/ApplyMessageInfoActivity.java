@@ -30,10 +30,10 @@ public class ApplyMessageInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.msg_app_statusbar_color, true);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_apply_message_info);
+        initLightToolbar();
         mApplyMessage = (ApplyMessage) getIntent().getSerializableExtra("applyMessage");
+        setTitle(mApplyMessage.getName());
         mBinding.setApplyMessage(mApplyMessage);
-        mBinding.back.setOnClickListener(v -> finish());
     }
 }

@@ -101,6 +101,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void setTitle(CharSequence charSequence) {
+        TextView textView = findViewById(R.id.tv_title);
+        if (textView != null) {
+            textView.setText(charSequence);
+        }
+    }
+
     public void initLightToolbar() {
         setLightStatusBar();
         initToolbar();

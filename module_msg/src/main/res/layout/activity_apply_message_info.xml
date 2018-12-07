@@ -15,32 +15,8 @@
         android:background="#F4F9FB"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_44dp"
-            android:background="@android:color/white"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
 
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/base_32dp"
-                android:layout_height="@dimen/base_32dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/selector_btn_back"
-                android:padding="@dimen/base_6dp"
-                android:src="@mipmap/icon_back" />
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@{applyMessage.name}"
-                android:textColor="@color/color_base_title"
-                android:textSize="@dimen/base_17sp" />
-        </RelativeLayout>
+        <include layout="@layout/toolbar_white" />
 
 
         <LinearLayout
@@ -145,8 +121,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textColor="#666666"
                     android:text="@{applyMessage.name}"
+                    android:textColor="#666666"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
 
@@ -193,8 +169,8 @@
             android:layout_marginTop="@dimen/base_10dp"
             android:background="@drawable/shape_bg_corner"
             android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp"
             android:paddingTop="@dimen/base_30dp"
+            android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
             android:text="@{applyMessage.message}"
             android:textColor="#999999"
