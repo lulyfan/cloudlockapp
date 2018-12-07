@@ -1,14 +1,14 @@
-package com.ut.module_mine.adapter;
+package com.ut.base.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.ut.module_mine.fragment.ForeverFragment;
-import com.ut.module_mine.fragment.LimitTimeFragment;
-import com.ut.module_mine.fragment.LoopFragment;
-import com.ut.module_mine.fragment.OnceFragment;
+import com.ut.base.fragment.ForeverFragment;
+import com.ut.base.fragment.LimitTimeFragment;
+import com.ut.base.fragment.LoopFragment;
+import com.ut.base.fragment.OnceFragment;
 
 public class GrantPermissionAdapter extends FragmentPagerAdapter {
 

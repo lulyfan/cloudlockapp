@@ -1,4 +1,4 @@
-package com.ut.module_mine.customView;
+package com.ut.base.customView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.aigestudio.wheelpicker.WheelPicker;
-import com.ut.module_mine.R;
+import com.ut.base.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

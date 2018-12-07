@@ -1,6 +1,8 @@
 package com.ut.module_mine.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseFragment;
@@ -19,6 +22,9 @@ import com.ut.module_mine.activity.LockUserActivity;
 import com.ut.module_mine.R;
 import com.ut.module_mine.activity.SystemSettingActivity;
 import com.ut.module_mine.databinding.*;
+import com.ut.module_mine.util.ImgUtil;
+
+import java.io.File;
 
 /**
  * author : zhouyubin
@@ -31,8 +37,6 @@ public class MineFragment extends BaseFragment {
 
     View mView = null;
     FragmentMineBinding mMineBinding = null;
-
-
 
     @Nullable
     @Override
@@ -85,7 +89,23 @@ public class MineFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        mMineBinding.headImg.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                setHeadImg();
+                return true;
+            }
+        });
     }
 
+    private void setHeadImg() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("cloudLock", Context.MODE_PRIVATE);
+        String headImgPath = sharedPreferences.getString("headImg", "");
+        File file = new File(headImgPath);
+        if (file.exists()) {
+            ImgUtil.setPic(mMineBinding.headImg, headImgPath);
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.ut.module_mine.util;
+package com.ut.base.Utils;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,7 +9,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.design.widget.TabLayout;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
@@ -41,6 +45,59 @@ public class Util {
         return result;
     }
 
+    public static void setTabWidth(final TabLayout tabLayout){
+        tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //拿到tabLayout的mTabStrip属性
+                    LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
+
+
+
+                    for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                        View tabView = mTabStrip.getChildAt(i);
+
+                        //拿到tabView的mTextView属性  tab的字数不固定一定用反射取mTextView
+                        Field mTextViewField = tabView.getClass().getDeclaredField("textView");
+                        mTextViewField.setAccessible(true);
+
+                        TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                        tabView.setPadding(0, 0, 0, 0);
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        int width = 0;
+                        width = mTextView.getWidth();
+                        if (width == 0) {
+                            mTextView.measure(0, 0);
+                            width = mTextView.getMeasuredWidth();
+                        }
+
+                        //设置tab左右间距 注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        int parentWidth = mTabStrip.getWidth();
+                        int tabCount = mTabStrip.getChildCount();
+                        int margin = (parentWidth - (tabCount * width)) / (tabCount * 2);
+                        params.width = width ;
+                        params.weight = 0;
+                        params.leftMargin = margin;
+                        params.rightMargin = margin;
+                        tabView.setLayoutParams(params);
+
+                        tabView.invalidate();
+                    }
+
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
     public static Bitmap toRoundBitmap(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -48,10 +105,11 @@ public class Util {
         float left, top, right, bottom, dst_left, dst_top, dst_right, dst_bottom;
         if (width <= height) {
             roundPx = width / 2;
+            float clip = (height - width) / 2;
             left = 0;
-            top = 0;
+            top = clip;
             right = width;
-            bottom = width;
+            bottom = height - clip;
             height = width;
             dst_left = 0;
             dst_top = 0;

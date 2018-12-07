@@ -21,4 +21,13 @@
     <dimen name="base_25dp">25dp</dimen>
     <dimen name="base_53dp">53dp</dimen>
     <dimen name="base_27dp">27dp</dimen>
+
+    <dimen name="xxs">10sp</dimen>
+    <dimen name="xs">12sp</dimen>
+    <dimen name="s">14sp</dimen>
+    <dimen name="m">17sp</dimen>
+    <dimen name="l">20sp</dimen>
+    <dimen name="xl">22sp</dimen>
+    <dimen name="xxl">24sp</dimen>
+    <dimen name="xxxl">30sp</dimen>
 </resources>

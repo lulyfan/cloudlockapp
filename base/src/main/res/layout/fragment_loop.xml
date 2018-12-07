@@ -6,7 +6,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.LoopFragment">
+        tools:context="com.ut.base.fragment.LoopFragment">
 
         <include
             android:id="@+id/include4"

@@ -1,16 +1,15 @@
-package com.ut.module_mine.activity;
+package com.ut.base.activity;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import com.ut.base.BaseActivity;
-import com.ut.module_mine.adapter.GrantPermissionAdapter;
-import com.ut.module_mine.R;
-import com.ut.module_mine.databinding.ActivityGrantPermissionBinding;
-import com.ut.module_mine.util.Util;
+import com.ut.base.R;
+import com.ut.base.Utils.Util;
+import com.ut.base.adapter.GrantPermissionAdapter;
+import com.ut.base.databinding.ActivityGrantPermissionBinding;
 
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
@@ -20,6 +19,12 @@ public class GrantPermissionActivity extends BaseActivity {
         enableImmersive();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_grant_permission);
         initUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Util.setTabWidth(binding.tabLayout);
     }
 
     private void initUI() {

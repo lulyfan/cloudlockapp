@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.ut.module_mine.customView.DatePicker
+    <com.ut.base.customView.DatePicker
         android:id="@+id/datePicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,9 +14,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </com.ut.module_mine.customView.DatePicker>
+    </com.ut.base.customView.DatePicker>
 
-    <com.ut.module_mine.customView.TimePicker
+    <com.ut.base.customView.TimePicker
         android:id="@+id/timePicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,6 +25,6 @@
         app:layout_constraintStart_toEndOf="@+id/datePicker"
         app:layout_constraintTop_toTopOf="@+id/datePicker">
 
-    </com.ut.module_mine.customView.TimePicker>
+    </com.ut.base.customView.TimePicker>
 
 </android.support.constraint.ConstraintLayout>

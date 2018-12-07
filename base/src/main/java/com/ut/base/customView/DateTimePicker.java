@@ -1,4 +1,4 @@
-package com.ut.module_mine.customView;
+package com.ut.base.customView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.ut.module_mine.R;
+import com.ut.base.R;
 
 import java.util.Calendar;
 

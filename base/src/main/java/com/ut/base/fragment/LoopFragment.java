@@ -1,4 +1,4 @@
-package com.ut.module_mine.fragment;
+package com.ut.base.fragment;
 
 
 import android.databinding.DataBindingUtil;
@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ut.module_mine.util.DialogUtil;
-import com.ut.module_mine.R;
-import com.ut.module_mine.customView.DatePicker;
-import com.ut.module_mine.customView.TimePicker;
-import com.ut.module_mine.databinding.FragmentLoopBinding;
+import com.ut.base.R;
+import com.ut.base.Utils.DialogUtil;
+import com.ut.base.customView.DatePicker;
+import com.ut.base.customView.TimePicker;
+import com.ut.base.databinding.FragmentLoopBinding;
 
 /**
  * A simple {@link Fragment} subclass.

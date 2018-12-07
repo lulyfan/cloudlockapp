@@ -5,18 +5,9 @@
         <item name="android:textColor">@color/gray3</item>
     </style>
 
-    <style name="tabStyle">
-        <item name="android:textSize">17sp</item>
-    </style>
-
     <style name="mineTextStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/gray6</item>
-    </style>
-
-    <style name="styleGrayE">
-        <item name="android:padding">5dp</item>
-        <item name="android:background">@drawable/select_gray_e</item>
     </style>
 
 </resources>

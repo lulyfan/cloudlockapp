@@ -7,8 +7,7 @@
         android:required="true" />
 
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -48,7 +47,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LockGroupItemActivity" />
         </activity>
-        <activity android:name=".activity.GrantPermissionActivity" />
+        <activity android:name="com.ut.base.activity.GrantPermissionActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

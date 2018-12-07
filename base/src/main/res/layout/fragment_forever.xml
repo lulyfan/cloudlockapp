@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OnceFragment">
+    tools:context="com.ut.base.fragment.ForeverFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <include
-        android:id="@+id/include3"
-        layout="@layout/receiver"
+        android:id="@+id/include"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.1901"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/receiver" />
 
-    <TextView
-        android:id="@+id/textView18"
+    <Switch
+        android:id="@+id/switch3"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.101"
         android:layout_marginTop="16dp"
-        android:text="@string/onceKeyTip"
-        android:textSize="@dimen/xs"
-        android:textColor="#F55D54"
+        android:text="@string/setGrantUser"
+        android:textSize="@dimen/s"
+        android:textColor="@color/gray6"
         android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/arc_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include3" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
 </android.support.constraint.ConstraintLayout>
