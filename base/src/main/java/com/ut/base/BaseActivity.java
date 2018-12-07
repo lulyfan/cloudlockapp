@@ -37,12 +37,16 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setLightStatusBar() {
         ImmersionBar.with(this)
-                .statusBarDarkFont(true).init();
+                .reset()
+                .statusBarDarkFont(true)
+                .init();
     }
 
     public void setDarkStatusBar() {
         ImmersionBar.with(this)
-                .statusBarDarkFont(false).init();
+                .reset()
+                .statusBarDarkFont(false)
+                .init();
     }
 
     /**
@@ -107,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        enableImmersive();
+//        enableImmersive();
         Toolbar toolbar = findViewById(R.id.toolbar);
         ViewParent parent = toolbar.getParent();
         if (parent instanceof View) {
@@ -128,7 +132,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // ToolBar左侧按键点击事件监听
-                finish();
+                onBackPressed();
                 break;
         }
         return true;
