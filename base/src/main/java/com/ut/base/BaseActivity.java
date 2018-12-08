@@ -1,25 +1,17 @@
 package com.ut.base;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.ut.base.UIUtils.StatusBarUtil;
-import com.ut.base.Utils.TxtUtils;
 import com.ut.base.Utils.Util;
 
 /**
@@ -29,6 +21,8 @@ import com.ut.base.Utils.Util;
  * version: 1.0
  */
 public class BaseActivity extends AppCompatActivity {
+
+    private OnCustomerClickListener moreListener = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,24 +68,7 @@ public class BaseActivity extends AppCompatActivity {
         ImmersionBar.with(this).reset().init();
     }
 
-    public void showTitleMore() {
-        findViewById(R.id.iv_more).setVisibility(View.VISIBLE);
-    }
-
-    public void setMoreClickListener(View.OnClickListener onClickListener) {
-        showTitleMore();
-        findViewById(R.id.iv_more).setOnClickListener(onClickListener);
-    }
-
-    public void showTitleAdd() {
-        ImageView imageView = findViewById(R.id.iv_more);
-        imageView.setImageResource(R.mipmap.icon_add);
-    }
-
     public void onXmlClick(View view) {
-        if (view.getId() == R.id.iv_back) {
-            this.finish();
-        }
     }
 
     public void setTitle(int resId) {
@@ -119,13 +96,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-//        enableImmersive();
         Toolbar toolbar = findViewById(R.id.toolbar);
         ViewParent parent = toolbar.getParent();
         if (parent instanceof View) {
             ((View) parent).setPadding(0, Util.getStatusBarHeight(this), 0, 0);
         }
-
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -135,13 +110,29 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public interface OnCustomerClickListener {
+        void onClick();
+    }
+
+    public void initMore(OnCustomerClickListener listener) {
+        this.moreListener = listener;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (moreListener != null) {
+            getMenuInflater().inflate(R.menu.toolbar_more_menu, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // ToolBar左侧按键点击事件监听
-                onBackPressed();
-                break;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {// ToolBar左侧按键点击事件监听
+            onBackPressed();
+        } else if (i == R.id.more && moreListener != null) {//更多图示点击事件
+            moreListener.onClick();
         }
         return true;
     }

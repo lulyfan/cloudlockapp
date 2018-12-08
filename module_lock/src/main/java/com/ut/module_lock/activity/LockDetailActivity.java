@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ut.base.BaseActivity;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.Utils.Util;
 import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
@@ -30,11 +31,21 @@ public class LockDetailActivity extends BaseActivity {
         enableImmersive();
         mLockKey = getIntent().getParcelableExtra(EXTRA_LOCK_KEY);
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
+        addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
     }
 
+    private void addPaddingTop() {
+        View view = findViewById(R.id.parent);
+        view.setPadding(view.getPaddingLeft(), Util.getStatusBarHeight(this), view.getPaddingRight(), view.getPaddingBottom());
+    }
+
     public class Present {
+        public void onBackClick(View view) {
+            onBackPressed();
+        }
+
         public void onSendKeyClick(View view) {
             startActivity(new Intent(LockDetailActivity.this, GrantPermissionActivity.class));
         }

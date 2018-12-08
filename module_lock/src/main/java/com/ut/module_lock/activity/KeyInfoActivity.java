@@ -39,12 +39,19 @@ public class KeyInfoActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
         keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
+        initTitle();
         initListener();
     }
 
-    private void initListener() {
+    private void initTitle() {
+        initDarkToolbar();
         setTitle(R.string.lock_key_info);
-        setDarkStatusBar();
+        initMore(this::popupMoreWindow);
+
+    }
+
+    private void initListener() {
+
         mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
                 .build(RouterUtil.LockModulePath.EDIT_KEY_NAME)
                 .withSerializable(Constance.KEY_INFO, keyInfo)
@@ -60,7 +67,6 @@ public class KeyInfoActivity extends BaseActivity {
         });
         mBinding.operationRecord.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation());
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
-        setMoreClickListener(v -> popupMoreWindow());
     }
 
     private void deleteKey() {

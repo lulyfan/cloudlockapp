@@ -14,7 +14,6 @@
             android:layout_height="0dp"
             android:background="@drawable/select_half_arc_border"
             android:paddingLeft="16dp"
-            android:paddingTop="@dimen/base_35dp"
             android:paddingRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.185"

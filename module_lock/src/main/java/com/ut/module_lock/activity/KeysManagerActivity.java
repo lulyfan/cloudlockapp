@@ -44,10 +44,11 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void initTitle() {
-        setDarkStatusBar();
-        setTitle(R.string.lock_key_manager);
-        showTitleMore();
-        setMoreClickListener(v -> popupMoreWindow());
+        initDarkToolbar();
+        initMore(() -> {
+            popupMoreWindow();
+        });
+        setTitle(R.string.func_manage_key);
     }
 
     private void init() {
@@ -82,6 +83,7 @@ public class KeysManagerActivity extends BaseActivity {
                     getPopupWindow().dismiss();
                 });
                 getView(R.id.close_window).setOnClickListener(v -> getPopupWindow().dismiss());
+                setLightStatusBar();
             }
 
             @Override
@@ -94,8 +96,7 @@ public class KeysManagerActivity extends BaseActivity {
                 );
             }
         };
-        setLightStatusBar();
-        popupWindow.showAtLocationWithAnim(getWindow().getDecorView(), Gravity.TOP, 0, 0, R.style.animTranslate);
+        popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
     private void sendKey() {

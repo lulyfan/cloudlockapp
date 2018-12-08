@@ -30,7 +30,17 @@
     <dimen name="base_6dp">6dp</dimen>
     <dimen name="base_62dp">62dp</dimen>
     <dimen name="base_52dp">52dp</dimen>
-
+    <dimen name="base_56dp">56dp</dimen>
+    <dimen name="base_8dp">8dp</dimen>
+    <dimen name="base_23dp">23dp</dimen>
+    <dimen name="base_15dp">15dp</dimen>
+    <dimen name="base_3dp">3dp</dimen>
+    <dimen name="base_1dp">1dp</dimen>
+    <dimen name="base_17dp">17dp</dimen>
+    <dimen name="base_36dp">36dp</dimen>
+    <dimen name="base_60dp">60dp</dimen>
+    <dimen name="base_160dp">160dp</dimen>
+    <dimen name="base_84dp">84dp</dimen>
     <dimen name="xxs">10sp</dimen>
     <dimen name="xs">12sp</dimen>
     <dimen name="s">14sp</dimen>

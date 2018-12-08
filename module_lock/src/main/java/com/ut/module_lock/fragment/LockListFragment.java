@@ -23,6 +23,7 @@ import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
@@ -61,9 +62,15 @@ public class LockListFragment extends BaseFragment {
         return mView;
     }
 
+    private void addPaddingTop() {
+        View view = getView().findViewById(R.id.parent);
+        view.setPadding(view.getPaddingLeft(), Util.getStatusBarHeight(getContext()), view.getPaddingRight(), view.getPaddingBottom());
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        addPaddingTop();
         //TODO 测试数据
         List<LockKey> lockKeys = new ArrayList<>();
         lockKeys.add(new LockKey("小锁Chan的锁/超过12位字符就", 0, 0, 0, 0, 80));
@@ -91,15 +98,13 @@ public class LockListFragment extends BaseFragment {
         public void onGroupClick(View view) {
             UTLog.i("onGroupClick");
 //            mLockListAdapter.notifyData(new ArrayList<>());
-            setLightStatusBarFont();
+
             List<LockGroup> list = new ArrayList<>();
             list.add(new LockGroup("全部分组", 0));
             list.add(new LockGroup("Chan的家", 1));
             list.add(new LockGroup("优特公司", 1));
-            WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-            lp.alpha = 0.5f;
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            getActivity().getWindow().setAttributes(lp);
+            setLightStatusBarFont();
+            setWindowAlpha(0.5f);
             CommonPopupWindow popupWindow = new CommonPopupWindow(getContext(), R.layout.activity_lock_group_list,
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
                 @Override
@@ -125,10 +130,7 @@ public class LockListFragment extends BaseFragment {
                     getPopupWindow().setOnDismissListener(new PopupWindow.OnDismissListener() {
                         @Override
                         public void onDismiss() {
-                            WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-                            lp.alpha = 1.0f;
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                            getActivity().getWindow().setAttributes(lp);
+                            setWindowAlpha(1.0f);
                             setDarkStatusBarFont();
                         }
                     });
@@ -139,13 +141,21 @@ public class LockListFragment extends BaseFragment {
 
         public void onSearchClick(View view) {
             UTLog.i("onSearchClick");
-
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
+            List<LockGroup> list = new ArrayList<>();
+            mLockListAdapter.notifyData(list);
+//            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
         }
 
         public void onAddClick(View view) {
             getActivity().startActivity(new Intent(getContext(), AddGuideActivity.class));
             UTLog.i("onAddClick");
         }
+    }
+
+    private void setWindowAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = alpha;
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getActivity().getWindow().setAttributes(lp);
     }
 }

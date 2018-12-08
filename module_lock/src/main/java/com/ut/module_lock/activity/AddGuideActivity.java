@@ -23,7 +23,6 @@ public class AddGuideActivity extends BaseActivity {
         int i = view.getId();
         if (i == R.id.btn_next) {
             startActivity(new Intent(this, NearLockActivity.class));
-
         }
     }
 }
