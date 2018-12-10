@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TestAndroidLib</string>
+    <string name="progress_tip">请稍候...</string>
+</resources>

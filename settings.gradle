@@ -1,1 +1,4 @@
-include ':app', ':base', ':module_login', ':commoncomponent', ':module_lock', ':module_msg', ':module_mall', ':module_mine', ':unilink-release', ':database',  ':lib2_smallest'
+include ':app', ':base', ':module_login', ':commoncomponent', ':module_lock',
+        ':module_msg', ':module_mall', ':module_mine', ':unilink-release', ':database', ':lib2_smallest',
+        ':lib_networkapi'
+

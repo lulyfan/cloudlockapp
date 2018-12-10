@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+
+    }
+    buildTypes {
+        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+//    productFlavors {
+////        main_ {
+////            //就否是工程项目
+////            buildConfigField "boolean", "ISPROJECT", "false"
+////            flavorDimensions "versionCode"
+////        }
+////        proApp {
+////            //就否是工程项目
+////            buildConfigField "boolean", "ISPROJECT", "true"
+////            flavorDimensions "versionCode"
+////        }
+//    }
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.support_library}"
+}
+
+
