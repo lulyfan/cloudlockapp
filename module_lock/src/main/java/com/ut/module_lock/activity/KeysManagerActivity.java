@@ -45,9 +45,7 @@ public class KeysManagerActivity extends BaseActivity {
 
     private void initTitle() {
         initDarkToolbar();
-        initMore(() -> {
-            popupMoreWindow();
-        });
+        initMore(this::popupMoreWindow);
         setTitle(R.string.func_manage_key);
     }
 

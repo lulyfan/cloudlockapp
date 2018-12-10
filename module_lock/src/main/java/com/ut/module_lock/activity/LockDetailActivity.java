@@ -63,7 +63,7 @@ public class LockDetailActivity extends BaseActivity {
         }
     }
 
-    @BindingAdapter("bind:electricityDrawable")
+    @BindingAdapter("electricityDrawable")
     public static void loadDrawable(TextView textView, int electricity) {
         UTLog.i("electricity:" + electricity);
         Drawable leftDrawable = textView.getResources().getDrawable(R.mipmap.icon_electricity_green);
@@ -77,7 +77,7 @@ public class LockDetailActivity extends BaseActivity {
                 textView.getCompoundDrawables()[2], textView.getCompoundDrawables()[3]);
     }
 
-    @BindingAdapter("bind:bgSrc")
+    @BindingAdapter("bgSrc")
     public static void loadbubble(TextView textView, int userType) {
         int srcId = R.mipmap.icon_bubble_orange;
         if (userType == 1) {
@@ -88,7 +88,7 @@ public class LockDetailActivity extends BaseActivity {
         textView.setBackgroundResource(srcId);
     }
 
-    @BindingAdapter("bind:userType")
+    @BindingAdapter("userType")
     public static void loadUserImage(ImageView imageView, int userType) {
         if (userType == 0) {
             imageView.setImageResource(R.mipmap.icon_user_manager_detail);

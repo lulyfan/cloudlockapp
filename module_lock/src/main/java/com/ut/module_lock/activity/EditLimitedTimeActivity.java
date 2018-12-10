@@ -30,7 +30,7 @@ public class EditLimitedTimeActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_limited_time);
-        setDarkStatusBar();
+        initDarkToolbar();
         setTitle(R.string.lock_loop_key);
         keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);

@@ -35,8 +35,8 @@ public class OperationRecordAcitivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_operation_record);
 
+        initDarkToolbar();
         setTitle(R.string.lock_operation_record);
-        setDarkStatusBar();
 
         List<OperationRecord > oprs = new ArrayList<>();
         for (int i= 0; i<20;i++){

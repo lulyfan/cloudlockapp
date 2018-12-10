@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/lock_clear_key"
         android:textColor="@color/color_base_title"
         android:textSize="@dimen/base_14sp" />
@@ -44,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/lock_send_key"
         android:textColor="@color/color_base_title"
         android:textSize="@dimen/base_14sp" />
