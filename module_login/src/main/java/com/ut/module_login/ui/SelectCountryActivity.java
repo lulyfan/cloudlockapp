@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_login.R;
 
 @Route(path = RouterUtil.LoginModulePath.SELECT_COUNTRY_AREA_CODE)
@@ -31,6 +32,11 @@ public class SelectCountryActivity extends BaseActivity {
             setResult(RESULT_OK, intent);
             finish();
         });
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
     }
 }

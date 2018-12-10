@@ -138,4 +138,10 @@ public class ForgetPasswordActivity extends BaseActivity {
     public void onBackPressed() {
         supportFinishAfterTransition();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
+    }
 }
