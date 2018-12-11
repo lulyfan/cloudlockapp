@@ -3,15 +3,15 @@
     <item android:state_focused="true">
         <shape>
             <corners android:radius="@dimen/base_3dp" />
-            <solid android:color="#F4F9FB" />
-            <stroke android:width="@dimen/base_1dp" android:color="@color/default_highlight_color" />
+            <solid android:color="@color/color_base_bg" />
+            <stroke android:width="@dimen/base_1dp" android:color="@color/color_base_highlight" />
         </shape>
     </item>
     <item android:state_selected="true">
         <shape>
             <corners android:radius="@dimen/base_3dp" />
-            <solid android:color="#F4F9FB" />
-            <stroke android:width="@dimen/base_1dp" android:color="@color/default_highlight_color" />
+            <solid android:color="@color/color_base_bg" />
+            <stroke android:width="@dimen/base_1dp" android:color="@color/color_base_highlight" />
         </shape>
     </item>
 
@@ -19,7 +19,7 @@
         <shape>
             <corners android:radius="@dimen/base_3dp" />
             <solid android:color="#F5F5F5" />
-            <stroke android:width="@dimen/base_2dp" android:color="@color/default_normal_color" />
+            <stroke android:width="@dimen/base_2dp" android:color="@color/color_base_divider" />
         </shape>
     </item>
 </selector>

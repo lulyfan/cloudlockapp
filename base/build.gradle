@@ -56,6 +56,10 @@ dependencies {
     api('com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha1') {
         exclude group: 'androidx.annotation', module: 'annotation'
     }
+    //导入数据库
+    api project(':database')
+    //导入网络库
+    api project(':lib_networkapi')
     //沉浸式状态栏
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
     api 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'

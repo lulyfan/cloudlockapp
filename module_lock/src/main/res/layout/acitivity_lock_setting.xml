@@ -3,7 +3,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="lockKey"
+            type="com.ut.module_lock.entity.LockKey"/>
     </data>
 
     <LinearLayout
@@ -31,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_device_id"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -40,7 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="#666666"
+                    android:text="@{lockKey.name}"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
 
 
@@ -48,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_gravity="bottom"
-                    android:background="#dfdfdf" />
+                    android:background="@color/color_base_divider" />
             </FrameLayout>
 
             <FrameLayout
@@ -61,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_device_mac"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -70,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
 
 
@@ -78,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_gravity="bottom"
-                    android:background="#dfdfdf" />
+                    android:background="@color/color_base_divider" />
             </FrameLayout>
 
             <FrameLayout
@@ -91,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_power"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -100,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
 
 
@@ -108,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_gravity="bottom"
-                    android:background="#dfdfdf" />
+                    android:background="@color/color_base_divider" />
             </FrameLayout>
 
             <FrameLayout
@@ -121,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_valid_date"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -130,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </FrameLayout>
         </LinearLayout>
@@ -155,7 +158,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_name"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -165,14 +168,14 @@
                     android:layout_marginRight="@dimen/base_27dp"
                     android:drawableRight="@mipmap/more_black"
                     android:drawablePadding="@dimen/base_10dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/color_base_title"
                     android:textSize="@dimen/base_17sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_gravity="bottom"
-                    android:background="#DFDFDF" />
+                    android:background="@color/color_base_divider" />
             </FrameLayout>
 
 
@@ -187,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_choose_group"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -197,7 +200,7 @@
                     android:layout_marginRight="@dimen/base_27dp"
                     android:drawableRight="@mipmap/more_black"
                     android:drawablePadding="@dimen/base_10dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/color_base_title"
                     android:textSize="@dimen/base_17sp" />
             </FrameLayout>
 

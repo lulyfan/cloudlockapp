@@ -13,6 +13,6 @@
         android:gravity="center"
         android:padding="@dimen/base_4dp"
         android:text="2018/06/6"
-        android:textColor="#999999"
+        android:textColor="@color/gray9"
         android:textSize="@dimen/base_10dp" />
 </FrameLayout>

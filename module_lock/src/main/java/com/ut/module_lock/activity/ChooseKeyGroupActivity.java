@@ -21,5 +21,10 @@ public class ChooseKeyGroupActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_choose_group);
+        initDarkToolbar();
+        initAdd(() -> {
+
+        });
+
     }
 }

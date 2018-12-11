@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4F9FB"
+        android:background="@color/color_base_bg"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar_white"/>
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/lock_key_name"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
 
                 <TextView
@@ -41,14 +41,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp"/>
             </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#DFDFDF"/>
+                android:background="@color/color_base_divider"/>
 
             <EditText
                 android:id="@+id/edt_ask_for"
@@ -80,7 +80,7 @@
                 android:button="@null"
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_permanent_key"
-                android:textColor="#666666"
+                android:textColor="@color/color_base_text"
                 android:textSize="@dimen/base_14sp"/>
 
             <View
@@ -95,7 +95,7 @@
                 android:button="@null"
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_limited_time_key"
-                android:textColor="#666666"
+                android:textColor="@color/color_base_text"
                 android:textSize="@dimen/base_14sp"/>
 
             <View
@@ -110,7 +110,7 @@
                 android:button="@null"
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_once_key"
-                android:textColor="#666666"
+                android:textColor="@color/color_base_text"
                 android:textSize="@dimen/base_14sp"/>
 
             <View
@@ -125,7 +125,7 @@
                 android:button="@null"
                 android:drawableRight="@drawable/selector_bg_radio"
                 android:text="@string/lock_loop_key"
-                android:textColor="#666666"
+                android:textColor="@color/color_base_text"
                 android:textSize="@dimen/base_14sp"/>
         </RadioGroup>
 

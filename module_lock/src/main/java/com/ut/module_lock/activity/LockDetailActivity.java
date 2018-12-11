@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.activity.GrantPermissionActivity;
@@ -51,15 +53,15 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onMangeKeyClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, KeysManagerActivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
         }
 
         public void onOperateRecordClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, OperationRecordAcitivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation();
         }
 
         public void onLockManageClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, LockSettingActivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).navigation();
         }
     }
 
