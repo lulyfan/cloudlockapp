@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F4F9FB"
+        android:background="@color/color_base_bg"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar_green" />
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/enable_time"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <TextView
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_gravity="bottom"
-                    android:background="#DFDFDF" />
+                    android:background="@color/color_base_divider" />
             </FrameLayout>
 
             <FrameLayout
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/invalid_time"
-                    android:textColor="#666666"
+                    android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp" />
 
                 <View

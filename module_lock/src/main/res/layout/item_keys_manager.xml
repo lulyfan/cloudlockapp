@@ -36,7 +36,7 @@
             android:layout_marginLeft="@dimen/base_10dp"
             android:alpha="@{keyItem.invalid ? 0.5f: 1.0f}"
             android:text="@{keyItem.caption}"
-            android:textColor="#333333"
+            android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             app:layout_constraintBottom_toTopOf="@id/memo"
             app:layout_constraintLeft_toRightOf="@id/tip"
@@ -68,7 +68,7 @@
                 android:drawablePadding="@dimen/base_10dp"
                 android:gravity="center_vertical"
                 android:text="@{keyItem.startTime}"
-                android:textColor="#999999"
+                android:textColor="@color/gray9"
                 android:textSize="@dimen/base_12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -82,7 +82,7 @@
                 android:drawableLeft="@mipmap/red_dot"
                 android:drawablePadding="@dimen/base_10dp"
                 android:text="@{keyItem.endTime}"
-                android:textColor="#999999"
+                android:textColor="@color/gray9"
                 android:textSize="@dimen/base_12sp"
                 app:layout_constraintLeft_toRightOf="@id/limit_start_time"
                 app:layout_constraintTop_toTopOf="@id/limit_start_time" />
@@ -96,7 +96,7 @@
                 android:drawableLeft="@mipmap/gray_dot"
                 android:drawablePadding="@dimen/base_10dp"
                 android:text="@{keyItem.desc}"
-                android:textColor="#999999"
+                android:textColor="@color/gray9"
                 android:textSize="@dimen/base_12sp"
                 android:visibility="@{keyItem.type != 1 || keyItem.invalid? View.VISIBLE : View.GONE }"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,7 +124,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#DFDFDF"
+            android:background="@color/color_base_divider"
             app:layout_constraintBottom_toBottomOf="parent" />
     </android.support.constraint.ConstraintLayout>
 </layout>

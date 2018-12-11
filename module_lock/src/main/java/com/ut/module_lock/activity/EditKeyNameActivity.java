@@ -39,7 +39,7 @@ public class EditKeyNameActivity extends BaseActivity {
     }
 
     private void initView() {
-        setDarkStatusBar();
+        initDarkToolbar();
         setTitle(R.string.lock_name);
         nameEdt = findViewById(R.id.edt_key_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {

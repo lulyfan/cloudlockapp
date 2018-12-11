@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/lock_clear_key"
         android:textColor="@color/color_base_title"
         android:textSize="@dimen/base_14sp" />
@@ -37,13 +38,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#DFDFDF" />
+        android:background="@color/color_base_divider" />
 
     <TextView
         android:id="@+id/item2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/lock_send_key"
         android:textColor="@color/color_base_title"
         android:textSize="@dimen/base_14sp" />

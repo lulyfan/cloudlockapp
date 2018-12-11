@@ -4,36 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/base_44dp"
-        android:background="#00BDCF"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp">
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="@dimen/base_22dp"
-            android:layout_height="@dimen/base_22dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/back_white" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/lock_choose_group"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:layout_width="@dimen/base_22dp"
-            android:layout_height="@dimen/base_22dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/icon_add" />
-    </RelativeLayout>
+    <include layout="@layout/toolbar_green" />
 
 
     <RadioGroup
@@ -50,7 +22,7 @@
             android:button="@null"
             android:drawableRight="@drawable/selector_bg_radio"
             android:text="@string/lock_group_all"
-            android:textColor="#666666"
+            android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
 
         <RadioButton
@@ -60,7 +32,7 @@
             android:button="@null"
             android:drawableRight="@drawable/selector_bg_radio"
             android:text="Chan的家"
-            android:textColor="#666666"
+            android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
 
     </RadioGroup>

@@ -44,7 +44,7 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:text="18807644294"
-                android:textColor="#00BBD2"
+                android:textColor="@color/color_base_highlight"
                 android:textSize="@dimen/xs"
                 app:layout_constraintBottom_toBottomOf="@+id/headImg"
                 app:layout_constraintStart_toStartOf="@+id/textView"/>

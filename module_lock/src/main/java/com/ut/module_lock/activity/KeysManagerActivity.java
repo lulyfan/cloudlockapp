@@ -45,9 +45,7 @@ public class KeysManagerActivity extends BaseActivity {
 
     private void initTitle() {
         initDarkToolbar();
-        initMore(() -> {
-            popupMoreWindow();
-        });
+        initMore(this::popupMoreWindow);
         setTitle(R.string.func_manage_key);
     }
 
@@ -111,7 +109,7 @@ public class KeysManagerActivity extends BaseActivity {
         List<KeyItem> items = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             KeyItem item = new KeyItem();
-            item.setCaption("caption " + i);
+            item.setCaption("Chan的钥匙");
             item.setType((i + 1) % 4);
             item.setAuthorized((i + 2) % 2 == 0);
             if (item.getType() == 3) {

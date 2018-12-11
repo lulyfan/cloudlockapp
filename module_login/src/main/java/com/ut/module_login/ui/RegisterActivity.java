@@ -175,4 +175,10 @@ public class RegisterActivity extends BaseActivity {
     private void register() {
 
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
+    }
 }

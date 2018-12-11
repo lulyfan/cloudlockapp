@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">ClockLock2_0</string>
-
-    <!--底部导航栏-->
-    <string name="bottom_title_home">首页</string>
-    <string name="bottom_title_msg">消息</string>
-    <string name="bottom_title_mall">商城</string>
-    <string name="bottom_title_mime">我的</string>
-</resources>

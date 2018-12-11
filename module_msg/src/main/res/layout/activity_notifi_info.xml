@@ -12,7 +12,7 @@
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4F9FB">
+        android:background="@color/color_base_bg">
 
         <include layout="@layout/toolbar_white" android:id="@+id/top"/>
 

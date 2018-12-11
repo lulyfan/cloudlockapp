@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.activity.GrantPermissionActivity;
@@ -51,19 +53,19 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onMangeKeyClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, KeysManagerActivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
         }
 
         public void onOperateRecordClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, OperationRecordAcitivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation();
         }
 
         public void onLockManageClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, LockSettingActivity.class));
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).navigation();
         }
     }
 
-    @BindingAdapter("bind:electricityDrawable")
+    @BindingAdapter("electricityDrawable")
     public static void loadDrawable(TextView textView, int electricity) {
         UTLog.i("electricity:" + electricity);
         Drawable leftDrawable = textView.getResources().getDrawable(R.mipmap.icon_electricity_green);
@@ -77,7 +79,7 @@ public class LockDetailActivity extends BaseActivity {
                 textView.getCompoundDrawables()[2], textView.getCompoundDrawables()[3]);
     }
 
-    @BindingAdapter("bind:bgSrc")
+    @BindingAdapter("bgSrc")
     public static void loadbubble(TextView textView, int userType) {
         int srcId = R.mipmap.icon_bubble_orange;
         if (userType == 1) {
@@ -88,7 +90,7 @@ public class LockDetailActivity extends BaseActivity {
         textView.setBackgroundResource(srcId);
     }
 
-    @BindingAdapter("bind:userType")
+    @BindingAdapter("userType")
     public static void loadUserImage(ImageView imageView, int userType) {
         if (userType == 0) {
             imageView.setImageResource(R.mipmap.icon_user_manager_detail);

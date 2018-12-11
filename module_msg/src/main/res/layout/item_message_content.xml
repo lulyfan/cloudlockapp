@@ -29,7 +29,7 @@
                 android:gravity="center"
                 android:padding="@dimen/base_4dp"
                 android:text="@{messageContent.date}"
-                android:textColor="#999999"
+                android:textColor="@color/gray9"
                 android:textSize="@dimen/base_10dp" />
         </FrameLayout>
 
@@ -45,7 +45,7 @@
             android:elevation="@dimen/base_2dp"
             android:layout_margin="@dimen/base_2dp"
             android:text="@{messageContent.content}"
-            android:textColor="#666666"
+            android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
     </LinearLayout>
 </layout>

@@ -142,4 +142,9 @@ public class LoginActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
+    }
 }
