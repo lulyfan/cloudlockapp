@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F4F9FB"
+        android:background="@color/color_base_bg"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar_green"/>
@@ -48,7 +48,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_key_name"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
                         <TextView
@@ -58,7 +58,7 @@
                             android:layout_gravity="center_vertical|right"
                             android:layout_marginEnd="@dimen/base_50dp"
                             android:text="@{keyItem.caption}"
-                            android:textColor="#333333"
+                            android:textColor="@color/color_base_title"
                             android:textSize="@dimen/base_17sp"/>
 
                         <ImageView
@@ -72,7 +72,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="#C7C7CC"/>
+                            android:background="@color/color_base_grayC7C7CC"/>
 
                     </FrameLayout>
 
@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_authorize_type"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
                         <TextView
@@ -98,14 +98,14 @@
                             android:layout_gravity="center_vertical|right"
                             android:layout_marginRight="@dimen/base_50dp"
                             android:text="@{keyItem.authorizedType}"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="#C7C7CC"/>
+                            android:background="@color/color_base_grayC7C7CC"/>
                     </FrameLayout>
 
 
@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_key_type"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
                         <View
@@ -137,7 +137,7 @@
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_50dp"
                             android:text="@{keyItem.typeString()}"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
 
                         <ImageView
@@ -152,7 +152,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="#C7C7CC"/>
+                            android:background="@color/color_base_grayC7C7CC"/>
                     </FrameLayout>
 
                     <FrameLayout
@@ -166,7 +166,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_accept_time"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
                         <TextView
@@ -176,7 +176,7 @@
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginRight="@dimen/base_50dp"
                             android:text="@{keyItem.acceptTime}"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
 
@@ -202,7 +202,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_sender"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
 
@@ -213,7 +213,7 @@
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_50dp"
                             android:text="@{keyItem.sender}"
-                            android:textColor="#333333"
+                            android:textColor="@color/color_base_title"
                             android:textSize="@dimen/base_17sp"/>
 
                         <ImageView
@@ -227,7 +227,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="#C7C7CC"/>
+                            android:background="@color/color_base_grayC7C7CC"/>
                     </FrameLayout>
 
                     <FrameLayout
@@ -241,7 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_send_time"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_14sp"/>
 
                         <TextView
@@ -251,7 +251,7 @@
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginRight="@dimen/base_50dp"
                             android:text="@{keyItem.sendTime}"
-                            android:textColor="#666666"
+                            android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
                 </LinearLayout>
@@ -273,7 +273,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/lock_operation_record"
-                        android:textColor="#666666"
+                        android:textColor="@color/color_base_text"
                         android:textSize="@dimen/base_14sp"/>
 
                     <View

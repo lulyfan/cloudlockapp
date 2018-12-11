@@ -23,6 +23,7 @@ import com.ut.base.Utils.Util;
 public class BaseActivity extends AppCompatActivity {
 
     private OnCustomerClickListener moreListener = null;
+    private OnCustomerClickListener addListener = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,11 +119,15 @@ public class BaseActivity extends AppCompatActivity {
         this.moreListener = listener;
     }
 
+    public void initAdd(OnCustomerClickListener listener) {
+        this.addListener = listener;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (moreListener != null) {
-            getMenuInflater().inflate(R.menu.toolbar_more_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.toolbar_more_menu, menu);
+        menu.findItem(R.id.more).setVisible(moreListener != null);
+        menu.findItem(R.id.add).setVisible(addListener != null);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -133,6 +138,8 @@ public class BaseActivity extends AppCompatActivity {
             onBackPressed();
         } else if (i == R.id.more && moreListener != null) {//更多图示点击事件
             moreListener.onClick();
+        } else if (i == R.id.add && addListener != null) {
+            addListener.onClick();
         }
         return true;
     }
