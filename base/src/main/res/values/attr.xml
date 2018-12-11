@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CheckCodeView">
+        <attr name="android:layout_width"/>
+        <attr name="length" format="integer"/>
+        <attr name="background" format="reference"/>
+        <attr name="selectedBackground" format="reference"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="selectedTextSize" format="dimension"/>
+        <attr name="textColor" format="color|reference"/>
+        <attr name="selectedTextColor" format="color|reference"/>
+        <attr name="itemWidthPercent" format="float"/>
+        <attr name="itemWidth" format="dimension"/>
+        <attr name="itemMargin" format="dimension"/>
+    </declare-styleable>
+</resources>

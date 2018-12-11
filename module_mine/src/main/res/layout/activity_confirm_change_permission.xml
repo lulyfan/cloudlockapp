@@ -23,12 +23,10 @@
 
         <ImageView
             android:id="@+id/imageView8"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/base_70dp"
+            android:layout_height="@dimen/base_70dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.0953"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -63,12 +61,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <com.tuo.customview.VerificationCodeView
-            android:id="@+id/icv_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <com.ut.base.customView.CheckCodeView
+            android:id="@+id/checkCodeView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/base_70dp"
             android:layout_marginTop="16dp"
-            app:icv_et_number="6"
+            app:length="6"
+            app:itemWidth="@dimen/base_54dp"
+            app:itemMargin="@dimen/base_10dp"
+            app:background="@drawable/bg_checkcodeview"
+            app:selectedBackground="@drawable/bg_checkcodeview_selected"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,41 +80,37 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/transformLockTip"
             android:textColor="@color/tipColor"
             android:textSize="@dimen/xs"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/icv_1" />
+            app:layout_constraintStart_toStartOf="@+id/checkCodeView"
+            app:layout_constraintTop_toBottomOf="@+id/checkCodeView" />
 
         <TextView
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:text="56s 重新发送"
             android:textColor="@color/themeColor"
             android:textSize="@dimen/s"
             app:layout_constraintBottom_toBottomOf="@+id/textView10"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/checkCodeView"
             app:layout_constraintTop_toTopOf="@+id/textView10" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/confirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:background="@drawable/select_bg_bt"
+            android:enabled="false"
             android:text="@string/ensure"
             android:textColor="@android:color/white"
             android:textSize="@dimen/m"
-            android:background="@drawable/select_bg_bt"
-            android:enabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/checkCodeView"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/checkCodeView"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
     </android.support.constraint.ConstraintLayout>
 </layout>
