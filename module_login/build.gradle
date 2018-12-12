@@ -55,12 +55,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-//    if (isBuildLoginModule.toBoolean()) {
-//        compileOnly project(':base')
-//    } else {
-//        implementation project(':base')
-//    }
-    implementation project(':base')
+    if (isBuildLoginModule.toBoolean()) {
+        compileOnly project(':base')
+    } else {
+        implementation project(':base')
+    }
     annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
 
 }

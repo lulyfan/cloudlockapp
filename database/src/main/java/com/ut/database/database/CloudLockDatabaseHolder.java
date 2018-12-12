@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ut.database.dao.LockKeyDao;
+import com.ut.database.dao.UserDao;
 
 /**
  * author : zhouyubin
@@ -39,6 +40,10 @@ public class CloudLockDatabaseHolder {
         if (mDb == null) {
             throw new RuntimeException("Please initialize the database first!");
         }
+    }
+
+    public UserDao getUserDao(){
+        return mDb.userDao();
     }
 
     private static RoomDatabase.Callback mRoomDatabaseCallback = new RoomDatabase.Callback() {
