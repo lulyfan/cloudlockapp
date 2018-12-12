@@ -75,6 +75,7 @@ public class ApplyFragment extends BaseFragment {
                     badge = (Badge) icon.getTag();
                 }
                 badge.bindTarget((View) icon.getParent())
+                        .setShowShadow(false)
                         .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
                         .setBadgeTextColor(Color.WHITE)
                         .setGravityOffset(0, -2, true)

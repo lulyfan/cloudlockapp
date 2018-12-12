@@ -3,9 +3,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="lockKey"
-            type="com.ut.module_lock.entity.LockKey"/>
+            type="com.ut.module_lock.entity.LockKey" />
     </data>
 
     <LinearLayout
@@ -13,199 +14,224 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/toolbar_green" />
 
-        <include layout="@layout/toolbar_green"/>
-
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_bg_left_right_bottom_corner"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_device_id"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
-
-                <TextView
-                    android:id="@+id/tv_device_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_53dp"
-                    android:text="@{lockKey.name}"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_17sp" />
-
-
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_gravity="bottom"
-                    android:background="@color/color_base_divider" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_device_mac"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
+                    android:background="@drawable/shape_bg_left_right_bottom_corner"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_device_mac"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_17sp" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_device_id"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_device_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_53dp"
+                            android:text="@{lockKey.deviceId}"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_17sp" />
 
 
-                <View
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_gravity="bottom"
+                            android:background="@color/color_base_divider" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_device_mac"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_device_mac"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_53dp"
+                            android:text="@{lockKey.mac}"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_17sp" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_gravity="bottom"
+                            android:background="@color/color_base_divider" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_power"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_device_power"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_53dp"
+                            android:text="@{lockKey.electricityStr}"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_17sp" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_gravity="bottom"
+                            android:background="@color/color_base_divider" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_valid_date"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_device_valid_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_53dp"
+                            android:text="@{lockKey.validTime}"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_17sp" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_gravity="bottom"
-                    android:background="@color/color_base_divider" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_power"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
-
-                <TextView
-                    android:id="@+id/tv_device_power"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_17sp" />
+                    android:layout_marginTop="@dimen/base_17dp"
+                    android:background="@drawable/shape_bg_corner"
+                    android:orientation="vertical">
 
 
-                <View
+                    <FrameLayout
+                        android:id="@+id/layout_lock_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_name"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_27dp"
+                            android:drawableRight="@mipmap/more_black"
+                            android:drawablePadding="@dimen/base_10dp"
+                            android:text="@{lockKey.name}"
+                            android:textColor="@color/color_base_title"
+                            android:textSize="@dimen/base_17sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_gravity="bottom"
+                            android:background="@color/color_base_divider" />
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/choose_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_choose_group"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_27dp"
+                            android:drawableRight="@mipmap/more_black"
+                            android:drawablePadding="@dimen/base_10dp"
+                            android:textColor="@color/color_base_title"
+                            android:textSize="@dimen/base_17sp" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_delete_key"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_gravity="bottom"
-                    android:background="@color/color_base_divider" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_valid_date"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
-
-                <TextView
-                    android:id="@+id/tv_device_valid_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_53dp"
-                    android:textColor="@color/color_base_text"
+                    android:layout_height="@dimen/base_50dp"
+                    android:layout_marginLeft="@dimen/base_20dp"
+                    android:layout_marginTop="@dimen/base_93dp"
+                    android:layout_marginRight="@dimen/base_20dp"
+                    android:layout_marginBottom="@dimen/base_20dp"
+                    android:background="@drawable/shape_btn_delete_key"
+                    android:text="@string/lock_delete_key"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/base_17sp" />
-            </FrameLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_17dp"
-            android:background="@drawable/shape_bg_corner"
-            android:orientation="vertical">
-
-
-            <FrameLayout
-                android:id="@+id/layout_lock_name"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_name"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_27dp"
-                    android:drawableRight="@mipmap/more_black"
-                    android:drawablePadding="@dimen/base_10dp"
-                    android:textColor="@color/color_base_title"
-                    android:textSize="@dimen/base_17sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_gravity="bottom"
-                    android:background="@color/color_base_divider" />
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:id="@+id/layout_choose_group"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_70dp"
-                android:paddingLeft="@dimen/base_20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/lock_choose_group"
-                    android:textColor="@color/color_base_text"
-                    android:textSize="@dimen/base_14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:layout_marginRight="@dimen/base_27dp"
-                    android:drawableRight="@mipmap/more_black"
-                    android:drawablePadding="@dimen/base_10dp"
-                    android:textColor="@color/color_base_title"
-                    android:textSize="@dimen/base_17sp" />
-            </FrameLayout>
-
-        </LinearLayout>
-
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </layout>
 

@@ -16,12 +16,10 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp"
-        android:layout_marginLeft="@dimen/base_20dp"
-        android:layout_marginRight="@dimen/base_20dp"
-        android:background="@drawable/shape_bg_corner"
+        android:layout_marginStart="@dimen/base_20dp"
+        android:layout_marginEnd="@dimen/base_20dp"
         android:layout_marginBottom="@dimen/base_6dp"
-        android:orientation="vertical"/>
+        android:background="@drawable/shape_bg_corner"
+        android:orientation="vertical" />
 
 </LinearLayout>

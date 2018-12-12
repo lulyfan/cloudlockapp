@@ -1,40 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
 
-    <include layout="@layout/toolbar_green" />
+    </data>
 
-
-    <RadioGroup
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RadioButton
+        <include layout="@layout/toolbar_green" />
+
+
+        <RadioGroup
+            android:id="@+id/radio_group"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/base_50dp"
-            android:background="@android:color/transparent"
-            android:button="@null"
-            android:drawableRight="@drawable/selector_bg_radio"
-            android:text="@string/lock_group_all"
-            android:textColor="@color/color_base_text"
-            android:textSize="@dimen/base_14sp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/base_50dp"
-            android:background="@android:color/transparent"
-            android:button="@null"
-            android:drawableRight="@drawable/selector_bg_radio"
-            android:text="Chan的家"
-            android:textColor="@color/color_base_text"
-            android:textSize="@dimen/base_14sp" />
+            <RadioButton
+                android:id="@+id/rtn1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_50dp"
+                android:layout_marginLeft="@dimen/base_20dp"
+                android:layout_marginRight="@dimen/base_20dp"
+                android:background="@android:color/transparent"
+                android:button="@null"
+                android:drawableRight="@drawable/selector_bg_radio"
+                android:text="@string/lock_group_all"
+                android:textColor="@color/color_base_text"
+                android:textSize="@dimen/base_14sp" />
 
-    </RadioGroup>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/base_20dp"
+                android:background="@color/color_base_divider" />
 
-</LinearLayout>
+            <RadioButton
+                android:id="@+id/rtn2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_50dp"
+                android:layout_marginLeft="@dimen/base_20dp"
+                android:layout_marginRight="@dimen/base_20dp"
+                android:background="@android:color/transparent"
+                android:button="@null"
+                android:drawableRight="@drawable/selector_bg_radio"
+                android:text="Chan的家"
+                android:textColor="@color/color_base_text"
+                android:textSize="@dimen/base_14sp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/base_20dp"
+                android:background="@color/color_base_divider" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+</layout>

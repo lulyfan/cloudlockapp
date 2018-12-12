@@ -8,6 +8,13 @@ package com.example.api;
  */
 public interface ApiUrl {
     //登录
-    String loginUrl = "/userLogin/login?json";
+    String loginUrl = "/api/user/login?json&&appid=1";
+
+    //注册
+    String registerUrl = "/api/user/registerUser?json&&appid=1";
+
+    //获取注册验证码
+
+    String getRegisterVerifyCode = "/api/user/getRegisterVeriCode?json&&appid=1";
 
 }

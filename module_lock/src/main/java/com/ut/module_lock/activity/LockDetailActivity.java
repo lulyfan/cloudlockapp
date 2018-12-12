@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +18,6 @@ import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
 import com.ut.module_lock.entity.LockKey;
-import com.ut.module_lock.entity.OperationRecord;
 
 public class LockDetailActivity extends BaseActivity {
     public static final String EXTRA_LOCK_KEY = "extra_lock_key";
@@ -61,7 +59,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onLockManageClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).withParcelable("lock_key", mLockKey).navigation();
         }
     }
 

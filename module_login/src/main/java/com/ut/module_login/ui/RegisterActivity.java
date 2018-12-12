@@ -1,5 +1,6 @@
 package com.ut.module_login.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,18 +10,18 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.jakewharton.rxbinding3.view.RxView;
+import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
@@ -28,8 +29,9 @@ import com.ut.module_login.common.LoginUtil;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-
+@SuppressLint("CheckResult")
 @Route(path = RouterUtil.LoginModulePath.REGISTER)
 public class RegisterActivity extends BaseActivity {
 
@@ -39,6 +41,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
+    private EditText verifyCodeEdt = null;
     private LoadingButton registerBtn = null;
 
     private Handler mainHandler = new Handler((this::handleMessage));
@@ -59,6 +62,7 @@ public class RegisterActivity extends BaseActivity {
         setTitle(R.string.register);
         countryAreaCode = getText(R.string.default_country_code).toString();
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
+        verifyCodeEdt = findViewById(R.id.edt_verify_code);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             String value = Objects.requireNonNull(event.getEditable()).toString();
@@ -106,9 +110,10 @@ public class RegisterActivity extends BaseActivity {
         });
         registerBtn = findViewById(R.id.register);
         registerBtn.setOnClickListener(v -> {
-            registerBtn.startLoading();
-            register();
-
+            String phone = phoneEdt.getText().toString().trim();
+            String password = passwordEdt.getText().toString().trim();
+            String verifyCode = verifyCodeEdt.getText().toString().trim();
+            register(phone, password, verifyCode);
         });
 
         findViewById(R.id.icon_of_county).setOnClickListener(v -> {
@@ -123,7 +128,7 @@ public class RegisterActivity extends BaseActivity {
 
         findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
 
-        findViewById(R.id.root).setOnClickListener(v->{
+        findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
     }
@@ -162,18 +167,31 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    private void getVerifyCode(String phone) {
-
-    }
-
     @Override
     public void onBackPressed() {
         supportFinishAfterTransition();
     }
 
+    private void getVerifyCode(String phone) {
+        MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getBaseContext(), result.msg);
+                });
+    }
 
-    private void register() {
-
+    private void register(String phone, String password, String verifyCode) {
+        MyRetrofit.get()
+                .getCommonApiService()
+                .register(phone, password, verifyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getBaseContext(), result.msg);
+                    registerBtn.endLoading();
+                    finish();
+                });
     }
 
     @Override

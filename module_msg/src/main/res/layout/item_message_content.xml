@@ -42,7 +42,6 @@
             android:paddingTop="@dimen/base_30dp"
             android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
-            android:elevation="@dimen/base_2dp"
             android:layout_margin="@dimen/base_2dp"
             android:text="@{messageContent.content}"
             android:textColor="@color/color_base_text"

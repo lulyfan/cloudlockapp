@@ -80,4 +80,5 @@
         <item>已失效</item>
     </string-array>
     <string name="lock_key_manager">钥匙管理</string>
+    <string name="choose_group">选择分组</string>
 </resources>

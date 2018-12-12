@@ -17,30 +17,20 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * Created by ZYB on 2017-03-10.
  */
 
 public class MyRetrofit {
-    //        public static String mBaseUrl = "https://cloudlock.zhunilink.com:443/";//云锁服务器url
-//        public static String mBaseUrl = "http://47.106.151.55:8556/";//云锁服务器url
-    public static String mBaseUrl = getBaseUrl();//云锁服务器url
-    //    public static String mBaseUrl = "http://192.168.75.181:8867/";//云锁服务器url
+    public static String mBaseUrl = "http://192.168.104.51:8666";//云锁服务器url
     private CommonApiService mCommonApiService = null;
 
     private OkHttpClient mOkHttpClient = null;
 
     static String getBaseUrl() {
-        String baseUrl = "https://cloudlock.zhunilink.com:443/";//大众云锁服务器url
-        if (BuildConfig.ISPROJECT) {
-            baseUrl = "https://cloudlock.zhunilink.com:4432";//工程云锁服务器url
-//            baseUrl = "http://192.168.75.62:8867/";//工程云锁服务器url
-        }
-//        if (BuildConfig.DEBUG) {
-//            baseUrl = "http://192.168.1.109:8556";//测试
-//        }
+        String baseUrl = "http://192.168.104.51:8666/api/";//大众云锁服务器url
         return baseUrl;
     }
 
@@ -94,7 +84,7 @@ public class MyRetrofit {
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
                 .client(mOkHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(CustomerGsonConverterFactory.create().setNoLoginListener(mNoLoginListener1))
                 .build();
         mCommonApiService = mRetrofit.create(CommonApiService.class);

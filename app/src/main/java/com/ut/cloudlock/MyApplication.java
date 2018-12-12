@@ -1,6 +1,7 @@
 package com.ut.cloudlock;
 
 import com.ut.base.BaseApplication;
+import com.ut.database.database.CloudLockDatabaseHolder;
 
 /**
  * author : zhouyubin
@@ -10,5 +11,9 @@ import com.ut.base.BaseApplication;
  */
 public class MyApplication extends BaseApplication {
 
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        CloudLockDatabaseHolder.get().init(this);
+    }
 }

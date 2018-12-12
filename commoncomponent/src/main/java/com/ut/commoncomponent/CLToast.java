@@ -16,7 +16,7 @@ import android.widget.TextView;
  * desc   : 云锁使用的Toast
  */
 public class CLToast {
-    private static long DEFAULT_DURATION = 1500L;
+    private static long DEFAULT_DURATION = 3000L;
 
     public static void showAtCenter(Context context, String message) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

@@ -63,8 +63,9 @@ public class ORListAdapter extends BaseAdapter {
         holder.header.setText(operationRecord.getTime());
         holder.container.removeAllViews();
         List<OperationRecord.Record> records = operationRecord.getRecords();
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, SystemUtils.dp2px(context, 70));
+        LinearLayout.LayoutParams lp = null;
         for (OperationRecord.Record r : records) {
+            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, SystemUtils.dp2px(context, 70));
             ViewGroup item = (ViewGroup) View.inflate(context, R.layout.item_record_body, null);
             TextView operatorTv = item.findViewById(R.id.operator);
             operatorTv.setText(r.getOperator());
@@ -72,14 +73,15 @@ public class ORListAdapter extends BaseAdapter {
             descTv.setText(r.getDesc());
             ImageView icon = item.findViewById(R.id.icon);
             holder.container.addView(item, lp);
-
-            if(records.indexOf(r) == records.size() - 1) {
+            if (records.indexOf(r) == records.size() - 1) {
                 continue;
             }
-
             View view = new View(context);
+            lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+            lp.leftMargin = SystemUtils.dp2px(context, 20);
+            lp.rightMargin = SystemUtils.dp2px(context, 20);
             view.setBackgroundColor(Color.parseColor("#DFDFDF"));
-            holder.container.addView(view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+            holder.container.addView(view, lp);
         }
 
         return convertView;

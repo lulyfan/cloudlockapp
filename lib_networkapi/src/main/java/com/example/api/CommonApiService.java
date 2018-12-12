@@ -1,26 +1,20 @@
 package com.example.api;
 
 import com.example.entity.base.Result;
-import com.example.entity.base.Results;
-import com.example.entity.data.AuthData;
-import com.example.entity.data.AuthLog;
-import com.example.entity.data.LockInfo;
 import com.example.entity.data.LoginEntity;
-import com.example.entity.data.OperateLog;
-import com.example.entity.data.VersionInfo;
 import com.google.gson.JsonElement;
+import com.ut.database.entity.User;
 
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -32,7 +26,7 @@ public interface CommonApiService {
     @Headers({
             "Accept: application/vnd.github.v3.full+json",
             "User-Agent: ShareBike-App",
-            "name:utShareBike"
+            "name:User-utShareBike"
     })
 
     @FormUrlEncoded
@@ -41,5 +35,13 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.loginUrl)
-    Call<Result<LoginEntity>> login(@Field("mobile") String mobile, @Field("password") String pwd);
+    Observable<String> login(@Field("account") String mobile, @Field("password") String pwd);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.registerUrl)
+    Observable<Result<Void>> register(@Field("mobile") String mobile, @Field("password") String password, @Field("veriCode") String veriCode);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getRegisterVerifyCode)
+    Observable<Result<Void>> getRegisterVerifyCode(@Field("mobile") String mobile);
 }
