@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SimpleTextWatcher;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 
@@ -43,9 +45,7 @@ public class EditKeyNameActivity extends BaseActivity {
         setTitle(R.string.lock_name);
         nameEdt = findViewById(R.id.edt_key_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                saveName();
-            }
+            saveName();
             return false;
         });
         nameEdt.addTextChangedListener(new SimpleTextWatcher() {
@@ -53,6 +53,11 @@ public class EditKeyNameActivity extends BaseActivity {
             protected void afterChanged(Editable s) {
                 super.afterChanged(s);
                 findViewById(R.id.btn_save).setEnabled(!TextUtils.isEmpty(s));
+            }
+        });
+        nameEdt.setOnFocusChangeListener((v, hasFocus) -> {
+            if(!hasFocus) {
+                SystemUtils.hideKeyboard(getBaseContext(), nameEdt.getRootView());
             }
         });
         findViewById(R.id.clear).setOnClickListener(v -> nameEdt.setText(""));
@@ -64,5 +69,11 @@ public class EditKeyNameActivity extends BaseActivity {
         intent.putExtra(Constance.EDIT_KEY_NAME, nameEdt.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 }

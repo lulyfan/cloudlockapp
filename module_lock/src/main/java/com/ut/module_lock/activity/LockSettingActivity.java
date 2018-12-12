@@ -8,8 +8,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
+import com.ut.module_lock.entity.LockKey;
 
 /**
  * author : chenjiajun
@@ -24,9 +26,11 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LockKey lockKey = getIntent().getParcelableExtra("lock_key");
         mBinding = DataBindingUtil.setContentView(this, R.layout.acitivity_lock_setting);
+        mBinding.setLockKey(lockKey);
         initDarkToolbar();
         setTitle(R.string.lock_setting);
-        mBinding.layoutChooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_KEY_GROUP).navigation());
+        mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_KEY_GROUP).navigation());
     }
 }
