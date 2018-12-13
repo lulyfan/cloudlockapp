@@ -24,7 +24,6 @@ public class LockUserItemActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lock_user_item);
         initUI();
     }
@@ -35,25 +34,18 @@ public class LockUserItemActivity extends BaseActivity {
     }
 
     private void setActionBar() {
-        setSupportActionBar(binding.toolbar8);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
+        initLightToolbar();
 
         String userName = getIntent().getStringExtra(EXTRA_USER_NAME);
-        binding.title.setText(userName);
+        setTitle(userName);
     }
 
     private void setLockList() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.lockList.setLayoutManager(layoutManager);
-        binding.lockList.addItemDecoration(
-                new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         DataBindingAdapter<Lock, MineItemLockListBinding> adapter =
                 new DataBindingAdapter<>(this, R.layout.mine_item_lock_list, BR.userLock);
-        adapter.setItemHeightByPercent(0.076);
 
         List<Lock> list = new ArrayList<>();
         list.add(new Lock("优特智能锁", "永久"));

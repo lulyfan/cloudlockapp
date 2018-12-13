@@ -26,17 +26,13 @@ public class KeyManageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_key_manage);
         initUI();
     }
 
     private void initUI() {
-        setSupportActionBar(binding.toolbar4);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
+        initLightToolbar();
+        setTitle(getString(R.string.keyManage));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvKeyList.setLayoutManager(layoutManager);
@@ -55,32 +51,6 @@ public class KeyManageActivity extends BaseActivity {
         list.add(new KeyData("Sam", "2018.11.15 10:00 - 2018.11.16 10:00"));
         adapter.setData(list);
         binding.rvKeyList.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.key_manage_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-
-        if (i == R.id.clearKey) {
-            return true;
-
-        } else if (i == R.id.resetKey) {
-            return true;
-
-        } else if (i == R.id.sendKey) {
-            Intent intent = new Intent(this, GrantPermissionActivity.class);
-            startActivity(intent);
-            return true;
-
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
     }
 
     public static class KeyData {

@@ -24,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
+    private OnCustomerClickListener checkAllListener = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,11 +124,16 @@ public class BaseActivity extends AppCompatActivity {
         this.addListener = listener;
     }
 
+    public void initCheckAll(OnCustomerClickListener listener) {
+        this.checkAllListener = listener;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_more_menu, menu);
         menu.findItem(R.id.more).setVisible(moreListener != null);
         menu.findItem(R.id.add).setVisible(addListener != null);
+        menu.findItem(R.id.checkAll).setVisible(checkAllListener != null);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -140,6 +146,8 @@ public class BaseActivity extends AppCompatActivity {
             moreListener.onClick();
         } else if (i == R.id.add && addListener != null) {
             addListener.onClick();
+        } else if (i == R.id.checkAll && checkAllListener != null) {
+            checkAllListener.onClick();
         }
         return true;
     }

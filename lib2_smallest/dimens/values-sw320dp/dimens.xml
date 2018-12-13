@@ -41,6 +41,7 @@
 <dimen name="base_60dp">46.38dp</dimen>
 <dimen name="base_160dp">123.67dp</dimen>
 <dimen name="base_84dp">64.93dp</dimen>
+<dimen name="base_54dp">41.74dp</dimen>
 <dimen name="xxs">7.73sp</dimen>
 <dimen name="xs">9.28sp</dimen>
 <dimen name="s">10.82sp</dimen>

@@ -22,7 +22,6 @@ public class ReceiverSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_receiver_setting);
         initUI();
         initViewModel();
@@ -30,33 +29,18 @@ public class ReceiverSettingActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ReceiverSettingViewModel.class);
-        viewModel.isInputPhone.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean b) {
-                binding.nextStep.setEnabled(b);
-            }
-        });
+        viewModel.isInputPhone.observe(this, b -> binding.nextStep.setEnabled(b));
 
         binding.setViewmodel(viewModel);
     }
 
     private void initUI() {
-        setActionBar();
+        initLightToolbar();
+        setTitle(getString(R.string.receiverSetting));
 
-        binding.nextStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ReceiverSettingActivity.this, ConfirmChangePermissionActivity.class);
-                startActivity(intent);
-            }
+        binding.nextStep.setOnClickListener(v -> {
+            Intent intent = new Intent(ReceiverSettingActivity.this, ConfirmChangePermissionActivity.class);
+            startActivity(intent);
         });
-    }
-
-    private void setActionBar() {
-        setSupportActionBar(binding.toolbar10);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
     }
 }
