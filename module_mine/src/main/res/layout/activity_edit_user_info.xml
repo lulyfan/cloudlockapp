@@ -8,65 +8,40 @@
         android:layout_height="match_parent"
         tools:context=".activity.EditUserInfoActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar6"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.0599"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/titleStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-
-                android:text="@string/editUserInfo" />
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/include11"
+            layout="@layout/toolbar_white" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.212"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar6">
+            app:layout_constraintTop_toBottomOf="@+id/include11">
 
             <View
                 android:id="@+id/divider8"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toTopOf="@+id/divider9"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/headContainer"/>
 
             <View
                 android:id="@+id/divider9"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/divider8"
-                app:layout_constraintTop_toBottomOf="@+id/divider8" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameContainer" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/headContainer"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/divider8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,13 +60,13 @@
 
                 <ImageView
                     android:id="@+id/headImg"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="@dimen/base_40dp"
+                    android:layout_height="@dimen/base_40dp"
+                    android:layout_marginTop="@dimen/base_8dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="@dimen/base_8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toStartOf="@+id/imageView6"
-                    app:layout_constraintHeight_percent="0.5683"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/headimg" />
 
@@ -108,12 +83,11 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout7"
+                android:id="@+id/nameContainer"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/divider9"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +122,8 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/base_52dp"
+                android:id="@+id/phoneContainer"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -195,11 +170,10 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/base_52dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.0708"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">

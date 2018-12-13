@@ -26,33 +26,24 @@ public class LockUserActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lock_user);
         initUI();
     }
 
     private void initUI() {
-        setSupportActionBar(binding.toolbar7);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
+        initLightToolbar();
+        setTitle(getString(R.string.lockUserManager));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.userList.setLayoutManager(layoutManager);
-        binding.userList.addItemDecoration(
-                new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         DataBindingAdapter<User, ItemLockUserBinding> adapter =
                 new DataBindingAdapter<>(this, R.layout.item_lock_user, BR.user);
-        adapter.setItemHeightByPercent(0.076);
-        adapter.setOnClickItemListener(new DataBindingAdapter.OnClickItemListener<ItemLockUserBinding>() {
-            @Override
-            public void onClick(ItemLockUserBinding selectedbinding, int position, ItemLockUserBinding lastSelectedBinding) {
-                Intent intent = new Intent(LockUserActivity.this, LockUserItemActivity.class);
-                intent.putExtra(LockUserItemActivity.EXTRA_USER_NAME, selectedbinding.userName.getText());
-                startActivity(intent);
-            }
+
+        adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
+            Intent intent = new Intent(LockUserActivity.this, LockUserItemActivity.class);
+            intent.putExtra(LockUserItemActivity.EXTRA_USER_NAME, selectedbinding.userName.getText());
+            startActivity(intent);
         });
 
         List<User> list = new ArrayList<>();
@@ -62,12 +53,6 @@ public class LockUserActivity extends BaseActivity {
 
         adapter.setData(list);
         binding.userList.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 
     public static class User {

@@ -4,4 +4,5 @@
     <color name="themeColor">#00BBD2</color>
     <color name="tipColor">#F55D54</color>
     <color name="appBarColor">#FFFFFF</color>
+    <color name="color_divider">#FFDFDFDF</color>
 </resources>

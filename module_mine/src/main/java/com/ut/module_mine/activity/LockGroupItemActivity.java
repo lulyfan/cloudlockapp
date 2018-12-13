@@ -28,32 +28,27 @@ public class LockGroupItemActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lock_group_item);
         initUI();
     }
 
     private void initUI() {
+        initMore(() -> {
+
+        });
+        initLightToolbar();
+
         String lockGroupName = "";
         if (getIntent() != null) {
             lockGroupName = getIntent().getStringExtra(EXTRA_LOCK_GROUP_NAME);
-            binding.title.setText(lockGroupName);
+            setTitle(lockGroupName);
         }
-
-        setSupportActionBar(binding.toolbar3);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockList.setLayoutManager(layoutManager);
-        binding.rvLockList.addItemDecoration(
-                new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         DataBindingAdapter<String, ItemLockBinding> adapter =
                 new DataBindingAdapter<>(this, R.layout.item_lock, BR.lockName);
-        adapter.setItemHeightByPercent(0.076);
 
         List<String> lockList = new ArrayList<>();
         lockList.add("物联锁");
@@ -63,30 +58,9 @@ public class LockGroupItemActivity extends BaseActivity {
         adapter.setData(lockList);
         binding.rvLockList.setAdapter(adapter);
 
-        adapter.setOnClickItemListener(new DataBindingAdapter.OnClickItemListener<ItemLockBinding>() {
-            @Override
-            public void onClick(ItemLockBinding selectedbinding, int position, ItemLockBinding lastSelectedBinding) {
-                Intent intent = new Intent(LockGroupItemActivity.this, KeyManageActivity.class);
-                startActivity(intent);
-            }
+        adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
+            Intent intent = new Intent(LockGroupItemActivity.this, KeyManageActivity.class);
+            startActivity(intent);
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.lockgroup_setting_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.editGroupName) {
-            return true;
-        } else if (i == R.id.batchAuth) {
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
     }
 }

@@ -9,9 +9,11 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
@@ -51,38 +53,18 @@ public class EditUserInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_user_info);
         initUI();
         requestWritePermission();
     }
 
     private void initUI() {
-        setSupportActionBar(binding.toolbar6);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
+        initLightToolbar();
+        setTitle(getString(R.string.editUserInfo));
 
-        binding.headContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editImg();
-            }
-        });
+        binding.headContainer.setOnClickListener(v -> editImg());
 
-        binding.headImg.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                setHeadImg();
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
+        binding.headImg.getViewTreeObserver().addOnGlobalLayoutListener(() -> setHeadImg());
     }
 
     private void editImg() {
@@ -93,31 +75,28 @@ public class EditUserInfoActivity extends BaseActivity {
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
                 .setContentBackgroundResource(R.drawable.bg_dialog)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(DialogPlus dialog, View view) {
-                        int i = view.getId();
-                        if (i == R.id.takePhoto) {
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            String imageFileName = "JPEG_" + timeStamp + "_";
-                            File photoFile = null;
-                            try {
-                                photoFile = ImgUtil.createImageFile(EditUserInfoActivity.this, imageFileName);
-                                mCurrentPhotoPath = photoFile.getAbsolutePath();
-                            } catch (IOException ex) {
-                                Toast.makeText(EditUserInfoActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            photoURI = ImgUtil.takePhoto(EditUserInfoActivity.this, "com.ut.module_mine.fileprovider",
-                                    photoFile, REQUEST_IMAGE_CAPTURE);
-                            dialog.dismiss();
-
-                        } else if (i == R.id.chooseLocalImg) {
-                            ImgUtil.choosePhoto(EditUserInfoActivity.this, REQUEST_CHOOSE_PHOTO);
-                            dialog.dismiss();
-                        } else {
+                .setOnClickListener((dialog1, view1) -> {
+                    int i = view1.getId();
+                    if (i == R.id.takePhoto) {
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String imageFileName = "JPEG_" + timeStamp + "_";
+                        File photoFile = null;
+                        try {
+                            photoFile = ImgUtil.createImageFile(EditUserInfoActivity.this, imageFileName);
+                            mCurrentPhotoPath = photoFile.getAbsolutePath();
+                        } catch (IOException ex) {
+                            Toast.makeText(EditUserInfoActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
+                        photoURI = ImgUtil.takePhoto(EditUserInfoActivity.this, "com.ut.module_mine.fileprovider",
+                                photoFile, REQUEST_IMAGE_CAPTURE);
+                        dialog1.dismiss();
+
+                    } else if (i == R.id.chooseLocalImg) {
+                        ImgUtil.choosePhoto(EditUserInfoActivity.this, REQUEST_CHOOSE_PHOTO);
+                        dialog1.dismiss();
+                    } else {
                     }
                 })
                 .create();

@@ -8,65 +8,47 @@
         android:layout_height="match_parent"
         tools:context=".activity.AboutUsActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar13"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.0599"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/titleStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/aboutUs"/>
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/include9"
+            layout="@layout/toolbar_white" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout11"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.2719"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar13">
+            app:layout_constraintTop_toBottomOf="@+id/include9">
 
             <ImageView
                 android:id="@+id/imageView9"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/base_80dp"
+                android:layout_height="@dimen/base_80dp"
+                android:layout_marginTop="@dimen/base_30dp"
                 android:layout_marginBottom="1dp"
                 app:layout_constraintBottom_toTopOf="@+id/textView11"
-                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.194"
-                app:srcCompat="@drawable/cloudlock_icon"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/cloudlock_icon" />
 
             <TextView
                 android:id="@+id/textView11"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="@dimen/base_80dp"
+                android:layout_height="@dimen/base_80dp"
+                android:layout_marginBottom="@dimen/base_8dp"
+                android:background="@drawable/bg_cloudlock"
                 android:gravity="center"
                 android:text="优特智能云锁\n V1.0"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/xs"
-                android:background="@drawable/bg_cloudlock"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.194"/>
+                app:layout_constraintStart_toStartOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout

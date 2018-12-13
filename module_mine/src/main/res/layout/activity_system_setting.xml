@@ -8,24 +8,9 @@
         android:layout_height="match_parent"
         tools:context=".activity.SystemSettingActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar12"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@android:color/white"
-            app:layout_constraintHeight_percent="0.0599"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/SystemSetting"
-                style="@style/titleStyle"/>
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/include18"
+            layout="@layout/toolbar_white" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout10"
@@ -36,13 +21,14 @@
             app:layout_constraintHeight_percent="0.212"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar12">
+            app:layout_constraintTop_toBottomOf="@+id/include18">
 
             <TextView
                 android:id="@+id/textView30"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/select_gray_e"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
@@ -50,7 +36,6 @@
                 android:text="@string/resetPW"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                android:clickable="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -123,6 +108,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/select_gray_e"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
@@ -130,7 +116,6 @@
                 android:text="@string/aboutUs"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

@@ -12,4 +12,9 @@
         android:icon="@mipmap/icon_add"
         android:title=""
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/checkAll"
+        android:title="@string/checkAll"
+        app:showAsAction="always" />
 </menu>
