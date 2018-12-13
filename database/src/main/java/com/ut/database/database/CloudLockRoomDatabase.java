@@ -8,7 +8,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ut.database.dao.LockKeyDao;
+import com.ut.database.dao.UserDao;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.User;
 
 /**
  * author : zhouyubin
@@ -16,10 +18,11 @@ import com.ut.database.entity.LockKey;
  * desc   :
  * version: 1.0
  */
-@Database(entities = {LockKey.class}, version = 1)
+@Database(entities = {LockKey.class, User.class}, version = 1)
 public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public LockKeyDao mLockKeyDao;
 
+    public abstract UserDao userDao();
 
 }

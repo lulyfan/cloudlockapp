@@ -1,19 +1,27 @@
 package com.ut.module_lock.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.Utils.DialogUtil;
+import com.ut.base.customView.DatePicker;
+import com.ut.base.customView.DateTimePicker;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLimitedTimeBinding;
 import com.ut.module_lock.entity.KeyItem;
+
+import java.util.Locale;
 
 /**
  * author : chenjiajun
@@ -34,5 +42,31 @@ public class EditLimitedTimeActivity extends BaseActivity {
         setTitle(R.string.lock_loop_key);
         keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
+        mBinding.chooseStartTime.setOnClickListener(v -> dateChoose(v, "生效时间"));
+        mBinding.chooseEndTime.setOnClickListener(v -> dateChoose(v, "失效时间"));
+        mBinding.btnSave.setOnClickListener(v -> save());
+    }
+
+    private void dateChoose(View v, String title) {
+        DialogUtil.chooseDateTime(v.getContext(), title, (year, month, day, hour, minute) -> {
+            String dateTime = String.valueOf(year + "/"
+                    + String.format(Locale.getDefault(), "%02d", month) + "/"
+                    + String.format(Locale.getDefault(), "%02d", day) + " "
+                    + String.format(Locale.getDefault(), "%02d", hour) + ":"
+                    + String.format(Locale.getDefault(), "%02d", minute));
+            if ("生效时间".equals(title)) {
+                keyInfo.setStartTime(dateTime);
+            } else {
+                keyInfo.setEndTime(dateTime);
+            }
+            mBinding.setKeyItem(keyInfo);
+        });
+    }
+
+    private void save() {
+        Intent intent = new Intent();
+        intent.putExtra(Constance.KEY_INFO, keyInfo);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

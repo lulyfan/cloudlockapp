@@ -24,8 +24,10 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/choose_start_time"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_70dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/base_20dp">
 
@@ -63,8 +65,10 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/choose_end_time"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_70dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/base_20dp">
 
@@ -111,6 +115,7 @@
 
         <Button
             android:id="@+id/btn_save"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_50dp"
             android:layout_marginStart="@dimen/base_20dp"

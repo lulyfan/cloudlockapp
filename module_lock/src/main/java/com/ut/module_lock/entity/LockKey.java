@@ -25,6 +25,9 @@ public class LockKey implements Parcelable {
     private int electricity;
     private String electricityStr;
 
+    private String mac;
+    private String deviceId;
+    private String validTime;
 
     public LockKey(String name, int status, int lockType, int keyType, int userType, int electricity) {
         this.name = name;
@@ -131,6 +134,33 @@ public class LockKey implements Parcelable {
         this.electricityStr = electricityStr;
     }
 
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(String validTime) {
+        this.validTime = validTime;
+    }
+
+    public static Creator<LockKey> getCREATOR() {
+        return CREATOR;
+    }
 
     public static final Creator<LockKey> CREATOR = new Creator<LockKey>() {
         @Override
@@ -156,6 +186,9 @@ public class LockKey implements Parcelable {
         userTypeStr = in.readString();
         electricity = in.readInt();
         electricityStr = in.readString();
+        mac = in.readString();
+        deviceId = in.readString();
+        validTime = in.readString();
     }
 
     @Override
@@ -176,5 +209,8 @@ public class LockKey implements Parcelable {
         dest.writeString(userTypeStr);
         dest.writeInt(electricity);
         dest.writeString(electricityStr);
+        dest.writeString(mac);
+        dest.writeString(deviceId);
+        dest.writeString(validTime);
     }
 }

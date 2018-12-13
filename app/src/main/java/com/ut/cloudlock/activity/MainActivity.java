@@ -1,5 +1,6 @@
 package com.ut.cloudlock.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;
+import com.ut.module_login.ui.LoginActivity;
 
 @Route(path = RouterUtil.MainModulePath.Main_Module)
 public class MainActivity extends BaseActivity {

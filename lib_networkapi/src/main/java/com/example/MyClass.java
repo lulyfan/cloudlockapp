@@ -285,159 +285,159 @@ public class MyClass {
 //        });
     }
 
-    private static void isAuth() {
-        CommonApi.isAuth("A4:34:F1:7A:BB:ED").enqueue(new Callback<Result<Boolean>>() {
-            @Override
-            public void onResponse(Call<Result<Boolean>> call, Response<Result<Boolean>> response) {
-                System.out.println(response.body().toString());
-                if (response.body().data) {
-                    System.out.println("print true");
-                }
-            }
+//    private static void isAuth() {
+//        CommonApi.isAuth("A4:34:F1:7A:BB:ED").enqueue(new Callback<Result<Boolean>>() {
+//            @Override
+//            public void onResponse(Call<Result<Boolean>> call, Response<Result<Boolean>> response) {
+//                System.out.println(response.body().toString());
+//                if (response.body().data) {
+//                    System.out.println("print true");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Result<Boolean>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onFailure(Call<Result<Boolean>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private static void listAuthUser() {
-        CommonApi.listAuthUser("F0:F8:F2:D2:52:DF").enqueue(new Callback<Results<AuthData>>() {
-            @Override
-            public void onResponse(Call<Results<AuthData>> call, Response<Results<AuthData>> response) {
-                System.out.println(response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<Results<AuthData>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private static void fetchUser() {
-        CommonApi.fetchUser("13534673710").enqueue(new Callback<Result<LoginEntity>>() {
-            @Override
-            public void onResponse(Call<Result<LoginEntity>> call, Response<Result<LoginEntity>> response) {
-                System.out.println(response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<Result<LoginEntity>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private static void test() {
-        Set<String> autoOpenLocks = new HashSet<>();
-        autoOpenLocks.add("123");
-        Results<LockInfo> lockInfoResults = new Results<>();
-        lockInfoResults.setCode(2);
-        List<LockInfo> lockInfos = new ArrayList<>();
-        LockInfo lockInfo = new LockInfo();
-        lockInfo.setMac("123");
-        lockInfos.add(lockInfo);
-        lockInfoResults.setData(lockInfos);
-        if (autoOpenLocks != null && autoOpenLocks.size() > 0) {
-            List<LockInfo> temp = lockInfoResults.getData();
-            for (LockInfo info : temp) {
-                if (autoOpenLocks.contains(info.getMac())) {
-                    info.setAutoOpen(true);
-                }
-            }
-        }
-
-        System.out.println(lockInfoResults.toString());
-    }
-
-    private static void fetchLocks() {
-        CommonApi.fetchLocks().enqueue(new Callback<Results<LockInfo>>() {
-            @Override
-            public void onResponse(Call<Results<LockInfo>> call, Response<Results<LockInfo>> response) {
-                System.out.println(response.toString());
-                System.out.println(response.body().toString());
-                System.out.println(new Gson().toJson(response.body()));
-            }
-
-            @Override
-            public void onFailure(Call<Results<LockInfo>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private static void resetPwd() {
-        try {
-            CommonApi.resetPassword("13534673710", DES.encryptDES("123456", DES.mypassword()), "183254").enqueue(new Callback<Result<Object>>() {
-                @Override
-                public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
-                    System.out.println(response.body().toString());
-                }
-
-                @Override
-                public void onFailure(Call<Result<Object>> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void regist() {
-        CommonApi.regist("13534673710", "123456", "243821").enqueue(new Callback<Result<Object>>() {
-            @Override
-            public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
-                System.out.println(response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<Result<Object>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private static void getVerify() {
-        Call<Result<Object>> call = CommonApi.getVerify("13534673710");
-        call.enqueue(new Callback<Result<Object>>() {
-            @Override
-            public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
-                Result<Object> result = response.body();
-                System.out.println(result.toString());
-            }
-
-            @Override
-            public void onFailure(Call<Result<Object>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private static void login() {
-        try {
-            CommonApi.login("13534673710", DES.encryptDES("123456", DES.mypassword())).enqueue(new Callback<Result<LoginEntity>>() {
-                @Override
-                public void onResponse(Call<Result<LoginEntity>> call, Response<Result<LoginEntity>> response) {
-//                    Result<LoginEntity> result = response.body();
-//                    System.out.println(result.toString());
-//                    fetchLocks();
-//                    fetchUser();
-//                    listAuthUser();
-                    isAuth();
-                }
-
-                @Override
-                public void onFailure(Call<Result<LoginEntity>> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void listAuthUser() {
+//        CommonApi.listAuthUser("F0:F8:F2:D2:52:DF").enqueue(new Callback<Results<AuthData>>() {
+//            @Override
+//            public void onResponse(Call<Results<AuthData>> call, Response<Results<AuthData>> response) {
+//                System.out.println(response.body().toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Results<AuthData>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+//
+//    private static void fetchUser() {
+//        CommonApi.fetchUser("13534673710").enqueue(new Callback<Result<LoginEntity>>() {
+//            @Override
+//            public void onResponse(Call<Result<LoginEntity>> call, Response<Result<LoginEntity>> response) {
+//                System.out.println(response.body().toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Result<LoginEntity>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+//
+//    private static void test() {
+//        Set<String> autoOpenLocks = new HashSet<>();
+//        autoOpenLocks.add("123");
+//        Results<LockInfo> lockInfoResults = new Results<>();
+//        lockInfoResults.setCode(2);
+//        List<LockInfo> lockInfos = new ArrayList<>();
+//        LockInfo lockInfo = new LockInfo();
+//        lockInfo.setMac("123");
+//        lockInfos.add(lockInfo);
+//        lockInfoResults.setData(lockInfos);
+//        if (autoOpenLocks != null && autoOpenLocks.size() > 0) {
+//            List<LockInfo> temp = lockInfoResults.getData();
+//            for (LockInfo info : temp) {
+//                if (autoOpenLocks.contains(info.getMac())) {
+//                    info.setAutoOpen(true);
+//                }
+//            }
+//        }
+//
+//        System.out.println(lockInfoResults.toString());
+//    }
+//
+//    private static void fetchLocks() {
+//        CommonApi.fetchLocks().enqueue(new Callback<Results<LockInfo>>() {
+//            @Override
+//            public void onResponse(Call<Results<LockInfo>> call, Response<Results<LockInfo>> response) {
+//                System.out.println(response.toString());
+//                System.out.println(response.body().toString());
+//                System.out.println(new Gson().toJson(response.body()));
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Results<LockInfo>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+//
+//    private static void resetPwd() {
+//        try {
+//            CommonApi.resetPassword("13534673710", DES.encryptDES("123456", DES.mypassword()), "183254").enqueue(new Callback<Result<Object>>() {
+//                @Override
+//                public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
+//                    System.out.println(response.body().toString());
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Result<Object>> call, Throwable t) {
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private static void regist() {
+//        CommonApi.regist("13534673710", "123456", "243821").enqueue(new Callback<Result<Object>>() {
+//            @Override
+//            public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
+//                System.out.println(response.body().toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Result<Object>> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+//
+//    private static void getVerify() {
+//        Call<Result<Object>> call = CommonApi.getVerify("13534673710");
+//        call.enqueue(new Callback<Result<Object>>() {
+//            @Override
+//            public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
+//                Result<Object> result = response.body();
+//                System.out.println(result.toString());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Result<Object>> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
+//    }
+//
+//    private static void login() {
+//        try {
+//            CommonApi.login("13534673710", DES.encryptDES("123456", DES.mypassword())).enqueue(new Callback<Result<LoginEntity>>() {
+//                @Override
+//                public void onResponse(Call<Result<LoginEntity>> call, Response<Result<LoginEntity>> response) {
+////                    Result<LoginEntity> result = response.body();
+////                    System.out.println(result.toString());
+////                    fetchLocks();
+////                    fetchUser();
+////                    listAuthUser();
+//                    isAuth();
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Result<LoginEntity>> call, Throwable t) {
+//                    t.printStackTrace();
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }

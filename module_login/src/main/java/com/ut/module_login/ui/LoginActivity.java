@@ -1,25 +1,27 @@
 package com.ut.module_login.ui;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.example.entity.base.Result;
+import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
-import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
+import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.database.entity.User;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 
@@ -27,6 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -35,6 +38,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * desc   : 登录界面
  */
 
+@SuppressLint("CheckResult")
 @Route(path = RouterUtil.LoginModulePath.Login)
 public class LoginActivity extends BaseActivity {
 
@@ -107,13 +111,9 @@ public class LoginActivity extends BaseActivity {
             mainHandler.postDelayed(() -> loadingButton.endLoading(), 3000L);
         });
 
-        findViewById(R.id.root).setOnClickListener(v->{
+        findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
-    }
-
-    private void onLogin() {
-        CLToast.showAtCenter(this, "");
     }
 
     private void subscribeEvent() {
@@ -140,6 +140,24 @@ public class LoginActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    private void onLogin() {
+        String phone = phoneEdt.getText().toString().trim();
+        String password = passwordEdt.getText().toString().trim();
+        MyRetrofit.get()
+                .getCommonApiService()
+                .login(phone, password)
+                .subscribeOn(Schedulers.io())
+                .subscribe(json -> {
+                    Result<User> result = JSON.parseObject(json,  new TypeReference<Result<User>>(){});
+                    CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
+                    CloudLockDatabaseHolder.get().getUserDao().insertUser(result.data);
+                    ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                    finish();
+                }, throwable -> {
+                    throwable.printStackTrace();
+                });
     }
 
     @Override
