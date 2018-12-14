@@ -58,7 +58,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                     List<ApplyMessage> ams = result.data;
                     applyMessages.setValue(ams);
                     Log.d("result", result.msg);
-                });
+                }, error-> error.printStackTrace());
     }
 
     public void ignoreApply(long applyId) {
