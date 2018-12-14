@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ut.database.dao.LockKeyDao;
+import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
 
 /**
@@ -42,8 +43,12 @@ public class CloudLockDatabaseHolder {
         }
     }
 
-    public UserDao getUserDao(){
+    public UserDao getUserDao() {
         return mDb.userDao();
+    }
+
+    public UUIDDao getUUIDDao() {
+        return mDb.uuidDao();
     }
 
     private static RoomDatabase.Callback mRoomDatabaseCallback = new RoomDatabase.Callback() {

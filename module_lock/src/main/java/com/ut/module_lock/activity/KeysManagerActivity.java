@@ -2,13 +2,10 @@ package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -21,6 +18,7 @@ import com.ut.module_lock.adapter.RecyclerListAdapter;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeysManagerBinding;
 import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.LockKey;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 import java.util.ArrayList;
@@ -33,14 +31,16 @@ public class KeysManagerActivity extends BaseActivity {
     private ActivityKeysManagerBinding mBinding = null;
     private RecyclerListAdapter<KeyItem> mAdapter = null;
     private List<KeyItem> keyItemList = new ArrayList<>();
+    private String mMac = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
+        LockKey lockKey = getIntent().getParcelableExtra("lock_key");
+        mMac = lockKey.getMac();
         initTitle();
         init();
-        loadData();
     }
 
     private void initTitle() {
@@ -56,7 +56,9 @@ public class KeysManagerActivity extends BaseActivity {
         mAdapter = new RecyclerListAdapter<>(keyItemList, R.layout.item_keys_manager, BR.keyItem);
         mBinding.list.setAdapter(mAdapter);
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
+        kmVM.setMac(mMac);
         kmVM.getKeys().observe(this, (keyItems) -> {
+            if (keyItems == null || keyItems.isEmpty()) return;
             mAdapter.addData(keyItems);
         });
         mAdapter.setOnItemListener((v, position) -> {
@@ -97,50 +99,16 @@ public class KeysManagerActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
+    private void loadData() {
+        kmVM.loadKeyItems();
+    }
+
     private void sendKey() {
 
     }
 
     private void clearKey() {
 
-    }
-
-    private void loadData() {
-        List<KeyItem> items = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            KeyItem item = new KeyItem();
-            item.setCaption("Chan的钥匙");
-            item.setType((i + 1) % 4);
-            item.setAuthorized((i + 2) % 2 == 0);
-            if (item.getType() == 3) {
-                item.setDesc("此钥匙没有使用次数限制");
-            } else if (item.getType() == 2) {
-                item.setDesc("2018/11/26-2018/12/26  每天  9:00-17:00");
-            } else if (item.getType() == 0) {
-                item.setDesc("钥匙有效期为1小时，使用一次后失效");
-            }
-            item.setSender("曹哲君");
-            item.setSendTime("2018/09/08 10:55");
-            item.setAcceptTime("2018/09/08 11:34");
-            item.setStartTime("2018/09/09 11:12");
-            item.setEndTime("2018/11/11 12:00");
-            if (i < 5) {
-                item.setState(2);
-            } else {
-                item.setState(0);
-            }
-            item.setAuthorizedType("普通用户");
-            items.add(item);
-        }
-        kmVM.getKeys().postValue(items);
-    }
-
-
-    private void setWindowAlpha(float alpha) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = alpha;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().setAttributes(lp);
     }
 
 }

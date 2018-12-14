@@ -34,22 +34,21 @@ public class SplashActivity extends BaseActivity {
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
 
         new Handler().postDelayed(() -> {
-//            Observable.just(this).subscribeOn(Schedulers.io()).map(context -> {
-//                List<User> allUsers = CloudLockDatabaseHolder.get().getUserDao().findAllUsers();
-//                String url = null;
-//                if (allUsers.isEmpty()) {
-//                    url = RouterUtil.LoginModulePath.Login;
-//                } else {
-//                    User user = allUsers.get(allUsers.size() - 1);
-//                    url = RouterUtil.MainModulePath.Main_Module;
-//                    BaseApplication.setUser(user);
-//                }
-//                return url;
-//            }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
-//                ARouter.getInstance().build(url).navigation();
-//                finish();
-//            });
-            ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+            Observable.just(this).subscribeOn(Schedulers.io()).map(context -> {
+                List<User> allUsers = CloudLockDatabaseHolder.get().getUserDao().findAllUsers();
+                String url = null;
+                if (allUsers.isEmpty()) {
+                    url = RouterUtil.LoginModulePath.Login;
+                } else {
+                    User user = allUsers.get(allUsers.size() - 1);
+                    url = RouterUtil.MainModulePath.Main_Module;
+                    BaseApplication.setUser(user);
+                }
+                return url;
+            }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
+                ARouter.getInstance().build(url).navigation();
+                finish();
+            });
         }, 2000L);
     }
 }

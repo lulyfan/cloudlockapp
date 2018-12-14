@@ -17,9 +17,9 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_100dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:paddingRight="@dimen/base_20dp">
 
         <ImageView
             android:id="@+id/tip"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/base_10dp"
             android:alpha="@{keyItem.invalid ? 0.5f: 1.0f}"
-            android:text="@{keyItem.caption}"
+            android:text="@{keyItem.keyName}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             app:layout_constraintBottom_toTopOf="@id/memo"
@@ -64,6 +64,7 @@
                 android:id="@+id/limit_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="@{keyItem.invalid ? 0.5f : 1f}"
                 android:drawableLeft="@mipmap/green_dot"
                 android:drawablePadding="@dimen/base_10dp"
                 android:gravity="center_vertical"
@@ -79,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/base_20dp"
+                android:alpha="@{keyItem.invalid ? 0.5f : 1f}"
                 android:drawableLeft="@mipmap/red_dot"
                 android:drawablePadding="@dimen/base_10dp"
                 android:text="@{keyItem.endTime}"
@@ -98,7 +100,7 @@
                 android:text="@{keyItem.desc}"
                 android:textColor="@color/gray9"
                 android:textSize="@dimen/base_12sp"
-                android:visibility="@{keyItem.type != 1 || keyItem.invalid? View.VISIBLE : View.GONE }"
+                android:visibility="@{keyItem.ruleType != 2 || keyItem.invalid? View.VISIBLE : View.GONE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +117,7 @@
                 android:id="@+id/limit_time_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{!keyItem.invalid  &amp;&amp; (keyItem.type==1) ? View.VISIBLE : View.GONE }"
+                android:visibility="@{(keyItem.ruleType==2) ? View.VISIBLE : View.GONE }"
                 app:constraint_referenced_ids="limit_start_time, limit_end_time" />
 
         </android.support.constraint.ConstraintLayout>

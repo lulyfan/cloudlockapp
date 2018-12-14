@@ -16,12 +16,13 @@ import java.io.Serializable;
  */
 public class KeyItem implements Serializable {
 
-    private String caption; //钥匙名字
+    private long keyId;//
+    private String userName; //钥匙名字
     private String desc; //描述
     private String startTime;
     private String endTime;
-    private int type;//类型 0：单次， 1：限时， 2：循环，3：永久
-    private int state;//状态 0：失效，1，生效，2：待接受
+    private int ruleType = 1;//类型 1永久 2限时 3单次 4循环
+    private int status;//状态 0：失效，1，生效，2：待接受
     private String sender;
     private String sendTime;
     private String acceptTime;
@@ -29,13 +30,75 @@ public class KeyItem implements Serializable {
     private String authorizedType;
     private String startDate;//循环钥匙的启动日期
     private String endDate;//循环钥匙的停止日期
+    private String mobile;
+    private String keyName;
+    private boolean isAdmin;
+    private int weeks;
+    private String startTimeRange;
+    private String endTimeRange;
 
-    public String getCaption() {
-        return caption;
+    public long getKeyId() {
+        return keyId;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
+    public void setKeyId(long keyId) {
+        this.keyId = keyId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getKeyName() {
+        return keyName;
+    }
+
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public int getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(int weeks) {
+        this.weeks = weeks;
+    }
+
+    public String getStartTimeRange() {
+        return startTimeRange;
+    }
+
+    public void setStartTimeRange(String startTimeRange) {
+        this.startTimeRange = startTimeRange;
+    }
+
+    public String getEndTimeRange() {
+        return endTimeRange;
+    }
+
+    public void setEndTimeRange(String endTimeRange) {
+        this.endTimeRange = endTimeRange;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDesc() {
@@ -62,20 +125,20 @@ public class KeyItem implements Serializable {
         this.endTime = endTime;
     }
 
-    public int getType() {
-        return type;
+    public int getRuleType() {
+        return ruleType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setRuleType(int type) {
+        this.ruleType = type;
     }
 
-    public int getState() {
-        return state;
+    public int getStatus() {
+        return status;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getSender() {
@@ -135,23 +198,23 @@ public class KeyItem implements Serializable {
     }
 
     public String typeString() {
-        //0：单次， 1：限时， 2：循环，3：永久
-        switch (type) {
-            case 0:
-                return BaseApplication.getAppContext().getString(R.string.once_time);
+//        1永久 2限时 3单次 4循环
+        switch (ruleType) {
             case 1:
-                return BaseApplication.getAppContext().getString(R.string.limit_time);
-            case 2:
-                return BaseApplication.getAppContext().getString(R.string.loop);
-            case 3:
                 return BaseApplication.getAppContext().getString(R.string.permanent);
+            case 2:
+                return BaseApplication.getAppContext().getString(R.string.limit_time);
+            case 3:
+                return BaseApplication.getAppContext().getString(R.string.once_time);
+            case 4:
+                return BaseApplication.getAppContext().getString(R.string.loop);
         }
         return "";
     }
 
     public String getStateString() {
 //        0：失效，1，生效，2：待接受
-        switch (state) {
+        switch (status) {
             case 0:
                 return "已失效";
 
@@ -162,17 +225,18 @@ public class KeyItem implements Serializable {
     }
 
     public int stateColor() {
-        return Color.parseColor(state == 0 ? "#999999" : "#F55D54");
+        return Color.parseColor(status == 0 ? "#999999" : "#F55D54");
     }
 
     public boolean isInvalid() {
-        return state == 0;
+        return status == 0;
     }
 
     public Drawable getTypeDrawable() {
-        int[] rids = {R.mipmap.once, R.mipmap.limited_time, R.mipmap.loop, R.mipmap.permanent};
+        if(ruleType == 0) ruleType = 1;
+        int[] rids = { R.mipmap.permanent, R.mipmap.limited_time, R.mipmap.once, R.mipmap.loop};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return BaseApplication.getAppContext().getDrawable(rids[type]);
+            return BaseApplication.getAppContext().getDrawable(rids[ruleType - 1]);
         }
         return null;
     }

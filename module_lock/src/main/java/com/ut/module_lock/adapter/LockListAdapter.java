@@ -5,7 +5,6 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,13 +13,11 @@ import android.widget.TextView;
 
 import com.ut.base.Utils.TxtUtils;
 import com.ut.base.Utils.UTLog;
+import com.ut.database.entity.User;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ItemLockListBinding;
 import com.ut.module_lock.databinding.ItemLockListEmptyBinding;
 import com.ut.module_lock.entity.LockKey;
-import com.ut.module_lock.entity.User;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

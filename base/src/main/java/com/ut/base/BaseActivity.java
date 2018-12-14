@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
@@ -111,6 +112,14 @@ public class BaseActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
         }
     }
+
+    public void setWindowAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = alpha;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+    }
+
 
     public interface OnCustomerClickListener {
         void onClick();

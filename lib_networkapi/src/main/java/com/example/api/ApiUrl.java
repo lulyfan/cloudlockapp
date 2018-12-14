@@ -14,7 +14,17 @@ public interface ApiUrl {
     String registerUrl = "/api/user/registerUser?json&&appid=1";
 
     //获取注册验证码
-
     String getRegisterVerifyCode = "/api/user/getRegisterVeriCode?json&&appid=1";
 
+    //获取钥匙申请列表
+    String getKeyApplyList = "api/key/list?json";
+
+    //申请钥匙
+    String applyKey = "api/key/add?json";
+
+    //忽略申请
+    String ignoreApply = "api/key/ignore?json";
+
+    //用户锁下的钥匙列表
+    String pageKey = "api/key/pageKey?json";
 }

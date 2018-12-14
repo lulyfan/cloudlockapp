@@ -7,7 +7,7 @@
 
         <variable
             name="user"
-            type="com.ut.module_lock.entity.User"/>
+            type="com.ut.database.entity.User"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

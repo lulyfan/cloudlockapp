@@ -6,6 +6,8 @@ import com.example.converter.CustomerGsonConverterFactory;
 import com.example.download.HttpClientHelper;
 import com.example.download.ProgressListener;
 import com.example.i.INoLoginListener;
+import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.database.entity.UUID;
 import com.utbike.testretrofit.BuildConfig;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by ZYB on 2017-03-10.
@@ -62,10 +65,16 @@ public class MyRetrofit {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
+                        com.ut.database.entity.UUID uuid = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
+                        if (uuid == null) {
+                            uuid = new UUID();
+                            uuid.setUuid(MyRetrofit.UUID);
+                            CloudLockDatabaseHolder.get().getUUIDDao().insertUUID(uuid);
+                        }
                         Request request = chain.request();
                         Request.Builder builder = request.newBuilder();
                         Request builder1 = builder.addHeader("mobile_session_flag", "true")
-                                .addHeader("session_token", MyRetrofit.UUID)
+                                .addHeader("session_token", uuid.getUuid())
                                 .build();
                         return chain.proceed(builder1);
                     }
@@ -85,7 +94,7 @@ public class MyRetrofit {
                 .baseUrl(mBaseUrl)
                 .client(mOkHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(CustomerGsonConverterFactory.create().setNoLoginListener(mNoLoginListener1))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mCommonApiService = mRetrofit.create(CommonApiService.class);
     }

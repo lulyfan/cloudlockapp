@@ -10,4 +10,9 @@
     <string name="key_type">钥匙类型</string>
     <string name="ignore">忽略</string>
     <string name="send_key">发送钥匙</string>
+
+    <string name="once_time">单次</string>
+    <string name="limit_time">限时</string>
+    <string name="loop">循环</string>
+    <string name="permanent">永久</string>
 </resources>

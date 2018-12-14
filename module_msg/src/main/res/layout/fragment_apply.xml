@@ -7,12 +7,18 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-
-        <ListView
-            android:id="@+id/apply_list"
+        <com.ut.commoncomponent.RefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null" />
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/apply_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null" />
+
+        </com.ut.commoncomponent.RefreshLayout>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

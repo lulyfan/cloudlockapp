@@ -51,7 +51,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onMangeKeyClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).withParcelable("lock_key", mLockKey).navigation();
         }
 
         public void onOperateRecordClick(View view) {

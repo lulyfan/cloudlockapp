@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.applicant}"
+                    android:text="@{applyMessage.userName}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.time}"
+                    android:text="@{applyMessage.applyTimeString()}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.name}"
+                    android:text="@{applyMessage.lockName}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.keyTypeString()}"
+                    android:text="@{applyMessage.lockTypeString()}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
@@ -172,7 +172,7 @@
             android:paddingTop="@dimen/base_30dp"
             android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
-            android:text="@{applyMessage.message}"
+            android:text="@{applyMessage.reason}"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_14sp" />
 
@@ -191,6 +191,7 @@
             android:paddingRight="@dimen/base_20dp">
 
             <Button
+                android:id="@+id/btn_ignore_apply"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/base_44dp"
                 android:layout_weight="1"
@@ -201,6 +202,7 @@
                 android:textSize="@dimen/base_17sp" />
 
             <Button
+                android:id="@+id/btn_send_key"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/base_44dp"
                 android:layout_marginLeft="@dimen/base_10dp"

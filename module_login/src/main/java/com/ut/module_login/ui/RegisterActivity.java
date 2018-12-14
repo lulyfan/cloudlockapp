@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -188,9 +189,13 @@ public class RegisterActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    CLToast.showAtCenter(getBaseContext(), result.msg);
-                    registerBtn.endLoading();
-                    finish();
+                  if(result.isSuccess()) {
+                      CLToast.showAtCenter(getBaseContext(), result.msg);
+                      registerBtn.endLoading();
+                      finish();
+                  } else {
+                      Log.d("register", result.msg);
+                  }
                 });
     }
 

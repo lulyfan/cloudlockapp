@@ -57,7 +57,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|right"
                             android:layout_marginEnd="@dimen/base_50dp"
-                            android:text="@{keyItem.caption}"
+                            android:text="@{keyItem.keyName}"
                             android:textColor="@color/color_base_title"
                             android:textSize="@dimen/base_17sp"/>
 
@@ -81,7 +81,7 @@
                         android:layout_height="@dimen/base_70dp"
                         android:orientation="horizontal"
                         android:paddingLeft="@dimen/base_20dp"
-                        android:visibility="@{keyItem.type == 0 || keyItem.type == 1 ? View.VISIBLE : View.GONE}">
+                        android:visibility="@{keyItem.ruleType == 3 || keyItem.ruleType == 4 ? View.VISIBLE : View.GONE}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                         android:id="@+id/key_type_selection"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/base_70dp"
-                        android:clickable="@{keyItem.type == 1 || keyItem.type == 2}"
+                        android:clickable="@{keyItem.ruleType == 2 || keyItem.ruleType == 4}"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:paddingLeft="@dimen/base_20dp">
 
@@ -146,7 +146,7 @@
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_20dp"
                             android:src="@mipmap/more_black"
-                            android:visibility="@{(keyItem.type ==1 || keyItem.type == 2) ? View.VISIBLE : View.INVISIBLE}"/>
+                            android:visibility="@{(keyItem.ruleType == 4 || keyItem.ruleType == 2) ? View.VISIBLE : View.INVISIBLE}"/>
 
                         <View
                             android:layout_width="match_parent"
