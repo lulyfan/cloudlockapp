@@ -189,14 +189,16 @@ public class RegisterActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                  if(result.isSuccess()) {
-                      CLToast.showAtCenter(getBaseContext(), result.msg);
-                      registerBtn.endLoading();
-                      finish();
-                  } else {
-                      Log.d("register", result.msg);
-                  }
-                });
+                    if(result.isSuccess()) {
+                        CLToast.showAtCenter(getBaseContext(), result.msg);
+                        registerBtn.endLoading();
+                        finish();
+                    } else {
+                        Log.d("register", result.msg);
+                    }
+                }, ((error)->{
+                    error.printStackTrace();
+                }));
     }
 
     @Override
