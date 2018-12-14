@@ -179,7 +179,9 @@ public class RegisterActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtCenter(getBaseContext(), result.msg);
-                });
+                },((error)->{
+                    error.printStackTrace();
+                }));
     }
 
     private void register(String phone, String password, String verifyCode) {
