@@ -4,14 +4,20 @@ import android.app.Application;
 import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 //import com.ut.database.database.CloudLockDatabaseHolder;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -47,6 +53,17 @@ public class BaseApplication extends Application {
 
         //主线程调度器，用于RxJava
         uiScheduler = Schedulers.from(new UiExecutor());
+
+        MyRetrofit.get().setNoLoginListener(() ->
+                Observable.just(this)
+                        .subscribeOn(Schedulers.io())
+                        .map(context -> {
+                            CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
+                            CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
+                            return RouterUtil.LoginModulePath.Login;
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(url -> ARouter.getInstance().build(url).navigation()));
     }
 
     private void initDatabase() {
