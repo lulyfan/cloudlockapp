@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.Utils.Util;
@@ -159,5 +160,19 @@ public class BaseActivity extends AppCompatActivity {
             checkAllListener.onClick();
         }
         return true;
+    }
+
+    protected void toastShort(String msg) {
+        if (msg == null || "".equals(msg)) {
+            return;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void toastLong(String msg) {
+        if (msg == null || "".equals(msg)) {
+            return;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 }

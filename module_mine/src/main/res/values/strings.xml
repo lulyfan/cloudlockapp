@@ -54,4 +54,6 @@
     <string name="takePhoto">照相</string>
     <string name="localImg">本地图片</string>
     <string name="needWritePermission">请先授予SD卡写入权限</string>
+    <string name="serviceErr">服务器开小差</string>
+    <string name="uploadHeadImgSuccess">上传头像成功</string>
 </resources>

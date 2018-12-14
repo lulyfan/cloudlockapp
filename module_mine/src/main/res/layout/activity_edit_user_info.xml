@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ut.module_mine.viewModel.EditUserInfoViewModel"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -68,6 +74,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/imageView6"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:imageUrl="@{viewModel.headImgUrl}"
                     app:srcCompat="@drawable/headimg" />
 
                 <ImageView
@@ -111,7 +118,7 @@
                     android:layout_marginEnd="16dp"
                     android:drawableRight="@drawable/right_triangle"
                     android:drawablePadding="16dp"
-                    android:text="@string/defaultShowPhone"
+                    android:text="@{viewModel.userName}"
                     android:textColor="@color/gray9"
                     android:textSize="@dimen/s"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -157,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="18807644294"
+                    android:text="@{viewModel.phoneNum}"
                     android:textColor="@color/gray6"
                     android:textSize="@dimen/m"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -205,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="2018/5/23"
+                android:text="@{viewModel.registTime}"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/m"
                 app:layout_constraintBottom_toBottomOf="parent"

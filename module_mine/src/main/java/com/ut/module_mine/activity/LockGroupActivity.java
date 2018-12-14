@@ -47,11 +47,9 @@ public class LockGroupActivity extends BaseActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockGroup.setLayoutManager(layoutManager);
-//        binding.rvLockGroup.addItemDecoration(new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         DataBindingAdapter<LockGroupData, ItemLockGroupBinding> adapter =
                 new DataBindingAdapter<>(this, R.layout.item_lock_group, BR.lockGroupItem);
-//        adapter.setItemHeightByPercent(0.0708);
 
         List<LockGroupData> list = new ArrayList<>();
         list.add(new LockGroupData("全部分组", 8));
@@ -81,7 +79,7 @@ public class LockGroupActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.add);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setIcon(R.drawable.add_black);
         return super.onPrepareOptionsMenu(menu);
     }

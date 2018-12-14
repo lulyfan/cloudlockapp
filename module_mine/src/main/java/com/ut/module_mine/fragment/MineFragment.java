@@ -1,5 +1,7 @@
 package com.ut.module_mine.fragment;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +15,10 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.bumptech.glide.Glide;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.module_mine.Constant;
 import com.ut.module_mine.activity.ChangeLockPermissionActivity;
 import com.ut.module_mine.activity.EditUserInfoActivity;
 import com.ut.module_mine.activity.LockGroupActivity;
@@ -23,6 +27,7 @@ import com.ut.module_mine.R;
 import com.ut.module_mine.activity.SystemSettingActivity;
 import com.ut.module_mine.databinding.*;
 import com.ut.module_mine.util.ImgUtil;
+import com.ut.module_mine.viewModel.MineViewModel;
 
 import java.io.File;
 
@@ -37,6 +42,7 @@ public class MineFragment extends BaseFragment {
 
     View mView = null;
     FragmentMineBinding mMineBinding = null;
+    MineViewModel mineViewModel;
 
     @Nullable
     @Override
@@ -46,66 +52,47 @@ public class MineFragment extends BaseFragment {
             mView = mMineBinding.getRoot();
         }
         initUI();
+        initViewModel();
         return mView;
     }
 
-    private void initUI() {
-        mMineBinding.lockGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), LockGroupActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mMineBinding.editUesrInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditUserInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mMineBinding.lockUserManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), LockUserActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mMineBinding.changeLockPermission.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ChangeLockPermissionActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mMineBinding.systemSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SystemSettingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mMineBinding.headImg.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                setHeadImg();
-                return true;
-            }
-        });
+    private void initViewModel() {
+        mineViewModel = ViewModelProviders.of(this).get(MineViewModel.class);
+        mMineBinding.setViewModel(mineViewModel);
     }
 
-    private void setHeadImg() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("cloudLock", Context.MODE_PRIVATE);
-        String headImgPath = sharedPreferences.getString("headImg", "");
-        File file = new File(headImgPath);
-        if (file.exists()) {
-            ImgUtil.setPic(mMineBinding.headImg, headImgPath);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mineViewModel.getUserInfo();
+        mineViewModel.getHeadImgUrl();
+    }
+
+    private void initUI() {
+        mMineBinding.lockGroup.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), LockGroupActivity.class);
+            startActivity(intent);
+        });
+
+        mMineBinding.editUesrInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditUserInfoActivity.class);
+            startActivity(intent);
+        });
+
+        mMineBinding.lockUserManage.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), LockUserActivity.class);
+            startActivity(intent);
+        });
+
+        mMineBinding.changeLockPermission.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ChangeLockPermissionActivity.class);
+            startActivity(intent);
+        });
+
+        mMineBinding.systemSetting.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SystemSettingActivity.class);
+            startActivity(intent);
+        });
     }
 
 }

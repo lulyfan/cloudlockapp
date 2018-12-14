@@ -8,6 +8,9 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
+
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 //import com.ut.database.database.CloudLockDatabaseHolder;
 
 /**
@@ -25,6 +28,8 @@ public class BaseApplication extends Application {
 
     public static User mUser;
 
+    private Scheduler uiScheduler;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -39,6 +44,9 @@ public class BaseApplication extends Application {
 
         //初始化数据库
         initDatabase();
+
+        //主线程调度器，用于RxJava
+        uiScheduler = Schedulers.from(new UiExecutor());
     }
 
     private void initDatabase() {
@@ -63,5 +71,10 @@ public class BaseApplication extends Application {
 
     public static User getUser(){
         return mUser;
+    }
+
+    public static Scheduler getUiScheduler() {
+        BaseApplication application = (BaseApplication) getAppContext();
+        return application.uiScheduler;
     }
 }
