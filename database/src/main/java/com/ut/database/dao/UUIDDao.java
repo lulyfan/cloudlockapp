@@ -20,6 +20,6 @@ public interface UUIDDao {
     @Insert
     void insertUUID(UUID uuid);
 
-    @Delete
-    void deleteUUID(UUID uuid);
+    @Query("DELETE FROM uuid")
+    void deleteUUID();
 }
