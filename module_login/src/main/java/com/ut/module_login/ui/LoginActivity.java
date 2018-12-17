@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
@@ -143,18 +145,24 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void onLogin() {
+        SystemUtils.hideKeyboard(this, phoneEdt);
         String phone = phoneEdt.getText().toString().trim();
         String password = passwordEdt.getText().toString().trim();
         MyRetrofit.get()
                 .getCommonApiService()
                 .login(phone, password)
                 .subscribeOn(Schedulers.io())
-                .subscribe(json -> {
-                    Result<User> result = JSON.parseObject(json,  new TypeReference<Result<User>>(){});
-                    CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-                    CloudLockDatabaseHolder.get().getUserDao().insertUser(result.data);
-                    ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                    finish();
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
+                        CloudLockDatabaseHolder.get().getUserDao().insertUser(result.data);
+                        ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                        finish();
+                    } else {
+                        mainHandler.post(() -> {
+                            CLToast.showAtCenter(LoginActivity.this, result.msg);
+                        });
+                    }
                 }, throwable -> {
                     throwable.printStackTrace();
                 });

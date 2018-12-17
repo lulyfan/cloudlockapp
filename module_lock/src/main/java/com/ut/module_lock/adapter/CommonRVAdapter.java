@@ -6,8 +6,6 @@ import android.view.View;
 
 import com.ut.module_lock.databinding.ItemLockListBinding;
 import com.ut.module_lock.databinding.ItemLockListEmptyBinding;
-import com.ut.module_lock.entity.LockKey;
-import com.ut.module_lock.entity.User;
 
 /**
  * author : zhouyubin

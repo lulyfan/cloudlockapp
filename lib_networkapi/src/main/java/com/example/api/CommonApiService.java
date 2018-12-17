@@ -35,7 +35,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.loginUrl)
-    Observable<String> login(@Field("account") String mobile, @Field("password") String pwd);
+    Observable<Result<User>> login(@Field("account") String mobile, @Field("password") String pwd);
 
     @FormUrlEncoded
     @POST(ApiUrl.registerUrl)
@@ -44,4 +44,20 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.getRegisterVerifyCode)
     Observable<Result<Void>> getRegisterVerifyCode(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getKeyApplyList)
+    Observable<String> getKeyApplyList(@Field("userId") long userId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageKey)
+    Observable<String> pageKeys(@Field("userId") long userId, @Field("mac") String mac, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.applyKey)
+    Observable<Result<Void>> applyKey(@Field("userId") long userId, @Field("mac") String mac, @Field("reason") String reason);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.ignoreApply)
+    Observable<Result<Void>> ignoreApply(@Field("userId") long userId, @Field("applyId") long applyId);
 }

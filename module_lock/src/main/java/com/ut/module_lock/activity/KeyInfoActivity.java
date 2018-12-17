@@ -58,7 +58,7 @@ public class KeyInfoActivity extends BaseActivity {
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
             String url;
-            if (keyInfo.getType() == 1) {
+            if (keyInfo.getRuleType() == 2) {
                 url = RouterUtil.LockModulePath.EDIT_LIMITED_TIME;
             } else {
                 url = RouterUtil.LockModulePath.EDIT_LOOP_TIME;
@@ -123,19 +123,12 @@ public class KeyInfoActivity extends BaseActivity {
                     } else if (data.hasExtra(Constance.EDIT_KEY_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_KEY_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
-                            keyInfo.setCaption(keyName);
+                            keyInfo.setKeyName(keyName);
                         }
                     }
                     mBinding.setKeyItem(keyInfo);
                     break;
             }
         }
-    }
-
-    private void setWindowAlpha(float alpha) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = alpha;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().setAttributes(lp);
     }
 }

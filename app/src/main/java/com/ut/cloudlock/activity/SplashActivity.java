@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
+import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.cloudlock.R;
 import com.ut.database.database.CloudLockDatabaseHolder;
@@ -38,7 +40,9 @@ public class SplashActivity extends BaseActivity {
                 if (allUsers.isEmpty()) {
                     url = RouterUtil.LoginModulePath.Login;
                 } else {
+                    User user = allUsers.get(allUsers.size() - 1);
                     url = RouterUtil.MainModulePath.Main_Module;
+                    BaseApplication.setUser(user);
                 }
                 return url;
             }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {

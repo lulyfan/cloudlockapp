@@ -23,9 +23,9 @@ public class User {
     public int status; //0,
     public int sex; //1,
     public String headPic; //null,
-    public boolean enableWebLogin; //1,
-    public boolean enableSound; //1,
-    public boolean enableAutoOpen; //1
+    public int enableWebLogin; //1,
+    public int enableSound; //1,
+    public int enableAutoOpen; //1
 
     @NonNull
     public long getId() {
@@ -100,27 +100,27 @@ public class User {
         this.headPic = headPic;
     }
 
-    public boolean isEnableWebLogin() {
+    public int isEnableWebLogin() {
         return enableWebLogin;
     }
 
-    public void setEnableWebLogin(boolean enableWebLogin) {
+    public void setEnableWebLogin(int enableWebLogin) {
         this.enableWebLogin = enableWebLogin;
     }
 
-    public boolean isEnableSound() {
+    public int isEnableSound() {
         return enableSound;
     }
 
-    public void setEnableSound(boolean enableSound) {
+    public void setEnableSound(int enableSound) {
         this.enableSound = enableSound;
     }
 
-    public boolean isEnableAutoOpen() {
+    public int isEnableAutoOpen() {
         return enableAutoOpen;
     }
 
-    public void setEnableAutoOpen(boolean enableAutoOpen) {
+    public void setEnableAutoOpen(int enableAutoOpen) {
         this.enableAutoOpen = enableAutoOpen;
     }
 }

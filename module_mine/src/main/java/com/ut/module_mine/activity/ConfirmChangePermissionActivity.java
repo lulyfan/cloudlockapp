@@ -17,13 +17,12 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_confirm_change_permission);
         initUI();
     }
 
     private void initUI() {
-        setActionBar();
+        initLightToolbar();
 
         binding.checkCodeView.setInputListener(new CheckCodeView.InputListener() {
             @Override
@@ -36,13 +35,5 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
                 binding.confirm.setEnabled(true);
             }
         });
-    }
-
-    private void setActionBar() {
-        setSupportActionBar(binding.toolbar11);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
     }
 }

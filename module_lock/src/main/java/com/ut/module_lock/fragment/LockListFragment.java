@@ -1,6 +1,5 @@
 package com.ut.module_lock.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -18,15 +17,14 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
+import com.ut.database.entity.User;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
 import com.ut.module_lock.activity.LockDetailActivity;
@@ -35,7 +33,6 @@ import com.ut.module_lock.adapter.OnRcvItemClickListener;
 import com.ut.module_lock.databinding.*;
 import com.ut.module_lock.entity.LockGroup;
 import com.ut.module_lock.entity.LockKey;
-import com.ut.module_lock.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +73,8 @@ public class LockListFragment extends BaseFragment {
         lockKeys.add(new LockKey("小锁Chan的锁/超过12位字符就", 0, 0, 0, 0, 80));
         lockKeys.add(new LockKey("我是【授权用户】的门锁", 2, 0, 0, 1, 39));
         lockKeys.add(new LockKey("我是【普通用户】的门锁", 3, 0, 1, 2, 10));
-        User user = new User("13534673711");
+        User user = new User();
+        user.setAccount("13534673711");
         //
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

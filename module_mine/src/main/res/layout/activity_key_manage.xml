@@ -9,23 +9,9 @@
         android:background="@android:color/white"
         tools:context=".activity.KeyManageActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar4"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.0599"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/titleStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/keyManage"/>
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/include12"
+            layout="@layout/toolbar_white" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvKeyList"
@@ -34,6 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar4"/>
+            app:layout_constraintTop_toBottomOf="@+id/include12" />
     </android.support.constraint.ConstraintLayout>
 </layout>

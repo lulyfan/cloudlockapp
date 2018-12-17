@@ -1,8 +1,12 @@
 package com.ut.module_msg.model;
 
+import com.ut.base.BaseApplication;
+import com.ut.module_msg.R;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * author : chenjiajun
@@ -12,20 +16,23 @@ import java.util.List;
 public class ApplyMessage implements Serializable {
 
     private String url;
-    private String name;
     private String hint;
-    private String time;
-    private String applicant;
+    private String userName;
     private int keyType;
+    private long id;// 申请记录ID,
+    private int lockType;// 锁类型,
+    private int status;// 处理状态,
+    private String lockName;// 锁名称,
+    private long applyTime;// 申请时间
+    private String reason;
 
-    private String message;
 
-    public String getApplicant() {
-        return applicant;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setApplicant(String applicant) {
-        this.applicant = applicant;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUrl() {
@@ -36,28 +43,12 @@ public class ApplyMessage implements Serializable {
         this.url = url;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getHint() {
         return hint;
     }
 
     public void setHint(String hint) {
         this.hint = hint;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public int getKeyType() {
@@ -68,24 +59,68 @@ public class ApplyMessage implements Serializable {
         this.keyType = keyType;
     }
 
-    public String getMessage() {
-        return message;
+    public String getReason() {
+        return reason;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    public String keyTypeString() {
-        switch (keyType) {
-            case 0:
-                return "单次";
-            case 1:
-                return "限时";
-            case 2:
-                return "循环";
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getLockType() {
+        return lockType;
+    }
+
+    public void setLockType(int lockType) {
+        this.lockType = lockType;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getLockName() {
+        return lockName;
+    }
+
+    public void setLockName(String lockName) {
+        this.lockName = lockName;
+    }
+
+    public long getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(long applyTime) {
+        this.applyTime = applyTime;
+    }
+
+    public String applyTimeString() {
+        return new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(applyTime));
+    }
+
+    public String lockTypeString() {
+        switch (lockType) {
             case 3:
-                return "永久";
+                return BaseApplication.getAppContext().getString(R.string.once_time);
+            case 2:
+                return BaseApplication.getAppContext().getString(R.string.limit_time);
+            case 4:
+                return BaseApplication.getAppContext().getString(R.string.loop);
+            case 1:
+                return BaseApplication.getAppContext().getString(R.string.permanent);
         }
         return "";
     }

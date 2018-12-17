@@ -64,6 +64,7 @@
 
 
         <RadioGroup
+            android:id="@+id/rbtn_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_20dp"
@@ -73,6 +74,7 @@
             android:paddingRight="@dimen/base_20dp">
 
             <RadioButton
+                android:id="@+id/rbtn_forever"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_50dp"
                 android:background="@android:color/transparent"
@@ -88,6 +90,7 @@
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
+                android:id="@+id/rbtn_limited"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_50dp"
                 android:background="@android:color/transparent"
@@ -103,6 +106,7 @@
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
+                android:id="@+id/rbtn_once"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_50dp"
                 android:background="@android:color/transparent"
@@ -118,6 +122,7 @@
                 android:background="@color/lock_color_btn_gray"/>
 
             <RadioButton
+                android:id="@+id/rbtn_loop"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_50dp"
                 android:background="@android:color/transparent"
@@ -135,6 +140,7 @@
             android:layout_weight="1"/>
 
         <Button
+            android:id="@+id/btn_apply_key"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_50dp"
             android:layout_marginLeft="@dimen/base_20dp"

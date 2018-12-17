@@ -29,25 +29,22 @@ public class ChangeLockPermissionActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_change_lock_permission);
         initUI();
     }
 
     private void initUI() {
-        setActionBar();
-        setLockList();
-
-        binding.checkAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<Data> list = adapter.getData();
-                for (Data data : list) {
-                    data.isChangePermission = true;
-                }
-                adapter.setData(list);
+        initCheckAll(() -> {
+            List<Data> list = adapter.getData();
+            for (Data data : list) {
+                data.isChangePermission = true;
             }
+            adapter.setData(list);
         });
+        initLightToolbar();
+        setTitle(getString(R.string.transformLock));
+
+        setLockList();
 
         binding.nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,28 +55,14 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         });
     }
 
-    private void setActionBar() {
-        setSupportActionBar(binding.toolbar9);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
-    }
-
     private void setLockList() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockList.setLayoutManager(layoutManager);
-        binding.rvLockList.addItemDecoration(
-                new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         adapter = new DataBindingAdapter<>(this, R.layout.item_change_lock_permission, BR.changeLockPermissionData);
-        adapter.setItemHeightByPercent(0.076);
-        adapter.setOnClickItemListener(new DataBindingAdapter.OnClickItemListener<ItemChangeLockPermissionBinding>() {
-            @Override
-            public void onClick(ItemChangeLockPermissionBinding selectedbinding, int position, ItemChangeLockPermissionBinding lastSelectedBinding) {
-                boolean isChecked = selectedbinding.checkBox.isChecked();
-                selectedbinding.checkBox.setChecked(!isChecked);
-            }
+        adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
+            boolean isChecked = selectedbinding.checkBox.isChecked();
+            selectedbinding.checkBox.setChecked(!isChecked);
         });
 
         List<Data> list = new ArrayList<>();
@@ -89,12 +72,6 @@ public class ChangeLockPermissionActivity extends BaseActivity {
 
         adapter.setData(list);
         binding.rvLockList.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
-        return true;
     }
 
     public static class Data {

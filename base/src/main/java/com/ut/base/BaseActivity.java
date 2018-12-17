@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
@@ -24,6 +25,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
+    private OnCustomerClickListener checkAllListener = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,6 +113,14 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void setWindowAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = alpha;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(lp);
+    }
+
+
     public interface OnCustomerClickListener {
         void onClick();
     }
@@ -123,11 +133,16 @@ public class BaseActivity extends AppCompatActivity {
         this.addListener = listener;
     }
 
+    public void initCheckAll(OnCustomerClickListener listener) {
+        this.checkAllListener = listener;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_more_menu, menu);
         menu.findItem(R.id.more).setVisible(moreListener != null);
         menu.findItem(R.id.add).setVisible(addListener != null);
+        menu.findItem(R.id.checkAll).setVisible(checkAllListener != null);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -140,6 +155,8 @@ public class BaseActivity extends AppCompatActivity {
             moreListener.onClick();
         } else if (i == R.id.add && addListener != null) {
             addListener.onClick();
+        } else if (i == R.id.checkAll && checkAllListener != null) {
+            checkAllListener.onClick();
         }
         return true;
     }

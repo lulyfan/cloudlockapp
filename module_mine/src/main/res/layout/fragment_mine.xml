@@ -5,18 +5,16 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/editUesrInfo"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/select_half_arc_border"
+            android:layout_height="@dimen/base_100dp"
+            android:background="@drawable/select_bg_item_bottom"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.185"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -25,13 +23,13 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="4dp"
                 android:text="18807644294"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/m"
                 app:layout_constraintStart_toEndOf="@+id/headImg"
-                app:layout_constraintTop_toTopOf="@+id/headImg"/>
+                app:layout_constraintTop_toTopOf="@+id/headImg" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -47,18 +45,16 @@
                 android:textColor="@color/color_base_highlight"
                 android:textSize="@dimen/xs"
                 app:layout_constraintBottom_toBottomOf="@+id/headImg"
-                app:layout_constraintStart_toStartOf="@+id/textView"/>
+                app:layout_constraintStart_toStartOf="@+id/textView" />
 
             <ImageView
                 android:id="@+id/headImg"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:srcCompat="@drawable/headimg"
+                android:layout_width="@dimen/base_52dp"
+                android:layout_height="@dimen/base_52dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintHeight_percent="0.65"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/headimg" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -67,84 +63,63 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_triangle"/>
+                app:srcCompat="@drawable/right_triangle" />
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout4"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/arc_border"
-            android:paddingLeft="16dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1411"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editUesrInfo">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_up"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/webLoginPermission"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toTopOf="@+id/divider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView3"/>
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/openLockVoice"
-                android:textColor="@color/gray3"
-                android:textSize="@dimen/s"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/divider"
-                app:layout_constraintTop_toBottomOf="@+id/divider"/>
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Switch
                 android:id="@+id/switch2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                android:background="@drawable/select_bg_item_bottom"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/openLockVoice"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/s"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView4"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <View
                 android:id="@+id/divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/switch1" />
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout5"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/arc_border"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.212"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
@@ -152,8 +127,8 @@
             <TextView
                 android:id="@+id/lockUserManage"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_up"
                 android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
                 android:gravity="center_vertical"
@@ -162,17 +137,15 @@
                 android:text="@string/lockUserManager"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toTopOf="@+id/lockGroup"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/lockGroup"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
@@ -182,18 +155,16 @@
                 android:text="@string/lockGroup"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toTopOf="@+id/changeLockPermission"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lockUserManage"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <TextView
                 android:id="@+id/changeLockPermission"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_bottom"
                 android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
                 android:gravity="center_vertical"
@@ -202,71 +173,43 @@
                 android:text="@string/transformLock"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.333"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
             <View
                 android:id="@+id/divider2"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="?android:attr/listDivider"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/lockUserManage"
-                app:layout_constraintTop_toBottomOf="@+id/lockUserManage"/>
+                app:layout_constraintTop_toBottomOf="@+id/lockUserManage" />
 
             <View
                 android:id="@+id/divider3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="?android:attr/listDivider"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/lockGroup"
-                app:layout_constraintTop_toBottomOf="@+id/lockGroup"/>
+                app:layout_constraintTop_toBottomOf="@+id/lockGroup" />
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/arc_border"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1411"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
             <TextView
-                android:id="@+id/systemSetting"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
-                android:clickable="true"
-                android:drawableRight="@drawable/right_triangle"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/systemSetting"
-                android:textColor="@color/gray3"
-                android:textSize="@dimen/s"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/divider5"/>
-
-            <TextView
                 android:id="@+id/textView9"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_up"
                 android:clickable="true"
                 android:drawableRight="@drawable/right_triangle"
                 android:gravity="center_vertical"
@@ -275,23 +218,36 @@
                 android:text="@string/customService"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toTopOf="@+id/systemSetting"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/systemSetting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_bottom"
+                android:clickable="true"
+                android:drawableRight="@drawable/right_triangle"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/systemSetting"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/s"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
             <View
                 android:id="@+id/divider5"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginLeft="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/dividerStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
         </android.support.constraint.ConstraintLayout>
 
 

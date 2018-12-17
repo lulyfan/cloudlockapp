@@ -20,7 +20,7 @@ public class LoginUtil {
     public static boolean isPassword(String password) {
         if (password.length() < 6)
             return false;
-        String reg = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$";
+        String reg = "^[0-9a-zA-Z]{6,20}$";
         Pattern p = Pattern.compile(reg);
         return p.matcher(password).matches();
     }

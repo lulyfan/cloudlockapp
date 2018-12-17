@@ -36,25 +36,22 @@ public class LockGroupActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableImmersive(R.color.appBarColor, true);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lock_group);
         initUI();
     }
 
     private void initUI() {
-        setSupportActionBar(binding.toolbar2);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.arrow_left_black);
-        actionBar.setTitle(null);
+        initAdd(() -> addLockGroup());
+        initLightToolbar();
+        setTitle(getString(R.string.lockGroup));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockGroup.setLayoutManager(layoutManager);
-        binding.rvLockGroup.addItemDecoration(new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
+//        binding.rvLockGroup.addItemDecoration(new BottomLineItemDecoration(this, true, BottomLineItemDecoration.MATCH_ITEM));
 
         DataBindingAdapter<LockGroupData, ItemLockGroupBinding> adapter =
                 new DataBindingAdapter<>(this, R.layout.item_lock_group, BR.lockGroupItem);
-        adapter.setItemHeightByPercent(0.0708);
+//        adapter.setItemHeightByPercent(0.0708);
 
         List<LockGroupData> list = new ArrayList<>();
         list.add(new LockGroupData("全部分组", 8));
@@ -65,32 +62,11 @@ public class LockGroupActivity extends BaseActivity {
         adapter.setData(list);
         binding.rvLockGroup.setAdapter(adapter);
 
-        adapter.setOnClickItemListener(new DataBindingAdapter.OnClickItemListener<ItemLockGroupBinding>() {
-            @Override
-            public void onClick(ItemLockGroupBinding selectedbinding, int position, ItemLockGroupBinding lastSelectedBinding) {
-                Intent intent = new Intent(LockGroupActivity.this, LockGroupItemActivity.class);
-                intent.putExtra(LockGroupItemActivity.EXTRA_LOCK_GROUP_NAME, selectedbinding.lockGroupName.getText());
-                startActivity(intent);
-            }
+        adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
+            Intent intent = new Intent(LockGroupActivity.this, LockGroupItemActivity.class);
+            intent.putExtra(LockGroupItemActivity.EXTRA_LOCK_GROUP_NAME, selectedbinding.lockGroupName.getText());
+            startActivity(intent);
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.lockgroup_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.addGroup) {
-            addLockGroup();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-
     }
 
     public static class LockGroupData {
@@ -103,6 +79,13 @@ public class LockGroupActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.add);
+        menuItem.setIcon(R.drawable.add_black);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public void addLockGroup() {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_addgroup, null);
 
@@ -111,18 +94,15 @@ public class LockGroupActivity extends BaseActivity {
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
                 .setContentBackgroundResource(R.drawable.bg_dialog)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(DialogPlus dialog, View view) {
-                        int i = view.getId();
-                        if (i == R.id.cancel) {
-                            dialog.dismiss();
+                .setOnClickListener((dialog1, view1) -> {
+                    int i = view1.getId();
+                    if (i == R.id.cancel) {
+                        dialog1.dismiss();
 
-                        } else if (i == R.id.confirm) {
-                            dialog.dismiss();
+                    } else if (i == R.id.confirm) {
+                        dialog1.dismiss();
 
-                        } else {
-                        }
+                    } else {
                     }
                 })
                 .create();
