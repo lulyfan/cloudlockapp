@@ -12,7 +12,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
+import com.ut.base.Utils.UTLog;
+import com.ut.commoncomponent.CLToast;
 import com.ut.module_msg.model.ApplyMessage;
 
 import java.util.List;
@@ -51,14 +54,17 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .getKeyApplyList(BaseApplication.getUser().id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(JsonElement::toString)
                 .subscribe(json -> {
                     Result<List<ApplyMessage>> result = JSON.parseObject(json,
                             new TypeReference<Result<List<ApplyMessage>>>() {
                             });
-                    List<ApplyMessage> ams = result.data;
-                    applyMessages.setValue(ams);
-                    Log.d("result", result.msg);
-                }, error-> error.printStackTrace());
+                    if (result.isSuccess()) {
+                        List<ApplyMessage> ams = result.data;
+                        applyMessages.setValue(ams);
+                    }
+                    UTLog.d(String.valueOf(result.toString()));
+                }, error -> error.printStackTrace());
     }
 
     public void ignoreApply(long applyId) {
@@ -67,6 +73,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .subscribe(result -> {
                     Log.d("ignoreApply", result.msg);
-                });
+                    CLToast.showAtBottom(getApplication(), result.msg);
+                }, error -> error.printStackTrace());
     }
 }

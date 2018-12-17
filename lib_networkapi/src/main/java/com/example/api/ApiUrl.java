@@ -28,9 +28,24 @@ public interface ApiUrl {
     //用户锁下的钥匙列表
     String pageKey = "api/key/pageKey?json";
 
+    //解除冻结钥匙
+    String unfrozenKey = "/api/key/unFrozenKey?json";
+
+    //冻结钥匙
+    String frozenKey = "/api/key/frozenKey?json";
+
+    //删除钥匙
+    String deleteKey = "/api/key/delKey?json";
+
+    //根据钥匙查找锁日志
+    String queryLogsByKey = "api/log/pageKeyLog?json";
+
     //上传用户头像
     String uploadImg = "api/user/uploadImg";
 
     //修改用户头像
     String uploadHead = "api/user/uploadHead";
+
+    //获取用户信息
+    String getUserInfo = "api/user/getUserInfo?json";
 }
