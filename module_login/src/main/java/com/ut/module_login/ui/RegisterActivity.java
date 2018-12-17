@@ -117,7 +117,7 @@ public class RegisterActivity extends BaseActivity {
             register(phone, password, verifyCode);
         });
 
-        findViewById(R.id.icon_of_county).setOnClickListener(v -> {
+        findViewById(R.id.tel_belong_of_place).setOnClickListener(v -> {
                     ViewGroup parent = (ViewGroup) v.getParent();
                     parent.requestFocus();
                     ARouter.getInstance()
@@ -197,6 +197,7 @@ public class RegisterActivity extends BaseActivity {
                         finish();
                     } else {
                         Log.d("register", result.msg);
+                        CLToast.showAtCenter(RegisterActivity.this, result.msg);
                     }
                 }, ((error)->{
                     error.printStackTrace();
