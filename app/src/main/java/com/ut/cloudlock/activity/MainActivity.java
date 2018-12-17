@@ -1,10 +1,7 @@
 package com.ut.cloudlock.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,11 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.example.entity.base.Result;
-import com.example.operation.MyRetrofit;
-import com.google.gson.JsonObject;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.FragmentUtil;
@@ -26,13 +20,9 @@ import com.ut.base.UserRepository;
 import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;
-import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
-import com.ut.database.entity.User;
-import com.ut.module_login.ui.LoginActivity;
 
 import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -56,11 +46,15 @@ public class MainActivity extends BaseActivity {
         mBinding.fab.setOnClickListener(v -> {
             Flowable.just(this).subscribeOn(Schedulers.io()).subscribe(context -> {
                 CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
+                CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
             });
         });
 
         UserRepository.getInstance().getUser().observe(this,user -> {
             BaseApplication.setUser(user);
+            if(user == null) {
+                ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+            }
             Log.d("observe", "user update ----> " + JSON.toJSONString(user));
         });
 
