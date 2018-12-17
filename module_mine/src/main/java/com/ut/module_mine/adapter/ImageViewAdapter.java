@@ -16,9 +16,8 @@ public class ImageViewAdapter {
             return;
         }
 
-        RequestOptions options = null;
+        RequestOptions options = new RequestOptions();
         if (isCircle) {
-            options = new RequestOptions();
             options.circleCrop();
         }
 

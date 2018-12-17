@@ -75,6 +75,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/imageView6"
                     app:layout_constraintTop_toTopOf="parent"
                     app:imageUrl="@{viewModel.headImgUrl}"
+                    app:isCircle="@{true}"
                     app:srcCompat="@drawable/headimg" />
 
                 <ImageView
@@ -112,7 +113,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView27"
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"

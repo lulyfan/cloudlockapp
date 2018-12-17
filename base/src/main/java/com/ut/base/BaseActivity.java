@@ -162,14 +162,14 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    protected void toastShort(String msg) {
+    public void toastShort(String msg) {
         if (msg == null || "".equals(msg)) {
             return;
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    protected void toastLong(String msg) {
+    public void toastLong(String msg) {
         if (msg == null || "".equals(msg)) {
             return;
         }

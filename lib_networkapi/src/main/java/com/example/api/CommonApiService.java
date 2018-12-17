@@ -75,6 +75,14 @@ public interface CommonApiService {
     Observable<Result<String>> uploadHead(@Field("imgUrl") String imgUrl);
 
     @FormUrlEncoded
+    @POST(ApiUrl.editUserNmae)
+    Observable<Result<Void>> editUserName(@Field("name") String userName);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.changeUserConfig)
+    Observable<Result<Void>> changeUserConfig(@Field("configType") String configType, @Field("operVal") String operVal);
+
+    @FormUrlEncoded
     @POST(ApiUrl.unfrozenKey)
     Observable<Result<Void>> unForzenKey(@Field("keyId")long id);
 

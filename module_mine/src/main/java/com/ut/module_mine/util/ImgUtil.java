@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import com.ut.base.Utils.Util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ImgUtil {
@@ -32,14 +35,30 @@ public class ImgUtil {
         return null;
     }
 
-     public static File createImageFile(Context context, String imageFileName) throws IOException {
+     public static File createImageFile(Context context, String imageFileName, String suffix) throws IOException {
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
+                suffix,         /* suffix */
                 storageDir      /* directory */
         );
         return image;
+    }
+
+    public static void saveBitmap(Bitmap bitmap, File destFile) {
+        if (bitmap == null || destFile == null || !destFile.exists()) {
+            return;
+        }
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(destFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void choosePhoto(Activity activity, int requestCode) {
