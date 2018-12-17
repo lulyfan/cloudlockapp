@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 /**
@@ -16,7 +17,7 @@ import android.widget.TextView;
  * desc   : 云锁使用的Toast
  */
 public class CLToast {
-    private static long DEFAULT_DURATION = 3000L;
+    private static long DEFAULT_DURATION = 2200L;
 
     public static void showAtCenter(Context context, String message) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -32,32 +33,9 @@ public class CLToast {
 
         if (windowManager != null) {
             windowManager.addView(contentView, layoutParams);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                contentView.animate().alphaBy(0f).withEndAction(() -> {
-                    windowManager.removeView(contentView);
-                }).setDuration(1500L).start();
-            } else {
-                Animation animation = new AlphaAnimation(1f,0f);
-                animation.setDuration(DEFAULT_DURATION);
-                animation.setFillAfter(true);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        windowManager.removeView(contentView);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                contentView.startAnimation(animation);
-            }
+            contentView.animate().alphaBy(0f).withEndAction(() -> {
+                windowManager.removeView(contentView);
+            }).setDuration(DEFAULT_DURATION).start();
         }
     }
 
@@ -68,39 +46,16 @@ public class CLToast {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         layoutParams.gravity = Gravity.BOTTOM;
+        layoutParams.verticalMargin= 0.1f;
 
         ViewGroup contentView = (ViewGroup) View.inflate(context, R.layout.toast_view, null);
         TextView messageTv = contentView.findViewById(R.id.message);
-        messageTv.setText(message);
-
+        messageTv.setText(String.valueOf(message));
         if (windowManager != null) {
             windowManager.addView(contentView, layoutParams);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                contentView.animate().alpha(0f).withEndAction(() -> {
-                    windowManager.removeView(contentView);
-                }).setDuration(1500L).start();
-            } else {
-                Animation animation = new AlphaAnimation(1f,0f);
-                animation.setDuration(DEFAULT_DURATION);
-                animation.setFillAfter(true);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        windowManager.removeView(contentView);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                contentView.startAnimation(animation);
-            }
+            contentView.animate().alpha(0f).withEndAction(() -> {
+                windowManager.removeView(contentView);
+            }).setDuration(DEFAULT_DURATION).start();
         }
     }
 }

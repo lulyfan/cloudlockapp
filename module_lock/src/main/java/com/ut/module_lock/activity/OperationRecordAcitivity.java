@@ -1,20 +1,19 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_lock.R;
 import com.ut.module_lock.adapter.ORListAdapter;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityOperationRecordBinding;
 import com.ut.module_lock.entity.OperationRecord;
+import com.ut.module_lock.viewmodel.OperationVm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,29 +28,42 @@ import java.util.List;
 public class OperationRecordAcitivity extends BaseActivity {
 
     private ActivityOperationRecordBinding mBinding = null;
+    private OperationVm operationVm = null;
+    private ORListAdapter listAdapter = null;
+    private List<OperationRecord> oprs = new ArrayList<>();
+    private long currentId = -1L;
+    private String recordType = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_operation_record);
-
         initDarkToolbar();
         setTitle(R.string.lock_operation_record);
+        handlerIntent();
+        initView();
+        operationVm = ViewModelProviders.of(this).get(OperationVm.class);
+        operationVm.getOperationRecords().observe(this, operationRecords -> {
+            if (operationRecords == null || operationRecords.isEmpty()) return;
+            oprs.addAll(operationRecords);
+            listAdapter.notifyDataSetChanged();
+        });
+        operationVm.loadRecord(recordType, currentId);
+    }
 
-        List<OperationRecord > oprs = new ArrayList<>();
-        for (int i= 0; i<20;i++){
-            OperationRecord op = new OperationRecord();
-            op.setTime("2018/09/06");
-            List<OperationRecord.Record> records = new ArrayList<>();
-            for (int j=0;j<3;j++) {
-                OperationRecord.Record record = new OperationRecord.Record();
-                record.setDesc("11:19:20 使用APP开锁");
-                record.setOperator("曹哲君");
-                records.add(record);
-            }
-            op.setRecords(records);
-            oprs.add(op);
+    private void initView() {
+        listAdapter = new ORListAdapter(this, oprs);
+        mBinding.operationRecordList.setAdapter(listAdapter);
+    }
+
+    private void handlerIntent() {
+        recordType = getIntent().getStringExtra(Constance.RECORD_TYPE);
+        if (getIntent().hasExtra(Constance.KEY_ID)) {
+            currentId = getIntent().getLongExtra(Constance.KEY_ID, currentId);
+        } else if (getIntent().hasExtra(Constance.USER_ID)) {
+            currentId = getIntent().getLongExtra(Constance.USER_ID, currentId);
+        } else if (getIntent().hasExtra(Constance.LOCK_ID)) {
+            currentId = getIntent().getLongExtra(Constance.LOCK_ID, currentId);
         }
-        mBinding.operationRecordList.setAdapter(new ORListAdapter(this, oprs));
     }
 }

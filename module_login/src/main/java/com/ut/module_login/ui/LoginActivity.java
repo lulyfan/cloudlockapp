@@ -5,25 +5,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.database.database.CloudLockDatabaseHolder;
-import com.ut.database.entity.User;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 
@@ -163,9 +159,7 @@ public class LoginActivity extends BaseActivity {
                             CLToast.showAtCenter(LoginActivity.this, result.msg);
                         });
                     }
-                }, throwable -> {
-                    throwable.printStackTrace();
-                });
+                }, new ErrorHandler());
     }
 
     @Override

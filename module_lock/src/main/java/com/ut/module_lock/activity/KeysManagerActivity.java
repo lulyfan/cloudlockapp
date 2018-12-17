@@ -3,6 +3,7 @@ package com.ut.module_lock.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -64,6 +65,15 @@ public class KeysManagerActivity extends BaseActivity {
         mAdapter.setOnItemListener((v, position) -> {
             KeyItem keyItem = keyItemList.get(position);
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
+        });
+        mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light);
+        mBinding.refreshLayout.setOnRefreshListener(() -> {
+            mBinding.refreshLayout.setRefreshing(true);
+            kmVM.loadKeyItems();
+            mBinding.refreshLayout.postDelayed(() -> {
+                mBinding.refreshLayout.setRefreshing(false);
+            }, 3000L);
         });
     }
 

@@ -24,7 +24,7 @@ public class ImageViewAdapter {
         Glide.with((Activity) imageView
                 .getContext())
                 .load(url)
-                .apply(options)
+//                .apply(options)
                 .into(imageView);
     }
 }

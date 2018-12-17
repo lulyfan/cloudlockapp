@@ -1,6 +1,5 @@
 package com.ut.module_lock;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ut.base.BaseActivity;
