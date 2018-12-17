@@ -11,7 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
+import com.ut.base.Utils.UTLog;
+import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.entity.KeyItem;
 
 import java.util.ArrayList;
@@ -25,8 +28,11 @@ import io.reactivex.schedulers.Schedulers;
  * time   : 2018/11/29
  * desc   :
  */
+
+@SuppressLint("CheckResult")
 public class KeyManagerVM extends AndroidViewModel {
     private MutableLiveData<List<KeyItem>> keys = null;
+    private MutableLiveData<String> feedbackMessage = null;
     private int currentPage = 0;
     private static int DEFAULT_PAGE_SIZE = 10;
     private String mac;
@@ -51,20 +57,38 @@ public class KeyManagerVM extends AndroidViewModel {
         return keys;
     }
 
-    @SuppressLint("CheckResult")
+    public MutableLiveData<String> getFeedbackMessage() {
+        if (feedbackMessage == null) {
+            feedbackMessage = new MutableLiveData<>();
+        }
+        return feedbackMessage;
+    }
+
     public void loadKeyItems() {
         if (BaseApplication.getUser() == null) return;
         MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.newThread())
+                .map(JsonElement::toString)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(json -> {
-                    Result<List<KeyItem>> result = JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
-                    });
+                .map(json -> JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
+                }))
+                .filter(result -> {
+                    boolean success = result.isSuccess();
+                    if (!success) {
+                        UTLog.d(result.msg);
+                    }
+                    return success;
+                })
+                .subscribe(result -> {
                     Log.d("pageKeys", result.msg);
                     getKeys().postValue(result.data);
                     currentPage++;
-                });
+                }, error -> error.printStackTrace());
+
+        /**
+         * 假数据
+         */
         List<KeyItem> items = new ArrayList<>();
         for (int i = 1; i < 11; i++) {
             KeyItem item = new KeyItem();
@@ -92,5 +116,28 @@ public class KeyManagerVM extends AndroidViewModel {
             items.add(item);
         }
         getKeys().postValue(items);
+    }
+
+    public void unFrozenKey(long keyId) {
+        MyRetrofit.get().getCommonApiService()
+                .unForzenKey(keyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
+
+    }
+
+    public void frozenKey(long keyId) {
+        MyRetrofit.get().getCommonApiService().frozenKey(keyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
+    }
+
+    public void deleteKey(long keyId) {
+        MyRetrofit.get().getCommonApiService().deleteKey(keyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
     }
 }
