@@ -13,6 +13,7 @@ import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.entity.KeyItem;
@@ -84,7 +85,7 @@ public class KeyManagerVM extends AndroidViewModel {
                     Log.d("pageKeys", result.msg);
                     getKeys().postValue(result.data);
                     currentPage++;
-                }, error -> error.printStackTrace());
+                }, new ErrorHandler());
 
         /**
          * 假数据
@@ -123,7 +124,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .unForzenKey(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
 
     }
 
@@ -131,13 +132,13 @@ public class KeyManagerVM extends AndroidViewModel {
         MyRetrofit.get().getCommonApiService().frozenKey(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
     }
 
     public void deleteKey(long keyId) {
         MyRetrofit.get().getCommonApiService().deleteKey(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), error -> error.printStackTrace());
+                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
     }
 }

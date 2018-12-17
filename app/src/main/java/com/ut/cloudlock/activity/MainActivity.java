@@ -22,6 +22,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.FragmentUtil;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UserRepository;
 import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;
@@ -53,23 +54,15 @@ public class MainActivity extends BaseActivity {
         mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home_pressed);
 
         mBinding.fab.setOnClickListener(v -> {
-            Flowable.just(this).subscribeOn(Schedulers.io()).subscribe(context -> CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID());
+            Flowable.just(this).subscribeOn(Schedulers.io()).subscribe(context -> {
+                CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
+            });
         });
 
-        MyRetrofit.get().getCommonApiService().getUserInfo()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(JsonObject::toString)
-                .subscribe(json -> {
-                    Result<User> result = JSON.parseObject(json, new TypeReference<Result<User>>() {
-                    });
-                    if (result.isSuccess()) {
-                        BaseApplication.setUser(result.data);
-                    } else {
-                        CLToast.showAtBottom(getBaseContext(), result.msg);
-                    }
-                    Log.d("updateUser",json);
-                }, Throwable::printStackTrace);
+        UserRepository.getInstance().getUser().observe(this,user -> {
+            BaseApplication.setUser(user);
+            Log.d("observe", "user update ----> " + JSON.toJSONString(user));
+        });
 
     }
 

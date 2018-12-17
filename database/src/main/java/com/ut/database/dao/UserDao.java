@@ -1,5 +1,7 @@
 package com.ut.database.dao;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -21,6 +23,9 @@ public interface UserDao {
 
     @Query("SELECT * FROM USER ORDER BY id ASC")
     List<User> findAllUsers();
+
+    @Query("SELECT * FROM user ORDER BY id DESC LIMIT 1")
+    LiveData<User> findLastOne();
 
     @Query("SELECT * FROM USER WHERE id = :id")
     User findUserById(long id);

@@ -91,5 +91,5 @@ public interface CommonApiService {
     Observable<JsonObject> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @GET(ApiUrl.getUserInfo)
-    Observable<JsonObject> getUserInfo();
+    Call<Result<User>> getUserInfo();
 }

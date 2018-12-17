@@ -20,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
@@ -179,9 +180,7 @@ public class RegisterActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtCenter(getBaseContext(), result.msg);
-                },((error)->{
-                    error.printStackTrace();
-                }));
+                }, new ErrorHandler());
     }
 
     private void register(String phone, String password, String verifyCode) {
@@ -191,7 +190,7 @@ public class RegisterActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    if(result.isSuccess()) {
+                    if (result.isSuccess()) {
                         CLToast.showAtCenter(getBaseContext(), result.msg);
                         registerBtn.endLoading();
                         finish();
@@ -199,14 +198,13 @@ public class RegisterActivity extends BaseActivity {
                         Log.d("register", result.msg);
                         CLToast.showAtCenter(RegisterActivity.this, result.msg);
                     }
-                }, ((error)->{
-                    error.printStackTrace();
-                }));
+                }, new ErrorHandler());
+        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 
     @Override
     public void finish() {
         super.finish();
-        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
+        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 }
