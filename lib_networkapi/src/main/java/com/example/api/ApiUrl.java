@@ -27,4 +27,10 @@ public interface ApiUrl {
 
     //用户锁下的钥匙列表
     String pageKey = "api/key/pageKey?json";
+
+    //上传用户头像
+    String uploadImg = "api/user/uploadImg";
+
+    //修改用户头像
+    String uploadHead = "api/user/uploadHead";
 }

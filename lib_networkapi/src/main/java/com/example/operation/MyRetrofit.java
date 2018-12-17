@@ -133,7 +133,7 @@ public class MyRetrofit {
         Retrofit mRetrofit = new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
                 .client(mOkHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mCommonApiService = mRetrofit.create(CommonApiService.class);

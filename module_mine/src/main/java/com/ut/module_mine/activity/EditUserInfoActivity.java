@@ -1,6 +1,8 @@
 package com.ut.module_mine.activity;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -25,14 +28,18 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
+import com.ut.module_mine.Constant;
 import com.ut.module_mine.R;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.databinding.ActivityEditUserInfoBinding;
 import com.ut.module_mine.util.ImgUtil;
+import com.ut.module_mine.viewModel.EditUserInfoViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +49,7 @@ import java.util.Date;
 public class EditUserInfoActivity extends BaseActivity {
 
     private ActivityEditUserInfoBinding binding;
+    private EditUserInfoViewModel viewModel;
     private String mCurrentPhotoPath;
     private Uri photoURI;
 
@@ -55,6 +63,7 @@ public class EditUserInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_user_info);
         initUI();
+        initViewModel();
         requestWritePermission();
     }
 
@@ -63,8 +72,25 @@ public class EditUserInfoActivity extends BaseActivity {
         setTitle(getString(R.string.editUserInfo));
 
         binding.headContainer.setOnClickListener(v -> editImg());
+    }
 
-        binding.headImg.getViewTreeObserver().addOnGlobalLayoutListener(() -> setHeadImg());
+    private void initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(EditUserInfoViewModel.class);
+        binding.setViewModel(viewModel);
+
+        viewModel.tip.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                toastShort(s);
+            }
+        });
+        viewModel.getUserInfo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        setHeadImg();
     }
 
     private void editImg() {
@@ -140,22 +166,23 @@ public class EditUserInfoActivity extends BaseActivity {
 
             ImgUtil.setPic(binding.headImg, mCurrentPhotoPath);
             saveHeadImgPath();
+
+            viewModel.uploadHeadImg(mCurrentPhotoPath);
         }
     }
 
     private void saveHeadImgPath() {
-        SharedPreferences sharedPreferences = getSharedPreferences("cloudLock", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("headImg", mCurrentPhotoPath);
+        editor.putString(Constant.KEY_HEAD_IMG_LOCAL, mCurrentPhotoPath);
         editor.apply();
     }
 
     private void setHeadImg() {
-        SharedPreferences sharedPreferences = getSharedPreferences("cloudLock", Context.MODE_PRIVATE);
-        String headImgPath = sharedPreferences.getString("headImg", "");
-        File file = new File(headImgPath);
-        if (file.exists()) {
-            ImgUtil.setPic(binding.headImg, headImgPath);
-        }
+        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String headImgPath = sharedPreferences.getString(Constant.KEY_HEAD_IMG_LOCAL, "");
+        RequestOptions options = new RequestOptions();
+        options.circleCrop();
+        Glide.with(this).load(headImgPath).apply(options).into(binding.headImg);
     }
 }

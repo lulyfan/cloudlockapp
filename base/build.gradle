@@ -67,7 +67,8 @@ dependencies {
     //导入fastJson
     api 'com.alibaba:fastjson:1.2.48'
     //glide 网络加载
-    api 'com.github.bumptech.glide:glide:3.7.0'
+    api 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     //测试依赖
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

@@ -11,6 +11,10 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
+//import com.ut.database.database.CloudLockDatabaseHolder;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -28,7 +32,9 @@ public class BaseApplication extends Application {
         return INSTANCE;
     }
 
-    private static User mUser;
+    public static User mUser;
+
+    private Scheduler uiScheduler;
 
     @Override
     public void onCreate() {
@@ -44,6 +50,9 @@ public class BaseApplication extends Application {
 
         //初始化数据库
         initDatabase();
+
+        //主线程调度器，用于RxJava
+        uiScheduler = Schedulers.from(new UiExecutor());
 
         MyRetrofit.get().setNoLoginListener(() ->
                 Observable.just(this)
@@ -77,7 +86,12 @@ public class BaseApplication extends Application {
         mUser = user;
     }
 
-    public static User getUser() {
+    public static User getUser(){
         return mUser;
+    }
+
+    public static Scheduler getUiScheduler() {
+        BaseApplication application = (BaseApplication) getAppContext();
+        return application.uiScheduler;
     }
 }
