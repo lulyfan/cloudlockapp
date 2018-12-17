@@ -1,8 +1,8 @@
 package com.example.api;
 
 import com.example.entity.base.Result;
-import com.example.entity.data.LoginEntity;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.ut.database.entity.User;
 
 
@@ -10,11 +10,11 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -52,11 +52,11 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.getKeyApplyList)
-    Observable<String> getKeyApplyList(@Field("userId") long userId);
+    Observable<JsonObject> getKeyApplyList(@Field("userId") long userId);
 
     @FormUrlEncoded
     @POST(ApiUrl.pageKey)
-    Observable<String> pageKeys(@Field("userId") long userId, @Field("mac") String mac, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<JsonObject> pageKeys(@Field("userId") long userId, @Field("mac") String mac, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
     @POST(ApiUrl.applyKey)
@@ -73,4 +73,23 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.uploadHead)
     Observable<Result<String>> uploadHead(@Field("imgUrl") String imgUrl);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.unfrozenKey)
+    Observable<Result<Void>> unForzenKey(@Field("keyId")long id);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.frozenKey)
+    Observable<Result<Void>> frozenKey(@Field("keyId") long keyId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.deleteKey)
+    Observable<Result<Void>> deleteKey(@Field("keyId") long keyId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.queryLogsByKey)
+    Observable<JsonObject> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @GET(ApiUrl.getUserInfo)
+    Observable<JsonObject> getUserInfo();
 }
