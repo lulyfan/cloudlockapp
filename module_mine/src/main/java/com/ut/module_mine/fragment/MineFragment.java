@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
+import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_mine.Constant;
@@ -51,21 +53,23 @@ public class MineFragment extends BaseFragment {
             mMineBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mine, container, false);
             mView = mMineBinding.getRoot();
         }
-        initUI();
         initViewModel();
+        initUI();
         return mView;
     }
 
     private void initViewModel() {
         mineViewModel = ViewModelProviders.of(this).get(MineViewModel.class);
-        mMineBinding.setViewModel(mineViewModel);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         mineViewModel.getUserInfo();
-        mineViewModel.getHeadImgUrl();
+        mMineBinding.setViewModel(mineViewModel);
+
+        mineViewModel.tip.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                BaseActivity activity = (BaseActivity) getActivity();
+                activity.toastShort(s);
+            }
+        });
     }
 
     private void initUI() {
@@ -93,6 +97,16 @@ public class MineFragment extends BaseFragment {
             Intent intent = new Intent(getContext(), SystemSettingActivity.class);
             startActivity(intent);
         });
+
+        mineViewModel.initWebLoginSwitchState(mMineBinding.switchWebLogin);
+        mineViewModel.initOpenLockVolumeSwitchState(mMineBinding.switchOpenLockVolume);
+
+        mMineBinding.switchWebLogin.setOnCheckedChangeListener((buttonView, isChecked) ->
+                mineViewModel.enableWebLogin());
+
+        mMineBinding.switchOpenLockVolume.setOnCheckedChangeListener((buttonView, isChecked) ->
+                mineViewModel.enableOpenLockVolume());
+
     }
 
 }

@@ -14,6 +14,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
@@ -158,9 +159,7 @@ public class LoginActivity extends BaseActivity {
                             CLToast.showAtCenter(LoginActivity.this, result.msg);
                         });
                     }
-                }, throwable -> {
-                    throwable.printStackTrace();
-                });
+                }, new ErrorHandler());
     }
 
     @Override

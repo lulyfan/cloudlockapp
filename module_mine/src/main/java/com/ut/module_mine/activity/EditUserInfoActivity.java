@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import com.ut.module_mine.viewModel.EditUserInfoViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -72,25 +74,32 @@ public class EditUserInfoActivity extends BaseActivity {
         setTitle(getString(R.string.editUserInfo));
 
         binding.headContainer.setOnClickListener(v -> editImg());
+        binding.userName.setOnClickListener(v -> editUserName());
     }
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(EditUserInfoViewModel.class);
         binding.setViewModel(viewModel);
 
-        viewModel.tip.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                toastShort(s);
+        viewModel.headImgUrl.observe(this, s -> {
+            RequestOptions options = new RequestOptions();
+            options.placeholder(R.drawable.headimg);
+            options.circleCrop();
+            Glide.with(EditUserInfoActivity.this).load(s).apply(options).into(binding.headImg);
+        });
+
+
+        viewModel.tip.observe(this, s -> {
+            toastShort(s);
+
+            if (getString(R.string.uploadHeadImgSuccess).equals(s)) {
+                RequestOptions options = new RequestOptions();
+                options.circleCrop();
+                Glide.with(EditUserInfoActivity.this).load(mCurrentPhotoPath).apply(options).into(binding.headImg);
             }
         });
-        viewModel.getUserInfo();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        setHeadImg();
+        viewModel.getUserInfo();
     }
 
     private void editImg() {
@@ -103,18 +112,14 @@ public class EditUserInfoActivity extends BaseActivity {
                 .setContentBackgroundResource(R.drawable.bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
+
                     if (i == R.id.takePhoto) {
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String imageFileName = "JPEG_" + timeStamp + "_";
-                        File photoFile = null;
-                        try {
-                            photoFile = ImgUtil.createImageFile(EditUserInfoActivity.this, imageFileName);
-                            mCurrentPhotoPath = photoFile.getAbsolutePath();
-                        } catch (IOException ex) {
-                            Toast.makeText(EditUserInfoActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        File photoFile = createImageFile();
+                        if (photoFile == null) {
                             return;
                         }
 
+                        mCurrentPhotoPath = photoFile.getAbsolutePath();
                         photoURI = ImgUtil.takePhoto(EditUserInfoActivity.this, "com.ut.module_mine.fileprovider",
                                 photoFile, REQUEST_IMAGE_CAPTURE);
                         dialog1.dismiss();
@@ -147,8 +152,7 @@ public class EditUserInfoActivity extends BaseActivity {
             ImgUtil.cropImageUri(EditUserInfoActivity.this, photoURI, 800, 800, CROP_PICTURE);
 
         } else if (requestCode == CROP_PICTURE && resultCode == RESULT_OK) {
-            ImgUtil.setPic(binding.headImg, mCurrentPhotoPath);
-            saveHeadImgPath();
+            viewModel.uploadHeadImg(mCurrentPhotoPath);
 
         } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == RESULT_OK) {
             if (!checkWritePermission()) {
@@ -164,25 +168,71 @@ public class EditUserInfoActivity extends BaseActivity {
             mCurrentPhotoPath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImgUtil.setPic(binding.headImg, mCurrentPhotoPath);
-            saveHeadImgPath();
+            Bitmap image = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            File imageFile = createImageFile();
+            if (imageFile == null) {
+                return;
+            }
 
-            viewModel.uploadHeadImg(mCurrentPhotoPath);
+            ImgUtil.saveBitmap(image, imageFile);
+            Uri uri = FileProvider.getUriForFile(this, "com.ut.module_mine.fileprovider", imageFile);
+            ImgUtil.cropImageUri(EditUserInfoActivity.this, uri, 800, 800, CROP_PICTURE);
         }
     }
 
-    private void saveHeadImgPath() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Constant.KEY_HEAD_IMG_LOCAL, mCurrentPhotoPath);
-        editor.apply();
+    private File createImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File imageFile = null;
+        try {
+            imageFile = ImgUtil.createImageFile(this, imageFileName, ".jpg");
+            return imageFile;
+        } catch (IOException e) {
+            toastShort(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private void setHeadImg() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        String headImgPath = sharedPreferences.getString(Constant.KEY_HEAD_IMG_LOCAL, "");
-        RequestOptions options = new RequestOptions();
-        options.circleCrop();
-        Glide.with(this).load(headImgPath).apply(options).into(binding.headImg);
+    public void editUserName() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_user_name, null);
+        EditText et_userName = view.findViewById(R.id.et_userName);
+
+        DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(new ViewHolder(view))
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
+                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setOnClickListener((dialog1, view1) -> {
+                    int i = view1.getId();
+                    if (i == R.id.cancel) {
+                        dialog1.dismiss();
+
+                    } else if (i == R.id.confirm) {
+                        String userName = et_userName.getText().toString();
+                        viewModel.editUserName(userName);
+                        dialog1.dismiss();
+
+                    } else {
+                    }
+                })
+                .create();
+
+        dialog.show();
     }
+
+//    private void saveHeadImgPath() {
+//        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(Constant.KEY_HEAD_IMG_LOCAL, mCurrentPhotoPath);
+//        editor.apply();
+//    }
+
+//    private void setHeadImg() {
+//        SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+//        String headImgPath = sharedPreferences.getString(Constant.KEY_HEAD_IMG_LOCAL, "");
+//        RequestOptions options = new RequestOptions();
+//        options.circleCrop();
+//        Glide.with(this).load(headImgPath).apply(options).into(binding.headImg);
+//    }
 }

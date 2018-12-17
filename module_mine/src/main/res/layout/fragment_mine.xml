@@ -85,7 +85,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editUesrInfo">
 
             <Switch
-                android:id="@+id/switch1"
+                android:id="@+id/switchWebLogin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/select_bg_item_up"
@@ -94,13 +94,14 @@
                 android:text="@string/webLoginPermission"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
+                android:checked="@{viewModel.isWebLoginEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Switch
-                android:id="@+id/switch2"
+                android:id="@+id/switchOpenLockVolume"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/select_bg_item_bottom"
@@ -109,6 +110,7 @@
                 android:text="@string/openLockVoice"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
+                android:checked="@{viewModel.isOpenLockVolumeEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
@@ -119,7 +121,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/switch1" />
+                app:layout_constraintTop_toBottomOf="@id/switchWebLogin" />
 
         </android.support.constraint.ConstraintLayout>
 

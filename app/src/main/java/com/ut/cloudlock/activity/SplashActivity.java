@@ -10,6 +10,7 @@ import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UserRepository;
 import com.ut.cloudlock.R;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
@@ -34,21 +35,24 @@ public class SplashActivity extends BaseActivity {
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
 
         new Handler().postDelayed(() -> {
-            Observable.just(this).subscribeOn(Schedulers.io()).map(context -> {
-                List<User> allUsers = CloudLockDatabaseHolder.get().getUserDao().findAllUsers();
-                String url = null;
-                if (allUsers.isEmpty()) {
-                    url = RouterUtil.LoginModulePath.Login;
-                } else {
-                    User user = allUsers.get(allUsers.size() - 1);
-                    url = RouterUtil.MainModulePath.Main_Module;
-                    BaseApplication.setUser(user);
-                }
-                return url;
-            }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
-                ARouter.getInstance().build(url).navigation();
-                finish();
-            });
+//            Observable.just(this).subscribeOn(Schedulers.io()).map(context -> {
+//                List<User> allUsers = CloudLockDatabaseHolder.get().getUserDao().findAllUsers();
+//                String url = null;
+//                if (allUsers.isEmpty()) {
+//                    url = RouterUtil.LoginModulePath.Login;
+//                } else {
+//                    User user = allUsers.get(allUsers.size() - 1);
+//                    url = RouterUtil.MainModulePath.Main_Module;
+//                    BaseApplication.setUser(user);
+//                }
+//                return url;
+//            }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
+//                ARouter.getInstance().build(url).navigation();
+//                finish();
+//            });
+
+            ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+            finish();
         }, 2000L);
     }
 }

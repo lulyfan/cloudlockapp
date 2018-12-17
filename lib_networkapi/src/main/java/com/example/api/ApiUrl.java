@@ -46,6 +46,13 @@ public interface ApiUrl {
     //修改用户头像
     String uploadHead = "api/user/uploadHead";
 
+    //修改用户昵称
+    String editUserNmae = "api/user/updateName";
+
+    //修改配置启用状态
+    String changeUserConfig = "api/user/changeUserConfig";
+
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
+
 }

@@ -233,11 +233,15 @@ public class KeyItem implements Serializable {
     }
 
     public Drawable getTypeDrawable() {
-        if(ruleType == 0) ruleType = 1;
-        int[] rids = { R.mipmap.permanent, R.mipmap.limited_time, R.mipmap.once, R.mipmap.loop};
+        if (ruleType == 0) ruleType = 1;
+        int[] rids = {R.mipmap.permanent, R.mipmap.limited_time, R.mipmap.once, R.mipmap.loop};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return BaseApplication.getAppContext().getDrawable(rids[ruleType - 1]);
         }
         return null;
+    }
+
+    public boolean isForzened() {
+        return status == 8;
     }
 }

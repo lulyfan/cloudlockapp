@@ -56,4 +56,5 @@
     <string name="needWritePermission">请先授予SD卡写入权限</string>
     <string name="serviceErr">服务器开小差</string>
     <string name="uploadHeadImgSuccess">上传头像成功</string>
+    <string name="editUserName">修改昵称</string>
 </resources>

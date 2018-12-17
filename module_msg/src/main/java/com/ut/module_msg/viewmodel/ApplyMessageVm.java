@@ -14,6 +14,7 @@ import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_msg.model.ApplyMessage;
@@ -64,7 +65,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                         applyMessages.setValue(ams);
                     }
                     UTLog.d(String.valueOf(result.toString()));
-                }, error -> error.printStackTrace());
+                }, new ErrorHandler());
     }
 
     public void ignoreApply(long applyId) {
@@ -74,6 +75,6 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribe(result -> {
                     Log.d("ignoreApply", result.msg);
                     CLToast.showAtBottom(getApplication(), result.msg);
-                }, error -> error.printStackTrace());
+                }, new ErrorHandler());
     }
 }

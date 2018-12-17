@@ -1,5 +1,6 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,10 +15,12 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeyInfoBinding;
 import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 /**
  * author : chenjiajun
@@ -33,14 +35,19 @@ public class KeyInfoActivity extends BaseActivity {
     private ActivityKeyInfoBinding mBinding = null;
     private static final int REQUEST_EDIT_KEY = 1111;
 
+    private KeyManagerVM keyManagerVM = null;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
         keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
+        keyManagerVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
+        keyManagerVM.getFeedbackMessage().observe(this, message -> CLToast.showAtBottom(KeyInfoActivity.this, message));
         mBinding.setKeyItem(keyInfo);
         initTitle();
         initListener();
+
     }
 
     private void initTitle() {
@@ -65,12 +72,16 @@ public class KeyInfoActivity extends BaseActivity {
             }
             ARouter.getInstance().build(url).withSerializable(Constance.KEY_INFO, keyInfo).navigation(this, REQUEST_EDIT_KEY);
         });
-        mBinding.operationRecord.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation());
+        mBinding.operationRecord.setOnClickListener(v ->
+                {
+                    ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).withString(Constance.RECORD_TYPE, Constance.BY_KEY).withLong(Constance.KEY_ID, keyInfo.getKeyId()).navigation();
+                }
+        );
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
     }
 
     private void deleteKey() {
-
+        keyManagerVM.deleteKey(keyInfo.getKeyId());
     }
 
     private void popupMoreWindow() {
@@ -91,6 +102,13 @@ public class KeyInfoActivity extends BaseActivity {
                 item2.setOnClickListener(v -> {
                     //ToDO
                     getPopupWindow().dismiss();
+
+                    if (keyInfo.isForzened()) {
+                        keyManagerVM.unFrozenKey(keyInfo.getKeyId());
+                    } else {
+                        keyManagerVM.frozenKey(keyInfo.getKeyId());
+                    }
+
                 });
                 getView(R.id.close_window).setOnClickListener(v -> getPopupWindow().dismiss());
             }
@@ -100,11 +118,11 @@ public class KeyInfoActivity extends BaseActivity {
                 super.initWindow();
                 getPopupWindow().setOnDismissListener(() -> {
                     setWindowAlpha(1f);
-                    setDarkStatusBar();
+                    initDarkToolbar();
                 });
             }
         };
-        setLightStatusBar();
+        initLightToolbar();
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 

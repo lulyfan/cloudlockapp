@@ -16,16 +16,15 @@ public class ImageViewAdapter {
             return;
         }
 
-        RequestOptions options = null;
+        RequestOptions options = new RequestOptions();
         if (isCircle) {
-            options = new RequestOptions();
             options.circleCrop();
         }
 
         Glide.with((Activity) imageView
                 .getContext())
                 .load(url)
-                .apply(options)
+//                .apply(options)
                 .into(imageView);
     }
 }
