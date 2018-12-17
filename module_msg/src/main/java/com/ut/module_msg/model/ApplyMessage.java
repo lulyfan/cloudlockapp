@@ -1,5 +1,9 @@
 package com.ut.module_msg.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.ut.base.BaseApplication;
 import com.ut.module_msg.R;
 
@@ -13,13 +17,14 @@ import java.util.Locale;
  * time   : 2018/11/30
  * desc   :
  */
+@Entity
 public class ApplyMessage implements Serializable {
-
+    @PrimaryKey()
+    private long id;// 申请记录ID,
     private String url;
     private String hint;
     private String userName;
     private int keyType;
-    private long id;// 申请记录ID,
     private int lockType;// 锁类型,
     private int status;// 处理状态,
     private String lockName;// 锁名称,
