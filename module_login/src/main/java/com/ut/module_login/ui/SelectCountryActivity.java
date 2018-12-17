@@ -37,6 +37,6 @@ public class SelectCountryActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        SystemUtils.hideKeyboard(getBaseContext(), findViewById(R.id.root));
+        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 }
