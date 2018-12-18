@@ -20,7 +20,7 @@ import com.ut.module_mine.R;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 
-public class MineViewModel extends AndroidViewModel {
+public class MineViewModel extends BaseViewModel {
 
     public ObservableField<String> phoneNum = new ObservableField<>();
     public ObservableField<String> userName = new ObservableField<>();
@@ -28,13 +28,9 @@ public class MineViewModel extends AndroidViewModel {
     public MutableLiveData<String> tip = new MutableLiveData<>();
     public ObservableField<Boolean> isWebLoginEnable = new ObservableField<>();
     public ObservableField<Boolean> isOpenLockVolumeEnable = new ObservableField<>();
-    private CommonApiService service;
-    private User user;
 
     public MineViewModel(@NonNull Application application) {
         super(application);
-        service = MyRetrofit.get().getCommonApiService();
-        user = BaseApplication.getUser();
     }
 
     public void getUserInfo() {

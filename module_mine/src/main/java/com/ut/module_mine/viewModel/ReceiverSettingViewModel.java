@@ -7,7 +7,7 @@ import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-public class ReceiverSettingViewModel extends AndroidViewModel {
+public class ReceiverSettingViewModel extends BaseViewModel {
 
     public ObservableField<String> receiverPhone = new ObservableField<>();
     public MutableLiveData<Boolean> isInputPhone = new MutableLiveData<>();

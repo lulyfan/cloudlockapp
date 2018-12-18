@@ -8,7 +8,7 @@ package com.example.api;
  */
 public interface ApiUrl {
     //登录
-    String loginUrl = "/api/user/login?json&&appid=1";
+    String loginUrl = "/api/user/login?json&&appid=2";
 
     //注册
     String registerUrl = "/api/user/registerUser?json&&appid=1";
@@ -55,4 +55,21 @@ public interface ApiUrl {
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
 
+    //获取用户的管理员锁
+    String pageAdminLock = "lock/pageAdminLock";
+
+    //获取锁分组
+    String getGroup = "api/lockGroup/getGroup";
+
+    //添加锁组
+    String addGroup = "api/lockGroup/newGroup";
+
+    //获取锁组内信息
+    String getLockInfoFromGroup = "api/lockGroup/getLockInfoFromGroup";
+
+    //删除锁分组
+    String delGroup = "api/lockGroup/delGroup";
+
+    //修改锁名称
+    String updateGroupName = "api/lockGroup/updateGroupName";
 }

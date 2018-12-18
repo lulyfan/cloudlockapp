@@ -23,20 +23,16 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class EditUserInfoViewModel extends AndroidViewModel {
+public class EditUserInfoViewModel extends BaseViewModel {
 
     public ObservableField<String> userName = new ObservableField<>();
     public ObservableField<String> registTime = new ObservableField<>();
     public ObservableField<String> phoneNum = new ObservableField<>();
     public MutableLiveData<String> headImgUrl = new MutableLiveData<>();
     public MutableLiveData<String> tip = new MutableLiveData<>();
-    private CommonApiService service;
-    private User user;
 
     public EditUserInfoViewModel(@NonNull Application application) {
         super(application);
-        service = MyRetrofit.get().getCommonApiService();
-        user = BaseApplication.getUser();
     }
 
     public void getUserInfo() {

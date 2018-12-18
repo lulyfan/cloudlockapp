@@ -5,7 +5,7 @@
         android:title="@string/editGroupName"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/batchAuth"
-        android:title="@string/batchAuth"
+    <item android:id="@+id/delGroup"
+        android:title="@string/delGroup"
         app:showAsAction="never"/>
 </menu>

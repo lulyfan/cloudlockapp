@@ -3,9 +3,12 @@ package com.example.api;
 import com.example.entity.base.Result;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ut.database.entity.Lock;
+import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.User;
 
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -81,6 +84,29 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.changeUserConfig)
     Observable<Result<Void>> changeUserConfig(@Field("configType") String configType, @Field("operVal") String operVal);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageAdminLock)
+    Observable<Result<List<Lock>>> pageAdminLock(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @GET(ApiUrl.getGroup)
+    Observable<Result<List<LockGroup>>> getGroup();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.addGroup)
+    Observable<Result<Void>> addGroup(@Field("name") String name);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getLockInfoFromGroup)
+    Observable<Result<List<Lock>>> getLockInfoFromGroup(@Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.delGroup)
+    Observable<Result<Void>> delGroup(@Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.updateGroupName)
+    Observable<Result<Void>> updateGroupName(@Field("groupId") long groupId, @Field("groupName") String groupName);
 
     @FormUrlEncoded
     @POST(ApiUrl.unfrozenKey)
