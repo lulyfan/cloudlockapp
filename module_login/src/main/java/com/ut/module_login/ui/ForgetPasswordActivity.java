@@ -135,7 +135,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void getVerifyCode(String phone) {
-        Disposable subscribe = MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getForgetPwdVerifyCode(phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
