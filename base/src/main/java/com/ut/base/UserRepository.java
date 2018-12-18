@@ -36,7 +36,7 @@ public class UserRepository {
             synchronized (UserRepository.class) {
                 instance = new UserRepository();
                 instance.userDao = CloudLockDatabaseHolder.get().getUserDao();
-                instance.executor = (command)-> Schedulers.io().scheduleDirect(command);
+                instance.executor = (command) -> Schedulers.io().scheduleDirect(command);
             }
         }
         return instance;
@@ -51,11 +51,11 @@ public class UserRepository {
         executor.execute(() -> {
             try {
                 Response<Result<User>> response = MyRetrofit.get().getCommonApiService().getUserInfo().execute();
-                if(response.body() != null && response.body().isSuccess()) {
+                if (response.body() != null && response.body().isSuccess()) {
                     userDao.updateUser(response.body().data);
                 }
                 Log.d("refreshUser", "refresher" + response.body().toString());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
