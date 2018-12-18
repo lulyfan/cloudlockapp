@@ -92,6 +92,7 @@
             android:src="@drawable/selector_verify_code" />
 
         <EditText
+            android:id="@+id/edt_verify_code"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

@@ -8,7 +8,7 @@ package com.example.api;
  */
 public interface ApiUrl {
     //登录
-    String loginUrl = "/api/user/login?json&&appid=2";
+    String loginUrl = "/api/user/login?json&&appid=1";
 
     //注册
     String registerUrl = "/api/user/registerUser?json&&appid=1";
@@ -55,6 +55,14 @@ public interface ApiUrl {
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
 
+    //重置密码
+    String resetPassword = "api/user/resetPwd?json&&appid=1";
+
+    //查找锁日志
+    String queryLogsByLock = "api/log/pageLockLog";
+
+    //用户下锁日志列表
+    String queryLogsByUser = "api/log/pageUserLog?json";
     //获取用户的管理员锁
     String pageAdminLock = "lock/pageAdminLock";
 

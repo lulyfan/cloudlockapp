@@ -1,4 +1,4 @@
-package com.ut.module_msg.adapter;
+package com.ut.base.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -34,9 +35,19 @@ public class ListAdapter<T> extends BaseAdapter {
         this.variableId = variableId;
     }
 
+    public void updateDate(List<T> list) {
+        if(list == null) return;
+        List<T> tmp = new ArrayList<T>(list);
+        for (T t: list) {
+            if(this.list.contains(t)) {
+                tmp.remove(t);
+            }
+        }
+        this.list.addAll(0, tmp);
+        notifyDataSetChanged();
+    }
 
-    public void updateData(List<T> list) {
-        this.list.clear();
+    public void loadDate(List<T> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
     }

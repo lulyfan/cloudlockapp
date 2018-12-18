@@ -3,6 +3,7 @@ package com.ut.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,8 +14,15 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -27,10 +35,23 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
+        MyRetrofit.get().setNoLoginListener(() -> {
+            Observable.just(RouterUtil.LoginModulePath.Login).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
+                if (dialog != null) dialog.dismiss();
+                dialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity()).setTitle("还未登录").setMessage("请重新登录").setPositiveButton("好的", (dialog1, which) -> {
+                    ARouter.getInstance().build(url).navigation();
+                }).create();
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+            });
+        });
     }
 
     public void setLightStatusBar() {
@@ -114,6 +135,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void hideNavigationIcon(){
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(null);
+    }
+
     public void setWindowAlpha(float alpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = alpha;
@@ -178,5 +204,11 @@ public class BaseActivity extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppManager.getAppManager().finishActivity(this);
     }
 }

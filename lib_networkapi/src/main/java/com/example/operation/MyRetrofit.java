@@ -82,6 +82,7 @@ public class MyRetrofit {
                         Request builder = request.newBuilder()
                                 .addHeader("mobile_session_flag", "true")
                                 .addHeader("session_token", uuid.getUuid())
+                                .addHeader("appid","2")
                                 .build();
                         Response response = chain.proceed(builder);
                         handlerResponse(response);
@@ -117,7 +118,8 @@ public class MyRetrofit {
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.getInt("code");
-                if (code == 400) {
+                String msg = jsonObject.optString("msg");
+                if (code == 401 || "还未登录".equals(msg)) {
                     if (mNoLoginListener != null) {
                         mNoLoginListener.onNoLogin();
                     }

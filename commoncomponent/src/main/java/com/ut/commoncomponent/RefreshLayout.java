@@ -68,7 +68,6 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-
         // 初始化ListView对象
         if (mListView == null) {
             getListView();
@@ -159,6 +158,9 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
         if (mOnLoadListener != null) {
             // 设置状态
             setLoading(true);
+            this.postDelayed(() -> {
+                mListView.setSelection(mListView.getBottom());
+            }, 200L);
             //
             mOnLoadListener.onLoad();
         }
@@ -181,6 +183,10 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
 
     public void setListViewFooter(View footer) {
         mListViewFooter = footer;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     /**
@@ -211,5 +217,9 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
      */
     public static interface OnLoadListener {
         public void onLoad();
+    }
+
+    public View createLoadingFooter() {
+        return View.inflate(getContext(), R.layout.view_loading, null);
     }
 }

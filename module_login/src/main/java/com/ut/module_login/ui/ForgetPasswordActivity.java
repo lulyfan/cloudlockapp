@@ -12,10 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.entity.base.Result;
+import com.example.operation.MyRetrofit;
+import com.google.gson.JsonElement;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
@@ -23,6 +28,8 @@ import com.ut.module_login.common.LoginUtil;
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 @Route(path = RouterUtil.LoginModulePath.FORGET_PWD)
 public class ForgetPasswordActivity extends BaseActivity {
@@ -32,6 +39,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private EditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
+    private EditText verifyCodeEdt = null;
     private LoadingButton sureBtn = null;
 
     private Handler mainHandler = new Handler((this::handleMessage));
@@ -51,14 +59,15 @@ public class ForgetPasswordActivity extends BaseActivity {
         setTitle(R.string.login_forget_password);
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
+        verifyCodeEdt = findViewById(R.id.edt_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             String value = Objects.requireNonNull(event.getEditable()).toString();
             if (!isReciprocal) {
                 getVerifyCodeTv.setEnabled(!TextUtils.isEmpty(value));
             }
-           if(phoneEdt.isFocused()) {
-               mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
-           }
+            if (phoneEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
         }).subscribe();
         phoneEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
@@ -71,7 +80,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
         passwordEdt = (EditText) findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
-            if(passwordEdt.isFocused()) {
+            if (passwordEdt.isFocused()) {
                 mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
             }
 
@@ -98,17 +107,12 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
         sureBtn = findViewById(R.id.sure);
         sureBtn.setOnClickListener(v -> {
-            sureBtn.startLoading();
             commit();
         });
 
-        findViewById(R.id.root).setOnClickListener(v->{
+        findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
-    }
-
-    private void commit() {
-
     }
 
     private boolean handleMessage(Message msg) {
@@ -131,7 +135,31 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void getVerifyCode(String phone) {
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getBaseContext(), result.msg);
+                }, new ErrorHandler());
+    }
 
+
+    private void commit() {
+        sureBtn.startLoading();
+
+        String phone = phoneEdt.getText().toString();
+        String password = passwordEdt.getText().toString();
+        String verifyCode = verifyCodeEdt.getText().toString();
+
+        Disposable subscribe = MyRetrofit.get()
+                .getCommonApiService()
+                .resetPassword(phone, password, verifyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtBottom(ForgetPasswordActivity.this, result.msg);
+                    sureBtn.endLoading();
+                }, new ErrorHandler());
     }
 
     @Override

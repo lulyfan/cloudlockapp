@@ -3,7 +3,6 @@ package com.ut.module_lock.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -12,10 +11,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.adapter.ListAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.module_lock.BR;
 import com.ut.module_lock.R;
-import com.ut.module_lock.adapter.RecyclerListAdapter;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeysManagerBinding;
 import com.ut.module_lock.entity.KeyItem;
@@ -30,7 +29,7 @@ public class KeysManagerActivity extends BaseActivity {
 
     private KeyManagerVM kmVM = null;
     private ActivityKeysManagerBinding mBinding = null;
-    private RecyclerListAdapter<KeyItem> mAdapter = null;
+    private ListAdapter<KeyItem> mAdapter = null;
     private List<KeyItem> keyItemList = new ArrayList<>();
     private String mMac = "";
 
@@ -51,30 +50,42 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void init() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mBinding.list.setLayoutManager(linearLayoutManager);
-        mAdapter = new RecyclerListAdapter<>(keyItemList, R.layout.item_keys_manager, BR.keyItem);
+        mAdapter = new ListAdapter<KeyItem>(this, R.layout.item_keys_manager, keyItemList, BR.keyItem);
         mBinding.list.setAdapter(mAdapter);
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.setMac(mMac);
         kmVM.getKeys().observe(this, (keyItems) -> {
             if (keyItems == null || keyItems.isEmpty()) return;
-            mAdapter.addData(keyItems);
-        });
-        mAdapter.setOnItemListener((v, position) -> {
-            KeyItem keyItem = keyItemList.get(position);
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
+            if (mBinding.refreshLayout.isLoading()) {
+                mAdapter.loadDate(keyItems);
+                mBinding.refreshLayout.postDelayed(()-> mBinding.refreshLayout.setLoading(false), 2000L);
+            } else {
+                mAdapter.updateDate(keyItems);
+            }
         });
         mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light);
+        mBinding.refreshLayout.setListViewFooter(mBinding.refreshLayout.createLoadingFooter());
         mBinding.refreshLayout.setOnRefreshListener(() -> {
             mBinding.refreshLayout.setRefreshing(true);
-            kmVM.loadKeyItems();
+            kmVM.updateKeyItems();
             mBinding.refreshLayout.postDelayed(() -> {
                 mBinding.refreshLayout.setRefreshing(false);
-            }, 3000L);
+            }, 2000L);
         });
+        mBinding.refreshLayout.setOnLoadListener(() -> {
+            if(!keyItemList.isEmpty()) {
+                loadData();
+            } else {
+                mBinding.refreshLayout.setLoading(false);
+            }
+        });
+        mBinding.list.setOnItemClickListener((parent, view, position, id) -> {
+            KeyItem keyItem = keyItemList.get(position);
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
+        });
+
+        updateData();
     }
 
     private void popupMoreWindow() {
@@ -107,6 +118,10 @@ public class KeysManagerActivity extends BaseActivity {
             }
         };
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
+    }
+
+    private void updateData(){
+        kmVM.updateKeyItems();
     }
 
     private void loadData() {
