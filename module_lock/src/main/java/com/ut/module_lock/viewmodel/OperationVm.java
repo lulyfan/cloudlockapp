@@ -10,14 +10,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.google.gson.JsonElement;
-import com.ut.base.BaseApplication;
-import com.ut.commoncomponent.CLToast;
+import com.ut.base.ErrorHandler;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.entity.OperationRecord;
+import com.ut.module_lock.entity.Record;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -32,7 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 public class OperationVm extends AndroidViewModel {
     private int currentPage = 0;
     private static int DEFAULT_PAGE_SIZE = 10;
-    private int currentId = -1;
+    private long currentId = -1;
 
     public OperationVm(@NonNull Application application) {
         super(application);
@@ -43,25 +47,6 @@ public class OperationVm extends AndroidViewModel {
     public MutableLiveData<List<OperationRecord>> getOperationRecords() {
         if (operationRecords == null) {
             operationRecords = new MutableLiveData<>();
-            List<OperationRecord> oprs = new ArrayList<>();
-            OperationRecord op = new OperationRecord();
-            op.setTime("2018/09/06");
-            List<OperationRecord.Record> records = new ArrayList<>();
-            OperationRecord.Record record = new OperationRecord.Record();
-            record.setDesc("11:19:20 使用APP开锁");
-            record.setOperator("曹哲君");
-            OperationRecord.Record record1 = new OperationRecord.Record();
-            record1.setDesc("11:19:20 使用APP开锁");
-            record1.setOperator("曹哲君");
-            OperationRecord.Record record2 = new OperationRecord.Record();
-            record2.setDesc("11:19:20 使用APP开锁");
-            record2.setOperator("曹哲君");
-            records.add(record);
-            records.add(record1);
-            records.add(record2);
-            op.setRecords(records);
-            oprs.add(op);
-            operationRecords.postValue(oprs);
         }
         return operationRecords;
     }
@@ -70,6 +55,7 @@ public class OperationVm extends AndroidViewModel {
     public void loadRecord(String recordType, long id) {
         if (id != currentId) {
             currentPage = 0;
+            currentId = id;
         }
         if (Constance.BY_KEY.equals(recordType)) {
             loadRecordByKey(id);
@@ -80,27 +66,85 @@ public class OperationVm extends AndroidViewModel {
         }
     }
 
-    public void loadRecordByLock(long lockId) {
+    private void loadRecordByLock(long lockId) {
+        MyRetrofit.get().getCommonApiService()
+                .queryLogsByLock(lockId, currentPage, DEFAULT_PAGE_SIZE)
+                .subscribeOn(Schedulers.io())
+                .map(jsonObject -> {
+                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
+                    });
+                    return result;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        List<OperationRecord> operationRecords = handlerRecords(result.data);
+                        getOperationRecords().postValue(operationRecords);
+                    }
+                }, new ErrorHandler());
     }
 
-    public void loadRecordByUser(long userId) {
+    private void loadRecordByUser(long userId) {
+        MyRetrofit.get().getCommonApiService()
+                .queryLogsByUser(userId, currentPage, DEFAULT_PAGE_SIZE)
+                .subscribeOn(Schedulers.io())
+                .map(jsonObject -> {
+                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
+                    });
+                    return result;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        List<OperationRecord> operationRecords = handlerRecords(result.data);
+                        getOperationRecords().postValue(operationRecords);
+                    }
+                }, new ErrorHandler());
     }
 
-    public void loadRecordByKey(long keyId) {
+    private void loadRecordByKey(long keyId) {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(JsonElement::toString)
-                .subscribe(json -> {
-                    Result<List<OperationRecord>> result = JSON.parseObject(json, new TypeReference<Result<List<OperationRecord>>>() {
+                .map(jsonObject -> {
+                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
                     });
+                    return result;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
                     if (result.isSuccess()) {
-                        getOperationRecords().postValue(result.data);
-                        currentPage++;
-                    } else {
-                        CLToast.showAtCenter(BaseApplication.getAppContext(), String.valueOf(result.msg));
+                        List<OperationRecord> operationRecords = handlerRecords(result.data);
+                        getOperationRecords().postValue(operationRecords);
                     }
-                }, Throwable::printStackTrace);
+                }, new ErrorHandler());
+    }
+
+    private List<OperationRecord> handlerRecords(List<Record> records) {
+        LinkedHashMap<String, List<Record>> map = new LinkedHashMap<>();
+        Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? 0 : 1;
+        for (Record li : records) {
+            String date = SystemUtils.getTimeDate(li.getCreateTime());
+            if (map.containsKey(date)) {
+                ArrayList<Record> tmps = (ArrayList<Record>) map.get(date);
+                tmps.add(li);
+                Collections.sort(tmps,comparator);
+            } else {
+                ArrayList<Record> newtmps = new ArrayList<Record>();
+                newtmps.add(li);
+                map.put(date, newtmps);
+            }
+        }
+        List<OperationRecord> oprs = new ArrayList<>();
+        Set<String> keySet = map.keySet();
+        while (keySet.iterator().hasNext()) {
+            String key = keySet.iterator().next();
+            List<Record> rs = map.get(key);
+            OperationRecord opr = new OperationRecord();
+            opr.setTime(key);
+            opr.setRecords(rs);
+            oprs.add(opr);
+        }
+        return oprs;
     }
 }

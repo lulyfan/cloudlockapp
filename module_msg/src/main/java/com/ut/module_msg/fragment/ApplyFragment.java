@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
-import com.ut.module_msg.adapter.ListAdapter;
+import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentApplyBinding;
 import com.ut.module_msg.model.ApplyMessage;
 import com.ut.module_msg.viewmodel.ApplyMessageVm;
@@ -85,10 +84,12 @@ public class ApplyFragment extends BaseFragment {
             ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", applyMessages.get(position)).navigation();
         });
 
+        mApplyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light);
         mApplyFgBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
             mApplyFgBinding.swipeRefreshLayout.setRefreshing(true);
             mApplyMessageVm.loadApplyMessages();
-            new Handler().postDelayed(() -> mApplyFgBinding.swipeRefreshLayout.setRefreshing(false), 3000L);
+            mApplyFgBinding.swipeRefreshLayout.postDelayed(() -> mApplyFgBinding.swipeRefreshLayout.setRefreshing(false), 3000L);
         });
     }
 }

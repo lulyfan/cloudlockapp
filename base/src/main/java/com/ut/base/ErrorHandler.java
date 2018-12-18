@@ -2,7 +2,7 @@ package com.ut.base;
 
 import android.widget.Toast;
 
-import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import io.reactivex.functions.Consumer;
 
@@ -15,7 +15,7 @@ public class ErrorHandler implements Consumer<Throwable> {
 
     @Override
     public void accept(Throwable throwable) throws Exception {
-        if(throwable instanceof SocketException) {
+        if(throwable instanceof SocketTimeoutException) {
             Toast.makeText(BaseApplication.getAppContext(), "网络连接超时",Toast.LENGTH_SHORT).show();
         }
     }

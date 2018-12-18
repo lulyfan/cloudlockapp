@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.R;
 import com.ut.module_lock.entity.OperationRecord;
+import com.ut.module_lock.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,15 +67,15 @@ public class ORListAdapter extends BaseAdapter {
         OperationRecord operationRecord = operationRecords.get(position);
         holder.header.setText(operationRecord.getTime());
         holder.container.removeAllViews();
-        List<OperationRecord.Record> records = operationRecord.getRecords();
+        List<Record> records = operationRecord.getRecords();
         LinearLayout.LayoutParams lp = null;
-        for (OperationRecord.Record r : records) {
+        for (Record r : records) {
             lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, SystemUtils.dp2px(context, 70));
             ViewGroup item = (ViewGroup) View.inflate(context, R.layout.item_record_body, null);
             TextView operatorTv = item.findViewById(R.id.operator);
             operatorTv.setText(r.getOperator());
             TextView descTv = item.findViewById(R.id.desc);
-            descTv.setText(r.getDesc());
+            descTv.setText(r.getDescription());
             ImageView icon = item.findViewById(R.id.icon);
             Glide.with(context).load(r.getIcon()).apply(new RequestOptions().placeholder(R.mipmap.default_icon_b)).into(icon);
             holder.container.addView(item, lp);

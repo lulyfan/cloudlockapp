@@ -64,6 +64,7 @@ public class LoginActivity extends BaseActivity {
     private void initLoginUI() {
         setTitle(R.string.login_title);
         initLightToolbar();
+        hideNavigationIcon();
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         phoneEdt.setOnFocusChangeListener((view, isFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
@@ -148,6 +149,7 @@ public class LoginActivity extends BaseActivity {
                 .getCommonApiService()
                 .login(phone, password)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();

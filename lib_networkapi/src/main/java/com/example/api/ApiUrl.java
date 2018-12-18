@@ -8,13 +8,13 @@ package com.example.api;
  */
 public interface ApiUrl {
     //登录
-    String loginUrl = "/api/user/login?json&&appid=1";
+    String loginUrl = "/api/user/login?json";
 
     //注册
-    String registerUrl = "/api/user/registerUser?json&&appid=1";
+    String registerUrl = "/api/user/registerUser?json";
 
     //获取注册验证码
-    String getRegisterVerifyCode = "/api/user/getRegisterVeriCode?json&&appid=1";
+    String getRegisterVerifyCode = "/api/user/getRegisterVeriCode?json";
 
     //获取钥匙申请列表
     String getKeyApplyList = "api/key/list?json";
@@ -55,4 +55,18 @@ public interface ApiUrl {
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
 
+    //重置密码
+    String resetPassword = "api/user/resetPwd?json";
+
+    //查找锁日志
+    String queryLogsByLock = "api/log/pageLockLog";
+
+    //用户下锁日志列表
+    String queryLogsByUser = "api/log/pageUserLog?json";
+
+    //获取忘记密码验证码
+    String getForgetPwdVerifyCode = "api/user/getForgetPwdVeriCode?json";
+
+    //修改钥匙规则
+    String editKey = "/api/key/modifyKeyRule?json";
 }

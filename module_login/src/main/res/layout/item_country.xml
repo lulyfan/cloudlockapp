@@ -3,7 +3,7 @@
     android:id="@+id/text1"
     android:layout_width="match_parent"
     android:layout_height="@dimen/base_70dp"
-    android:drawableRight="@mipmap/more_tink"
+    android:drawableRight="@mipmap/arrow_right"
     android:gravity="center_vertical"
     android:paddingLeft="@dimen/base_20dp"
     android:paddingRight="@dimen/base_20dp"

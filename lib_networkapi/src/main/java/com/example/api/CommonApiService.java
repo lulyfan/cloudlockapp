@@ -60,7 +60,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.applyKey)
-    Observable<Result<Void>> applyKey(@Field("userId") long userId, @Field("mac") String mac, @Field("reason") String reason);
+    Observable<Result<Void>> applyKey(@Field("userId") long userId, @Field("mac") String mac, @Field("reason") String reason, @Field("ruleType") int ruleType);
 
     @FormUrlEncoded
     @POST(ApiUrl.ignoreApply)
@@ -84,7 +84,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.unfrozenKey)
-    Observable<Result<Void>> unForzenKey(@Field("keyId")long id);
+    Observable<Result<Void>> unFrozenKey(@Field("keyId") long id);
 
     @FormUrlEncoded
     @POST(ApiUrl.frozenKey)
@@ -100,4 +100,24 @@ public interface CommonApiService {
 
     @GET(ApiUrl.getUserInfo)
     Call<Result<User>> getUserInfo();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.resetPassword)
+    Observable<Result<Void>> resetPassword(@Field("mobile") String mobile, @Field("password") String password, @Field("veriCode") String verifyCode);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.queryLogsByLock)
+    Observable<JsonObject> queryLogsByLock(@Field("lockId") long lockId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.queryLogsByUser)
+    Observable<JsonObject> queryLogsByUser(@Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getForgetPwdVerifyCode)
+    Observable<Result<Void>> getForgetPwdVerifyCode(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.editKey)
+    Observable<Result<Void>> editKey(@Field("mac") String mac, @Field("keyId") long keyId, @Field("startTime") String startTime, @Field("endTime") String endTime, @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange, @Field("endTimeRange") String endTimeRange);
 }
