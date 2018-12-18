@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
-import com.ut.module_msg.adapter.ListAdapter;
+import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentNotificationBinding;
 import com.ut.module_msg.model.NotificationMessage;
 import com.ut.module_msg.viewmodel.NotificationViewModel;
@@ -95,7 +94,7 @@ public class NotificationFragment extends BaseFragment {
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotificationViewModel.class);
         notificationViewModel.getNotifications().observe(getActivity(), notifications -> {
-            listAdapter.updateData(notifications);
+            listAdapter.updateDate(notifications);
         });
 
         mNotifyFgBinding.notificationList.setOnItemClickListener((parent, view, position, id) -> {

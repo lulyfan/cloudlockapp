@@ -117,7 +117,8 @@ public class MyRetrofit {
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.getInt("code");
-                if (code == 400) {
+                String msg = jsonObject.optString("msg");
+                if (code == 401 || "还未登录".equals(msg)) {
                     if (mNoLoginListener != null) {
                         mNoLoginListener.onNoLogin();
                     }

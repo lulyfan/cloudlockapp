@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.module_msg.adapter.ListAdapter;
+import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.ActivityNotifiInfoBinding;
 import com.ut.module_msg.model.MessageContent;
 import com.ut.module_msg.model.NotificationMessage;

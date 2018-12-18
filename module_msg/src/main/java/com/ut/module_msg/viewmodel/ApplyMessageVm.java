@@ -55,11 +55,13 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .getKeyApplyList(BaseApplication.getUser().id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(JsonElement::toString)
-                .subscribe(json -> {
-                    Result<List<ApplyMessage>> result = JSON.parseObject(json,
-                            new TypeReference<Result<List<ApplyMessage>>>() {
-                            });
+                .map(jsonObject -> {
+                    String json = jsonObject.toString();
+                    Result<List<ApplyMessage>> result = JSON.parseObject(json, new TypeReference<Result<List<ApplyMessage>>>() {
+                    });
+                    return result;
+                })
+                .subscribe(result -> {
                     if (result.isSuccess()) {
                         List<ApplyMessage> ams = result.data;
                         applyMessages.setValue(ams);

@@ -55,4 +55,12 @@ public interface ApiUrl {
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
 
+    //重置密码
+    String resetPassword = "api/user/resetPwd?json&&appid=1";
+
+    //查找锁日志
+    String queryLogsByLock = "api/log/pageLockLog";
+
+    //用户下锁日志列表
+    String queryLogsByUser = "api/log/pageUserLog?json";
 }
