@@ -149,6 +149,7 @@ public class LoginActivity extends BaseActivity {
                 .getCommonApiService()
                 .login(phone, password)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
