@@ -82,6 +82,7 @@ public class MyRetrofit {
                         Request builder = request.newBuilder()
                                 .addHeader("mobile_session_flag", "true")
                                 .addHeader("session_token", uuid.getUuid())
+                                .addHeader("appid","1")
                                 .build();
                         Response response = chain.proceed(builder);
                         handlerResponse(response);
