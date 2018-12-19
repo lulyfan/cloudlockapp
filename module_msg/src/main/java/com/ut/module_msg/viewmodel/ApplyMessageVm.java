@@ -1,6 +1,7 @@
 package com.ut.module_msg.viewmodel;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
@@ -8,13 +9,17 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.google.gson.JsonElement;
+import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_msg.model.ApplyMessage;
@@ -64,6 +69,13 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         List<ApplyMessage> ams = result.data;
+                        ApplyMessage message = new ApplyMessage();
+                        message.setApplyTime(System.currentTimeMillis());
+                        message.setLockName("XYSU");
+                        message.setUserName("秀秀");
+                        message.setLockType(2);
+                        message.setId(System.currentTimeMillis() / 1000L);
+                        ams.add(message);
                         applyMessages.setValue(ams);
                     }
                     UTLog.d(String.valueOf(result.toString()));
@@ -77,6 +89,33 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribe(result -> {
                     Log.d("ignoreApply", result.msg);
                     CLToast.showAtBottom(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
+
+    public void checkApplyStatus(ApplyMessage message) {
+        MyRetrofit.get().getCommonApiService().checkKeyStatus(message.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(jsonObject -> {
+                    String json = jsonObject.toString();
+                    JSONObject obj = JSON.parseObject(json);
+                    Integer code = obj.getInteger("code");
+                    String msg = obj.getString("msg");
+                    if (code == 200) {
+                        ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", message).navigation();
+                    } else if (code == 409) {
+                        String dealer = obj.getString("dealUser");
+                        String dealTime = obj.getString("dealTime");
+
+                        //TODO
+                        new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
+                                .setTitle("提示")
+                                .setMessage(dealer + "已于" + dealTime + "处理这条申请")
+                                .setPositiveButton("好的", null)
+                                .show();
+                    } else {
+                        CLToast.showAtCenter(getApplication(), msg);
+                    }
                 }, new ErrorHandler());
     }
 }

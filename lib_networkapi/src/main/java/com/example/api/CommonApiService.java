@@ -123,4 +123,8 @@ public interface CommonApiService {
 
     @POST(ApiUrl.getMessage)
     Call<JsonObject> getMessage();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.checkKeyStatus)
+    Observable<JsonObject> checkKeyStatus(@Field("appId")long appId);
 }

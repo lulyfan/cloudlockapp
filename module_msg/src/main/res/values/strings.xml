@@ -15,4 +15,6 @@
     <string name="limit_time">限时</string>
     <string name="loop">循环</string>
     <string name="permanent">永久</string>
+    <string name="wait_for_handle">待处理</string>
+    <string name="apply_desc">该用户向您申请%s%s的钥匙，请及时处理</string>
 </resources>

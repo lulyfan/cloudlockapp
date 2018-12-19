@@ -1,5 +1,6 @@
 package com.ut.module_msg.model;
 
+import android.annotation.SuppressLint;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -112,11 +113,11 @@ public class ApplyMessage implements Serializable {
     }
 
     public String applyTimeString() {
-        return new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(applyTime));
+        return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.getDefault()).format(new Date(getApplyTime()));
     }
 
     public String lockTypeString() {
-        switch (lockType) {
+        switch (getLockType()) {
             case 3:
                 return BaseApplication.getAppContext().getString(R.string.once_time);
             case 2:
@@ -127,5 +128,11 @@ public class ApplyMessage implements Serializable {
                 return BaseApplication.getAppContext().getString(R.string.permanent);
         }
         return "";
+    }
+
+    @SuppressLint("StringFormatMatches")
+    public String description() {
+        String string = BaseApplication.getAppContext().getString(R.string.apply_desc);
+        return String.format(string, lockTypeString(), lockName);
     }
 }
