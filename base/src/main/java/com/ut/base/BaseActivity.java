@@ -35,23 +35,11 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
-    private AlertDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
-        MyRetrofit.get().setNoLoginListener(() -> {
-            Observable.just(RouterUtil.LoginModulePath.Login).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
-                if (dialog != null) dialog.dismiss();
-                dialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity()).setTitle("还未登录").setMessage("请重新登录").setPositiveButton("好的", (dialog1, which) -> {
-                    ARouter.getInstance().build(url).navigation();
-                }).create();
-                if (!dialog.isShowing()) {
-                    dialog.show();
-                }
-            });
-        });
     }
 
     public void setLightStatusBar() {

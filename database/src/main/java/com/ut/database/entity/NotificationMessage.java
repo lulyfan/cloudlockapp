@@ -1,4 +1,7 @@
-package com.ut.module_msg.model;
+package com.ut.database.entity;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
@@ -7,10 +10,11 @@ import java.io.Serializable;
  * time   : 2018/11/26
  * desc   :
  */
+@Entity
 public class NotificationMessage implements Serializable {
 
-    private String icon;
-    private String time;
+    @PrimaryKey
+    private long messageId;// 1
     private String name;// "1",
     private String description;// "2",
     private long userId;// 19,
@@ -18,16 +22,7 @@ public class NotificationMessage implements Serializable {
     private int status;// 0 未读，已读1,
     private String readTime;// null,
     private String dealTime;// null,
-    private long messageId;// 1
 
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
 
     public String getName() {
         return name;

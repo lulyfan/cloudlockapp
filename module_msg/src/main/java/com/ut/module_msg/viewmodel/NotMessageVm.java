@@ -9,10 +9,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_msg.model.NotifyCarrier;
-import com.ut.module_msg.model.NotificationMessage;
+import com.ut.database.entity.NotificationMessage;
+import com.ut.module_msg.repo.NotMessageRepo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,11 +31,11 @@ import io.reactivex.schedulers.Schedulers;
  * time   : 2018/11/27
  * desc   :
  */
-public class NotificationMessageVm extends AndroidViewModel {
+public class NotMessageVm extends AndroidViewModel {
 
     private MutableLiveData<List<NotifyCarrier>> notifications;
 
-    public NotificationMessageVm(@NonNull Application application) {
+    public NotMessageVm(@NonNull Application application) {
         super(application);
     }
 
@@ -42,27 +44,16 @@ public class NotificationMessageVm extends AndroidViewModel {
             notifications = new MutableLiveData<>();
             loadNotifications();
         }
-
         return notifications;
     }
 
     public void loadNotifications() {
         // do aysnc task
-        Disposable getMessage = MyRetrofit.get().getCommonApiService().getMessage()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(jsonObject -> {
-                    String json = jsonObject.toString();
-                    Result<List<NotificationMessage>> result = JSON.parseObject(json, new TypeReference<Result<List<NotificationMessage>>>() {
-                    });
-                    return result;
-                }).subscribe(result -> {
-                    if (result.isSuccess()) {
-                        getNotifications().postValue(handleData(result.data));
-                    } else {
-                        CLToast.showAtBottom(getApplication(), result.msg);
-                    }
-                }, new ErrorHandler());
+        NotMessageRepo.getInstance().getNotificationMessages().observe(AppManager.getAppManager().currentActivity(), notifications->{
+            if(notifications != null) {
+                getNotifications().postValue(handleData(notifications));
+            }
+        });
     }
 
     private List<NotifyCarrier> handleData(List<NotificationMessage> nms) {

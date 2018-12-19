@@ -20,7 +20,7 @@ import com.ut.module_msg.R;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentNotificationBinding;
 import com.ut.module_msg.model.NotifyCarrier;
-import com.ut.module_msg.viewmodel.NotificationMessageVm;
+import com.ut.module_msg.viewmodel.NotMessageVm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class NotificationFragment extends BaseFragment {
     private FragmentNotificationBinding mNotifyFgBinding = null;
     private List<NotifyCarrier> list = new ArrayList<>();
     private ListAdapter<NotifyCarrier> listAdapter = null;
-    private NotificationMessageVm notificationViewModel = null;
+    private NotMessageVm notificationViewModel = null;
 
     @Nullable
     @Override
@@ -79,9 +79,9 @@ public class NotificationFragment extends BaseFragment {
             }
         };
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
-        notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotificationMessageVm.class);
-        notificationViewModel.getNotifications().observe(getActivity(), messages -> {
-            listAdapter.updateDate(messages);
+        notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
+        notificationViewModel.getNotifications().observe(getActivity(), carriers -> {
+            listAdapter.updateDate(carriers);
         });
 
         mNotifyFgBinding.notificationList.setOnItemClickListener((parent, view, position, id) -> {

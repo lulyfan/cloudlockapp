@@ -122,5 +122,5 @@ public interface CommonApiService {
     Observable<Result<Void>> editKey(@Field("mac") String mac, @Field("keyId") long keyId, @Field("startTime") String startTime, @Field("endTime") String endTime, @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange, @Field("endTimeRange") String endTimeRange);
 
     @POST(ApiUrl.getMessage)
-    Observable<JsonObject> getMessage();
+    Call<JsonObject> getMessage();
 }

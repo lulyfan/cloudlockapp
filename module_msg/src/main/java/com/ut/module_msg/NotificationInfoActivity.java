@@ -10,7 +10,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.ActivityNotifiInfoBinding;
 import com.ut.module_msg.model.NotifyCarrier;
-import com.ut.module_msg.model.NotificationMessage;
+import com.ut.database.entity.NotificationMessage;
 
 import java.util.ArrayList;
 import java.util.List;

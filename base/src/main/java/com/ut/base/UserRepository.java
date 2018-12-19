@@ -47,7 +47,7 @@ public class UserRepository {
         return userDao.findLastOne();
     }
 
-    private void refreshUser() {
+    public void refreshUser() {
         executor.execute(() -> {
             try {
                 Response<Result<User>> response = MyRetrofit.get().getCommonApiService().getUserInfo().execute();

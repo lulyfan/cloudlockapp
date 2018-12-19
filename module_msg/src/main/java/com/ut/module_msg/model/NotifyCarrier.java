@@ -1,5 +1,7 @@
 package com.ut.module_msg.model;
 
+import com.ut.database.entity.NotificationMessage;
+
 import java.io.Serializable;
 import java.util.List;
 

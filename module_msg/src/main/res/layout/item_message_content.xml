@@ -5,7 +5,7 @@
 
         <variable
             name="notificationMessage"
-            type="com.ut.module_msg.model.NotificationMessage" />
+            type="com.ut.database.entity.NotificationMessage" />
     </data>
 
     <LinearLayout
@@ -42,7 +42,8 @@
             android:paddingTop="@dimen/base_30dp"
             android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
-            android:layout_margin="@dimen/base_2dp"
+            android:layout_marginTop="@dimen/base_5dp"
+            android:layout_marginBottom="@dimen/base_5dp"
             android:text="@{notificationMessage.description}"
             android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
