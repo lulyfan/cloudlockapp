@@ -20,46 +20,45 @@ import java.util.List;
 public class ListAdapter<T> extends BaseAdapter {
 
     private Context context;
-    private List<T> list;
+    private List<T> dataSource;
     private int layoutId;
     private int variableId;
 
     public ListAdapter(Context context, int layoutId, List<T> list, int variableId) {
         this.context = context;
-        if(list == null) {
-            this.list = new ArrayList<>();
+        if (list == null) {
+            dataSource = new ArrayList<>();
         } else {
-            this.list = list;
+            dataSource = list;
         }
         this.layoutId = layoutId;
         this.variableId = variableId;
     }
 
     public void updateDate(List<T> list) {
-        if(list == null) return;
-        List<T> tmp = new ArrayList<T>(list);
-        for (T t: list) {
-            if(this.list.contains(t)) {
-                tmp.remove(t);
-            }
-        }
-        this.list.addAll(0, tmp);
+        if (list == null) return;
+        dataSource.clear();
+        dataSource.addAll(list);
         notifyDataSetChanged();
     }
 
     public void loadDate(List<T> list) {
-        this.list.addAll(list);
+        if (list == null) return;
+        dataSource.addAll(list);
+        HashSet<T> set = new HashSet<>(dataSource);
+        dataSource.clear();
+        dataSource.addAll(set);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return dataSource.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return dataSource.get(position);
     }
 
     @Override
@@ -77,12 +76,12 @@ public class ListAdapter<T> extends BaseAdapter {
         }
 
         assert binding != null;
-        binding.setVariable(variableId, list.get(position));
-        addBadge(binding,position);
+        binding.setVariable(variableId, dataSource.get(position));
+        addBadge(binding, position);
         return binding.getRoot();
     }
 
-    public void addBadge(ViewDataBinding binding, int position){
+    public void addBadge(ViewDataBinding binding, int position) {
     }
 }
 
