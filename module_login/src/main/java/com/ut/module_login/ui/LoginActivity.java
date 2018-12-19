@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -149,11 +150,16 @@ public class LoginActivity extends BaseActivity {
                 .getCommonApiService()
                 .login(phone, password)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
+                .map(result -> {
                     if (result.isSuccess()) {
                         CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
                         CloudLockDatabaseHolder.get().getUserDao().insertUser(result.data);
+                    }
+                    return result;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
                         finish();
                     } else {

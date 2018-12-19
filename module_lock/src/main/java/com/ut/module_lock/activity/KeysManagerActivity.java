@@ -37,8 +37,10 @@ public class KeysManagerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        LockKey lockKey = getIntent().getParcelableExtra("lock_key");
+        LockKey lockKey = getIntent().getParcelableExtra(Constance.LOCK_KEY);
         mMac = lockKey.getMac();
+        //ToDo
+        mMac = "33-33-22-A1-B0-34";
         initTitle();
         init();
     }
@@ -58,7 +60,7 @@ public class KeysManagerActivity extends BaseActivity {
             if (keyItems == null || keyItems.isEmpty()) return;
             if (mBinding.refreshLayout.isLoading()) {
                 mAdapter.loadDate(keyItems);
-                mBinding.refreshLayout.postDelayed(()-> mBinding.refreshLayout.setLoading(false), 2000L);
+                mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 200L);
             } else {
                 mAdapter.updateDate(keyItems);
             }
@@ -74,7 +76,7 @@ public class KeysManagerActivity extends BaseActivity {
             }, 2000L);
         });
         mBinding.refreshLayout.setOnLoadListener(() -> {
-            if(!keyItemList.isEmpty()) {
+            if (!keyItemList.isEmpty() && keyItemList.size() - 1 >= kmVM.getDefaultPageSize()) {
                 loadData();
             } else {
                 mBinding.refreshLayout.setLoading(false);
@@ -120,7 +122,7 @@ public class KeysManagerActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
-    private void updateData(){
+    private void updateData() {
         kmVM.updateKeyItems();
     }
 

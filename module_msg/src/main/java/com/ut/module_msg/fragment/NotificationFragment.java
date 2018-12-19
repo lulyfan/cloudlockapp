@@ -19,8 +19,8 @@ import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentNotificationBinding;
-import com.ut.module_msg.model.NotificationMessage;
-import com.ut.module_msg.viewmodel.NotificationViewModel;
+import com.ut.module_msg.model.NotifyCarrier;
+import com.ut.module_msg.viewmodel.NotMessageVm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,9 @@ import q.rorbin.badgeview.QBadgeView;
 public class NotificationFragment extends BaseFragment {
 
     private FragmentNotificationBinding mNotifyFgBinding = null;
-    private List<NotificationMessage> list = null;
-    private ListAdapter<NotificationMessage> listAdapter = null;
-    private NotificationViewModel notificationViewModel = null;
+    private List<NotifyCarrier> list = new ArrayList<>();
+    private ListAdapter<NotifyCarrier> listAdapter = null;
+    private NotMessageVm notificationViewModel = null;
 
     @Nullable
     @Override
@@ -57,21 +57,7 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initView() {
-
-        list = new ArrayList<>();
-        NotificationMessage notification = new NotificationMessage();
-        notification.setTitle("chan的智能锁");
-        notification.setContent("您收到了一把电子钥匙【Chan的智能锁】，使用期限...");
-        notification.setTime("2018/11/26 14:20");
-        list.add(notification);
-
-        NotificationMessage notification1 = new NotificationMessage();
-        notification1.setTitle("公司门锁");
-        notification1.setContent("您收到了一把电子钥匙【公司门锁】，使用期限【永...");
-        notification1.setTime("2018/11/30 17:30");
-        list.add(notification1);
-
-        listAdapter = new ListAdapter<NotificationMessage>(getActivity(), R.layout.item_notification_msg, list, BR.notification){
+        listAdapter = new ListAdapter<NotifyCarrier>(getActivity(), R.layout.item_notification_carrier, list, BR.notifyCarrier) {
             @Override
             public void addBadge(ViewDataBinding binding, int position) {
                 super.addBadge(binding, position);
@@ -83,18 +69,19 @@ public class NotificationFragment extends BaseFragment {
                 } else {
                     badge = (Badge) icon.getTag();
                 }
+                NotifyCarrier notifyCarrier = list.get(position);
                 badge.bindTarget((View) icon.getParent())
                         .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
                         .setBadgeTextColor(Color.WHITE)
                         .setShowShadow(false)
                         .setBadgeTextSize(9, true)
-                        .setBadgeNumber((int)(Math.random() * 120));
+                        .setBadgeNumber(notifyCarrier.countUnRead());
             }
         };
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
-        notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotificationViewModel.class);
-        notificationViewModel.getNotifications().observe(getActivity(), notifications -> {
-            listAdapter.updateDate(notifications);
+        notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
+        notificationViewModel.getNotifications().observe(getActivity(), carriers -> {
+            listAdapter.updateDate(carriers);
         });
 
         mNotifyFgBinding.notificationList.setOnItemClickListener((parent, view, position, id) -> {
@@ -103,7 +90,8 @@ public class NotificationFragment extends BaseFragment {
         mNotifyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         mNotifyFgBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            mNotifyFgBinding.swipeRefreshLayout.postDelayed(()-> {
+            notificationViewModel.loadNotifications();
+            mNotifyFgBinding.swipeRefreshLayout.postDelayed(() -> {
                 mNotifyFgBinding.swipeRefreshLayout.setRefreshing(false);
             }, 2000L);
         });

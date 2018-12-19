@@ -159,6 +159,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                 .subscribe(result -> {
                     CLToast.showAtBottom(ForgetPasswordActivity.this, result.msg);
                     sureBtn.endLoading();
+                    finish();
                 }, new ErrorHandler());
     }
 

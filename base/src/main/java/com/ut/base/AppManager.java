@@ -11,7 +11,7 @@ import java.util.Stack;
  * @author chenjiajun
  */
 public class AppManager {
-    private static Stack<Activity> activityStack;
+    private static Stack<BaseActivity> activityStack;
     private static AppManager instance;
 
     private AppManager(){}
@@ -27,17 +27,17 @@ public class AppManager {
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity){
+    public void addActivity(BaseActivity activity){
         if(activityStack==null){
-            activityStack=new Stack<Activity>();
+            activityStack=new Stack<BaseActivity>();
         }
         activityStack.add(activity);
     }
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
-    public Activity currentActivity(){
-        Activity activity=activityStack.lastElement();
+    public BaseActivity currentActivity(){
+        BaseActivity activity=activityStack.lastElement();
         return activity;
     }
     /**

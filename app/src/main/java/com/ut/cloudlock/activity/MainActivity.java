@@ -139,8 +139,10 @@ public class MainActivity extends BaseActivity {
         mBinding.vpMain.setAdapter(mainPageAdapter);
     }
 
-    public class Present {
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserRepository.getInstance().refreshUser();
     }
-
 }

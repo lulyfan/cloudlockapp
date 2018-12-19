@@ -69,4 +69,7 @@ public interface ApiUrl {
 
     //修改钥匙规则
     String editKey = "/api/key/modifyKeyRule?json";
+
+    //获取消息列表
+    String getMessage = "api/lockMessage/getMessage?json";
 }
