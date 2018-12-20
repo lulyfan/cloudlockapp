@@ -19,9 +19,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.database.entity.Lock;
 import com.ut.module_mine.BR;
@@ -129,11 +131,14 @@ public class LockGroupItemActivity extends BaseActivity {
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
             Intent intent = new Intent(LockGroupItemActivity.this, KeyManageActivity.class);
             startActivity(intent);
+//            ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD).navigation();
         });
     }
 
     public void editGroupName() {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_addgroup, null);
+        TextView title = view.findViewById(R.id.content);
+        title.setText(getString(R.string.editGroupName));
         EditText et_groupName = view.findViewById(R.id.et_groupName);
 
         DialogPlus dialog = DialogPlus.newDialog(this)

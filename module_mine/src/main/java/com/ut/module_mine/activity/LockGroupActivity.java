@@ -12,12 +12,15 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
@@ -133,7 +136,29 @@ public class LockGroupActivity extends BaseActivity {
 
     public void addLockGroup() {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_addgroup, null);
+        ImageView clear = view.findViewById(R.id.clear);
         EditText et_groupName = view.findViewById(R.id.et_groupName);
+        et_groupName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    clear.setVisibility(View.VISIBLE);
+                } else {
+                    clear.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
 
         DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(new ViewHolder(view))
@@ -150,7 +175,8 @@ public class LockGroupActivity extends BaseActivity {
                         viewModel.addLockGroup(groupName);
                         dialog1.dismiss();
 
-                    } else {
+                    } else if (i == R.id.clear){
+                        et_groupName.setText("");
                     }
                 })
                 .create();

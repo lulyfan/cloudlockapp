@@ -20,15 +20,37 @@
 
     <EditText
         android:id="@+id/et_groupName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_border"
         android:ems="10"
+        android:hint="@string/inputGroupName"
         android:inputType="textPersonName"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="@dimen/m"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content" />
+
+    <ImageView
+        android:id="@+id/clear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/select_bt"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/et_groupName"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/et_groupName"
+        app:layout_constraintTop_toTopOf="@+id/et_groupName"
+        app:srcCompat="@drawable/delete_selected" />
 
     <View
         android:id="@+id/divider14"
@@ -52,7 +74,6 @@
         android:paddingBottom="16dp"
         android:text="@string/cancel"
         android:textSize="@dimen/m"
-        android:textColor="@android:color/holo_blue_bright"
         app:layout_constraintEnd_toStartOf="@+id/confirm"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +87,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/confirm"
-        android:textColor="@android:color/holo_blue_bright"
+        android:textColor="@color/themeColor"
         android:textSize="@dimen/m"
         app:layout_constraintBottom_toBottomOf="@+id/cancel"
         app:layout_constraintEnd_toEndOf="parent"

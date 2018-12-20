@@ -59,4 +59,10 @@
     <string name="editUserName">修改昵称</string>
     <string name="delGroup">删除分组</string>
     <string name="confirmDelGroup">确定删除组吗？锁设备不会被删除。</string>
+    <string name="sendAgain">重新发送</string>
+    <string name="inputName">请输入昵称</string>
+    <string name="mine_limitTime">限时</string>
+    <string name="mine_forever">永久</string>
+    <string name="mine_once">单次</string>
+    <string name="mine_loop">循环</string>
 </resources>

@@ -25,7 +25,6 @@ public class MineViewModel extends BaseViewModel {
     public ObservableField<String> phoneNum = new ObservableField<>();
     public ObservableField<String> userName = new ObservableField<>();
     public ObservableField<String> headImgUrl = new ObservableField<>();
-    public MutableLiveData<String> tip = new MutableLiveData<>();
     public ObservableField<Boolean> isWebLoginEnable = new ObservableField<>();
     public ObservableField<Boolean> isOpenLockVolumeEnable = new ObservableField<>();
 
@@ -40,14 +39,30 @@ public class MineViewModel extends BaseViewModel {
         headImgUrl.set(user.getHeadPic());
         isWebLoginEnable.set(user.enableWebLogin == 1 ? true : false);
         isOpenLockVolumeEnable.set(user.enableSound == 1 ? true : false);
+
+        isWebLoginEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
+//                System.out.println("onPropertyChanged isWebLoginEnable");
+                enableWebLogin(isWebLoginEnable.get());
+            }
+        });
+
+        isOpenLockVolumeEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
+//                System.out.println("onPropertyChanged isOpenLockVolumeEnable");
+                enableOpenLockVolume(isOpenLockVolumeEnable.get());
+            }
+        });
     }
 
-    public void enableWebLogin() {
-        changeUserConfig(Constant.CONFIG_TYPE_WEB_LOGIN, isWebLoginEnable.get());
+    public void enableWebLogin(boolean isEnable) {
+        changeUserConfig(Constant.CONFIG_TYPE_WEB_LOGIN, isEnable);
     }
 
-    public void enableOpenLockVolume() {
-        changeUserConfig(Constant.CONFIG_TYPE_ENABLE_VOLUME, isOpenLockVolumeEnable.get());
+    public void enableOpenLockVolume(boolean isEnable) {
+        changeUserConfig(Constant.CONFIG_TYPE_ENABLE_VOLUME, isEnable);
     }
 
     public void changeUserConfig(String type, boolean enable) {
@@ -62,16 +77,18 @@ public class MineViewModel extends BaseViewModel {
                         throw new Exception(stringResult.msg);
                     }
                 })
-                .subscribe(voidResult -> tip.postValue(voidResult.msg),
-                        throwable -> tip.postValue(throwable.getMessage()));
-    }
+                .subscribe(voidResult -> {
+                    tip.postValue(voidResult.msg);
+                    if (Constant.CONFIG_TYPE_WEB_LOGIN.equals(type)) {
+                        user.enableWebLogin = enable ? 1 : 0;
+                    } else if (Constant.CONFIG_TYPE_ENABLE_VOLUME.equals(type)) {
+                        user.enableSound = enable ? 1 : 0;
+                    }
+                },
+                    throwable -> {
+                        tip.postValue(throwable.getMessage());
 
-    public void initWebLoginSwitchState(Switch switchView) {
-        switchView.setChecked(user.enableWebLogin == 1 ? true : false);
-    }
-
-    public void initOpenLockVolumeSwitchState(Switch switchView) {
-        switchView.setChecked(user.enableSound == 1 ? true : false);
+                });
     }
 
 //    public void getHeadImgUrl() {

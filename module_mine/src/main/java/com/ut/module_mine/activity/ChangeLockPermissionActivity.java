@@ -1,22 +1,19 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.databinding.Observable;
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
-import android.view.View;
+import android.widget.CompoundButton;
 
 import com.ut.base.BaseActivity;
 import com.ut.database.entity.Lock;
 import com.ut.module_mine.BR;
-import com.ut.module_mine.util.BottomLineItemDecoration;
+import com.ut.module_mine.GlobalData;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityChangeLockPermissionBinding;
@@ -28,14 +25,14 @@ import java.util.List;
 
 public class ChangeLockPermissionActivity extends BaseActivity {
 
-    private ActivityChangeLockPermissionBinding binding;
+    private ActivityChangeLockPermissionBinding mBinding;
     private ChangeLockPermissionViewModel viewModel;
     private DataBindingAdapter<Data, ItemChangeLockPermissionBinding> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_change_lock_permission);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_change_lock_permission);
         initUI();
         initViewMOdel();
     }
@@ -45,7 +42,7 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         viewModel.locks.observe(this, locks -> {
             List<Data> dataList = new ArrayList<>();
             for (Lock lock : locks) {
-                Data data = new Data(lock.getName(), false);
+                Data data = new Data(lock.getName(), lock.getMac(), false);
                 dataList.add(data);
             }
             adapter.setData(dataList);
@@ -62,7 +59,7 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         initCheckAll(() -> {
             List<Data> list = adapter.getData();
             for (Data data : list) {
-                data.isChangePermission = true;
+                data.isChangePermission.set(true);
             }
             adapter.setData(list);
         });
@@ -71,15 +68,25 @@ public class ChangeLockPermissionActivity extends BaseActivity {
 
         setLockList();
 
-        binding.nextStep.setOnClickListener(v -> {
+        mBinding.nextStep.setOnClickListener(v -> {
             Intent intent = new Intent(ChangeLockPermissionActivity.this, ReceiverSettingActivity.class);
             startActivity(intent);
+
+            //保存要转移的锁mac地址
+            List<Data> dataList = adapter.getData();
+            String changeLockMacs = "";
+            for (Data data : dataList) {
+                if (data.isChangePermission.get()) {
+                    changeLockMacs += data.lockMac + ",";
+                }
+            }
+            GlobalData.getInstance().changeLockMacs = changeLockMacs;
         });
     }
 
     private void setLockList() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        binding.rvLockList.setLayoutManager(layoutManager);
+        mBinding.rvLockList.setLayoutManager(layoutManager);
 
         adapter = new DataBindingAdapter<>(this, R.layout.item_change_lock_permission, BR.changeLockPermissionData);
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
@@ -88,21 +95,38 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         });
 
         List<Data> list = new ArrayList<>();
-        list.add(new Data("优特智能锁", true));
-        list.add(new Data("优特智能锁", false));
-        list.add(new Data("优特智能锁", true));
+        list.add(new Data("优特智能锁", "",false));
+        list.add(new Data("优特智能锁", "",false));
+        list.add(new Data("优特智能锁", "",false));
 
         adapter.setData(list);
-        binding.rvLockList.setAdapter(adapter);
+        mBinding.rvLockList.setAdapter(adapter);
     }
 
-    public static class Data {
+    public class Data {
         public String lockName;
-        public boolean isChangePermission;
+        public String lockMac;
+        public ObservableField<Boolean> isChangePermission = new ObservableField<>();
 
-        public Data(String lockName, boolean isChangePermission) {
+        public Data(String lockName, String lockMac, boolean isChangePermission) {
             this.lockName = lockName;
-            this.isChangePermission = isChangePermission;
+            this.lockMac = lockMac;
+            this.isChangePermission.set(isChangePermission);
+
+            //用户选择要转移的锁后才可以进行下一步
+            this.isChangePermission.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    List<Data> dataList = adapter.getData();
+                    for (Data data : dataList) {
+                        if (data.isChangePermission.get()) {
+                            mBinding.nextStep.setEnabled(true);
+                            return;
+                        }
+                    }
+                    mBinding.nextStep.setEnabled(false);
+                }
+            });
         }
     }
 }

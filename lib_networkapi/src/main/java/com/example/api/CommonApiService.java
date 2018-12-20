@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
+import com.ut.database.entity.LockUser;
+import com.ut.database.entity.LockUserKey;
 import com.ut.database.entity.User;
 
 
@@ -146,4 +148,32 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.editKey)
     Observable<Result<Void>> editKey(@Field("mac") String mac, @Field("keyId") long keyId, @Field("startTime") String startTime, @Field("endTime") String endTime, @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange, @Field("endTimeRange") String endTimeRange);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.changeLockAdmin)
+    Observable<Result<Void>> changeLockAdmin(@Field("macs") String macs, @Field("mobile") String mobile, @Field("veriCode") String veriCode);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.sendMobileCode)
+    Observable<Result<Void>> sendMobileCode(@Field("mobile") String mobile);
+
+    @GET(ApiUrl.getChangeAdminCode)
+    Observable<Result<Void>> getChangeAdminCode();
+
+    @GET(ApiUrl.logout)
+    Observable<Result<Void>> logout();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageLockUser)
+    Observable<Result<List<LockUser>>> pageLockUser(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getUserInfoByMobile)
+    Observable<Result<User>> getUserInfoByMobile(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageLockUserKey)
+    Observable<Result<List<LockUserKey>>> pageLockUserKey(
+            @Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
 }

@@ -50,16 +50,16 @@ public class  ApplyKeyActivity extends BaseActivity {
 
         mBinding.btnApplyKey.setOnClickListener(v -> {
             if (BaseApplication.getUser() == null) return;
-            MyRetrofit.get().getCommonApiService()
-                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> {
-                        if (result.isSuccess()) {
-
-                        }
-                        Log.d("applyKey", result.msg);
-                    });
+//            MyRetrofit.get().getCommonApiService()
+//                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString())
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(result -> {
+//                        if (result.isSuccess()) {
+//
+//                        }
+//                        Log.d("applyKey", result.msg);
+//                    });
         });
     }
 }

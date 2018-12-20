@@ -7,6 +7,8 @@ import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
+import com.ut.module_mine.GlobalData;
+
 public class ReceiverSettingViewModel extends BaseViewModel {
 
     public ObservableField<String> receiverPhone = new ObservableField<>();
@@ -20,6 +22,7 @@ public class ReceiverSettingViewModel extends BaseViewModel {
             public void onPropertyChanged(Observable sender, int propertyId) {
                 if (receiverPhone.get().length() == 11) {
                     isInputPhone.setValue(true);
+                    GlobalData.getInstance().receiverPhone = receiverPhone.get();
                 } else {
                     isInputPhone.setValue(false);
                 }
