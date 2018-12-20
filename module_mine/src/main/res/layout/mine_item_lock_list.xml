@@ -6,7 +6,7 @@
     <data>
         <variable
             name="userLock"
-            type="com.ut.module_mine.activity.LockUserItemActivity.Lock"/>
+            type="com.ut.module_mine.activity.LockUserItemActivity.Data"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -41,7 +41,7 @@
             android:id="@+id/textView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{userLock.validTime}"
+            android:text="@{userLock.keyType}"
             android:textColor="@color/gray9"
             android:textSize="@dimen/xs"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"

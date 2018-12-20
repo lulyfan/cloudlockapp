@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ut.module_mine.viewModel.ConfirmChangePermissionViewModel"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,14 +27,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.114"
-            app:srcCompat="@drawable/headimg" />
+            app:srcCompat="@drawable/headimg"
+            app:imageUrl="@{viewModel.receiverHeadImgUrl}"
+            app:isCircle="@{true}"/>
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="张小凡"
+            android:text="@{viewModel.receiverName}"
             android:textColor="@color/gray3"
             android:textSize="@dimen/l"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +51,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/bg_phone"
             android:padding="3dp"
-            android:text="18807644294"
+            android:text="@{viewModel.receiverPhone}"
             android:textColor="@color/themeColor"
             android:textSize="@dimen/xxs"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +67,7 @@
             app:length="6"
             app:itemWidth="@dimen/base_54dp"
             app:itemMargin="@dimen/base_10dp"
+            app:textColor="@color/gray3"
             app:background="@drawable/bg_checkcodeview"
             app:selectedBackground="@drawable/bg_checkcodeview_selected"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,12 +87,13 @@
             app:layout_constraintTop_toBottomOf="@+id/checkCodeView" />
 
         <TextView
-            android:id="@+id/textView29"
+            android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="56s 重新发送"
             android:textColor="@color/themeColor"
             android:textSize="@dimen/s"
+            style="@style/styleGrayE"
             app:layout_constraintBottom_toBottomOf="@+id/textView10"
             app:layout_constraintEnd_toEndOf="@+id/checkCodeView"
             app:layout_constraintTop_toTopOf="@+id/textView10" />

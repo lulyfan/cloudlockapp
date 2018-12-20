@@ -20,6 +20,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -74,7 +76,7 @@ public class EditUserInfoActivity extends BaseActivity {
         setTitle(getString(R.string.editUserInfo));
 
         binding.headContainer.setOnClickListener(v -> editImg());
-        binding.userName.setOnClickListener(v -> editUserName());
+        binding.nameContainer.setOnClickListener(v -> editUserName());
     }
 
     private void initViewModel() {
@@ -196,7 +198,28 @@ public class EditUserInfoActivity extends BaseActivity {
 
     public void editUserName() {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_user_name, null);
+        ImageView clear = view.findViewById(R.id.clear);
         EditText et_userName = view.findViewById(R.id.et_userName);
+        et_userName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    clear.setVisibility(View.VISIBLE);
+                } else {
+                    clear.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         DialogPlus dialog = DialogPlus.newDialog(this)
                 .setContentHolder(new ViewHolder(view))
@@ -213,7 +236,8 @@ public class EditUserInfoActivity extends BaseActivity {
                         viewModel.editUserName(userName);
                         dialog1.dismiss();
 
-                    } else {
+                    } else if (i == R.id.clear) {
+                        et_userName.setText("");
                     }
                 })
                 .create();
