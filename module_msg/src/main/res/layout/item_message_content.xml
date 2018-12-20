@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="messageContent"
-            type="com.ut.module_msg.model.MessageContent" />
+            name="notificationMessage"
+            type="com.ut.database.entity.NotificationMessage" />
     </data>
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 android:background="#EBEFF1"
                 android:gravity="center"
                 android:padding="@dimen/base_4dp"
-                android:text="@{messageContent.date}"
+                android:text="@{notificationMessage.createTime}"
                 android:textColor="@color/gray9"
                 android:textSize="@dimen/base_10dp" />
         </FrameLayout>
@@ -42,8 +42,9 @@
             android:paddingTop="@dimen/base_30dp"
             android:paddingRight="@dimen/base_20dp"
             android:paddingBottom="@dimen/base_30dp"
-            android:layout_margin="@dimen/base_2dp"
-            android:text="@{messageContent.content}"
+            android:layout_marginTop="@dimen/base_5dp"
+            android:layout_marginBottom="@dimen/base_5dp"
+            android:text="@{notificationMessage.description}"
             android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
     </LinearLayout>

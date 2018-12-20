@@ -16,6 +16,7 @@ import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
 import com.ut.module_lock.entity.LockKey;
 
@@ -51,7 +52,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onMangeKeyClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).withParcelable("lock_key", mLockKey).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).withParcelable(Constance.LOCK_KEY, mLockKey).navigation();
         }
 
         public void onOperateRecordClick(View view) {
@@ -59,7 +60,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onLockManageClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).withParcelable("lock_key", mLockKey).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).withParcelable(Constance.LOCK_KEY, mLockKey).navigation();
         }
     }
 

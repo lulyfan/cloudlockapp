@@ -47,21 +47,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_2dp"
-            android:text="@{apply.lockName}"
+            android:text="@{apply.userName}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             app:layout_constraintBottom_toTopOf="@id/hint"
             app:layout_constraintLeft_toRightOf="@id/icon_layout"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/icon_layout" />
 
         <TextView
             android:id="@+id/hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{apply.hint}"
+            android:text="@{apply.description()}"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_layout"
             app:layout_constraintLeft_toLeftOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/name" />
 

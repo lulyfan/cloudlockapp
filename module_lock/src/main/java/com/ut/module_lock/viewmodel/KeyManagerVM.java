@@ -130,4 +130,18 @@ public class KeyManagerVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
     }
+
+    public int getDefaultPageSize() {
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    public void editKey(KeyItem keyItem) {
+        //ToDo
+        MyRetrofit.get().getCommonApiService().editKey("33-33-22-A1-B0-34", keyItem.getKeyId(), keyItem.getStartTime(), keyItem.getEndTime(), keyItem.getWeeks(), keyItem.getStartTimeRange(), keyItem.getEndTimeRange())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtBottom(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
 }

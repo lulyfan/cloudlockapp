@@ -15,4 +15,5 @@ public interface Constance {
     String BY_LOCK = "by_lock";
     String USER_ID = "user_id";
     String LOCK_ID = "lock_id";
+    String LOCK_KEY = "lock_key";
 }

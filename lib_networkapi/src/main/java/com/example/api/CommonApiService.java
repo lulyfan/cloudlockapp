@@ -176,4 +176,11 @@ public interface CommonApiService {
     Observable<Result<List<LockUserKey>>> pageLockUserKey(
             @Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
+
+    @POST(ApiUrl.getMessage)
+    Call<JsonObject> getMessage();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.checkKeyStatus)
+    Observable<JsonObject> checkKeyStatus(@Field("appId")long appId);
 }

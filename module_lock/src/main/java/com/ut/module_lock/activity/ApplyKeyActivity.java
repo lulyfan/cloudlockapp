@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityApplyKeyBinding;
 
@@ -20,11 +22,12 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  */
 
+@Route(path = RouterUtil.LockModulePath.APPLY_KEY)
 public class  ApplyKeyActivity extends BaseActivity {
 
     private ActivityApplyKeyBinding mBinding;
     private String mac;
-    private int type;
+    private int ruleType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,33 +36,33 @@ public class  ApplyKeyActivity extends BaseActivity {
         initLightToolbar();
         setTitle(R.string.lock_apply_key);
         initView();
+        mac = "33-33-22-A1-B0-34";
     }
 
     private void initView() {
         mBinding.rbtnGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbtn_forever) {
-                type = 1;
+                ruleType = 1;
             } else if (checkedId == R.id.rbtn_limited) {
-                type = 2;
+                ruleType = 2;
             } else if (checkedId == R.id.rbtn_once) {
-                type = 3;
+                ruleType = 3;
             } else if (checkedId == R.id.rbtn_loop) {
-                type = 4;
+                ruleType = 4;
             }
         });
 
         mBinding.btnApplyKey.setOnClickListener(v -> {
             if (BaseApplication.getUser() == null) return;
-//            MyRetrofit.get().getCommonApiService()
-//                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString())
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(result -> {
-//                        if (result.isSuccess()) {
-//
-//                        }
-//                        Log.d("applyKey", result.msg);
-//                    });
+            MyRetrofit.get().getCommonApiService()
+                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString(),ruleType)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        if (result.isSuccess()) {
+                        }
+                        Log.d("applyKey", result.msg);
+                    });
         });
     }
 }

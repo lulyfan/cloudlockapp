@@ -5,16 +5,16 @@
     <data>
 
         <variable
-            name="notification"
-            type="com.ut.module_msg.model.NotificationMessage" />
+            name="notifyCarrier"
+            type="com.ut.module_msg.model.NotifyCarrier" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_80dp"
-        android:paddingLeft="@dimen/base_20dp"
         android:background="@android:color/white"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingLeft="@dimen/base_20dp">
 
         <FrameLayout
             android:id="@+id/icon_layout"
@@ -28,8 +28,7 @@
                 android:layout_width="@dimen/base_40dp"
                 android:layout_height="@dimen/base_40dp"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/default_icon_a"
-                app:url="@{notification.icon}" />
+                android:src="@mipmap/default_icon_a" />
 
         </FrameLayout>
 
@@ -38,34 +37,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/msg_12dp"
-            android:text="@{notification.title}"
+            android:text="@{notifyCarrier.name}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/content"
             app:layout_constraintLeft_toRightOf="@id/icon_layout"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/icon_layout" />
 
         <TextView
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{notification.content}"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
+            android:text="@{notifyCarrier.firstDesc}"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_layout"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/base_20dp"
-            android:text="@{notification.time}"
+            android:layout_marginEnd="@dimen/base_20dp"
             android:textColor="#BBBBBB"
-            android:textSize="@dimen/base_10dp"
+            android:textSize="@dimen/base_10sp"
+            android:text="@{notifyCarrier.firstCreateTime}"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/title" />
 

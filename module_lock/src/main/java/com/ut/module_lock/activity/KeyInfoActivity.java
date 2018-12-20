@@ -126,6 +126,8 @@ public class KeyInfoActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
+    private boolean hasEdit = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -145,8 +147,17 @@ public class KeyInfoActivity extends BaseActivity {
                         }
                     }
                     mBinding.setKeyItem(keyInfo);
+                    hasEdit = true;
                     break;
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        if(hasEdit) {
+            keyManagerVM.editKey(keyInfo);
+        }
+        super.finish();
     }
 }

@@ -108,4 +108,10 @@ public interface ApiUrl {
 
     //获取发给
     String pageLockUserKey = "api/lock/pageLockUserKey";
+
+    //获取消息列表
+    String getMessage = "api/lockMessage/getMessage?json";
+
+    //校验钥匙申请的处理状态
+    String checkKeyStatus = "api/key/checkStatus?json";
 }

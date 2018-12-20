@@ -28,14 +28,21 @@ public class KeyItem implements Serializable {
     private String acceptTime;
     private boolean isAuthorized; //是否授权
     private String authorizedType;
-    private String startDate;//循环钥匙的启动日期
-    private String endDate;//循环钥匙的停止日期
     private String mobile;
     private String keyName;
     private boolean isAdmin;
-    private int weeks;
-    private String startTimeRange;
-    private String endTimeRange;
+    private String weeks;
+    private String startTimeRange; //循环钥匙的启动日期
+    private String endTimeRange; //循环钥匙的停止日期
+    private String mac;
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
 
     public long getKeyId() {
         return keyId;
@@ -69,11 +76,11 @@ public class KeyItem implements Serializable {
         isAdmin = admin;
     }
 
-    public int getWeeks() {
+    public String getWeeks() {
         return weeks;
     }
 
-    public void setWeeks(int weeks) {
+    public void setWeeks(String weeks) {
         this.weeks = weeks;
     }
 
@@ -179,22 +186,6 @@ public class KeyItem implements Serializable {
 
     public void setAuthorizedType(String authorizedType) {
         this.authorizedType = authorizedType;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     public String typeString() {

@@ -9,8 +9,8 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.ActivityNotifiInfoBinding;
-import com.ut.module_msg.model.MessageContent;
-import com.ut.module_msg.model.NotificationMessage;
+import com.ut.module_msg.model.NotifyCarrier;
+import com.ut.database.entity.NotificationMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,32 +25,25 @@ import java.util.List;
 public class NotificationInfoActivity extends BaseActivity {
 
     private ActivityNotifiInfoBinding mBinding = null;
-    private ListAdapter<MessageContent> mAdapter = null;
-    private List<MessageContent> messageContents = new ArrayList<>();
+    private ListAdapter<NotificationMessage> mAdapter = null;
+    private List<NotificationMessage> notificationMessages = new ArrayList<>();
 
-    private NotificationMessage mNotificationMessage;
+    private NotifyCarrier notifyCarrier;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNotificationMessage = (NotificationMessage) getIntent().getSerializableExtra("notificationInfo");
+        notifyCarrier = (NotifyCarrier) getIntent().getSerializableExtra("notificationInfo");
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_notifi_info);
-        mBinding.setNotification(mNotificationMessage);
-        setTitle(mNotificationMessage.getTitle());
+        mBinding.setNotifyCarrier(notifyCarrier);
+        setTitle(notifyCarrier.getName());
         initLightToolbar();
+        mAdapter = new ListAdapter<>(this, R.layout.item_message_content, notificationMessages, BR.notificationMessage);
+        mBinding.messageList.setAdapter(mAdapter);
         loadData();
     }
 
     private void loadData() {
-        MessageContent content = new MessageContent();
-        content.setDate("2018/09/10");
-        content.setContent("您收到了一把电子钥匙【Chan的智能锁】，使用期限为【永久】。");
-        messageContents.add(content);
-        MessageContent content1 = new MessageContent();
-        content1.setDate("2018/09/11");
-        content1.setContent("您收到了一把电子钥匙【Chan的智能锁】，使用期限为【单次】。");
-        messageContents.add(content1);
-        mAdapter = new ListAdapter<>(this, R.layout.item_message_content, messageContents, BR.messageContent);
-        mBinding.messageList.setAdapter(mAdapter);
+        mAdapter.updateDate(notifyCarrier.getNotificationMessages());
     }
 }

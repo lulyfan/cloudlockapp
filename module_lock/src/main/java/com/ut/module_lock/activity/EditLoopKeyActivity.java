@@ -81,9 +81,9 @@ public class EditLoopKeyActivity extends BaseActivity {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
             String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
             if ("启用时期".equals(title)) {
-                mKeyItem.setStartDate(date);
+                mKeyItem.setStartTimeRange(date);
             } else {
-                mKeyItem.setEndDate(date);
+                mKeyItem.setEndTimeRange(date);
             }
             mBinding.setKeyItem(mKeyItem);
         });
