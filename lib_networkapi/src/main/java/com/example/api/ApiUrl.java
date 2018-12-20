@@ -64,11 +64,50 @@ public interface ApiUrl {
     //用户下锁日志列表
     String queryLogsByUser = "api/log/pageUserLog?json";
 
+    //获取用户的管理员锁
+    String pageAdminLock = "api/lock/pageAdminLock";
+
+    //获取锁分组
+    String getGroup = "api/lockGroup/getGroup";
+
+    //添加锁组
+    String addGroup = "api/lockGroup/newGroup";
+
+    //获取锁组内信息
+    String getLockInfoFromGroup = "api/lockGroup/getLockInfoFromGroup";
+
+    //删除锁分组
+    String delGroup = "api/lockGroup/delGroup";
+
+    //修改锁名称
+    String updateGroupName = "api/lockGroup/updateGroupName";
+
     //获取忘记密码验证码
     String getForgetPwdVerifyCode = "api/user/getForgetPwdVeriCode?json";
 
     //修改钥匙规则
     String editKey = "/api/key/modifyKeyRule?json";
+
+    //转移锁权限
+    String changeLockAdmin = "api/lock/changeLockAdmin";
+
+    //发送短信验证码
+    String sendMobileCode = "api/user/sendMobileCode";
+
+    //获取转移管理员的验证码
+    String getChangeAdminCode = "api/lock/getChangeAdminCode";
+
+    //退出登录
+    String logout = "api/user/logout";
+
+    //获取锁用户
+    String pageLockUser = "api/lock/pageLockUser";
+
+    //根据手机号获取用户信息
+    String getUserInfoByMobile = "api/user/getUserInfoByMobile";
+
+    //获取发给
+    String pageLockUserKey = "api/lock/pageLockUserKey";
 
     //获取消息列表
     String getMessage = "api/lockMessage/getMessage?json";

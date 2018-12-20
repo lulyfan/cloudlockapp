@@ -53,8 +53,8 @@ public class MineFragment extends BaseFragment {
             mMineBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mine, container, false);
             mView = mMineBinding.getRoot();
         }
-        initViewModel();
         initUI();
+        initViewModel();
         return mView;
     }
 
@@ -97,16 +97,6 @@ public class MineFragment extends BaseFragment {
             Intent intent = new Intent(getContext(), SystemSettingActivity.class);
             startActivity(intent);
         });
-
-        mineViewModel.initWebLoginSwitchState(mMineBinding.switchWebLogin);
-        mineViewModel.initOpenLockVolumeSwitchState(mMineBinding.switchOpenLockVolume);
-
-        mMineBinding.switchWebLogin.setOnCheckedChangeListener((buttonView, isChecked) ->
-                mineViewModel.enableWebLogin());
-
-        mMineBinding.switchOpenLockVolume.setOnCheckedChangeListener((buttonView, isChecked) ->
-                mineViewModel.enableOpenLockVolume());
-
     }
 
 }

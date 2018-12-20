@@ -170,6 +170,10 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    protected Toolbar getToolBar() {
+        return findViewById(R.id.toolbar);
+    }
+
     public void toastShort(String msg) {
         if (msg == null || "".equals(msg)) {
             return;

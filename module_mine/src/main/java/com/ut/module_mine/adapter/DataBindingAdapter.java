@@ -133,7 +133,7 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
 
     private BindListener bindListener;
 
-    interface BindListener<S> {
+    public interface BindListener<S> {
         void onBind(S binding, int position);
     }
 

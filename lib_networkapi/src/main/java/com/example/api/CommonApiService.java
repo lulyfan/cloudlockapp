@@ -3,9 +3,14 @@ package com.example.api;
 import com.example.entity.base.Result;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.ut.database.entity.Lock;
+import com.ut.database.entity.LockGroup;
+import com.ut.database.entity.LockUser;
+import com.ut.database.entity.LockUserKey;
 import com.ut.database.entity.User;
 
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -83,6 +88,29 @@ public interface CommonApiService {
     Observable<Result<Void>> changeUserConfig(@Field("configType") String configType, @Field("operVal") String operVal);
 
     @FormUrlEncoded
+    @POST(ApiUrl.pageAdminLock)
+    Observable<Result<List<Lock>>> pageAdminLock(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @GET(ApiUrl.getGroup)
+    Observable<Result<List<LockGroup>>> getGroup();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.addGroup)
+    Observable<Result<Void>> addGroup(@Field("name") String name);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getLockInfoFromGroup)
+    Observable<Result<List<Lock>>> getLockInfoFromGroup(@Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.delGroup)
+    Observable<Result<Void>> delGroup(@Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.updateGroupName)
+    Observable<Result<Void>> updateGroupName(@Field("groupId") long groupId, @Field("groupName") String groupName);
+
+    @FormUrlEncoded
     @POST(ApiUrl.unfrozenKey)
     Observable<Result<Void>> unFrozenKey(@Field("keyId") long id);
 
@@ -120,6 +148,34 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.editKey)
     Observable<Result<Void>> editKey(@Field("mac") String mac, @Field("keyId") long keyId, @Field("startTime") String startTime, @Field("endTime") String endTime, @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange, @Field("endTimeRange") String endTimeRange);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.changeLockAdmin)
+    Observable<Result<Void>> changeLockAdmin(@Field("macs") String macs, @Field("mobile") String mobile, @Field("veriCode") String veriCode);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.sendMobileCode)
+    Observable<Result<Void>> sendMobileCode(@Field("mobile") String mobile);
+
+    @GET(ApiUrl.getChangeAdminCode)
+    Observable<Result<Void>> getChangeAdminCode();
+
+    @GET(ApiUrl.logout)
+    Observable<Result<Void>> logout();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageLockUser)
+    Observable<Result<List<LockUser>>> pageLockUser(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getUserInfoByMobile)
+    Observable<Result<User>> getUserInfoByMobile(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageLockUserKey)
+    Observable<Result<List<LockUserKey>>> pageLockUserKey(
+            @Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
 
     @POST(ApiUrl.getMessage)
     Call<JsonObject> getMessage();

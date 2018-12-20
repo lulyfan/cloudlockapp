@@ -6,13 +6,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/editUserName"
-        android:textSize="@dimen/m"
         android:textColor="@color/gray3"
+        android:textSize="@dimen/m"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,20 +20,28 @@
 
     <EditText
         android:id="@+id/et_userName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_border"
         android:ems="10"
+        android:gravity="center_vertical"
+        android:hint="@string/inputName"
         android:inputType="textPersonName"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="@dimen/m"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        app:layout_constraintTop_toBottomOf="@+id/content" />
 
     <View
         android:id="@+id/divider14"
-        android:layout_width="395dp"
-        android:layout_height="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,14 +53,13 @@
         android:id="@+id/cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/select_bt"
         android:clickable="true"
-        android:background="@drawable/select_gray_e"
         android:gravity="center"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:text="@string/cancel"
         android:textSize="@dimen/m"
-        android:textColor="@android:color/holo_blue_bright"
         app:layout_constraintEnd_toStartOf="@+id/confirm"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,12 +69,12 @@
         android:id="@+id/confirm"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/select_bt"
         android:clickable="true"
-        android:background="@drawable/select_gray_e"
         android:gravity="center"
         android:text="@string/confirm"
+        android:textColor="@color/themeColor"
         android:textSize="@dimen/m"
-        android:textColor="@android:color/holo_blue_bright"
         app:layout_constraintBottom_toBottomOf="@+id/cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -76,7 +83,7 @@
 
     <View
         android:id="@+id/divider16"
-        android:layout_width="1dp"
+        android:layout_width="0.5dp"
         android:layout_height="0dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="@+id/cancel"
@@ -84,5 +91,19 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cancel" />
+
+    <ImageView
+        android:id="@+id/clear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/et_userName"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/et_userName"
+        app:layout_constraintTop_toTopOf="@+id/et_userName"
+        app:srcCompat="@drawable/delete_selected" />
 
 </android.support.constraint.ConstraintLayout>
