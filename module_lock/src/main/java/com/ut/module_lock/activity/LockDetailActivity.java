@@ -1,10 +1,13 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,16 +18,25 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.activity.GrantPermissionActivity;
+import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
-import com.ut.module_lock.entity.LockKey;
+import com.ut.module_lock.viewmodel.LockDetailVM;
+import com.ut.unilink.UnilinkManager;
+
+import org.w3c.dom.Text;
 
 public class LockDetailActivity extends BaseActivity {
     public static final String EXTRA_LOCK_KEY = "extra_lock_key";
     private LockKey mLockKey = null;
 
     ActivityLockDetailBindingImpl mDetailBinding;
+
+    private LockDetailVM mLockDetailVM;
+    private static final int BLEREAUESTCODE = 101;
+    private static final int BLEENABLECODE = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,22 @@ public class LockDetailActivity extends BaseActivity {
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
+
+        initViewModel();
     }
+
+    private void initViewModel() {
+        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
+        mLockDetailVM.setLockKey(mLockKey);
+        mLockDetailVM.getConnectStatus().observe(this, isConnected -> {
+            if (isConnected) {
+                mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_green);
+            } else {
+                mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_grey);
+            }
+        });
+    }
+
 
     private void addPaddingTop() {
         View view = findViewById(R.id.parent);
@@ -45,6 +72,10 @@ public class LockDetailActivity extends BaseActivity {
     public class Present {
         public void onBackClick(View view) {
             onBackPressed();
+        }
+
+        public void onOpenLockClick(View view) {
+            toScan();
         }
 
         public void onSendKeyClick(View view) {
@@ -81,9 +112,9 @@ public class LockDetailActivity extends BaseActivity {
     @BindingAdapter("bgSrc")
     public static void loadbubble(TextView textView, int userType) {
         int srcId = R.mipmap.icon_bubble_orange;
-        if (userType == 1) {
+        if (userType == EnumCollection.UserType.AUTH.ordinal()) {
             srcId = R.mipmap.icon_bubble_purple;
-        } else if (userType == 2) {
+        } else if (userType == EnumCollection.UserType.NORMAL.ordinal()) {
             srcId = R.mipmap.icon_bubble_gray;
         }
         textView.setBackgroundResource(srcId);
@@ -91,12 +122,45 @@ public class LockDetailActivity extends BaseActivity {
 
     @BindingAdapter("userType")
     public static void loadUserImage(ImageView imageView, int userType) {
-        if (userType == 0) {
+        if (userType == EnumCollection.UserType.ADMIN.ordinal()) {
             imageView.setImageResource(R.mipmap.icon_user_manager_detail);
-        } else if (userType == 1) {
+        } else if (userType == EnumCollection.UserType.AUTH.ordinal()) {
             imageView.setImageResource(R.mipmap.icon_user_auth_detail);
         } else {
             imageView.setImageResource(R.mipmap.icon_user_normal_detail);
+        }
+    }
+
+    @BindingAdapter("setVisiable")
+    public static void setVisiable(TextView textView, int userType) {
+        if (userType == EnumCollection.UserType.ADMIN.ordinal() || userType == EnumCollection.UserType.AUTH.ordinal()) {
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
+    }
+
+    private void toScan() {
+        int scanResult = mLockDetailVM.toOpenLock();
+        switch (scanResult) {
+            case UnilinkManager.BLE_NOT_SUPPORT:
+                toastShort(getString(R.string.lock_tip_ble_not_support));
+                break;
+            case UnilinkManager.NO_LOCATION_PERMISSION:
+                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
+                break;
+            case UnilinkManager.BLE_NOT_OPEN:
+                UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
+                toScan();
         }
     }
 }

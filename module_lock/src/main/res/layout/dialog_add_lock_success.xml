@@ -16,6 +16,7 @@
             android:background="@null"
             android:scaleType="fitXY"
             android:src="@mipmap/icon_close"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout"/>
 
@@ -37,11 +38,11 @@
                 android:layout_height="wrap_content"
                 android:background="@mipmap/bitmap_add_success"
                 android:gravity="center"
+                android:lines="2"
                 android:maxLength="20"
                 android:paddingLeft="@dimen/base_20dp"
-                android:paddingRight="20dp"
                 android:paddingTop="@dimen/base_50dp"
-                android:lines="2"
+                android:paddingRight="20dp"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/base_17sp"
                 android:textStyle="bold"

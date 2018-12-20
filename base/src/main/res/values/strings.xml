@@ -15,6 +15,7 @@
     <string name="endDate">停止日期</string>
     <string name="onceKeyTip">注:单次钥匙有效期为1小时,使用1次后失效</string>
     <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
     <string name="receiver">接收者</string>
     <string name="name">名称</string>
     <string name="nameKey">请为钥匙命名</string>

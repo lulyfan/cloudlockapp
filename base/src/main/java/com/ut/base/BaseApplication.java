@@ -2,6 +2,7 @@ package com.ut.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -18,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  * version: 1.0
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends MultiDexApplication {
     private static Context INSTANCE = null;
 
     public static Context getAppContext() {

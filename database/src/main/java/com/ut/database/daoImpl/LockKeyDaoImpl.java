@@ -39,7 +39,7 @@ public class LockKeyDaoImpl {
     }
 
     public void insert(LockKey... lockKeys) {
-        
+        mLockKeyDao.insertAll(lockKeys);
     }
 
 

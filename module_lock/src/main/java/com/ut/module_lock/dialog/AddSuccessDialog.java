@@ -35,6 +35,12 @@ public class AddSuccessDialog extends BaseDialog {
         setContentView(view);
     }
 
+    public AddSuccessDialog setConfirmListener(View.OnClickListener listener) {
+        mOnClickListener = listener;
+        mBinding.btnAddSuccessConfirm.setOnClickListener(mOnClickListener);
+        return this;
+    }
+
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override

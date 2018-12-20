@@ -5,7 +5,7 @@
     <color name="colorAccent">#00C2C7</color>
     <color name="colorBackgroud">#F1F3F2</color>
     <color name="color_base_title">#333333</color>
-    <color name="color_tv_blue">#ff00bbd2</color>
+    <color name="color_tv_blue">#FF00BBD2</color>
     <color name="app_statusbar_color">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
@@ -24,4 +24,5 @@
     <color name="color_base_text">#666666</color>
     <color name="color_base_grayC7C7CC">#C7C7CC</color>
     <color name="color_base_highlight">#00BBD2</color>
+    <color name="color_base_bg_search">#fff4f5f7</color>
 </resources>

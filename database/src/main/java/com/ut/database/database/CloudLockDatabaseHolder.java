@@ -34,14 +34,7 @@ public class CloudLockDatabaseHolder {
     }
 
     public LockKeyDao getLockKeyDao() {
-        checkdb();
-        return mDb.mLockKeyDao;
-    }
-
-    private void checkdb() {
-        if (mDb == null) {
-            throw new RuntimeException("Please initialize the database first!");
-        }
+        return mDb.lockKeyDao();
     }
 
     public UserDao getUserDao() {

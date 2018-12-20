@@ -3,7 +3,6 @@ package com.ut.module_lock.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
 
@@ -13,12 +12,12 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.BR;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeysManagerBinding;
 import com.ut.module_lock.entity.KeyItem;
-import com.ut.module_lock.entity.LockKey;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 import java.util.ArrayList;

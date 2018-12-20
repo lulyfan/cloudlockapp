@@ -11,13 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.ut.base.BaseApplication;
 import com.ut.base.Utils.TxtUtils;
 import com.ut.base.Utils.UTLog;
+import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockKey;
 import com.ut.database.entity.User;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ItemLockListBinding;
 import com.ut.module_lock.databinding.ItemLockListEmptyBinding;
-import com.ut.module_lock.entity.LockKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.List;
  * Created by ZYB on 2017-03-24.
  */
 
-public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.LockKeyViewHolder> implements View.OnClickListener {
+public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKeyViewHolder> implements View.OnClickListener {
     private LayoutInflater mLayoutInflater = null;
     private List<LockKey> datas = new ArrayList<>();
     private OnRcvItemClickListener mOnRcvItemClickListener = null;
@@ -73,7 +75,10 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
     public void onBindViewHolder(LockKeyViewHolder holder, int position) {
         if (holder.viewType == VIEW_TYPE_ITEM) {
             LockKey lockKey = datas.get(position);
-            lockKey.init();
+            lockKey.setStatusStr(BaseApplication.getAppContext().getResources().getStringArray(R.array.key_status));
+            lockKey.setLockTypeStr(BaseApplication.getAppContext().getResources().getStringArray(R.array.lock_type));
+            lockKey.setKeyTypeStr(BaseApplication.getAppContext().getResources().getStringArray(R.array.key_type));
+            lockKey.setElectricityStr();
             holder.bind(lockKey);
             holder.mView.setTag(position);
         } else {
@@ -99,21 +104,11 @@ public class LockListAdapter<T> extends RecyclerView.Adapter<LockListAdapter.Loc
         }
     }
 
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_UP && mOnRcvItemClickListener != null) {
-//            mOnRcvItemClickListener.onItemClick(v, datas, (Integer) v.getTag());
-//            return true;
-//        }
-//        return false;
-//    }
-
-
     @BindingAdapter("imgSrc")
     public static void loadImage(ImageView imageView, int userType) {
-        if (userType == 0) {
+        if (userType == EnumCollection.UserType.ADMIN.ordinal()) {
             imageView.setImageResource(R.mipmap.icon_user_manager);
-        } else if (userType == 1) {
+        } else if (userType == EnumCollection.UserType.AUTH.ordinal()) {
             imageView.setImageResource(R.mipmap.icon_user_auth);
         } else {
             imageView.setImageResource(R.mipmap.icon_user_normal);

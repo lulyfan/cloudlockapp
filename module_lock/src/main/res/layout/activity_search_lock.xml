@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingStart="@dimen/base_20dp"
+    tools:context=".activity.SearchLockActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <com.ut.commoncomponent.ClearEditText
+            android:id="@+id/editText3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_8dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_edt_search"
+            android:drawableLeft="@mipmap/icon_search_gray"
+            android:drawablePadding="@dimen/base_8dp"
+            android:hint="@string/lock_search_lock"
+            android:paddingLeft="@dimen/base_10dp"
+            android:paddingTop="@dimen/base_8dp"
+            android:paddingRight="@dimen/base_10dp"
+            android:paddingBottom="@dimen/base_8dp"
+            android:textColor="@color/color_base_title"
+            android:textSize="@dimen/base_14sp"
+            android:transitionName="@string/lock_share_string_search"
+            />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:onClick="onXmlClick"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp"
+            android:text="@string/lock_cancel"
+            android:textColor="@color/color_base_title"
+            android:textSize="@dimen/base_14sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_27dp"
+            android:text="@string/lock_tv_search_history"
+            android:textColor="@color/gray9"
+            android:textSize="@dimen/base_14sp"
+            />
+
+        <com.ut.commoncomponent.Flowlayout
+            android:id="@+id/fly_search_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_20dp"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/base_5dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
+
+</android.support.constraint.ConstraintLayout>
