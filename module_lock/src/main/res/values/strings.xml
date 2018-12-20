@@ -83,4 +83,16 @@
     </string-array>
     <string name="lock_key_manager">钥匙管理</string>
     <string name="choose_group">选择分组</string>
+    <string name="lock_key_status_sending">发送中</string>
+    <string name="lock_key_status_frozening">冻结中</string>
+    <string name="lock_key_status_cancel_frozen">解除冻结中</string>
+    <string name="lock_key_status_delete">删除中</string>
+    <string name="lock_key_status_authorize">授权中</string>
+    <string name="lock_key_status_cancel_authorize">取消授权中</string>
+    <string name="lock_key_status_fix">修改中</string>
+    <string name="lock_key_status_normal">正常</string>
+    <string name="lock_key_status_has_frozen">已冻结</string>
+    <string name="lock_key_status_has_deleted">已删除</string>
+    <string name="lock_key_status_has_invailed">已失效</string>
+    <string name="lock_key_status_out_of_date">已过期</string>
 </resources>

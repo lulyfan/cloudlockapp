@@ -9,7 +9,9 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityApplyKeyBinding;
 
@@ -23,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @Route(path = RouterUtil.LockModulePath.APPLY_KEY)
-public class  ApplyKeyActivity extends BaseActivity {
+public class ApplyKeyActivity extends BaseActivity {
 
     private ActivityApplyKeyBinding mBinding;
     private String mac;
@@ -36,6 +38,7 @@ public class  ApplyKeyActivity extends BaseActivity {
         initLightToolbar();
         setTitle(R.string.lock_apply_key);
         initView();
+        //todo
         mac = "33-33-22-A1-B0-34";
     }
 
@@ -55,14 +58,16 @@ public class  ApplyKeyActivity extends BaseActivity {
         mBinding.btnApplyKey.setOnClickListener(v -> {
             if (BaseApplication.getUser() == null) return;
             MyRetrofit.get().getCommonApiService()
-                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString(),ruleType)
+                    .applyKey(BaseApplication.getUser().id, mac, mBinding.edtAskFor.getText().toString(), ruleType)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(result -> {
                         if (result.isSuccess()) {
+                        } else {
                         }
+                        CLToast.showAtCenter(getBaseContext(), result.msg);
                         Log.d("applyKey", result.msg);
-                    });
+                    }, new ErrorHandler());
         });
     }
 }

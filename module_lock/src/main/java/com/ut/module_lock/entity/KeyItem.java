@@ -22,27 +22,19 @@ public class KeyItem implements Serializable {
     private String startTime;
     private String endTime;
     private int ruleType = 1;//类型 1永久 2限时 3单次 4循环
-    private int status;//状态 0：失效，1，生效，2：待接受
+    private int status;//status 1,"发送中" 2,"冻结中" 3,"解除冻结中" 4,"删除中" 5,"授权中" 6,"取消授权中" 7,"修改中 8,"正常"  9,"已冻结" 10,"已删除" 11,"已失效" 12,"已过期"
     private String sender;
     private String sendTime;
     private String acceptTime;
-    private boolean isAuthorized; //是否授权
-    private String authorizedType;
     private String mobile;
     private String keyName;
-    private boolean isAdmin;
     private String weeks;
     private String startTimeRange; //循环钥匙的启动日期
     private String endTimeRange; //循环钥匙的停止日期
     private String mac;
+    private int userType;//userType;//类型(1:管理员,2:授权用户,3:普通用户)
+    private int isAdmin;
 
-    public String getMac() {
-        return mac;
-    }
-
-    public void setMac(String mac) {
-        this.mac = mac;
-    }
 
     public long getKeyId() {
         return keyId;
@@ -50,54 +42,6 @@ public class KeyItem implements Serializable {
 
     public void setKeyId(long keyId) {
         this.keyId = keyId;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getKeyName() {
-        return keyName;
-    }
-
-    public void setKeyName(String keyName) {
-        this.keyName = keyName;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
-    public String getWeeks() {
-        return weeks;
-    }
-
-    public void setWeeks(String weeks) {
-        this.weeks = weeks;
-    }
-
-    public String getStartTimeRange() {
-        return startTimeRange;
-    }
-
-    public void setStartTimeRange(String startTimeRange) {
-        this.startTimeRange = startTimeRange;
-    }
-
-    public String getEndTimeRange() {
-        return endTimeRange;
-    }
-
-    public void setEndTimeRange(String endTimeRange) {
-        this.endTimeRange = endTimeRange;
     }
 
     public String getUserName() {
@@ -136,8 +80,8 @@ public class KeyItem implements Serializable {
         return ruleType;
     }
 
-    public void setRuleType(int type) {
-        this.ruleType = type;
+    public void setRuleType(int ruleType) {
+        this.ruleType = ruleType;
     }
 
     public int getStatus() {
@@ -156,14 +100,6 @@ public class KeyItem implements Serializable {
         this.sender = sender;
     }
 
-    public String getAcceptTime() {
-        return acceptTime;
-    }
-
-    public void setAcceptTime(String acceptTime) {
-        this.acceptTime = acceptTime;
-    }
-
     public String getSendTime() {
         return sendTime;
     }
@@ -172,20 +108,91 @@ public class KeyItem implements Serializable {
         this.sendTime = sendTime;
     }
 
-    public boolean isAuthorized() {
-        return isAuthorized;
+    public String getAcceptTime() {
+        return acceptTime;
     }
 
-    public void setAuthorized(boolean authorized) {
-        isAuthorized = authorized;
+    public void setAcceptTime(String acceptTime) {
+        this.acceptTime = acceptTime;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getKeyName() {
+        return keyName;
+    }
+
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
+
+    public String getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(String weeks) {
+        this.weeks = weeks;
+    }
+
+    public String getStartTimeRange() {
+        return startTimeRange;
+    }
+
+    public void setStartTimeRange(String startTimeRange) {
+        this.startTimeRange = startTimeRange;
+    }
+
+    public String getEndTimeRange() {
+        return endTimeRange;
+    }
+
+    public void setEndTimeRange(String endTimeRange) {
+        this.endTimeRange = endTimeRange;
+    }
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
+
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean isAuthorized() {
+        return userType == 2;
     }
 
     public String getAuthorizedType() {
-        return authorizedType;
-    }
-
-    public void setAuthorizedType(String authorizedType) {
-        this.authorizedType = authorizedType;
+        if (userType == 1) {
+            return "管理员";
+        } else if (userType == 2) {
+            return "授权用户";
+        } else if (userType == 3) {
+            return "普通用户";
+        }
+        return "";
     }
 
     public String typeString() {
@@ -204,23 +211,42 @@ public class KeyItem implements Serializable {
     }
 
     public String getStateString() {
-//        0：失效，1，生效，2：待接受
+//       //status 1,"发送中" 2,"冻结中" 3,"解除冻结中" 4,"删除中" 5,"授权中" 6,"取消授权中" 7,"修改中 8,"正常"  9,"已冻结" 10,"已删除" 11,"已失效" 12,"已过期"
         switch (status) {
-            case 0:
-                return "已失效";
-
+            case 1:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_sending);
             case 2:
-                return "待接受";
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_frozening);
+            case 3:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_cancel_frozen);
+            case 4:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_delete);
+            case 5:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_authorize);
+            case 6:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_cancel_authorize);
+            case 7:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_fix);
+            case 8:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_normal);
+            case 9:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_frozen);
+            case 10:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_deleted);
+            case 11:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_invailed);
+            case 12:
+                return BaseApplication.getAppContext().getString(R.string.lock_key_status_out_of_date);
         }
         return "";
     }
 
     public int stateColor() {
-        return Color.parseColor(status == 0 ? "#999999" : "#F55D54");
+        return Color.parseColor(status >= 9 ? "#999999" : "#F55D54");
     }
 
     public boolean isInvalid() {
-        return status == 0;
+        return status == 11;
     }
 
     public Drawable getTypeDrawable() {
@@ -233,6 +259,6 @@ public class KeyItem implements Serializable {
     }
 
     public boolean isForzened() {
-        return status == 8;
+        return status == 9;
     }
 }

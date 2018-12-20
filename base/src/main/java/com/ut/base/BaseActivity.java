@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,8 +14,16 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -28,12 +37,38 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
+    private AlertDialog noLoginDialog = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppManager.getAppManager().addActivity(this);
+        initNoLoginListener();
+    }
+
+    private void initNoLoginListener() {
+        MyRetrofit.get().setNoLoginListener(() -> {
+            Observable.just(RouterUtil.LoginModulePath.Login)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(url -> {
+                        try {
+                            if (noLoginDialog != null) noLoginDialog.dismiss();
+                            noLoginDialog = new AlertDialog.Builder(BaseActivity.this)
+                                    .setTitle("还未登录")
+                                    .setMessage("请重新登录")
+                                    .setPositiveButton("好的", (dialog1, which) -> {
+                                        ARouter.getInstance().build(url).navigation();
+                                    }).create();
+                            if (!noLoginDialog.isShowing()) {
+                                noLoginDialog.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+        });
     }
 
     public void setLightStatusBar() {
@@ -117,7 +152,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void hideNavigationIcon(){
+    public void hideNavigationIcon() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(null);
     }
