@@ -50,10 +50,10 @@ public class ApplyFragment extends BaseFragment {
             mApplyMessageVm.getApplyMessages().observe(this, ams -> {
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
                 if (ams == null || ams.isEmpty()) return;
-                applyMessages.clear();
-                applyMessages.addAll(ams);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.updateDate(ams);
             });
+
+            mApplyMessageVm.loadApplyMessages();
         }
         return mApplyFgBinding.getRoot();
     }
@@ -63,25 +63,27 @@ public class ApplyFragment extends BaseFragment {
             @Override
             public void addBadge(ViewDataBinding binding, int position) {
                 Badge badge = null;
-                ImageView icon = binding.getRoot().findViewById(R.id.icon);
+                ViewGroup icon = binding.getRoot().findViewById(R.id.icon_layout);
                 if (icon.getTag() == null) {
                     badge = new QBadgeView(getActivity());
                     icon.setTag(badge);
                 } else {
                     badge = (Badge) icon.getTag();
                 }
-                badge.bindTarget((View) icon.getParent())
+
+                ApplyMessage message = applyMessages.get(position);
+                badge.bindTarget(icon)
                         .setShowShadow(false)
                         .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
                         .setBadgeTextColor(Color.WHITE)
-                        .setGravityOffset(0, -2, true)
+                        .setGravityOffset(0, 0, true)
                         .setBadgeTextSize(9, true)
-                        .setBadgeText("待处理");
+                        .setBadgeText(message.getStatus() == 0 ? getString(R.string.wait_for_handle) : null);
             }
         };
         mApplyFgBinding.applyList.setAdapter(mAdapter);
         mApplyFgBinding.applyList.setOnItemClickListener((parent, view, position, id) -> {
-            ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", applyMessages.get(position)).navigation();
+            mApplyMessageVm.checkApplyStatus(applyMessages.get(position));
         });
 
         mApplyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
