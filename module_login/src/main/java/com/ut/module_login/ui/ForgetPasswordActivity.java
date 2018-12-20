@@ -157,9 +157,12 @@ public class ForgetPasswordActivity extends BaseActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    CLToast.showAtBottom(ForgetPasswordActivity.this, result.msg);
+                    CLToast.showAtCenter(ForgetPasswordActivity.this, result.msg);
                     sureBtn.endLoading();
-                    finish();
+                    if(result.isSuccess()) {
+                        finish();
+                    }
+
                 }, new ErrorHandler());
     }
 

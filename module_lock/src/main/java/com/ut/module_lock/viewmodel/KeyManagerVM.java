@@ -16,7 +16,6 @@ import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.entity.KeyItem;
-
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -64,16 +63,16 @@ public class KeyManagerVM extends AndroidViewModel {
     }
 
     public void loadKeyItems() {
-        if (BaseApplication.getUser() == null) return;
         MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, currentPage, DEFAULT_PAGE_SIZE)
-                .subscribeOn(Schedulers.newThread())
-                .map(JsonElement::toString)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(json -> JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
-                }))
+                .map(jsonObject -> {
+                    String json = jsonObject.toString();
+                    return JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
+                    });
+                })
                 .subscribe(result -> {
-                    Log.d("pageKeys", result.msg);
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
                             getKeys().postValue(result.data);
@@ -82,11 +81,11 @@ public class KeyManagerVM extends AndroidViewModel {
                     } else {
                         CLToast.showAtBottom(getApplication(), result.msg);
                     }
+                    Log.d("pageKeys", result.msg);
                 }, new ErrorHandler());
     }
 
     public void updateKeyItems() {
-        if (BaseApplication.getUser() == null) return;
         MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, 0, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.newThread())
@@ -94,7 +93,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(json -> JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
                 }))
-                .subscribe(result -> {
+                .subscribe( result -> {
                     Log.d("pageKeys", result.msg);
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
