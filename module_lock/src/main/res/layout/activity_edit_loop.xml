@@ -19,12 +19,10 @@
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_210dp"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.2854"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/top">
 
@@ -42,9 +40,9 @@
 
             <include
                 android:id="@+id/include5"
-                layout="@layout/week"
+                layout="@layout/layout_choose_week"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
                 android:layout_marginEnd="@dimen/base_16dp"
                 app:layout_constraintBottom_toTopOf="@+id/divider11"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,13 +125,11 @@
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_140dp"
             android:layout_marginTop="@dimen/base_16dp"
             android:background="@drawable/arc_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1901"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 

@@ -50,6 +50,8 @@
     <string name="lock_choose_group">选择分组</string>
     <string name="lock_authorize_type">权限类型</string>
     <string name="lock_delete_key">删除钥匙</string>
+    <string name="lock_start_date">启用日期</string>
+    <string name="lock_end_state">停止日期</string>
 
     <string name="percentage_symbol">%</string>
 

@@ -1,9 +1,9 @@
 package com.ut.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,16 +13,9 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
-import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -39,6 +32,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppManager.getAppManager().addActivity(this);
     }
 
