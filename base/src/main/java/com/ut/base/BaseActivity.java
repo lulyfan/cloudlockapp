@@ -55,14 +55,17 @@ public class BaseActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(url -> {
                         try {
-                            if (noLoginDialog != null && noLoginDialog.isShowing())
+                            if (noLoginDialog != null && noLoginDialog.isShowing()) {
                                 noLoginDialog.dismiss();
+                            }
                             noLoginDialog = new AlertDialog.Builder(BaseActivity.this)
                                     .setTitle("还未登录")
                                     .setMessage("请重新登录")
                                     .setPositiveButton("好的", (dialog1, which) -> {
                                         ARouter.getInstance().build(url).navigation();
-                                        noLoginDialog.dismiss();
+                                        if(dialog1 != null) {
+                                            dialog1.dismiss();
+                                        }
                                     }).setOnDismissListener(dialog -> {
                                         noLoginDialog = null;
                                     }).create();
