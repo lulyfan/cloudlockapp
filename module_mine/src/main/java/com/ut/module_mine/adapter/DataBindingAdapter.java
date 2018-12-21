@@ -84,19 +84,43 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                V oldSelectedBinding = selectedBinding;
-                if (oldSelectedBinding != null) {
-                    oldSelectedBinding.getRoot().setSelected(false);
-                }
-                holder.itemView.setSelected(true);
-
-                if (onClickItemListener != null) {
-                    onClickItemListener.onClick(holder.binding, position, oldSelectedBinding);
-                }
-                selectedBinding = (V) holder.binding;
+                handleClick(holder, position);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                handleLongClick(holder, position);
+                return true;
+            }
+        });
+    }
+
+    private void handleLongClick(BaseViewHolder holder, int position) {
+        V oldSelectedBinding = selectedBinding;
+        if (oldSelectedBinding != null) {
+            oldSelectedBinding.getRoot().setSelected(false);
+        }
+        holder.itemView.setSelected(true);
+
+        if (onLongClickItemListener != null) {
+            onLongClickItemListener.onLongClick(holder.binding, position, oldSelectedBinding);
+        }
+        selectedBinding = (V) holder.binding;
+    }
+
+    private void handleClick(BaseViewHolder holder, int position) {
+        V oldSelectedBinding = selectedBinding;
+        if (oldSelectedBinding != null) {
+            oldSelectedBinding.getRoot().setSelected(false);
+        }
+        holder.itemView.setSelected(true);
+
+        if (onClickItemListener != null) {
+            onClickItemListener.onClick(holder.binding, position, oldSelectedBinding);
+        }
+        selectedBinding = (V) holder.binding;
     }
 
     @Override
@@ -141,10 +165,19 @@ public class DataBindingAdapter<T, V extends ViewDataBinding> extends RecyclerVi
         this.onClickItemListener = onClickItemListener;
     }
 
+    public void setOnLongClickItemListener(OnLongClickItemListener<V> onLongClickItemListener) {
+        this.onLongClickItemListener = onLongClickItemListener;
+    }
+
     private OnClickItemListener onClickItemListener;
+    private OnLongClickItemListener onLongClickItemListener;
 
     public interface OnClickItemListener<U> {
         void onClick(U selectedbinding, int position, U lastSelectedBinding);
+    }
+
+    public interface OnLongClickItemListener<U> {
+        void onLongClick(U selectedbinding, int position, U lastSelectedBinding);
     }
 
     static class BaseViewHolder extends RecyclerView.ViewHolder {

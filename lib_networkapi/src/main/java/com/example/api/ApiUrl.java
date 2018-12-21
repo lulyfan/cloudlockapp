@@ -41,16 +41,16 @@ public interface ApiUrl {
     String queryLogsByKey = "api/log/pageKeyLog?json";
 
     //上传用户头像
-    String uploadImg = "api/user/uploadImg";
+    String uploadImg = "api/user/uploadImg?json";
 
     //修改用户头像
-    String uploadHead = "api/user/uploadHead";
+    String uploadHead = "api/user/uploadHead?json";
 
     //修改用户昵称
-    String editUserNmae = "api/user/updateName";
+    String editUserNmae = "api/user/updateName?json";
 
     //修改配置启用状态
-    String changeUserConfig = "api/user/changeUserConfig";
+    String changeUserConfig = "api/user/changeUserConfig?json";
 
     //获取用户信息
     String getUserInfo = "api/user/getUserInfo?json";
@@ -59,28 +59,28 @@ public interface ApiUrl {
     String resetPassword = "api/user/resetPwd?json";
 
     //查找锁日志
-    String queryLogsByLock = "api/log/pageLockLog";
+    String queryLogsByLock = "api/log/pageLockLog?json";
 
     //用户下锁日志列表
     String queryLogsByUser = "api/log/pageUserLog?json";
 
     //获取用户的管理员锁
-    String pageAdminLock = "api/lock/pageAdminLock";
+    String pageAdminLock = "api/lock/pageAdminLock?json";
 
     //获取锁分组
-    String getGroup = "api/lockGroup/getGroup";
+    String getGroup = "api/lockGroup/getGroup?json";
 
     //添加锁组
-    String addGroup = "api/lockGroup/newGroup";
+    String addGroup = "api/lockGroup/newGroup?json";
 
     //获取锁组内信息
-    String getLockInfoFromGroup = "api/lockGroup/getLockInfoFromGroup";
+    String getLockInfoFromGroup = "api/lockGroup/getLockInfoFromGroup?json";
 
     //删除锁分组
-    String delGroup = "api/lockGroup/delGroup";
+    String delGroup = "api/lockGroup/delGroup?json";
 
     //修改锁名称
-    String updateGroupName = "api/lockGroup/updateGroupName";
+    String updateGroupName = "api/lockGroup/updateGroupName?json";
 
     //获取忘记密码验证码
     String getForgetPwdVerifyCode = "api/user/getForgetPwdVeriCode?json";
@@ -89,25 +89,25 @@ public interface ApiUrl {
     String editKey = "/api/key/modifyKeyRule?json";
 
     //转移锁权限
-    String changeLockAdmin = "api/lock/changeLockAdmin";
+    String changeLockAdmin = "api/lock/changeLockAdmin?json";
 
     //发送短信验证码
-    String sendMobileCode = "api/user/sendMobileCode";
+    String sendMobileCode = "api/user/sendMobileCode?json";
 
     //获取转移管理员的验证码
-    String getChangeAdminCode = "api/lock/getChangeAdminCode";
+    String getChangeAdminCode = "api/lock/getChangeAdminCode?json";
 
     //退出登录
-    String logout = "api/user/logout";
+    String logout = "api/user/logout?json";
 
     //获取锁用户
-    String pageLockUser = "api/lock/pageLockUser";
+    String pageLockUser = "api/lock/pageLockUser?json";
 
     //根据手机号获取用户信息
-    String getUserInfoByMobile = "api/user/getUserInfoByMobile";
+    String getUserInfoByMobile = "api/user/getUserInfoByMobile?json";
 
     //获取发给
-    String pageLockUserKey = "api/lock/pageLockUserKey";
+    String pageLockUserKey = "api/lock/pageLockUserKey?json";
 
     //获取消息列表
     String getMessage = "api/lockMessage/getMessage?json";

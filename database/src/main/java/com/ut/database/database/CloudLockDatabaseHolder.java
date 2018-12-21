@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.ut.database.dao.LockGroupDao;
 import com.ut.database.dao.LockKeyDao;
 import com.ut.database.dao.NotifyDao;
 import com.ut.database.dao.UUIDDao;

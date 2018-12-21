@@ -38,6 +38,7 @@ public class MyRetrofit {
     private CommonApiService mCommonApiService = null;
 
     private OkHttpClient mOkHttpClient = null;
+    private WebSocketHelper mWebSocketHelper;
 
     static String getBaseUrl() {
         String baseUrl = "http://192.168.104.51:8666/api/";//大众云锁服务器url
@@ -94,6 +95,7 @@ public class MyRetrofit {
                 .writeTimeout(10, TimeUnit.SECONDS);
         builder.addInterceptor(httpLoggingInterceptor);
         mOkHttpClient = builder.build();
+        mWebSocketHelper = new WebSocketHelper(mOkHttpClient);
     }
 
     private void handlerResponse(Response response) throws IOException {
@@ -152,6 +154,10 @@ public class MyRetrofit {
                 .client(HttpClientHelper.getClient(progressListener))
                 .build();
         return retrofit.create(DownloadApi.class);
+    }
+
+    public void setWebSocketListener(WebSocketHelper.DataListener dataListener) {
+        mWebSocketHelper.setDataListener(dataListener);
     }
 
     private static class Holder {

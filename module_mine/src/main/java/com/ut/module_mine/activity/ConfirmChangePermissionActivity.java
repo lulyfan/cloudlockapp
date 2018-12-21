@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -62,9 +63,15 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
             }
         });
 
-        binding.confirm.setOnClickListener(v -> {
-            String verifyCode = binding.checkCodeView.getInput();
-            viewModel.changeLockAdmin(verifyCode);
+        binding.confirm.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_UP == event.getAction()) {
+                    String verifyCode = binding.checkCodeView.getInput();
+                    viewModel.changeLockAdmin(verifyCode);
+                }
+                return true;
+            }
         });
 
         binding.timer.setOnClickListener(v -> sendVerifyCode());
