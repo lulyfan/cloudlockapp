@@ -1,5 +1,10 @@
 package com.ut.database.entity;
 
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class LockUserKey {
 
     /**
@@ -10,6 +15,7 @@ public class LockUserKey {
      */
 
     private int ruleType;
+    @PrimaryKey
     private int keyId;
     private String lockName;
     private String mac;

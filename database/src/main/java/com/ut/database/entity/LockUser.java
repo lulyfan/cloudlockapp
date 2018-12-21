@@ -1,5 +1,9 @@
 package com.ut.database.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class LockUser {
 
     /**
@@ -11,6 +15,7 @@ public class LockUser {
 
     private long createTime;
     private String name;
+    @PrimaryKey
     private int userId;
     private String telNo;
 

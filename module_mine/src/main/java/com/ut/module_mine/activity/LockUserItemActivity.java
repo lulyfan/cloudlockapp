@@ -1,10 +1,8 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -46,7 +44,7 @@ public class LockUserItemActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserItemViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
-        viewModel.lockUserKeys.observe(this, lockUserKeys -> {
+        viewModel.mLockUserKeys.observe(this, lockUserKeys -> {
             List<Data> dataList = new ArrayList<>();
             for (LockUserKey key : lockUserKeys) {
                 String keyType = "";
