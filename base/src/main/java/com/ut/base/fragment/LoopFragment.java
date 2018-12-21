@@ -1,16 +1,21 @@
 package com.ut.base.fragment;
 
 
+import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ut.base.R;
 import com.ut.base.Utils.DialogUtil;
+import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.base.customView.DatePicker;
 import com.ut.base.customView.TimePicker;
 import com.ut.base.databinding.FragmentLoopBinding;
@@ -39,30 +44,38 @@ public class LoopFragment extends Fragment {
         binding.validTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseTime(v, "生效时间");
+                chooseTime(v, getString(R.string.validTime));
             }
         });
 
         binding.invalidTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseTime(v, "失效时间");
+                chooseTime(v, getString(R.string.invalidTime));
             }
         });
 
         binding.startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               chooseDate(v, "启用日期");
+               chooseDate(v, getString(R.string.startDate));
             }
         });
 
         binding.endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseDate(v, "停止日期");
+                chooseDate(v, getString(R.string.endDate));
             }
         });
+
+        ImageView iv_contact = binding.getRoot().findViewById(R.id.contact);
+        iv_contact.setOnClickListener(v -> ((GrantPermissionActivity)getActivity()).selectContact());
+
+        EditText et_phoneNum = binding.getRoot().findViewById(R.id.et_phoneNum);
+        EditText et_name = binding.getRoot().findViewById(R.id.et_receiverName);
+        ((GrantPermissionActivity)getActivity()).receiverPhoneNum.observe(this, s -> et_phoneNum.setText(s));
+        ((GrantPermissionActivity)getActivity()).receiverName.observe(this, s -> et_name.setText(s));
     }
 
     private void chooseDate(View v, String title) {

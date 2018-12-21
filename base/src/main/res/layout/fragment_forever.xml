@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ut.base.fragment.ForeverFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <include
-        android:id="@+id/include"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1901"
-        layout="@layout/receiver" />
+        android:layout_height="match_parent"
+        tools:context="com.ut.base.fragment.ForeverFragment">
 
-    <Switch
-        android:id="@+id/switch3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.101"
-        android:layout_marginTop="16dp"
-        android:text="@string/setGrantUser"
-        android:textSize="@dimen/s"
-        android:textColor="@color/gray6"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@drawable/arc_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include" />
+        <!-- TODO: Update blank fragment layout -->
+        <include
+            android:id="@+id/include"
+            layout="@layout/receiver"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.1901" />
 
-</android.support.constraint.ConstraintLayout>
+        <Switch
+            android:id="@+id/switch3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/arc_border"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/setGrantUser"
+            android:textColor="@color/gray6"
+            android:textSize="@dimen/s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.101"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

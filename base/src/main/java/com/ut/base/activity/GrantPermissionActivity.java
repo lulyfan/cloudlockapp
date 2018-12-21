@@ -1,9 +1,19 @@
 package com.ut.base.activity;
 
+import android.arch.lifecycle.MutableLiveData;
+import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.ut.base.BaseActivity;
 import com.ut.base.R;
@@ -13,6 +23,9 @@ import com.ut.base.databinding.ActivityGrantPermissionBinding;
 
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
+    public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();
+    public MutableLiveData<String> receiverName = new MutableLiveData<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,5 +56,38 @@ public class GrantPermissionActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
         return true;
+    }
+
+    static final int REQUEST_SELECT_PHONE_NUMBER = 1;
+
+    public void selectContact() {
+        // Start an activity for the user to pick a phone number from contacts
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SELECT_PHONE_NUMBER && resultCode == RESULT_OK) {
+            // Get the URI and query the content provider for the phone number
+            Uri contactUri = data.getData();
+            String[] projection = new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER,
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+
+            Cursor cursor = getContentResolver().query(contactUri, projection,
+                    null, null, null);
+            // If the cursor returned is valid, get the phone number
+            if (cursor != null && cursor.moveToFirst()) {
+                int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                String number = cursor.getString(numberIndex).replace(" ","");
+                String name = cursor.getString(nameIndex);
+                receiverPhoneNum.setValue(number);
+                receiverName.setValue(name);
+            }
+        }
     }
 }

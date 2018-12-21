@@ -41,7 +41,7 @@ public class LockGroupItemActivity extends BaseActivity {
 
     private ActivityLockGroupItemBinding binding;
     private LockGroupItemViewModel viewModel;
-    private DataBindingAdapter<String, ItemLockBinding> adapter;
+    private DataBindingAdapter<Lock, ItemLockBinding> adapter;
     public static final String EXTRA_LOCK_GROUP_NAME = "lockGroupName";
     public static final String EXTRA_LOCK_GROUP_ID = "lockGroupId";
 
@@ -55,27 +55,11 @@ public class LockGroupItemActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupItemViewModel.class);
-        viewModel.locks.observe(this, new Observer<List<Lock>>() {
-            @Override
-            public void onChanged(@Nullable List<Lock> locks) {
-                List<String> lockList = new ArrayList<>();
-                for (Lock lock : locks) {
-                    String lockName = lock.getName();
-                    lockList.add(lockName);
-                }
-                adapter.setData(lockList);
-            }
-        });
+        viewModel.locks.observe(this, locks -> adapter.setData(locks));
 
-        viewModel.updateGroupName.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String groupName) {
-                setTitle(groupName);
-            }
-        });
+        viewModel.updateGroupName.observe(this, groupName -> setTitle(groupName));
 
         viewModel.delGroupSuccess.observe(this, aVoid -> onBackPressed());
-
         viewModel.tip.observe(this, s -> toastShort(s));
     }
 
@@ -118,20 +102,13 @@ public class LockGroupItemActivity extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockList.setLayoutManager(layoutManager);
 
-        adapter = new DataBindingAdapter<>(this, R.layout.item_lock, BR.lockName);
-
-        List<String> lockList = new ArrayList<>();
-        lockList.add("物联锁");
-        lockList.add("家居锁");
-        lockList.add("物联锁");
-        lockList.add("家居锁");
-        adapter.setData(lockList);
+        adapter = new DataBindingAdapter<>(this, R.layout.item_lock, BR.lock);
         binding.rvLockList.setAdapter(adapter);
 
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
-            Intent intent = new Intent(LockGroupItemActivity.this, KeyManageActivity.class);
-            startActivity(intent);
-//            ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD).navigation();
+            ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module)
+                    .withObject("lock", selectedbinding.getLock())
+                    .navigation();
         });
     }
 

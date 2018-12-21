@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="lockName"
-            type="String"/>
+            name="lock"
+            type="com.ut.database.entity.Lock"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -22,7 +22,7 @@
             android:drawableRight="@drawable/right_triangle"
             android:drawablePadding="@dimen/base_16dp"
             android:gravity="center_vertical"
-            android:text="@{lockName}"
+            android:text="@{lock.getName()}"
             android:textColor="@color/gray3"
             android:textSize="@dimen/s"
             app:layout_constraintBottom_toBottomOf="parent"
