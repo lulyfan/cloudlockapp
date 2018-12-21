@@ -61,28 +61,34 @@ public class LockDetailVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
-                CloudLock cloudLock = new CloudLock(mLockKey.getMac());
-                cloudLock.setOpenLockPassword(mLockKey.getAdminPwd());
-                cloudLock.setEncryptType(mLockKey.getEncryptType());
-                cloudLock.setEntryptKey(mLockKey.getEncryptKey());
-                UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
-                    @Override
-                    public void onSuccess(CloudLock cloudLock) {
-                        //TODO 提示开锁成功，并发送记录到后台
-                    }
-
-                    @Override
-                    public void onFailed(int i, String s) {
-                        //TODO 提示开锁失败
-                    }
-                });
+                toActOpenLock();
+                connectStatus.postValue(true);
             }
 
             @Override
             public void onDisconnect(int i, String s) {
+                connectStatus.postValue(false);
                 if (i != -100) {
                     //TODO 提示连接失败
                 }
+            }
+        });
+    }
+
+    private void toActOpenLock() {
+        CloudLock cloudLock = new CloudLock(mLockKey.getMac());
+        cloudLock.setOpenLockPassword(mLockKey.getBlueKey());
+        cloudLock.setEncryptType(mLockKey.getEncryptType());
+        cloudLock.setEntryptKey(mLockKey.getEncryptKey());
+        UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
+            @Override
+            public void onSuccess(CloudLock cloudLock) {
+                //TODO 提示开锁成功，并发送记录到后台
+            }
+
+            @Override
+            public void onFailed(int i, String s) {
+                //TODO 提示开锁失败
             }
         });
     }

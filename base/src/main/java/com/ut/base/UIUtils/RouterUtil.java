@@ -29,7 +29,7 @@ public class RouterUtil {
     public static class LockModulePath {
         //锁模块的首页
         public static final String Fragment_Lock = "/lock/main";
-        public static final String KEY_INFO =  "/lock/keyInfo";
+        public static final String KEY_INFO = "/lock/keyInfo";
         public static final String KEY_MANAGER = "/lock/keyManager";
         public static final String OPERATION_RECORD = "/lock/operationRecord";
         public static final String EDIT_KEY_NAME = "/lock/editKeyName";
@@ -38,6 +38,13 @@ public class RouterUtil {
         public static final String EDIT_LOOP_TIME = "/lock/editLoopTime";
         public static final String LOCK_SETTING = "/lock/lockSetting";
         public static final String APPLY_KEY = "/lock/applyKey";
+        //锁详情
+        public static final String LOCK_DETAIL = "/lock/detail";
+
+    }
+
+    public interface LockModuleExtraKey {
+        String Extra_lock_detail = "extra_lock_key";
     }
 
     public static class MsgModulePath {
@@ -57,4 +64,6 @@ public class RouterUtil {
         //我的模块首页
         public static final String Fragment_Mine = "/mine/main";
     }
+
+
 }

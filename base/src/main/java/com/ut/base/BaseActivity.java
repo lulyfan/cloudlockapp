@@ -1,5 +1,6 @@
 package com.ut.base;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,12 +55,16 @@ public class BaseActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(url -> {
                         try {
-                            if (noLoginDialog != null) noLoginDialog.dismiss();
+                            if (noLoginDialog != null && noLoginDialog.isShowing())
+                                noLoginDialog.dismiss();
                             noLoginDialog = new AlertDialog.Builder(BaseActivity.this)
                                     .setTitle("还未登录")
                                     .setMessage("请重新登录")
                                     .setPositiveButton("好的", (dialog1, which) -> {
                                         ARouter.getInstance().build(url).navigation();
+                                        noLoginDialog.dismiss();
+                                    }).setOnDismissListener(dialog -> {
+                                        noLoginDialog = null;
                                     }).create();
                             if (!noLoginDialog.isShowing()) {
                                 noLoginDialog.show();

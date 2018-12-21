@@ -111,7 +111,7 @@ public class LockListFragment extends BaseFragment {
                     LockKey lockKey = (LockKey) datas.get(position);
                     if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
                         Intent intent = new Intent(getContext(), LockDetailActivity.class);
-                        intent.putExtra(LockDetailActivity.EXTRA_LOCK_KEY, (Parcelable) datas.get(position));
+                        intent.putExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail, (Parcelable) datas.get(position));
                         startActivity(intent);
                     }
                 }

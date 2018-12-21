@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
@@ -28,8 +29,8 @@ import com.ut.unilink.UnilinkManager;
 
 import org.w3c.dom.Text;
 
+@Route(path = RouterUtil.LockModulePath.LOCK_DETAIL)
 public class LockDetailActivity extends BaseActivity {
-    public static final String EXTRA_LOCK_KEY = "extra_lock_key";
     private LockKey mLockKey = null;
 
     ActivityLockDetailBindingImpl mDetailBinding;
@@ -42,7 +43,7 @@ public class LockDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableImmersive();
-        mLockKey = getIntent().getParcelableExtra(EXTRA_LOCK_KEY);
+        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
