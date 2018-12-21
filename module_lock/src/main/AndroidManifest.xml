@@ -36,7 +36,7 @@
         <activity android:name=".activity.OperationRecordAcitivity"/>
         <activity android:name=".activity.ApplyKeyActivity"/>
         <activity android:name=".activity.LockSettingActivity"/>
-        <activity android:name=".activity.ChooseKeyGroupActivity"/>
+        <activity android:name=".activity.ChooseLockGroupActivity"/>
         <activity android:name=".activity.EditLoopKeyActivity"/>
         <activity android:name=".activity.SearchLockActivity">
         </activity>

@@ -14,7 +14,7 @@ import java.io.Serializable;
  * time   : 2018/11/29
  * desc   :
  */
-public class KeyItem implements Serializable {
+public class Key implements Serializable {
 
     private long keyId;//
     private String userName; //钥匙名字

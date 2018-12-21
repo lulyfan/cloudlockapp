@@ -124,4 +124,17 @@
     <string name="lock_key_status_has_deleted">已删除</string>
     <string name="lock_key_status_has_invailed">已失效</string>
     <string name="lock_key_status_out_of_date">已过期</string>
+    <string name="lock_delete_key_tips">确定删除该钥匙吗？删除会在用户APP联网后生效。</string>
+    <string name="lock_delete">删除</string>
+    <string name="lock_to_grant_authorization_or_not">授权/取消授权</string>
+    <string name="lock_to_frozen_or_not">冻结/解除冻结</string>
+    <string name="lock_unfrozen">解除冻结</string>
+    <string name="lock_unfrozen_tips">解除冻结会在用户APP联网后生效。</string>
+    <string name="lock_frozen_tips">确定删除该钥匙吗？冻结会在用户APP联网后生效。</string>
+    <string name="lock_frozen">冻结</string>
+    <string name="lock_delete_lock_tips">确定删除该锁吗？删除后所有的钥匙都将失效。</string>
+    <string name="lock_verify_user_password_hint">请输入账号的密码</string>
+    <string name="lock_safe_verify">安全验证</string>
+    <string name="lock_create_group">创建新分组</string>
+    <string name="lock_create_group_hint">请输入组名称</string>
 </resources>

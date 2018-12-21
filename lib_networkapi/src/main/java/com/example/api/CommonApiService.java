@@ -215,4 +215,16 @@ public interface CommonApiService {
                                      @Field("startTime") String startTime, @Field("endTime") String endTime,
                                      @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange,
                                      @Field("endTimeRange") String endTimeRange);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.addLockIntoGroup)
+    Observable<Result<Void>> addLockIntoGroup(@Field("macs") String mac, @Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.verifyUserPwd)
+    Observable<Result<Void>> verifyUserPwd(@Field("password") String password);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.deleteAdminLock)
+    Observable<Result<Void>> deleteAdminLock(@Field("mac")String mac);
 }

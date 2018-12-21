@@ -14,7 +14,7 @@ import com.ut.base.Utils.DialogUtil;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLoopBinding;
-import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.Key;
 
 import java.util.Locale;
 
@@ -28,15 +28,15 @@ import java.util.Locale;
 public class EditLoopKeyActivity extends BaseActivity {
 
     private ActivityEditLoopBinding mBinding;
-    private KeyItem mKeyItem;
+    private Key mKey;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_loop);
-        mKeyItem = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
-        mBinding.setKeyItem(mKeyItem);
+        mKey = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
+        mBinding.setKeyItem(mKey);
         initUI();
 
     }
@@ -64,7 +64,7 @@ public class EditLoopKeyActivity extends BaseActivity {
 
         mBinding.btnSave.setOnClickListener(v -> save());
 
-        String weeks = mKeyItem.getWeeks();
+        String weeks = mKey.getWeeks();
 
         if (weeks.contains("1")) {
             checkBox1.setChecked(true);
@@ -97,11 +97,11 @@ public class EditLoopKeyActivity extends BaseActivity {
                     + String.format(Locale.getDefault(), "%02d", hour) + ":"
                     + String.format(Locale.getDefault(), "%02d", minute));
             if ("生效时间".equals(title)) {
-                mKeyItem.setStartTime(dateTime);
+                mKey.setStartTime(dateTime);
             } else {
-                mKeyItem.setEndTime(dateTime);
+                mKey.setEndTime(dateTime);
             }
-            mBinding.setKeyItem(mKeyItem);
+            mBinding.setKeyItem(mKey);
         });
     }
 
@@ -129,9 +129,9 @@ public class EditLoopKeyActivity extends BaseActivity {
             weeks.append(weeks.length() == 0 ? "7" : ",7");
         }
 
-        mKeyItem.setWeeks(weeks.toString());
+        mKey.setWeeks(weeks.toString());
         Intent intent = new Intent();
-        intent.putExtra(Constance.KEY_INFO, mKeyItem);
+        intent.putExtra(Constance.KEY_INFO, mKey);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -140,11 +140,11 @@ public class EditLoopKeyActivity extends BaseActivity {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
             String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
             if ("启用时期".equals(title)) {
-                mKeyItem.setStartTimeRange(date);
+                mKey.setStartTimeRange(date);
             } else {
-                mKeyItem.setEndTimeRange(date);
+                mKey.setEndTimeRange(date);
             }
-            mBinding.setKeyItem(mKeyItem);
+            mBinding.setKeyItem(mKey);
         });
     }
 

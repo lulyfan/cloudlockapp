@@ -135,4 +135,13 @@ public interface ApiUrl {
 
     //发送钥匙
     String sendKey = "api/lock/sendKey?json";
+
+    //添加锁进分组
+    String addLockIntoGroup = "api/lockGroup/addLockIntoGroup?json";
+
+    //验证用户
+    String verifyUserPwd = "api/user/veriPassword?json";
+
+    //删除管理员锁
+    String deleteAdminLock = "api/lock/delAdminLock?json";
 }

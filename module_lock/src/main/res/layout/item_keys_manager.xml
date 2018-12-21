@@ -11,7 +11,7 @@
 
         <variable
             name="keyItem"
-            type="com.ut.module_lock.entity.KeyItem" />
+            type="com.ut.module_lock.entity.Key" />
     </data>
 
     <android.support.constraint.ConstraintLayout

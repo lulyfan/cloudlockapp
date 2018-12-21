@@ -76,17 +76,15 @@ public class CustomerAlertDialog extends BaseDialog {
         public void onClickCancel(View view) {
             if (cancelListener != null) {
                 cancelListener.onClick(view);
-            } else {
-                dismiss();
             }
+            dismiss();
         }
 
         public void onClickConfirm(View view) {
             if (confirmListener != null) {
                 confirmListener.onClick(view);
-            } else {
-                dismiss();
             }
+            dismiss();
         }
     }
 }
