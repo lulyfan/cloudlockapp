@@ -2,10 +2,14 @@ package com.ut.module_mine.viewModel;
 
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.example.entity.base.Result;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.Lock;
+import com.ut.database.entity.LockKey;
 import com.ut.module_mine.R;
 
 import java.util.List;
@@ -16,24 +20,10 @@ public class ChangeLockPermissionViewModel extends BaseViewModel{
 
     private int currentPage = 1;
     private int pageSize = 10;
-    public MutableLiveData<List<Lock>> locks = new MutableLiveData<>();
+    public MutableLiveData<List<LockKey>> locks = new MutableLiveData<>();
 
     public ChangeLockPermissionViewModel(@NonNull Application application) {
         super(application);
-    }
-
-    public void loadAdminLock() {
-        service.pageAdminLock(currentPage, pageSize)
-                .doOnNext(stringResult -> {
-                    if (stringResult == null) {
-                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
-                    }
-
-                    if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
-                    }
-                })
-                .subscribe(listResult -> locks.postValue(listResult.data),
-                        throwable -> tip.postValue(throwable.getMessage()));
+        LockKeyDaoImpl.get().getAdminLock().observeForever(lockKeys -> locks.setValue(lockKeys));
     }
 }

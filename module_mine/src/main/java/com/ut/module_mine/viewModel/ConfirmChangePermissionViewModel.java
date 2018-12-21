@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.User;
 import com.ut.module_mine.GlobalData;
 import com.ut.module_mine.R;
@@ -59,6 +60,10 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
+                            String[] macArray = macs.split(",");
+                            for (String mac : macArray) {
+                                LockKeyDaoImpl.get().deleteByMac(mac);
+                            }
                             ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
                         },
                         throwable -> tip.postValue(throwable.getMessage()));

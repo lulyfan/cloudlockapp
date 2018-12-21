@@ -2,13 +2,9 @@ package com.ut.module_mine.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,16 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.Utils.Util;
 import com.ut.database.entity.LockGroup;
 import com.ut.module_mine.BR;
-import com.ut.module_mine.util.BottomLineItemDecoration;
 import com.ut.module_mine.adapter.DataBindingAdapter;
-import com.ut.base.Utils.DialogUtil;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityLockGroupBinding;
 import com.ut.module_mine.databinding.ItemLockGroupBinding;
@@ -57,7 +49,7 @@ public class LockGroupActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupViewModel.class);
-        viewModel.lockGroups.observe(this, new Observer<List<LockGroup>>() {
+        viewModel.mLockGroups.observe(this, new Observer<List<LockGroup>>() {
             @Override
             public void onChanged(@Nullable List<LockGroup> lockGroups) {
                 List<LockGroupData> lockGroupDataList = new ArrayList<>();
@@ -68,18 +60,8 @@ public class LockGroupActivity extends BaseActivity {
                 adapter.setData(lockGroupDataList);
             }
         });
-        viewModel.addGroupSuccess.observe(this, new Observer<Void>() {
-            @Override
-            public void onChanged(@Nullable Void aVoid) {
-                viewModel.loadLockGroup();
-            }
-        });
-        viewModel.tip.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                toastShort(s);
-            }
-        });
+        viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup());
+        viewModel.tip.observe(this, s -> toastShort(s));
     }
 
     @Override

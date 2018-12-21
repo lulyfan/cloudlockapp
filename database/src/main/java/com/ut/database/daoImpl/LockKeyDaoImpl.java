@@ -80,6 +80,18 @@ public class LockKeyDaoImpl {
         return mLockKeyDao.getLockByName(name);
     }
 
+    public LockKey getLockByMac(String mac) {
+        return mLockKeyDao.getByMac(mac);
+    }
+
+    public void deleteByMac(String mac) {
+        mLockKeyDao.deleteByMac(mac);
+    }
+
+    public LiveData<List<LockKey>> getAdminLock() {
+        return mLockKeyDao.getAdminLock();
+    }
+
     private static class Holder {
         protected static LockKeyDaoImpl lockKeyDao = new LockKeyDaoImpl();
     }

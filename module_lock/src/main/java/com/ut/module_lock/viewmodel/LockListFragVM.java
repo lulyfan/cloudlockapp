@@ -78,7 +78,7 @@ public class LockListFragVM extends AndroidViewModel {
         if (lockGroup.getId() == -1){
             return LockKeyDaoImpl.get().getAllLockKey();
         }else{
-            return LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
+            return LockKeyDaoImpl.get().getLockByGroupId((int) lockGroup.getId());
         }
     }
 

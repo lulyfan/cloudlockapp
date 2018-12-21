@@ -19,16 +19,15 @@ public class LockUserViewModel extends BaseViewModel {
 
     public LockUserViewModel(@NonNull Application application) {
         super(application);
-    }
-
-    public void loadLockUser() {
         LockUserDaoImpl.get().getAll().observeForever(new Observer<List<LockUser>>() {
             @Override
             public void onChanged(@Nullable List<LockUser> lockUsers) {
                 mLockUsers.postValue(lockUsers);
             }
         });
+    }
 
+    public void loadLockUser() {
         service.pageLockUser(mCurrentPage, PAGE_SIZE)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
