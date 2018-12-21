@@ -65,22 +65,22 @@ public class LockListFragment extends BaseFragment {
         if (mView == null) {
             mFragmentLocklistBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_locklist, container, false);
             mView = mFragmentLocklistBinding.getRoot();
+            mFragmentLocklistBinding.setPresenter(new Present());
+            addPaddingTop();
+            initRecycleView();
+            initViewModel();
         }
         return mView;
     }
 
     private void addPaddingTop() {
-        View view = getView().findViewById(R.id.parent);
+        View view = mView.findViewById(R.id.parent);
         view.setPadding(view.getPaddingLeft(), Util.getStatusBarHeight(getContext()), view.getPaddingRight(), view.getPaddingBottom());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        addPaddingTop();
-        mFragmentLocklistBinding.setPresenter(new Present());
-        initRecycleView();
-        initViewModel();
         mLockListFragVM.toGetLockList();
     }
 

@@ -15,11 +15,12 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeyInfoBinding;
-import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.Key;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 /**
@@ -31,29 +32,31 @@ import com.ut.module_lock.viewmodel.KeyManagerVM;
 @Route(path = RouterUtil.LockModulePath.KEY_INFO)
 public class KeyInfoActivity extends BaseActivity {
 
-    private KeyItem keyInfo;
+    private Key keyInfo;
     private ActivityKeyInfoBinding mBinding = null;
     private static final int REQUEST_EDIT_KEY = 1111;
 
     private KeyManagerVM keyManagerVM = null;
 
+    private void initTitle() {
+        initDarkToolbar();
+        setTitle(R.string.lock_key_info);
+        if (keyInfo.getUserType() < 3) {
+            initMore(this::popupMoreWindow);
+        }
+
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
-        keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
+        keyInfo = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
         keyManagerVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         keyManagerVM.getFeedbackMessage().observe(this, message -> CLToast.showAtBottom(KeyInfoActivity.this, message));
         mBinding.setKeyItem(keyInfo);
         initTitle();
         initListener();
-
-    }
-
-    private void initTitle() {
-        initDarkToolbar();
-        setTitle(R.string.lock_key_info);
-        initMore(this::popupMoreWindow);
 
     }
 
@@ -81,7 +84,12 @@ public class KeyInfoActivity extends BaseActivity {
     }
 
     private void deleteKey() {
-        keyManagerVM.deleteKey(keyInfo.getKeyId());
+        CustomerAlertDialog dialog = new CustomerAlertDialog(this, false);
+        dialog.setMsg(getString(R.string.lock_delete_key_tips));
+        dialog.setConfirmText(getString(R.string.lock_delete));
+        dialog.setConfirmListener(v -> keyManagerVM.deleteKey(keyInfo.getKeyId()));
+        dialog.setCancelText(getString(R.string.lock_cancel));
+        dialog.setCancelLister(null);
     }
 
     private void popupMoreWindow() {
@@ -92,21 +100,34 @@ public class KeyInfoActivity extends BaseActivity {
             @Override
             protected void initView() {
                 TextView item1 = getView(R.id.item1);
-                item1.setText("授权/取消授权");
+                item1.setText(R.string.lock_to_grant_authorization_or_not);
                 item1.setOnClickListener(v -> {
-                    //ToDO
                     getPopupWindow().dismiss();
+                    //ToDO
+                    //授权 or not
+
                 });
                 TextView item2 = getView(R.id.item2);
-                item2.setText("冻结/解除冻结");
+                item2.setText(R.string.lock_to_frozen_or_not);
                 item2.setOnClickListener(v -> {
-                    //ToDO
                     getPopupWindow().dismiss();
-
                     if (keyInfo.isForzened()) {
-                        keyManagerVM.unFrozenKey(keyInfo.getKeyId());
+                        CustomerAlertDialog dialog = new CustomerAlertDialog(KeyInfoActivity.this, false);
+                        dialog.setMsg(getString(R.string.lock_unfrozen_tips));
+                        dialog.setConfirmText(getString(R.string.lock_unfrozen));
+                        dialog.setConfirmListener(v1 ->
+                                keyManagerVM.unFrozenKey(keyInfo.getKeyId()));
+                        dialog.setCancelText(getString(R.string.lock_cancel));
+                        dialog.setCancelLister(null);
+
                     } else {
-                        keyManagerVM.frozenKey(keyInfo.getKeyId());
+                        CustomerAlertDialog dialog = new CustomerAlertDialog(KeyInfoActivity.this, false);
+                        dialog.setMsg(getString(R.string.lock_frozen_tips));
+                        dialog.setConfirmText(getString(R.string.lock_frozen));
+                        dialog.setConfirmListener(v1 ->
+                                keyManagerVM.frozenKey(keyInfo.getKeyId()));
+                        dialog.setCancelText(getString(R.string.lock_cancel));
+                        dialog.setCancelLister(null);
                     }
 
                 });
@@ -136,7 +157,7 @@ public class KeyInfoActivity extends BaseActivity {
                 case REQUEST_EDIT_KEY:
                     if (data == null) return;
                     if (data.hasExtra(Constance.KEY_INFO)) {
-                        KeyItem item = (KeyItem) data.getSerializableExtra(Constance.KEY_INFO);
+                        Key item = (Key) data.getSerializableExtra(Constance.KEY_INFO);
                         if (item != null) {
                             keyInfo = item;
                         }
@@ -155,7 +176,7 @@ public class KeyInfoActivity extends BaseActivity {
 
     @Override
     public void finish() {
-        if(hasEdit) {
+        if (hasEdit) {
             keyManagerVM.editKey(keyInfo);
         }
         super.finish();

@@ -2,24 +2,18 @@ package com.ut.module_lock.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.DialogUtil;
-import com.ut.base.customView.DatePicker;
-import com.ut.base.customView.DateTimePicker;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLimitedTimeBinding;
-import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.Key;
 
 import java.util.Locale;
 
@@ -32,7 +26,7 @@ import java.util.Locale;
 public class EditLimitedTimeActivity extends BaseActivity {
 
     private ActivityEditLimitedTimeBinding mBinding = null;
-    private KeyItem keyInfo;
+    private Key keyInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +34,7 @@ public class EditLimitedTimeActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_limited_time);
         initDarkToolbar();
         setTitle(R.string.lock_loop_key);
-        keyInfo = (KeyItem) getIntent().getSerializableExtra(Constance.KEY_INFO);
+        keyInfo = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
         mBinding.setKeyItem(keyInfo);
         mBinding.chooseStartTime.setOnClickListener(v -> dateChoose(v, "生效时间"));
         mBinding.chooseEndTime.setOnClickListener(v -> dateChoose(v, "失效时间"));

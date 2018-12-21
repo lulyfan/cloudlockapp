@@ -15,7 +15,8 @@ import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.commoncomponent.CLToast;
-import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.Key;
+
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("CheckResult")
 public class KeyManagerVM extends AndroidViewModel {
-    private MutableLiveData<List<KeyItem>> keys = null;
+    private MutableLiveData<List<Key>> keys = null;
     private MutableLiveData<String> feedbackMessage = null;
     private int currentPage = 0;
     private static int DEFAULT_PAGE_SIZE = 10;
@@ -47,7 +48,7 @@ public class KeyManagerVM extends AndroidViewModel {
         this.mac = mac;
     }
 
-    public MutableLiveData<List<KeyItem>> getKeys() {
+    public MutableLiveData<List<Key>> getKeys() {
         if (keys == null) {
             keys = new MutableLiveData<>();
             loadKeyItems();
@@ -69,7 +70,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(jsonObject -> {
                     String json = jsonObject.toString();
-                    return JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
+                    return JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
                     });
                 })
                 .subscribe(result -> {
@@ -91,7 +92,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribeOn(Schedulers.newThread())
                 .map(JsonElement::toString)
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(json -> JSON.parseObject(json, new TypeReference<Result<List<KeyItem>>>() {
+                .map(json -> JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
                 }))
                 .subscribe( result -> {
                     Log.d("pageKeys", result.msg);
@@ -134,7 +135,7 @@ public class KeyManagerVM extends AndroidViewModel {
         return DEFAULT_PAGE_SIZE;
     }
 
-    public void editKey(KeyItem keyItem) {
+    public void editKey(Key keyItem) {
         //ToDo
         MyRetrofit.get().getCommonApiService().editKey("33-33-22-A1-B0-34", keyItem.getKeyId(), keyItem.getStartTime(), keyItem.getEndTime(), keyItem.getWeeks(), keyItem.getStartTimeRange(), keyItem.getEndTimeRange())
                 .subscribeOn(Schedulers.io())

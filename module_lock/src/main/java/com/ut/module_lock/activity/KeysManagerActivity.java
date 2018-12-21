@@ -17,7 +17,7 @@ import com.ut.module_lock.BR;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeysManagerBinding;
-import com.ut.module_lock.entity.KeyItem;
+import com.ut.module_lock.entity.Key;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class KeysManagerActivity extends BaseActivity {
 
     private KeyManagerVM kmVM = null;
     private ActivityKeysManagerBinding mBinding = null;
-    private ListAdapter<KeyItem> mAdapter = null;
-    private List<KeyItem> keyItemList = new ArrayList<>();
+    private ListAdapter<Key> mAdapter = null;
+    private List<Key> keyList = new ArrayList<>();
     private String mMac = "";
 
     @Override
@@ -51,7 +51,7 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void init() {
-        mAdapter = new ListAdapter<KeyItem>(this, R.layout.item_keys_manager, keyItemList, BR.keyItem);
+        mAdapter = new ListAdapter<Key>(this, R.layout.item_keys_manager, keyList, BR.keyItem);
         mBinding.list.setAdapter(mAdapter);
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.setMac(mMac);
@@ -75,14 +75,14 @@ public class KeysManagerActivity extends BaseActivity {
             }, 2000L);
         });
         mBinding.refreshLayout.setOnLoadListener(() -> {
-            if (!keyItemList.isEmpty() && keyItemList.size() - 1 >= kmVM.getDefaultPageSize()) {
+            if (!keyList.isEmpty() && keyList.size() - 1 >= kmVM.getDefaultPageSize()) {
                 loadData();
             } else {
                 mBinding.refreshLayout.setLoading(false);
             }
         });
         mBinding.list.setOnItemClickListener((parent, view, position, id) -> {
-            KeyItem keyItem = keyItemList.get(position);
+            Key keyItem = keyList.get(position);
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
         });
 

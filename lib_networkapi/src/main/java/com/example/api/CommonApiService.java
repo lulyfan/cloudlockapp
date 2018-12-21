@@ -207,4 +207,16 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.pageUserLock)
     Observable<Results<LockKey>> pageUserLock(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.addLockIntoGroup)
+    Observable<Result<Void>> addLockIntoGroup(@Field("macs") String mac, @Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.verifyUserPwd)
+    Observable<Result<Void>> verifyUserPwd(@Field("password") String password);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.deleteAdminLock)
+    Observable<Result<Void>> deleteAdminLock(@Field("mac")String mac);
 }

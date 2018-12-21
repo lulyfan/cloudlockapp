@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="lockGroup"
+            type="com.ut.database.entity.LockGroup" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/check_box"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_50dp"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:layout_marginRight="@dimen/base_20dp"
+            android:background="@android:color/transparent"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_bg_radio"
+            android:text="@{lockGroup.name}"
+            android:textColor="@color/color_base_text"
+            android:textSize="@dimen/base_14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/base_20dp"
+            android:background="@color/color_base_divider" />
+
+    </FrameLayout>
+</layout>
