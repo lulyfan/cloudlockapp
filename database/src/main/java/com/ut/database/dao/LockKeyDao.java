@@ -29,6 +29,12 @@ public interface LockKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(LockKey... lockKeys);
 
+    @Query("SELECT * FROM lock_key WHERE groupId = :groupId ORDER BY userType ASC")
+    LiveData<List<LockKey>> getLockByGroupId(int groupId);
+
+    @Query("SELECT * FROM lock_key WHERE name LIKE :name ORDER BY userType ASC")
+    LiveData<List<LockKey>> getLockByName(String name);
+
     @Query("DELETE FROM lock_key")
     void deleteAll();
 

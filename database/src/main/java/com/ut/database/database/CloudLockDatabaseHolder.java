@@ -60,6 +60,10 @@ public class CloudLockDatabaseHolder {
         return mDb.lockUserKeyDao();
     }
 
+    public LockGroupDao getLockGroupDao() {
+        return mDb.lockGroupDao();
+    }
+
     private static RoomDatabase.Callback mRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
