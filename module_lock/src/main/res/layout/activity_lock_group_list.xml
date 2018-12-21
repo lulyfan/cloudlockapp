@@ -20,6 +20,7 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/base_23dp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"

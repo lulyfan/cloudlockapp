@@ -62,8 +62,7 @@ public class CommonApi {
      * @return
      */
     public static Observable<Result<List<LockGroup>>> getGroup() {
-        Observable<Result<List<LockGroup>>> resultsObservable = getCommonApiService().getGroup();
-        return resultsObservable;
+        return getCommonApiService().getGroup();
     }
 
     protected static CommonApiService getCommonApiService() {
