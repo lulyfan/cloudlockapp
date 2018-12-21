@@ -8,10 +8,9 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.base.UIUtils.SystemUtils;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
-import com.ut.module_lock.entity.LockKey;
 
 /**
  * author : chenjiajun

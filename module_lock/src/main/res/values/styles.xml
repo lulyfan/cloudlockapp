@@ -25,9 +25,13 @@
     <style name="AddGuideTV.drawableLeft">
         <item name="android:drawableLeft">@mipmap/icon_oval</item>
     </style>
-
     <style name="function_tv">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingLeft">@dimen/base_5dp</item>
+        <item name="android:paddingRight">@dimen/base_5dp</item>
+        <item name="android:paddingTop">@dimen/base_5dp</item>
+        <item name="android:paddingBottom">@dimen/base_30dp</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center_horizontal</item>

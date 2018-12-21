@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/base_20dp"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/icon_right_arrow_black"
+        android:paddingTop="@dimen/base_18dp"
+        android:paddingRight="@dimen/base_20dp"
+        android:paddingBottom="@dimen/base_18dp"
+        android:textColor="@color/color_base_title"
+        android:textSize="@dimen/base_17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <include layout="@layout/line"/>
+</android.support.constraint.ConstraintLayout>

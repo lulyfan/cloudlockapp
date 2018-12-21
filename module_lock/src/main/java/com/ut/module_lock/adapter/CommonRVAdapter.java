@@ -23,7 +23,6 @@ public class CommonRVAdapter<T, ET> {
     private int emptyVariableId;
 
 
-
     public static class CommonRVHolder<T, ET> extends RecyclerView.ViewHolder {
         private ItemLockListBinding mBinding;
         private ItemLockListEmptyBinding mEmptyBinding;
@@ -40,13 +39,13 @@ public class CommonRVAdapter<T, ET> {
         }
 
         public void bind(T item, int itemVariableId) {
-            if (item != null) {
+            if (mBinding != null && item != null) {
                 mBinding.setVariable(itemVariableId, item);
             }
         }
 
         public void bindEmpty(ET emptyData, int emptyVariableId) {
-            if (emptyData != null) {
+            if (mEmptyBinding != null && emptyData != null) {
                 mEmptyBinding.setVariable(emptyVariableId, emptyData);
             }
         }

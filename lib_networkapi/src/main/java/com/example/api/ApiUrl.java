@@ -7,6 +7,9 @@ package com.example.api;
  * version: 1.0
  */
 public interface ApiUrl {
+    String PREFIX = "/api";
+    String SUFFIX = "?json";
+
     //登录
     String loginUrl = "/api/user/login?json";
 
@@ -108,6 +111,21 @@ public interface ApiUrl {
 
     //获取发给
     String pageLockUserKey = "api/lock/pageLockUserKey?json";
+
+    //绑定锁
+    String bindLock = PREFIX + "/lock/addAdminLock" + SUFFIX;
+
+    //查询锁信息（蓝牙搜索页面）
+    String getLockInfo = PREFIX + "/lock/getLockInfo" + SUFFIX;
+
+    //删除管理员钥匙
+    String delAdminLock = PREFIX + "/lock/delAdminLock" + SUFFIX;
+
+    //修改锁名称
+    String updateLockName = PREFIX + "/lock/updateLockName" + SUFFIX;
+
+    //获取用户锁列表
+    String pageUserLock = PREFIX + "/lock/pageUserLock" + SUFFIX;
 
     //获取消息列表
     String getMessage = "api/lockMessage/getMessage?json";

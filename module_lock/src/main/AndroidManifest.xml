@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.ut.module_lock">
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,15 +27,19 @@
         </activity>
         <activity android:name=".activity.LockDetailActivity">
         </activity>
-        <activity android:name=".activity.KeyInfoActivity" />
-        <activity android:name=".activity.KeysManagerActivity" />
-        <activity android:name=".activity.EditKeyNameActivity" android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".activity.EditLimitedTimeActivity" />
-        <activity android:name=".activity.OperationRecordAcitivity" />
-        <activity android:name=".activity.ApplyKeyActivity" />
-        <activity android:name=".activity.LockSettingActivity" />
-        <activity android:name=".activity.ChooseKeyGroupActivity" />
-        <activity android:name=".activity.EditLoopKeyActivity" />
+        <activity android:name=".activity.KeyInfoActivity"/>
+        <activity android:name=".activity.KeysManagerActivity"/>
+        <activity
+            android:name=".activity.EditKeyNameActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".activity.EditLimitedTimeActivity"/>
+        <activity android:name=".activity.OperationRecordAcitivity"/>
+        <activity android:name=".activity.ApplyKeyActivity"/>
+        <activity android:name=".activity.LockSettingActivity"/>
+        <activity android:name=".activity.ChooseKeyGroupActivity"/>
+        <activity android:name=".activity.EditLoopKeyActivity"/>
+        <activity android:name=".activity.SearchLockActivity">
+        </activity>
     </application>
 
 </manifest>

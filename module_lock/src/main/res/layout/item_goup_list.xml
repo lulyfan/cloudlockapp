@@ -4,59 +4,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/base_10dp"
+    android:paddingTop="@dimen/base_20dp"
+    android:paddingRight="@dimen/base_10dp"
+    android:paddingBottom="@dimen/base_20dp"
     >
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/cl_item"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_group_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/base_20dp"
-        android:paddingBottom="@dimen/base_20dp">
-
-        <TextView
-            android:id="@+id/tv_group_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/base_20dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/lock_color_tv_gray"
-            android:textSize="@dimen/base_17sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/tv_current_group"
-            android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_marginEnd="8dp"
-            android:paddingRight="@dimen/base_10dp"
-            android:text="@string/lock_group_current"
-            android:textColor="@color/color_tv_blue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/iBtn_right_arrow"
-            app:layout_constraintEnd_toStartOf="@+id/iBtn_right_arrow"
-            app:layout_constraintTop_toTopOf="@+id/iBtn_right_arrow"/>
-
-        <ImageView
-            android:id="@+id/iBtn_right_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:src="@mipmap/icon_right_arrow_black"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_group_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_group_name"/>
-    </android.support.constraint.ConstraintLayout>
-
-    <View
-        android:id="@+id/line_group_item"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/base_1dp"
-        android:background="@color/lock_color_btn_gray"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/cl_item"
+        android:drawablePadding="@dimen/base_20dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/lock_color_tv_gray"
+        android:textSize="@dimen/base_17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
+    <ImageView
+        android:id="@+id/iBtn_right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@mipmap/icon_group_list_selected"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_group_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_group_name"/>
 </android.support.constraint.ConstraintLayout>
+

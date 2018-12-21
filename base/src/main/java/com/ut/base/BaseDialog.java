@@ -56,4 +56,10 @@ public class BaseDialog extends AppCompatDialog {
         super.cancel();
         currentDialog = null;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        currentDialog = null;
+    }
 }

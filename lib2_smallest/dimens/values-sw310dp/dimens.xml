@@ -42,6 +42,14 @@
 <dimen name="base_160dp">119.81dp</dimen>
 <dimen name="base_84dp">62.90dp</dimen>
 <dimen name="base_54dp">40.43dp</dimen>
+<dimen name="base_104dp">77.87dp</dimen>
+<dimen name="base_156dp">116.81dp</dimen>
+<dimen name="base_140dp">104.83dp</dimen>
+<dimen name="base_210dp">157.25dp</dimen>
+<dimen name="base_18dp">13.48dp</dimen>
+<dimen name="base_200dp">149.76dp</dimen>
+<dimen name="base_350dp">262.08dp</dimen>
+<dimen name="base_250dp">187.20dp</dimen>
 <dimen name="xxs">7.49sp</dimen>
 <dimen name="xs">8.99sp</dimen>
 <dimen name="s">10.48sp</dimen>

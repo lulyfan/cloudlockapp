@@ -1,5 +1,7 @@
 package com.ut.module_lock.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,11 +27,20 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @Route(path = RouterUtil.LockModulePath.APPLY_KEY)
-public class ApplyKeyActivity extends BaseActivity {
+public class  ApplyKeyActivity extends BaseActivity {
+    public static final String EXTRA_KEY_DATA = "extra_key_data";
 
     private ActivityApplyKeyBinding mBinding;
     private String mac;
     private int ruleType;
+
+    public static void start(Context context, Bundle data) {
+        Intent intent = new Intent(context, ApplyKeyActivity.class);
+        if (data != null) {
+            intent.putExtras(data);
+        }
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

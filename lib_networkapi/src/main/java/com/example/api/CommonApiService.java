@@ -1,6 +1,9 @@
 package com.example.api;
 
 import com.example.entity.base.Result;
+import com.example.entity.base.Results;
+import com.ut.database.entity.LockKey;
+import com.ut.database.entity.NearScanLock;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ut.database.entity.Lock;
@@ -182,5 +185,26 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.checkKeyStatus)
-    Observable<JsonObject> checkKeyStatus(@Field("appId")long appId);
+    Observable<JsonObject> checkKeyStatus(@Field("appId") long appId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.bindLock)
+    Observable<Result<Void>> bindLock(@Field("mac") String mac, @Field("lockName") String lockName, @Field("adminPwd") String adminPwd,
+                                      @Field("blueKey") String blueKey, @Field("encryptType") String encryptType, @Field("encryptKey") String encryptKey);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getLockInfo)
+    Observable<Result<NearScanLock>> getLockInfo(@Field("mac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.delAdminLock)
+    Observable<Result<Void>> delAdminLock(@Field("mac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.updateLockName)
+    Observable<Result<Void>> updateLockName(@Field("mac") String mac, @Field("lockName") String lockName);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.pageUserLock)
+    Observable<Results<LockKey>> pageUserLock(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 }

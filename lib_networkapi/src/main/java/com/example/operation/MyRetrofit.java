@@ -83,7 +83,7 @@ public class MyRetrofit {
                         Request builder = request.newBuilder()
                                 .addHeader("mobile_session_flag", "true")
                                 .addHeader("session_token", uuid.getUuid())
-                                .addHeader("appid","2")
+                                .addHeader("appid", "2")
                                 .build();
                         Response response = chain.proceed(builder);
                         handlerResponse(response);
@@ -101,7 +101,7 @@ public class MyRetrofit {
     private void handlerResponse(Response response) throws IOException {
         ResponseBody responseBody = response.body();
         String rBody = null;
-        if(responseBody != null) {
+        if (responseBody != null) {
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.buffer();

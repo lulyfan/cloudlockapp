@@ -1,4 +1,4 @@
-package com.ut.base;
+package com.ut.base.permissionUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,29 +33,30 @@ public class PermissionHelperJava {
     private PermissionCallback mPermissionCallback;
     private boolean showRational;
 
-    private PermissionHelperJava(Activity activity, Fragment fragment, String[] permissions, int requestCode) {
+    private PermissionHelperJava(Activity activity, Fragment fragment, int requestCode) {
         this.activity = activity;
         this.fragment = fragment;
-        this.permissions = permissions;
+//        this.permissions = permissions;
         this.REQUEST_CODE = requestCode;
-        checkIfPermissionPresentInAndroidManifest();
+//        checkIfPermissionPresentInAndroidManifest();
     }
 
-    public PermissionHelperJava(Activity activity, String[] permissions, int requestCode) {
+    public PermissionHelperJava(Activity activity, int requestCode) {
         this.activity = activity;
-        this.permissions = permissions;
+//        this.permissions = permissions;
         this.REQUEST_CODE = requestCode;
-        checkIfPermissionPresentInAndroidManifest();
+//        checkIfPermissionPresentInAndroidManifest();
     }
 
-    public PermissionHelperJava(Fragment fragment, String[] permissions, int requestCode) {
+    public PermissionHelperJava(Fragment fragment, int requestCode) {
         this.fragment = fragment;
-        this.permissions = permissions;
+//        this.permissions = permissions;
         this.REQUEST_CODE = requestCode;
-        checkIfPermissionPresentInAndroidManifest();
+//        checkIfPermissionPresentInAndroidManifest();
     }
 
-    private void checkIfPermissionPresentInAndroidManifest() {
+    public void checkIfPermissionPresentInAndroidManifest(String[] permissions) {
+        this.permissions = permissions;
         for (String permission : permissions) {
             if (hasPermissionInManifest(permission) == false) {
                 throw new RuntimeException("Permission (" + permission + ") Not Declared in manifest");

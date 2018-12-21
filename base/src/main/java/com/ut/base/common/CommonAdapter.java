@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +24,9 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     public void notifyData(List<T> list) {
-        this.mDatas.clear();
-        this.mDatas.addAll(list);
+//        this.mDatas.clear();
+//        this.mDatas.addAll(list);
+        this.mDatas = new ArrayList<>(list);
         notifyDataSetChanged();
     }
 

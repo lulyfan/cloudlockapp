@@ -8,7 +8,7 @@
 
         <variable
             name="lockKey"
-            type="com.ut.module_lock.entity.LockKey"/>
+            type="com.ut.database.entity.LockKey"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -23,6 +23,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_160dp"
+            android:foreground="?android:attr/selectableItemBackground"
             android:paddingLeft="@dimen/base_20dp"
             >
             <!--android:src="@mipmap/icon_user_manager"-->
