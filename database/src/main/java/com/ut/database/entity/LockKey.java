@@ -31,7 +31,7 @@ import android.support.annotation.NonNull;
  * status : 0
  * longitude : null
  */
-@Entity(tableName = "lock_key", indices = {@Index("name"), @Index("mac")})
+@Entity(tableName = "lock_key", indices = {@Index("name"), @Index("mac"), @Index("groupId")})
 public class LockKey implements Parcelable {
     @PrimaryKey
     @NonNull
@@ -73,6 +73,9 @@ public class LockKey implements Parcelable {
     //加密
     private int encryptType;
     private String encryptKey;
+
+    //钥匙id
+    private int keyId;
 
 
     @Ignore
@@ -278,6 +281,15 @@ public class LockKey implements Parcelable {
     }
 
 
+    public int getKeyId() {
+        return keyId;
+    }
+
+    public void setKeyId(int keyId) {
+        this.keyId = keyId;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -305,6 +317,7 @@ public class LockKey implements Parcelable {
         dest.writeString(this.longitude);
         dest.writeInt(this.encryptType);
         dest.writeString(this.encryptKey);
+        dest.writeInt(this.keyId);
         dest.writeString(this.statusStr);
         dest.writeString(this.lockTypeStr);
         dest.writeString(this.keyTypeStr);
@@ -335,6 +348,7 @@ public class LockKey implements Parcelable {
         this.longitude = in.readString();
         this.encryptType = in.readInt();
         this.encryptKey = in.readString();
+        this.keyId = in.readInt();
         this.statusStr = in.readString();
         this.lockTypeStr = in.readString();
         this.keyTypeStr = in.readString();

@@ -4,14 +4,22 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.ut.database.entity.LockGroup;
+
+import java.util.List;
+
 @Dao
 public interface LockGroupDao {
+    @Query("select * from lockgroup ORDER By name ASC")
+    LiveData<List<LockGroup>> getAll();
+
     @Query("select * from lockgroup")
-    LiveData<LockGroup> getAll();
+    LockGroup getById(long groupId);
+
 
     @Delete
     void delete(LockGroup lockGroup);
@@ -21,4 +29,8 @@ public interface LockGroupDao {
 
     @Insert
     void insert(LockGroup lockGroup);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(LockGroup... lockGroups);
+
 }

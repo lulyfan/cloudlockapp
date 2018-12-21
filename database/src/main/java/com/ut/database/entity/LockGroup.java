@@ -16,6 +16,7 @@ public class LockGroup {
     private String name;
     private long createTime;
     private int userId;
+    private int current = 0;
 
     public int getId() {
         return id;
@@ -47,5 +48,13 @@ public class LockGroup {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
     }
 }

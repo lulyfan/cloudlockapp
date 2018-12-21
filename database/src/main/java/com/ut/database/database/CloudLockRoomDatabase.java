@@ -5,12 +5,16 @@ import android.arch.persistence.room.RoomDatabase;
 
 import com.ut.database.dao.LockGroupDao;
 import com.ut.database.dao.LockKeyDao;
+import com.ut.database.dao.LockUserDao;
+import com.ut.database.dao.LockUserKeyDao;
 import com.ut.database.dao.NotifyDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.LockUser;
+import com.ut.database.entity.LockUserKey;
 import com.ut.database.entity.NotificationMessage;
 import com.ut.database.entity.UUID;
 import com.ut.database.entity.User;
@@ -21,7 +25,8 @@ import com.ut.database.entity.User;
  * desc   :
  * version: 1.0
  */
-@Database(entities = {LockKey.class, User.class, UUID.class, NotificationMessage.class, LockGroup.class}, version = 2)
+@Database(entities = {LockKey.class, User.class, UUID.class, NotificationMessage.class, LockGroup.class,
+        LockUser.class, LockUserKey.class}, version = 3)
 public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public abstract LockKeyDao lockKeyDao();
@@ -34,4 +39,7 @@ public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public abstract LockGroupDao lockGroupDao();
 
+    public abstract LockUserDao lockUserDao();
+
+    public abstract LockUserKeyDao lockUserKeyDao();
 }

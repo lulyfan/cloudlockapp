@@ -106,8 +106,8 @@ public class LockGroupItemActivity extends BaseActivity {
         binding.rvLockList.setAdapter(adapter);
 
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
-            ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module)
-                    .withObject("lock", selectedbinding.getLock())
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                    .withObject(RouterUtil.LockModuleExtraKey.Extra_lock_detail, selectedbinding.getLock())
                     .navigation();
         });
     }

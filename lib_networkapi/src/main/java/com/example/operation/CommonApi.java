@@ -3,8 +3,11 @@ package com.example.operation;
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.NearScanLock;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -51,6 +54,16 @@ public class CommonApi {
     public static Observable<Results<LockKey>> pageUserLock(int index, int pageSize) {
         Observable<Results<LockKey>> resultObservable = getCommonApiService().pageUserLock(index, pageSize);
         return resultObservable;
+    }
+
+    /**
+     * 获取锁分组列表
+     *
+     * @return
+     */
+    public static Observable<Result<List<LockGroup>>> getGroup() {
+        Observable<Result<List<LockGroup>>> resultsObservable = getCommonApiService().getGroup();
+        return resultsObservable;
     }
 
     protected static CommonApiService getCommonApiService() {

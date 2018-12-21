@@ -13,6 +13,7 @@ import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.BaseApplication;
+import com.ut.base.Utils.UTLog;
 import com.ut.database.entity.User;
 import com.ut.module_mine.Constant;
 import com.ut.module_mine.R;
@@ -43,7 +44,7 @@ public class MineViewModel extends BaseViewModel {
         isWebLoginEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
-//                System.out.println("onPropertyChanged isWebLoginEnable");
+                UTLog.d("onPropertyChanged isWebLoginEnable");
                 enableWebLogin(isWebLoginEnable.get());
             }
         });
@@ -51,7 +52,7 @@ public class MineViewModel extends BaseViewModel {
         isOpenLockVolumeEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
-//                System.out.println("onPropertyChanged isOpenLockVolumeEnable");
+                UTLog.d("onPropertyChanged isOpenLockVolumeEnable");
                 enableOpenLockVolume(isOpenLockVolumeEnable.get());
             }
         });
