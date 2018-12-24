@@ -43,6 +43,13 @@ public class LockGroupDaoImpl {
     }
 
     /**
+     * 通过id获取分组
+     */
+    public LockGroup getLockGroupById(long id){
+        return mLockGroupDao.getById(id);
+    }
+
+    /**
      * 批量添加
      *
      * @param lockGroups
