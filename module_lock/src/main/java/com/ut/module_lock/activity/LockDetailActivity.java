@@ -43,8 +43,8 @@ public class LockDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         enableImmersive();
-        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
+        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());

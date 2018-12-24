@@ -21,7 +21,6 @@ import java.util.concurrent.Executors;
 public class LockKeyDaoImpl {
 
     private LockKeyDao mLockKeyDao;
-    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
 
     public static LockKeyDaoImpl get() {
         return Holder.lockKeyDao;
@@ -65,7 +64,7 @@ public class LockKeyDaoImpl {
      * @param groupId
      * @return
      */
-    public LiveData<List<LockKey>> getLockByGroupId(int groupId) {
+    public LiveData<List<LockKey>> getLockByGroupId(long groupId) {
         return mLockKeyDao.getLockByGroupId(groupId);
     }
 
@@ -77,7 +76,7 @@ public class LockKeyDaoImpl {
      * @return
      */
     public LiveData<List<LockKey>> getLockByName(String name) {
-        return mLockKeyDao.getLockByName(name);
+        return mLockKeyDao.getLockByName(name+"%");
     }
 
     public LockKey getLockByMac(String mac) {
@@ -90,6 +89,13 @@ public class LockKeyDaoImpl {
 
     public LiveData<List<LockKey>> getAdminLock() {
         return mLockKeyDao.getAdminLock();
+    }
+
+    /**
+     * 清除所有锁数据
+     */
+    public void deleteAll() {
+        mLockKeyDao.deleteAll();
     }
 
     private static class Holder {

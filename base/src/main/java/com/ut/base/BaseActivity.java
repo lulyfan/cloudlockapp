@@ -63,7 +63,7 @@ public class BaseActivity extends AppCompatActivity {
                                     .setMessage("请重新登录")
                                     .setPositiveButton("好的", (dialog1, which) -> {
                                         ARouter.getInstance().build(url).navigation();
-                                        if(dialog1 != null) {
+                                        if (dialog1 != null) {
                                             dialog1.dismiss();
                                         }
                                     }).setOnDismissListener(dialog -> {

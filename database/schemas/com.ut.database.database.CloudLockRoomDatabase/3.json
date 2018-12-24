@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "064412d2d5df624779d1d959e0541f4b",
+    "version": 3,
+    "identityHash": "6c5a119605dea3ff75f60d3dd936459f",
     "entities": [
       {
         "tableName": "lock_key",
@@ -344,7 +344,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "LockGroup",
+        "tableName": "lock_group",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `createTime` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `current` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -386,11 +386,87 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "LockUser",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`createTime` INTEGER NOT NULL, `name` TEXT, `userId` INTEGER NOT NULL, `telNo` TEXT, PRIMARY KEY(`userId`))",
+        "fields": [
+          {
+            "fieldPath": "createTime",
+            "columnName": "createTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "telNo",
+            "columnName": "telNo",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "LockUserKey",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ruleType` INTEGER NOT NULL, `keyId` INTEGER NOT NULL, `lockName` TEXT, `mac` TEXT, PRIMARY KEY(`keyId`))",
+        "fields": [
+          {
+            "fieldPath": "ruleType",
+            "columnName": "ruleType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keyId",
+            "columnName": "keyId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lockName",
+            "columnName": "lockName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mac",
+            "columnName": "mac",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "keyId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"064412d2d5df624779d1d959e0541f4b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6c5a119605dea3ff75f60d3dd936459f\")"
     ]
   }
 }
