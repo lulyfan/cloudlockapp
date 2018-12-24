@@ -27,23 +27,18 @@ import io.reactivex.schedulers.Schedulers;
  * version: 1.0
  */
 public class LockListFragVM extends AndroidViewModel {
-    private LiveData<List<LockKey>> mLockList = null;
-    private LiveData<List<LockGroup>> mLockGroupList = null;
-
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     public LockListFragVM(@NonNull Application application) {
         super(application);
-        mLockList = LockKeyDaoImpl.get().getAllLockKey();
-        mLockGroupList = LockGroupDaoImpl.get().getAllLockGroup();
     }
 
     public LiveData<List<LockKey>> getLockList() {
-        return mLockList;
+        return LockKeyDaoImpl.get().getAllLockKey();
     }
 
     public LiveData<List<LockGroup>> getLockGroupList() {
-        return mLockGroupList;
+        return LockGroupDaoImpl.get().getAllLockGroup();
     }
 
     public void toGetLockAllList() {
@@ -53,6 +48,8 @@ public class LockListFragVM extends AndroidViewModel {
                 .subscribe(lockKeyResults -> {
                     List<LockKey> list = lockKeyResults.getData();
                     LockKey[] lockKeys = new LockKey[list.size()];
+                    //TODO 先清除数据,后面再做优化
+                    LockKeyDaoImpl.get().deleteAll();
                     LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                 }, throwable -> {
                     //TODO 获取锁列表失败处理
@@ -67,18 +64,25 @@ public class LockListFragVM extends AndroidViewModel {
                 .subscribe(lockGroupResult -> {
                     List<LockGroup> list = lockGroupResult.getData();
                     LockGroup[] lockGroups = new LockGroup[list.size()];
-                    LockGroupDaoImpl.get().insertAll(lockGroups);
+                    LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                 }, throwable -> {
+                    throwable.printStackTrace();
                     //TODO
                 });
         mCompositeDisposable.add(disposable);
     }
 
-    public LiveData<List<LockKey>> toGetGroupLockList(LockGroup lockGroup) {
-        if (lockGroup.getId() == -1){
+    /**
+     * 获取分组的锁
+     *
+     * @param lockGroup
+     * @return
+     */
+    public LiveData<List<LockKey>> getGroupLockList(LockGroup lockGroup) {
+        if (lockGroup.getId() == -1) {
             return LockKeyDaoImpl.get().getAllLockKey();
-        }else{
-            return LockKeyDaoImpl.get().getLockByGroupId((int) lockGroup.getId());
+        } else {
+            return LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
         }
     }
 

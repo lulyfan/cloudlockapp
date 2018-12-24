@@ -95,12 +95,14 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UTLog.i(this.getClass().getSimpleName() + ":onResume");
+        onUserVisible();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         UTLog.i(this.getClass().getSimpleName() + ":onPause");
+        onUserInvisible();
     }
 
     @Override
@@ -125,5 +127,41 @@ public class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         UTLog.i(this.getClass().getSimpleName() + ":onDetach");
+    }
+
+    /**
+     *用于 viewpager + fragment， 切换时生效
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            onUserVisible();
+        } else {
+            onUserInvisible();
+        }
+    }
+
+    /**
+     * 用户fragment hide() or show()
+     * @param hidden
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if (hidden) {
+            onUserInvisible();
+        } else {
+            onUserVisible();
+        }
+    }
+
+
+    protected void onUserVisible(){
+
+    }
+
+    protected void onUserInvisible(){
+
     }
 }

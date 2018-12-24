@@ -1,33 +1,7 @@
 package com.example;
 
-import android.util.Log;
-
-import com.example.download.ProgressListener;
-import com.example.entity.base.Result;
-import com.example.entity.base.Results;
-//import com.example.entity.data.AuthData;
-//import com.example.entity.data.LockInfo;
-//import com.example.entity.data.LoginEntity;
-//import com.example.entity.data.VersionInfo;
-import com.example.operation.CommonApi;
-import com.example.operation.Download;
-import com.example.utils.DES;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MyClass {
     private static String url;

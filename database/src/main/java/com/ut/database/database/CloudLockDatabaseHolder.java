@@ -11,6 +11,7 @@ import com.ut.database.dao.LockKeyDao;
 import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
 import com.ut.database.dao.NotifyDao;
+import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
 
@@ -21,7 +22,7 @@ import com.ut.database.dao.UserDao;
  * version: 1.0
  */
 public class CloudLockDatabaseHolder {
-    private static final String DBNAME = "cloudLock_database";
+    private static final String DBNAME = "cloudLock_database.db";
     private CloudLockRoomDatabase mDb = null;
 
     public static CloudLockDatabaseHolder get() {
@@ -62,6 +63,10 @@ public class CloudLockDatabaseHolder {
 
     public LockGroupDao getLockGroupDao() {
         return mDb.lockGroupDao();
+    }
+
+    public SearchRecordDao getSearchRecordDao() {
+        return mDb.searchRecordDao();
     }
 
     private static RoomDatabase.Callback mRoomDatabaseCallback = new RoomDatabase.Callback() {

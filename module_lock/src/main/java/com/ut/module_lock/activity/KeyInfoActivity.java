@@ -63,7 +63,7 @@ public class KeyInfoActivity extends BaseActivity {
     private void initListener() {
 
         mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
-                .build(RouterUtil.LockModulePath.EDIT_KEY_NAME)
+                .build(RouterUtil.LockModulePath.EDIT_NAME)
                 .withSerializable(Constance.KEY_INFO, keyInfo)
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
@@ -161,8 +161,8 @@ public class KeyInfoActivity extends BaseActivity {
                         if (item != null) {
                             keyInfo = item;
                         }
-                    } else if (data.hasExtra(Constance.EDIT_KEY_NAME)) {
-                        String keyName = data.getStringExtra(Constance.EDIT_KEY_NAME);
+                    } else if (data.hasExtra(Constance.EDIT_NAME)) {
+                        String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
                             keyInfo.setKeyName(keyName);
                         }

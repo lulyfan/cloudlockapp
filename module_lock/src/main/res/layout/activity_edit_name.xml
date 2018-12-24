@@ -23,7 +23,7 @@
             android:paddingRight="@dimen/base_20dp">
 
             <EditText
-                android:id="@+id/edt_key_name"
+                android:id="@+id/edt_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -47,7 +47,6 @@
 
     </LinearLayout>
 
-
     <Button
         android:id="@+id/btn_save"
         style="?android:attr/borderlessButtonStyle"
@@ -62,5 +61,4 @@
         android:text="@string/lock_save"
         android:textColor="@android:color/white"
         android:textSize="@dimen/base_17sp" />
-
 </FrameLayout>

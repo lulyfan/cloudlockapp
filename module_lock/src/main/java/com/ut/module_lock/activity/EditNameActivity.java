@@ -1,18 +1,12 @@
 package com.ut.module_lock.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -28,8 +22,8 @@ import com.ut.module_lock.common.Constance;
  * desc   :
  */
 
-@Route(path = RouterUtil.LockModulePath.EDIT_KEY_NAME)
-public class EditKeyNameActivity extends BaseActivity {
+@Route(path = RouterUtil.LockModulePath.EDIT_NAME)
+public class EditNameActivity extends BaseActivity {
 
     private EditText nameEdt = null;
 
@@ -43,7 +37,7 @@ public class EditKeyNameActivity extends BaseActivity {
     private void initView() {
         initDarkToolbar();
         setTitle(R.string.lock_name);
-        nameEdt = findViewById(R.id.edt_key_name);
+        nameEdt = findViewById(R.id.edt_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {
             saveName();
             return false;
@@ -66,7 +60,7 @@ public class EditKeyNameActivity extends BaseActivity {
 
     private void saveName() {
         Intent intent = new Intent();
-        intent.putExtra(Constance.EDIT_KEY_NAME, nameEdt.getText().toString());
+        intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
     }

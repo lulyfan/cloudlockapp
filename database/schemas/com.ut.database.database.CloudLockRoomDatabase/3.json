@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "7d997d80aa9a530229bed76ecfb2dedd",
+    "identityHash": "6c5a119605dea3ff75f60d3dd936459f",
     "entities": [
       {
         "tableName": "lock_key",
@@ -344,7 +344,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "LockGroup",
+        "tableName": "lock_group",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `createTime` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `current` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -466,7 +466,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7d997d80aa9a530229bed76ecfb2dedd\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6c5a119605dea3ff75f60d3dd936459f\")"
     ]
   }
 }

@@ -123,7 +123,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.deleteKey)
-    Observable<Result<Void>> deleteKey(@Field("keyId") long keyId);
+    Observable<Result<Void>> deleteKey(@Field("keyId") long keyId, @Field("isRelation") int isRelation);
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByKey)
@@ -226,5 +226,13 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.deleteAdminLock)
-    Observable<Result<Void>> deleteAdminLock(@Field("mac")String mac);
+    Observable<Result<Void>> deleteAdminLock(@Field("mac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.editLockName)
+    Observable<Result<Void>> editLockName(@Field("mac") String mac, @Field("lockName") String lockName);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.changeLockGroup)
+    Observable<Result<Void>> changeLockGroup(@Field("mac") String mac, @Field("groupId") long groupId);
 }

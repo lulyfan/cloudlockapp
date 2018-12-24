@@ -14,10 +14,10 @@ import java.util.List;
 
 @Dao
 public interface LockGroupDao {
-    @Query("select * from lockgroup ORDER By name ASC")
+    @Query("select * from lock_group ORDER By name ASC")
     LiveData<List<LockGroup>> getAll();
 
-    @Query("select * from lockgroup where id = :groupId limit 1")
+    @Query("select * from lock_group where id = :groupId limit 1")
     LockGroup getById(long groupId);
 
 
@@ -36,10 +36,10 @@ public interface LockGroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<LockGroup> lockGroups);
 
-    @Query("UPDATE lockgroup SET name = :groupName WHERE id = :groupId")
+    @Query("UPDATE lock_group SET name = :groupName WHERE id = :groupId")
     void updateGroupName(long groupId, String groupName);
 
-    @Query("DELETE FROM lockgroup WHERE id = :groupId")
+    @Query("DELETE FROM lock_group WHERE id = :groupId")
     void deleteById(long groupId);
 
 }

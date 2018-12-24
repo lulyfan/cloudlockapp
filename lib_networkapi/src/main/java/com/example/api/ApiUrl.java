@@ -144,4 +144,10 @@ public interface ApiUrl {
 
     //删除管理员锁
     String deleteAdminLock = "api/lock/delAdminLock?json";
+
+    //修改锁名称
+    String editLockName = "api/lock/updateLockName?json";
+
+    //将锁从一个分组移动到另一个分组
+    String changeLockGroup = "api/lockGroup/changeGroup?json";
 }

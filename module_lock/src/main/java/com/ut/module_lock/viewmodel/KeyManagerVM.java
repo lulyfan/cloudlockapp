@@ -94,7 +94,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(json -> JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
                 }))
-                .subscribe( result -> {
+                .subscribe(result -> {
                     Log.d("pageKeys", result.msg);
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
@@ -125,7 +125,7 @@ public class KeyManagerVM extends AndroidViewModel {
     }
 
     public void deleteKey(long keyId) {
-        MyRetrofit.get().getCommonApiService().deleteKey(keyId)
+        MyRetrofit.get().getCommonApiService().deleteKey(keyId, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());

@@ -9,6 +9,7 @@
     tools:ignore="MissingDefaultResource">
 
     <TextView
+        android:id="@+id/tv_lock_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableRight="@mipmap/icon_right_arrow_black"

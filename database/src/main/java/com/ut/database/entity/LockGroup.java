@@ -2,7 +2,8 @@ package com.ut.database.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-@Entity
+
+@Entity(tableName = "lock_group")
 public class LockGroup {
 
     /**
@@ -56,5 +57,16 @@ public class LockGroup {
 
     public void setCurrent(int current) {
         this.current = current;
+    }
+
+    @Override
+    public String toString() {
+        return "LockGroup{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", userId=" + userId +
+                ", current=" + current +
+                '}';
     }
 }

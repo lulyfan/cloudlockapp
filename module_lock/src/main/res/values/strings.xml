@@ -137,4 +137,5 @@
     <string name="lock_safe_verify">安全验证</string>
     <string name="lock_create_group">创建新分组</string>
     <string name="lock_create_group_hint">请输入组名称</string>
+    <string name="lock_anthorize_delete_lock_tip">同时删除其发送的所有钥匙，删除后无法恢复。</string>
 </resources>

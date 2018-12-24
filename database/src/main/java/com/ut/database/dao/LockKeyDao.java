@@ -29,7 +29,7 @@ public interface LockKeyDao {
     void insertAll(LockKey... lockKeys);
 
     @Query("SELECT * FROM lock_key WHERE groupId = :groupId ORDER BY userType ASC")
-    LiveData<List<LockKey>> getLockByGroupId(int groupId);
+    LiveData<List<LockKey>> getLockByGroupId(long groupId);
 
     @Query("SELECT * FROM lock_key WHERE name LIKE :name ORDER BY userType ASC")
     LiveData<List<LockKey>> getLockByName(String name);

@@ -7,7 +7,7 @@ package com.ut.module_lock.common;
  */
 public interface Constance {
     String KEY_INFO = "keyInfo";
-    String EDIT_KEY_NAME = "edit_key_name";
+    String EDIT_NAME = "edit_key_name";
     String KEY_ID = "key_id";
     String RECORD_TYPE = "record_type";
     String BY_KEY = "by_key";
