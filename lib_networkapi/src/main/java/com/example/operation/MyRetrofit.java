@@ -34,8 +34,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MyRetrofit {
-//    public static String mBaseUrl = "http://192.168.104.51:8666";//云锁服务器url
-    public static String mBaseUrl = "http://39.108.50.181:8666";
+    public static String mBaseUrl = "http://192.168.104.51:8666";//云锁服务器url
+//    public static String mBaseUrl = "http://39.108.50.181:8666";
     private CommonApiService mCommonApiService = null;
 
     private OkHttpClient mOkHttpClient = null;

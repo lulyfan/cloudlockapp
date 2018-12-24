@@ -47,6 +47,10 @@ public class RouterUtil {
         String Extra_lock_detail = "extra_lock_key";
     }
 
+    public interface LoginModuleAction {
+        String action_login_resetPW = "action_login_resetPW";
+    }
+
     public static class MsgModulePath {
         //消息模块首页
         public static final String Fragment_MSG = "/msg/main";

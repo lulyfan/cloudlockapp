@@ -37,16 +37,13 @@ public class LockUserActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
-        viewModel.mLockUsers.observe(this, new Observer<List<LockUser>>() {
-            @Override
-            public void onChanged(@Nullable List<LockUser> lockUsers) {
-                List<User> userList = new ArrayList<>();
-                for (LockUser lockUser : lockUsers) {
-                    User user = new User(lockUser.getUserId(), null, lockUser.getName(), lockUser.getTelNo());
-                    userList.add(user);
-                }
-                adapter.setData(userList);
+        viewModel.mLockUsers.observe(this, lockUsers -> {
+            List<User> userList = new ArrayList<>();
+            for (LockUser lockUser : lockUsers) {
+                User user = new User(lockUser.getUserId(), lockUser.getHeadPic(), lockUser.getName(), lockUser.getTelNo());
+                userList.add(user);
             }
+            adapter.setData(userList);
         });
     }
 
@@ -72,12 +69,6 @@ public class LockUserActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        List<User> list = new ArrayList<>();
-        list.add(new User(0, "", "Sam", "18807644294"));
-        list.add(new User(1,"", "Sam", "18807644294"));
-        list.add(new User(2,"", "Sam", "18807644294"));
-
-        adapter.setData(list);
         binding.userList.setAdapter(adapter);
     }
 

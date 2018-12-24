@@ -101,13 +101,6 @@ public class LockUserItemActivity extends BaseActivity {
         binding.lockList.setLayoutManager(layoutManager);
 
         adapter = new DataBindingAdapter<>(this, R.layout.mine_item_lock_list, BR.userLock);
-
-        List<Data> list = new ArrayList<>();
-        list.add(new Data("优特智能锁", 0,"永久"));
-        list.add(new Data("优特智能锁", 1,"限时"));
-        list.add(new Data("优特智能锁", 2,"限次"));
-
-        adapter.setData(list);
         adapter.setOnLongClickItemListener((selectedbinding, position, lastSelectedBinding) ->
                 deleteKey(selectedbinding.getUserLock().keyId));
         binding.lockList.setAdapter(adapter);

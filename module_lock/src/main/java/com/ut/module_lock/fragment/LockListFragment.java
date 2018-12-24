@@ -80,7 +80,7 @@ public class LockListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLockListFragVM.toGetLockList();
+        mLockListFragVM.toGetLockAllList();
     }
 
     private void initViewModel() {

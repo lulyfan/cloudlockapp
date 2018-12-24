@@ -21,11 +21,11 @@ public class LockUserItemViewModel extends BaseViewModel {
 
     public LockUserItemViewModel(@NonNull Application application) {
         super(application);
+        LockUserKeyDaoImpl.get().getAll()
+                .observeForever(lockUserKeys -> mLockUserKeys.postValue(lockUserKeys));
     }
 
     public void loadLockUserKey() {
-        LockUserKeyDaoImpl.get().getAll()
-                .observeForever(lockUserKeys -> mLockUserKeys.postValue(lockUserKeys));
 
         service.pageLockUserKey(userId, mCurrentPage, PAGE_SIZE)
                 .doOnNext(stringResult -> {
@@ -38,9 +38,8 @@ public class LockUserItemViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
-                            mLockUserKeys.postValue(listResult.data);
-                            LockUserKeyDaoImpl.get().insert(listResult.data);
-                        },
+                    LockUserKeyDaoImpl.get().deleteAll();
+                    LockUserKeyDaoImpl.get().insert(listResult.data);},
                         throwable -> tip.postValue(throwable.getMessage()));
     }
 

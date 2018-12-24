@@ -35,4 +35,8 @@ public class LockUserKeyDaoImpl {
     public void deleteById(long keyId) {
         mLockUserKeyDao.deleteById(keyId);
     }
+
+    public void deleteAll() {
+        mLockUserKeyDao.deleteAll();;
+    }
 }

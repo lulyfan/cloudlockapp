@@ -5,7 +5,7 @@
     
     <data>
         <variable
-            name="lockGroupItem"
+            name="lockGroupData"
             type="com.ut.module_mine.activity.LockGroupActivity.LockGroupData"/>
     </data>
 <android.support.constraint.ConstraintLayout
@@ -22,7 +22,7 @@
         android:paddingLeft="@dimen/base_16dp"
         android:textSize="@dimen/s"
         android:textColor="@color/gray3"
-        android:text='@{lockGroupItem.name}'
+        android:text='@{lockGroupData.name}'
         android:drawableRight="@drawable/right_triangle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

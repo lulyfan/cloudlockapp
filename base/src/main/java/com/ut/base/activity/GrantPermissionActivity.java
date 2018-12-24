@@ -1,30 +1,25 @@
 package com.ut.base.activity;
 
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.ut.base.BaseActivity;
 import com.ut.base.R;
 import com.ut.base.Utils.Util;
 import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
+import com.ut.base.viewModel.GrantPermisssionViewModel;
 
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
-    public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();
-    public MutableLiveData<String> receiverName = new MutableLiveData<>();
+    private GrantPermisssionViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +27,8 @@ public class GrantPermissionActivity extends BaseActivity {
         enableImmersive();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_grant_permission);
         initUI();
+        viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
+        viewModel.tip.observe(this, s -> toastShort(s));
     }
 
     @Override
@@ -50,6 +47,40 @@ public class GrantPermissionActivity extends BaseActivity {
         binding.headContainer.setPadding(0, Util.getStatusBarHeight(this), 0, 0);
         binding.viewPager.setAdapter(new GrantPermissionAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+
+        binding.sendKey.setOnClickListener(v -> {
+
+            String phoneNum = viewModel.receiverPhoneNum.getValue();
+            String keyName = viewModel.keyName.getValue();
+            boolean isAdmin = viewModel.isAdmin;
+            String startTime = viewModel.startTime;
+            String endTime = viewModel.endTime;
+            String startTimeRange = viewModel.startTimeRange;
+            String endTimeRange = viewModel.endTimeRange;
+            String weeks = viewModel.weeks;
+            String mac = "33-33-22-A1-B0-20";
+
+            switch (binding.viewPager.getCurrentItem()) {
+
+                case 0:
+                    viewModel.sendForeverKey(phoneNum, mac, keyName, isAdmin);
+                    break;
+
+                case 1:
+                    viewModel.sendLimitTimeKey(phoneNum, mac, keyName, startTime, endTime);
+                    break;
+
+                case 2:
+                    viewModel.sendOnceKey(phoneNum, mac, keyName);
+                    break;
+
+                case 3:
+                    viewModel.sendLoopKey(phoneNum, mac, keyName, startTime, endTime, weeks, startTimeRange, endTimeRange);
+                    break;
+
+                    default:
+            }
+        });
     }
 
     @Override
@@ -85,8 +116,8 @@ public class GrantPermissionActivity extends BaseActivity {
                 int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 String number = cursor.getString(numberIndex).replace(" ","");
                 String name = cursor.getString(nameIndex);
-                receiverPhoneNum.setValue(number);
-                receiverName.setValue(name);
+                viewModel.receiverPhoneNum.setValue(number);
+                viewModel.keyName.setValue(name);
             }
         }
     }

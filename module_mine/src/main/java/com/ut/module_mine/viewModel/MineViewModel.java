@@ -31,13 +31,7 @@ public class MineViewModel extends BaseViewModel {
 
     public MineViewModel(@NonNull Application application) {
         super(application);
-    }
 
-    public void getUserInfo() {
-        User user = BaseApplication.getUser();
-        phoneNum.set(user.getAccount());
-        userName.set(user.getName());
-        headImgUrl.set(user.getHeadPic());
         isWebLoginEnable.set(user.enableWebLogin == 1 ? true : false);
         isOpenLockVolumeEnable.set(user.enableSound == 1 ? true : false);
 
@@ -56,6 +50,13 @@ public class MineViewModel extends BaseViewModel {
                 enableOpenLockVolume(isOpenLockVolumeEnable.get());
             }
         });
+    }
+
+    public void getUserInfo() {
+        User user = BaseApplication.getUser();
+        phoneNum.set(user.getAccount());
+        userName.set(user.getName());
+        headImgUrl.set(user.getHeadPic());
     }
 
     public void enableWebLogin(boolean isEnable) {

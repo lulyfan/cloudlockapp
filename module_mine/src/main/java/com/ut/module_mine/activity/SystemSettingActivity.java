@@ -45,7 +45,9 @@ public class SystemSettingActivity extends BaseActivity {
         });
 
         binding.resetPW.setOnClickListener(v -> {
-            ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD).navigation();
+            ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD)
+                    .withAction(RouterUtil.LoginModuleAction.action_login_resetPW)
+                    .navigation();
         });
 
         binding.logout.setOnClickListener(v -> {

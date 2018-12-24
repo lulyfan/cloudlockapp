@@ -17,7 +17,7 @@
             app:layout_constraintHeight_percent="0.1901" />
 
         <Switch
-            android:id="@+id/switch3"
+            android:id="@+id/sw_isAdmin"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
