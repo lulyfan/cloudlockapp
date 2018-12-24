@@ -141,4 +141,7 @@ public interface ApiUrl {
 
     //删除管理员锁
     String deleteAdminLock = "api/lock/delAdminLock?json";
+
+    //修改锁名称
+    String editLockName = "api/lock/updateLockName?json";
 }

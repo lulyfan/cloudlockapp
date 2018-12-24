@@ -11,14 +11,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.commoncomponent.CLToast;
-import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -27,7 +26,6 @@ import com.ut.module_lock.BR;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Result;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -98,7 +96,6 @@ public class ChooseLockGroupActivity extends BaseActivity {
                     dialog.dismiss();
                     MyRetrofit.get().getCommonApiService().addGroup(edt.getText().toString().trim())
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(result -> {
                                 CLToast.showAtCenter(getBaseContext(), result.msg);
                                 if (result.isSuccess()) {
@@ -115,6 +112,11 @@ public class ChooseLockGroupActivity extends BaseActivity {
     private void loadGroup() {
         Disposable subscribe = MyRetrofit.get().getCommonApiService().getGroup()
                 .subscribeOn(Schedulers.io())
+                .map(listResult -> {
+                    LockGroup[] lockGroups = new LockGroup[listResult.data.size()];
+                    LockGroupDaoImpl.get().insertAll(listResult.data.toArray(lockGroups));
+                    return listResult;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {

@@ -218,5 +218,9 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.deleteAdminLock)
-    Observable<Result<Void>> deleteAdminLock(@Field("mac")String mac);
+    Observable<Result<Void>> deleteAdminLock(@Field("mac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.editLockName)
+    Observable<Result<Void>> editLockName(@Field("mac") String mac, @Field("lockName") String lockName);
 }

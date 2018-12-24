@@ -6,28 +6,24 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
-import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
 
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -36,10 +32,14 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :锁设置界面
  */
 
+@SuppressLint("CheckResult")
 @Route(path = RouterUtil.LockModulePath.LOCK_SETTING)
 public class LockSettingActivity extends BaseActivity {
     private AcitivityLockSettingBinding mBinding;
     private LockKey lockKey;
+
+    private final int REQUEST_CODE_EDIT_NAME = 1122;
+    private final int REQUEST_CODE_CHOOSE_GROUP = 1002;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,12 +49,12 @@ public class LockSettingActivity extends BaseActivity {
         mBinding.setLockKey(lockKey);
         initDarkToolbar();
         setTitle(R.string.lock_setting);
-        mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, 1002));
+        mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
 
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
 
         mBinding.layoutLockName.setOnClickListener(v -> {
-            Toast.makeText(this, "bababa", Toast.LENGTH_SHORT).show();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).navigation(this, REQUEST_CODE_EDIT_NAME);
         });
     }
 
@@ -69,6 +69,7 @@ public class LockSettingActivity extends BaseActivity {
     }
 
     private void verifyAdmin() {
+        //todo
         View contentView = View.inflate(this, R.layout.dialog_edit, null);
         EditText edtPwd = contentView.findViewById(R.id.edt);
         edtPwd.setHint(getString(R.string.lock_verify_user_password_hint));
@@ -93,7 +94,6 @@ public class LockSettingActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    @SuppressLint("CheckResult")
     private void deleteAdminLock() {
         MyRetrofit.get().getCommonApiService().deleteAdminLock(lockKey.getMac())
                 .subscribeOn(Schedulers.io())
@@ -110,10 +110,29 @@ public class LockSettingActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (RESULT_OK == resultCode) {
-            if (requestCode == 1002 && data != null) {
+            if (requestCode == REQUEST_CODE_CHOOSE_GROUP && data != null) {
                 lockKey.setGroupId((int) data.getLongExtra("lock_group_id", lockKey.getGroupId()));
                 mBinding.setLockKey(lockKey);
+            } else if (requestCode == REQUEST_CODE_EDIT_NAME && data != null) {
+                String name = data.getStringExtra(Constance.EDIT_NAME);
+                if (!TextUtils.isEmpty(name)) {
+                    modifyLockName(name);
+                }
             }
         }
+    }
+
+    private void modifyLockName(String name) {
+        MyRetrofit.get().getCommonApiService().editLockName(lockKey.getMac(), name)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result ->
+                {
+                    if (result.isSuccess()) {
+                        lockKey.setName(name);
+                        mBinding.setLockKey(lockKey);
+                    }
+                    CLToast.showAtCenter(getBaseContext(), result.msg);
+                }, new ErrorHandler());
     }
 }

@@ -17,9 +17,8 @@ public interface LockGroupDao {
     @Query("select * from lockgroup ORDER By name ASC")
     LiveData<List<LockGroup>> getAll();
 
-    @Query("select * from lockgroup")
+    @Query("select * from lockgroup WHERE id =:groupId")
     LockGroup getById(long groupId);
-
 
     @Delete
     void delete(LockGroup lockGroup);
