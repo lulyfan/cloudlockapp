@@ -22,7 +22,6 @@ public interface LockKeyDao {
     @Query("SELECT * FROM lock_key ORDER BY userType ASC")
     LiveData<List<LockKey>> getAll();
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(LockKey lockKey);
 
@@ -38,4 +37,12 @@ public interface LockKeyDao {
     @Query("DELETE FROM lock_key")
     void deleteAll();
 
+    @Query("DELETE FROM lock_key WHERE mac LIKE :lockMac")
+    void deleteByMac(String lockMac);
+
+    @Query("SELECT * FROM lock_key WHERE mac LIKE :mac limit 1")
+    LockKey getByMac(String mac);
+
+    @Query("SELECT * FROM lock_key WHERE userType = 1")
+    LiveData<List<LockKey>> getAdminLock();
 }

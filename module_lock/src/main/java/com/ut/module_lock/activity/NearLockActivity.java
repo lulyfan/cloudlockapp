@@ -43,27 +43,6 @@ public class NearLockActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         toScan();
-//        List<NearScanLock> list = new ArrayList<>();
-//        refreshListData(list);
-//        NearScanLock nearScanLock = new NearScanLock();
-//        nearScanLock.setBindStatus(1);
-//        nearScanLock.setName("ims");
-//        nearScanLock.setType(1);
-//        nearScanLock.setMac("33-33-22-A1-B0-66");
-//        nearScanLock.setKeyStatus(8);
-//        list.add(nearScanLock);
-//        refreshListData(list);
-//        NearScanLock nearScanLock1 = new NearScanLock();
-//        nearScanLock1.setBindStatus(1);
-//        nearScanLock1.setName("ims");
-//        nearScanLock1.setType(1);
-//        nearScanLock1.setMac("33-33-226");
-//        nearScanLock1.setKeyStatus(8);
-//        list.clear();
-//        list.add(nearScanLock1);
-//        refreshListData(list);
-////        list.add(nearScanLock);
-////        refreshListData(list);
     }
 
     private void toScan() {

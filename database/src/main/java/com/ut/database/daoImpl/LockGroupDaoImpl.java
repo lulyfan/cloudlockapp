@@ -51,6 +51,10 @@ public class LockGroupDaoImpl {
         mLockGroupDao.insertAll(lockGroups);
     }
 
+    public void insertAll(List<LockGroup> lockGroups) {
+        mLockGroupDao.insertAll(lockGroups);
+    }
+
 
     /**
      * 单个添加
@@ -67,6 +71,14 @@ public class LockGroupDaoImpl {
      */
     public void delete(LockGroup lockGroup) {
         mLockGroupDao.delete(lockGroup);
+    }
+
+    public void updateGroupName(long groupId, String groupName) {
+        mLockGroupDao.updateGroupName(groupId, groupName);
+    }
+
+    public void deleteById(long groupId) {
+        mLockGroupDao.deleteById(groupId);
     }
 
     /**

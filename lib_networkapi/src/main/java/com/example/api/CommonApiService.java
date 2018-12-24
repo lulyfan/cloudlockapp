@@ -209,6 +209,14 @@ public interface CommonApiService {
     Observable<Results<LockKey>> pageUserLock(@Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
+    @POST(ApiUrl.sendKey)
+    Observable<Result<Void>> sendKey(@Field("mobile") String mobile, @Field("mac") String mac, @Field("ruleType") int ruleType,
+                                     @Field("keyName") String keyName, @Field("isAdmin") String isAdmin,
+                                     @Field("startTime") String startTime, @Field("endTime") String endTime,
+                                     @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange,
+                                     @Field("endTimeRange") String endTimeRange);
+
+    @FormUrlEncoded
     @POST(ApiUrl.addLockIntoGroup)
     Observable<Result<Void>> addLockIntoGroup(@Field("macs") String mac, @Field("groupId") long groupId);
 

@@ -25,7 +25,9 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.Lock;
+import com.ut.database.entity.LockKey;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.util.BottomLineItemDecoration;
 import com.ut.module_mine.adapter.DataBindingAdapter;
@@ -41,7 +43,7 @@ public class LockGroupItemActivity extends BaseActivity {
 
     private ActivityLockGroupItemBinding binding;
     private LockGroupItemViewModel viewModel;
-    private DataBindingAdapter<Lock, ItemLockBinding> adapter;
+    private DataBindingAdapter<LockKey, ItemLockBinding> adapter;
     public static final String EXTRA_LOCK_GROUP_NAME = "lockGroupName";
     public static final String EXTRA_LOCK_GROUP_ID = "lockGroupId";
 
@@ -55,18 +57,11 @@ public class LockGroupItemActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupItemViewModel.class);
+
         viewModel.locks.observe(this, locks -> adapter.setData(locks));
-
         viewModel.updateGroupName.observe(this, groupName -> setTitle(groupName));
-
         viewModel.delGroupSuccess.observe(this, aVoid -> onBackPressed());
         viewModel.tip.observe(this, s -> toastShort(s));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        viewModel.loadLockByGroup();
     }
 
     @Override
@@ -106,8 +101,9 @@ public class LockGroupItemActivity extends BaseActivity {
         binding.rvLockList.setAdapter(adapter);
 
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
+            LockKey lockKey = selectedbinding.getLock();
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                    .withObject(RouterUtil.LockModuleExtraKey.Extra_lock_detail, selectedbinding.getLock())
+                    .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, lockKey)
                     .navigation();
         });
     }

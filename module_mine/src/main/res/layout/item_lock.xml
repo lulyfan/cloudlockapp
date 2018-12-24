@@ -5,7 +5,7 @@
     <data>
         <variable
             name="lock"
-            type="com.ut.database.entity.Lock"/>
+            type="com.ut.database.entity.LockKey"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

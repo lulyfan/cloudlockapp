@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 
 import com.ut.base.BaseActivity;
 import com.ut.database.entity.Lock;
+import com.ut.database.entity.LockKey;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.GlobalData;
 import com.ut.module_mine.adapter.DataBindingAdapter;
@@ -41,18 +42,12 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(ChangeLockPermissionViewModel.class);
         viewModel.locks.observe(this, locks -> {
             List<Data> dataList = new ArrayList<>();
-            for (Lock lock : locks) {
+            for (LockKey lock : locks) {
                 Data data = new Data(lock.getName(), lock.getMac(), false);
                 dataList.add(data);
             }
             adapter.setData(dataList);
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        viewModel.loadAdminLock();
     }
 
     private void initUI() {

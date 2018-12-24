@@ -133,6 +133,9 @@ public interface ApiUrl {
     //校验钥匙申请的处理状态
     String checkKeyStatus = "api/key/checkStatus?json";
 
+    //发送钥匙
+    String sendKey = "api/lock/sendKey?json";
+
     //添加锁进分组
     String addLockIntoGroup = "api/lockGroup/addLockIntoGroup?json";
 

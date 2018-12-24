@@ -16,7 +16,7 @@ public class LockUserKey {
 
     private int ruleType;
     @PrimaryKey
-    private int keyId;
+    private long keyId;
     private String lockName;
     private String mac;
 
@@ -28,11 +28,11 @@ public class LockUserKey {
         this.ruleType = ruleType;
     }
 
-    public int getKeyId() {
+    public long getKeyId() {
         return keyId;
     }
 
-    public void setKeyId(int keyId) {
+    public void setKeyId(long keyId) {
         this.keyId = keyId;
     }
 

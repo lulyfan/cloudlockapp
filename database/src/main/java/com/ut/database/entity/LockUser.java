@@ -16,7 +16,7 @@ public class LockUser {
     private long createTime;
     private String name;
     @PrimaryKey
-    private int userId;
+    private long userId;
     private String telNo;
 
     public long getCreateTime() {
@@ -35,11 +35,11 @@ public class LockUser {
         this.name = name;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

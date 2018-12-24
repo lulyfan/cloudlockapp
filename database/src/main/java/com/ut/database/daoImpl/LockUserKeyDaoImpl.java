@@ -32,8 +32,7 @@ public class LockUserKeyDaoImpl {
         mLockUserKeyDao.insert(lockUserKeys);
     }
 
-    public void deleteById(int keyId) {
-        LockUserKey lockUserKey = mLockUserKeyDao.getById(keyId);
-        mLockUserKeyDao.delete(lockUserKey);
+    public void deleteById(long keyId) {
+        mLockUserKeyDao.deleteById(keyId);
     }
 }
