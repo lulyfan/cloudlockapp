@@ -17,8 +17,9 @@ public interface LockGroupDao {
     @Query("select * from lockgroup ORDER By name ASC")
     LiveData<List<LockGroup>> getAll();
 
-    @Query("select * from lockgroup WHERE id =:groupId")
+    @Query("select * from lockgroup where id = :groupId limit 1")
     LockGroup getById(long groupId);
+
 
     @Delete
     void delete(LockGroup lockGroup);
@@ -31,5 +32,14 @@ public interface LockGroupDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(LockGroup... lockGroups);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<LockGroup> lockGroups);
+
+    @Query("UPDATE lockgroup SET name = :groupName WHERE id = :groupId")
+    void updateGroupName(long groupId, String groupName);
+
+    @Query("DELETE FROM lockgroup WHERE id = :groupId")
+    void deleteById(long groupId);
 
 }
