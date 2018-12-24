@@ -197,5 +197,11 @@ public class LockListFragment extends BaseFragment {
         }
     }
 
-
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+        if(mLockListFragVM != null) {
+            mLockListFragVM.toGetLockAllList();
+        }
+    }
 }

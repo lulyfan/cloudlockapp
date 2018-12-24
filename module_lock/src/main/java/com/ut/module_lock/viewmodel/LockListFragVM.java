@@ -57,7 +57,6 @@ public class LockListFragVM extends AndroidViewModel {
                 }, throwable -> {
                     //TODO 获取锁列表失败处理
                 });
-        mCompositeDisposable.add(disposable);
     }
 
     public void toGetAllGroupList() {
@@ -82,9 +81,7 @@ public class LockListFragVM extends AndroidViewModel {
         }
     }
 
-
     @Override
-
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();

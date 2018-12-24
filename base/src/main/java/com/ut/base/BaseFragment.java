@@ -95,12 +95,14 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UTLog.i(this.getClass().getSimpleName() + ":onResume");
+        onUserVisible();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         UTLog.i(this.getClass().getSimpleName() + ":onPause");
+        onUserInvisible();
     }
 
     @Override

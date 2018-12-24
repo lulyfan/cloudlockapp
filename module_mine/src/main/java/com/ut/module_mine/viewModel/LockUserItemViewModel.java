@@ -45,7 +45,7 @@ public class LockUserItemViewModel extends BaseViewModel {
     }
 
     public void deleteKey(long keyId) {
-        service.deleteKey(keyId)
+        service.deleteKey(keyId,0)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
                         throw new NullPointerException(getApplication().getString(R.string.serviceErr));

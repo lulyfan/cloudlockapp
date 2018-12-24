@@ -147,4 +147,7 @@ public interface ApiUrl {
 
     //修改锁名称
     String editLockName = "api/lock/updateLockName?json";
+
+    //将锁从一个分组移动到另一个分组
+    String changeLockGroup = "api/lockGroup/changeGroup?json";
 }

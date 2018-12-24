@@ -1,5 +1,6 @@
 package com.ut.module_lock.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.databinding.ViewDataBinding;
@@ -37,12 +38,15 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :选择钥匙分组界面
  */
 
+
+@SuppressLint("CheckResult")
 @Route(path = RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP)
 public class ChooseLockGroupActivity extends BaseActivity {
     private List<LockGroup> lockGroups = new ArrayList<>();
     private LockKey lockKey;
     private ListAdapter<LockGroup> adapter;
     private long currentGroupId = -1;
+    private boolean ifInsert = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class ChooseLockGroupActivity extends BaseActivity {
         setContentView(R.layout.acitivity_choose_group);
         lockKey = getIntent().getParcelableExtra("lock_key");
         currentGroupId = lockKey.getGroupId();
+        ifInsert = currentGroupId == 0;
+
         initDarkToolbar();
         setTitle(getString(R.string.choose_group));
         initAdd(() -> createGroup());
@@ -130,18 +136,33 @@ public class ChooseLockGroupActivity extends BaseActivity {
         if (currentGroupId != lockKey.getGroupId()) {
             final long tmp = currentGroupId;
             currentGroupId = lockKey.getGroupId();
-            Disposable subscribe = MyRetrofit.get().getCommonApiService().addLockIntoGroup(lockKey.getMac(), tmp)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> {
-                        CLToast.showAtCenter(getApplication(), result.msg);
-                        if (result.isSuccess()) {
-                            Intent intent = new Intent();
-                            intent.putExtra("lock_group_id", tmp);
-                            setResult(RESULT_OK, intent);
-                        }
-                        super.finish();
-                    }, error -> super.finish());
+            if(ifInsert) {
+                Disposable subscribe = MyRetrofit.get().getCommonApiService().addLockIntoGroup(lockKey.getMac(), tmp)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            CLToast.showAtCenter(getApplication(), result.msg);
+                            if (result.isSuccess()) {
+                                Intent intent = new Intent();
+                                intent.putExtra("lock_group_id", tmp);
+                                setResult(RESULT_OK, intent);
+                            }
+                            super.finish();
+                        }, error -> super.finish());
+            } else {
+                MyRetrofit.get().getCommonApiService().changeLockGroup(lockKey.getMac(), tmp)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(result -> {
+                            CLToast.showAtCenter(getApplication(), result.msg);
+                            if (result.isSuccess()) {
+                                Intent intent = new Intent();
+                                intent.putExtra("lock_group_id", tmp);
+                                setResult(RESULT_OK, intent);
+                            }
+                            super.finish();
+                        }, error -> super.finish());
+            }
         } else {
             super.finish();
         }
