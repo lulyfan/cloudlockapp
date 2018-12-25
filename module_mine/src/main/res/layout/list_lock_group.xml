@@ -17,7 +17,7 @@
         android:id="@+id/lockGroupName"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/base_16dp"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/base_16dp"
         android:textSize="@dimen/s"

@@ -11,90 +11,88 @@
         <include
             android:id="@+id/include2"
             layout="@layout/receiver"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1901"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/arc_border"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1901"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include2">
 
             <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView16"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_item_up"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/base_16dp"
                 android:text="@string/invalidTime"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/divider10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_item_bottom"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/base_16dp"
+                android:text="@string/invalidTime"
+                android:textColor="@color/gray6"
+                android:textSize="@dimen/s"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider10" />
 
             <TextView
                 android:id="@+id/tv_validTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="@dimen/base_16dp"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
+                android:gravity="center_vertical"
                 android:text="@string/chooseTime"
                 android:textColor="@color/grayC"
                 android:textSize="@dimen/s"
-                android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/textView16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView16" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/tv_invalidTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/base_16dp"
+                android:gravity="center_vertical"
                 android:text="@string/chooseTime"
                 android:textColor="@color/grayC"
                 android:textSize="@dimen/s"
-                android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/textView19"
-                app:layout_constraintEnd_toEndOf="@+id/tv_validTime"
-                app:layout_constraintTop_toTopOf="@+id/textView19" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/validTime"
-                android:textColor="@color/gray6"
-                android:textSize="@dimen/s"
-                app:layout_constraintBottom_toTopOf="@+id/divider10"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView19"
+                app:layout_constraintEnd_toEndOf="@+id/tv_validTime" />
 
             <View
                 android:id="@+id/divider10"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
         </android.support.constraint.ConstraintLayout>
+
 
 
     </android.support.constraint.ConstraintLayout>

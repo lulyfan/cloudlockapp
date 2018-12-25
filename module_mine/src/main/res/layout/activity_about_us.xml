@@ -16,7 +16,8 @@
             android:id="@+id/constraintLayout11"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/arc_border"
+            android:background="@drawable/bg_item_bottom"
+            android:paddingLeft="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +54,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/arc_border"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.2828"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout11">
@@ -66,46 +64,41 @@
                 android:id="@+id/divider17"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25"/>
+                app:layout_constraintTop_toBottomOf="@id/phoneContainer" />
 
             <View
                 android:id="@+id/divider18"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/websiteContainer"/>
 
             <View
                 android:id="@+id/divider19"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/base_16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.75"/>
+                app:layout_constraintTop_toBottomOf="@id/developSiteContainer" />
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/phoneContainer"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_bg_item_up"
                 android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/divider17"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,12 +106,15 @@
 
                 <TextView
                     android:id="@+id/textView38"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:background="@drawable/select_bg_item_up"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/base_16dp"
                     android:text="@string/contactNumber"
                     android:textColor="@color/gray6"
                     android:textSize="@dimen/s"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -127,23 +123,22 @@
                     android:id="@+id/textView41"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/base_16dp"
                     android:drawableRight="@drawable/right_triangle"
                     android:drawablePadding="8dp"
                     android:text="@string/_contactNum"
                     android:textColor="@color/gray3"
                     android:textSize="@dimen/s"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView38"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/websiteContainer"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/divider18"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +148,7 @@
                     android:id="@+id/textView43"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/base_16dp"
                     android:text="@string/officialWebSite"
                     android:textColor="@color/gray6"
                     android:textSize="@dimen/s"
@@ -165,7 +160,7 @@
                     android:id="@+id/textView44"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/base_16dp"
                     android:drawableRight="@drawable/right_triangle"
                     android:drawablePadding="8dp"
                     android:text="@string/_officialWebSite"
@@ -177,11 +172,11 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/developSiteContainer"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
-                app:layout_constraintBottom_toTopOf="@+id/divider19"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +186,7 @@
                     android:id="@+id/textView45"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/base_16dp"
                     android:text="@string/developWebSite"
                     android:textColor="@color/gray6"
                     android:textSize="@dimen/s"
@@ -203,7 +198,7 @@
                     android:id="@+id/textView46"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/base_16dp"
                     android:drawableRight="@drawable/right_triangle"
                     android:drawablePadding="8dp"
                     android:text="@string/_officialWebSite"
@@ -216,10 +211,7 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/select_gray_e"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,29 +219,31 @@
 
                 <TextView
                     android:id="@+id/textView47"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:clickable="true"
+                    android:background="@drawable/select_bg_item_bottom"
+                    android:paddingLeft="@dimen/base_16dp"
+                    android:gravity="center_vertical"
                     android:text="@string/BusinessMail"
                     android:textColor="@color/gray6"
                     android:textSize="@dimen/s"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/textView48"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/base_16dp"
                     android:drawableRight="@drawable/right_triangle"
                     android:drawablePadding="8dp"
                     android:text="@string/_businessMail"
                     android:textColor="@color/gray3"
                     android:textSize="@dimen/s"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textView47"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>

@@ -63,15 +63,9 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
             }
         });
 
-        binding.confirm.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEvent.ACTION_UP == event.getAction()) {
-                    String verifyCode = binding.checkCodeView.getInput();
-                    viewModel.changeLockAdmin(verifyCode);
-                }
-                return true;
-            }
+        binding.confirm.setOnClickListener(v -> {
+                String verifyCode = binding.checkCodeView.getInput();
+                viewModel.changeLockAdmin(verifyCode);
         });
 
         binding.timer.setOnClickListener(v -> sendVerifyCode());

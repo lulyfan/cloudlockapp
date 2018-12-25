@@ -18,6 +18,7 @@
     <color name="grayC">#CCCCCC</color>
     <color name="grayD">#DDDDDD</color>
     <color name="grayE">#EEEEEE</color>
+    <color name="darker_green">#ff00bbd2</color>
 
     <color name="color_base_divider">#DFDFDF</color>
     <color name="color_base_bg">#F4F9FB</color>

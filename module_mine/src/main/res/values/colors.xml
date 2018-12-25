@@ -5,4 +5,6 @@
     <color name="tipColor">#F55D54</color>
     <color name="appBarColor">#FFFFFF</color>
     <color name="color_divider">#FFDFDFDF</color>
+    <color name="darker_red">#fff55d54</color>
+    <color name="light_red">#ffff7f61</color>
 </resources>
