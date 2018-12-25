@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.entity.LockMessage;
 import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
 import com.ut.base.adapter.ListAdapter;
@@ -37,8 +38,8 @@ import q.rorbin.badgeview.QBadgeView;
 public class NotificationFragment extends BaseFragment {
 
     private FragmentNotificationBinding mNotifyFgBinding = null;
-    private List<NotifyCarrier> list = new ArrayList<>();
-    private ListAdapter<NotifyCarrier> listAdapter = null;
+    private List<LockMessage> list = new ArrayList<>();
+    private ListAdapter<LockMessage> listAdapter = null;
     private NotMessageVm notificationViewModel = null;
 
     @Nullable
@@ -57,30 +58,30 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initView() {
-        listAdapter = new ListAdapter<NotifyCarrier>(getActivity(), R.layout.item_notification_carrier, list, BR.notifyCarrier) {
-            @Override
-            public void addBadge(ViewDataBinding binding, int position) {
-                super.addBadge(binding, position);
-                Badge badge = null;
-                ImageView icon = binding.getRoot().findViewById(R.id.icon);
-                if (icon.getTag() == null) {
-                    badge = new QBadgeView(getActivity());
-                    icon.setTag(badge);
-                } else {
-                    badge = (Badge) icon.getTag();
-                }
-                NotifyCarrier notifyCarrier = list.get(position);
-                badge.bindTarget((View) icon.getParent())
-                        .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
-                        .setBadgeTextColor(Color.WHITE)
-                        .setShowShadow(false)
-                        .setBadgeTextSize(9, true)
-                        .setBadgeNumber(notifyCarrier.countUnRead());
-            }
-        };
+       listAdapter = new  ListAdapter<LockMessage>(getContext(), R.layout.item_notification_carrier, list, BR.lockMessage) {
+           @Override
+           public void addBadge(ViewDataBinding binding, int position) {
+               super.addBadge(binding, position);
+               Badge badge = null;
+               ImageView icon = binding.getRoot().findViewById(R.id.icon);
+               if (icon.getTag() == null) {
+                   badge = new QBadgeView(getActivity());
+                   icon.setTag(badge);
+               } else {
+                   badge = (Badge) icon.getTag();
+               }
+               LockMessage lockMessage = list.get(position);
+               badge.bindTarget((View) icon.getParent())
+                       .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
+                       .setBadgeTextColor(Color.WHITE)
+                       .setShowShadow(false)
+                       .setBadgeTextSize(9, true)
+                       .setBadgeNumber(lockMessage.getUnReadCount());
+           }
+       };
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
-        notificationViewModel.getNotifications().observe(getActivity(), carriers -> {
+        notificationViewModel.getLockMessages().observe(getActivity(), carriers -> {
             listAdapter.updateDate(carriers);
         });
 

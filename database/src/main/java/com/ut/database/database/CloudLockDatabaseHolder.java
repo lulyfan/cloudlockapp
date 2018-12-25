@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.ut.database.dao.LockGroupDao;
 import com.ut.database.dao.LockKeyDao;
+import com.ut.database.dao.LockMessageDao;
 import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
 import com.ut.database.dao.NotifyDao;
@@ -49,8 +50,8 @@ public class CloudLockDatabaseHolder {
         return mDb.uuidDao();
     }
 
-    public NotifyDao getNotiDao() {
-        return mDb.notifyDao();
+    public LockMessageDao lockMessageDao() {
+        return mDb.lockMessageDao();
     }
 
     public LockUserDao getLockUserDao() {

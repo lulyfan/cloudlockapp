@@ -159,4 +159,10 @@ public interface ApiUrl {
 
     //清空钥匙
     String clearAllKeys = "api/key/clearKey?json";
+
+    //获取某把锁的所有消息（二级消息菜单）
+    String getLockMessageInfos = "api/lockMessage/getMessageDetail?json";
+
+    //读消息
+    String readMessages = "api/lockMessage/readMessage?json";
 }

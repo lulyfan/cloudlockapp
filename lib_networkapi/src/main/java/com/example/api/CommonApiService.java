@@ -3,6 +3,8 @@ package com.example.api;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.LockMessage;
+import com.ut.database.entity.LockMessageInfo;
 import com.ut.database.entity.NearScanLock;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -181,7 +183,7 @@ public interface CommonApiService {
 
 
     @POST(ApiUrl.getMessage)
-    Call<JsonObject> getMessage();
+    Call<Result<List<LockMessage>>> getMessage();
 
     @FormUrlEncoded
     @POST(ApiUrl.checkKeyStatus)
@@ -247,4 +249,12 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.clearAllKeys)
     Observable<Result<Void>> clearAllKey(@Field("mac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getLockMessageInfos)
+    Observable<Result<List<LockMessageInfo>>> getLockMessageInfos(@Field("lockMac") String mac);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.readMessages)
+    Observable<Result<Void>> readMessages(@Field("lockMac") String mac);
 }

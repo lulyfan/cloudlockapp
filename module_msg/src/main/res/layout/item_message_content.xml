@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="notificationMessage"
-            type="com.ut.database.entity.NotificationMessage" />
+            name="lockMessageInfo"
+            type="com.ut.database.entity.LockMessageInfo" />
     </data>
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 android:background="#EBEFF1"
                 android:gravity="center"
                 android:padding="@dimen/base_4dp"
-                android:text="@{notificationMessage.createTime}"
+                android:text="@{lockMessageInfo.createTimeformat()}"
                 android:textColor="@color/gray9"
                 android:textSize="@dimen/base_10dp" />
         </FrameLayout>
@@ -44,7 +44,7 @@
             android:paddingBottom="@dimen/base_30dp"
             android:layout_marginTop="@dimen/base_5dp"
             android:layout_marginBottom="@dimen/base_5dp"
-            android:text="@{notificationMessage.description}"
+            android:text="@{lockMessageInfo.description}"
             android:textColor="@color/color_base_text"
             android:textSize="@dimen/base_14sp" />
     </LinearLayout>

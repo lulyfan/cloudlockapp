@@ -25,13 +25,22 @@ public class ApplyMessage implements Serializable {
     private String hint;
     private String userName;
     private int keyType;
-    private int lockType;// 锁类型,
+    private String lockType;// 锁类型,
     private String status;// 处理状态,
     private String lockName;// 锁名称,
     private long applyTime;// 申请时间
     private String reason;
     private String headPic;// "http://cloudlockbuss.oss-cn-shenzhen.aliyuncs.com/img/f11ddf63f16a48d9bd17f8f07ba8f7c7",
 
+    private int ruleType;
+
+    public int getRuleType() {
+        return ruleType;
+    }
+
+    public void setRuleType(int ruleType) {
+        this.ruleType = ruleType;
+    }
 
     public String getUserName() {
         return userName;
@@ -72,11 +81,11 @@ public class ApplyMessage implements Serializable {
         this.id = id;
     }
 
-    public int getLockType() {
+    public String getLockType() {
         return lockType;
     }
 
-    public void setLockType(int lockType) {
+    public void setLockType(String lockType) {
         this.lockType = lockType;
     }
 
@@ -125,7 +134,7 @@ public class ApplyMessage implements Serializable {
     }
 
     public String lockTypeString() {
-        switch (getLockType()) {
+        switch (ruleType) {
             case 3:
                 return BaseApplication.getAppContext().getString(R.string.once_time);
             case 2:

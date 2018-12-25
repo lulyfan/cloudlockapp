@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="notifyCarrier"
-            type="com.ut.module_msg.model.NotifyCarrier" />
+            name="lockMessage"
+            type="com.ut.database.entity.LockMessage" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/msg_12dp"
-            android:text="@{notifyCarrier.name}"
+            android:text="@{lockMessage.name}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
             android:textStyle="bold"
@@ -52,7 +52,7 @@
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
-            android:text="@{notifyCarrier.firstDesc}"
+            android:text="@{lockMessage.description}"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/icon_layout"
             app:layout_constraintLeft_toLeftOf="@id/title"
@@ -64,7 +64,7 @@
             android:layout_marginEnd="@dimen/base_20dp"
             android:textColor="#BBBBBB"
             android:textSize="@dimen/base_10sp"
-            android:text="@{notifyCarrier.firstCreateTime}"
+            android:text="@{lockMessage.createTimeformat()}"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/title" />
 

@@ -59,8 +59,7 @@ public class BaseActivity extends AppCompatActivity {
                                 noLoginDialog.dismiss();
                             }
                             noLoginDialog = new AlertDialog.Builder(BaseActivity.this)
-                                    .setTitle("还未登录")
-                                    .setMessage("请重新登录")
+                                    .setMessage(R.string.base_auto_login_time_out)
                                     .setPositiveButton("好的", (dialog1, which) -> {
                                         ARouter.getInstance().build(url).navigation();
                                         if (dialog1 != null) {

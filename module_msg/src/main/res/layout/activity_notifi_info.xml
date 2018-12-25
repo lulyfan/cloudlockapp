@@ -4,9 +4,6 @@
 
     <data>
 
-        <variable
-            name="notifyCarrier"
-            type="com.ut.module_msg.model.NotifyCarrier" />
     </data>
 
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
