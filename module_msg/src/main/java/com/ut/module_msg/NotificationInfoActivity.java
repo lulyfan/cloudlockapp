@@ -12,8 +12,6 @@ import com.ut.base.adapter.ListAdapter;
 import com.ut.database.entity.LockMessage;
 import com.ut.database.entity.LockMessageInfo;
 import com.ut.module_msg.databinding.ActivityNotifiInfoBinding;
-import com.ut.module_msg.model.NotifyCarrier;
-import com.ut.database.entity.NotificationMessage;
 import com.ut.module_msg.viewmodel.NotMessageVm;
 
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ public class NotificationInfoActivity extends BaseActivity {
     }
 
     private void readMessages() {
-        notMessageVm.readMessags(lockMessage.getLockMac());
+        notMessageVm.readMessages(lockMessage.getLockMac());
     }
 
     private void loadData() {

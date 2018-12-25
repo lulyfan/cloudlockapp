@@ -83,7 +83,7 @@ public class NotMessageVm extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
-    public void readMessags(String mac) {
+    public void readMessages(String mac) {
         MyRetrofit.get().getCommonApiService().readMessages(mac)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

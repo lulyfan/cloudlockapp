@@ -52,6 +52,8 @@
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
+            android:lines="1"
+            android:ellipsize="end"
             android:text="@{lockMessage.description}"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/icon_layout"

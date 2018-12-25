@@ -16,4 +16,5 @@ public interface Constance {
     String USER_ID = "user_id";
     String LOCK_ID = "lock_id";
     String LOCK_KEY = "lock_key";
+    String USERTYPE = "usertype";
 }

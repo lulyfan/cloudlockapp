@@ -68,6 +68,7 @@ public class ChooseLockGroupActivity extends BaseActivity {
                 long lockKeyId = lockGroups.get(position).getId();
                 CheckBox checkBox = binding.getRoot().findViewById(R.id.check_box);
                 if (lockGroups.get(position).getName().equals(newGroupName)) {
+                    newGroupName = null;
                     currentGroupId = lockKeyId;
                 }
                 checkBox.setChecked(currentGroupId == lockKeyId);
@@ -102,10 +103,12 @@ public class ChooseLockGroupActivity extends BaseActivity {
                     dialog.dismiss();
                     MyRetrofit.get().getCommonApiService().addGroup(edt.getText().toString().trim())
                             .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(result -> {
                                 CLToast.showAtCenter(getBaseContext(), result.msg);
                                 if (result.isSuccess()) {
                                     newGroupName = edt.getText().toString().trim();
+                                    currentGroupId = -1;
                                     loadGroup();
                                 }
                             }, new ErrorHandler());

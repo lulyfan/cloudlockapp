@@ -9,6 +9,9 @@ import com.ut.base.BaseApplication;
 import com.ut.module_lock.R;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * author : chenjiajun
@@ -24,9 +27,8 @@ public class Key implements Serializable {
     private String endTime;
     private int ruleType = 1;//类型 1永久 2限时 3单次 4循环
     private int status;//status 1,"发送中" 2,"冻结中" 3,"解除冻结中" 4,"删除中" 5,"授权中" 6,"取消授权中" 7,"修改中 8,"正常"  9,"已冻结" 10,"已删除" 11,"已失效" 12,"已过期"
-    private String sender;
     private String sendTime;
-    private String acceptTime;
+    private String receiveTime;
     private String mobile;
     private String keyName;
     private String weeks;
@@ -93,13 +95,6 @@ public class Key implements Serializable {
         this.status = status;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
 
     public String getSendTime() {
         return sendTime;
@@ -109,12 +104,12 @@ public class Key implements Serializable {
         this.sendTime = sendTime;
     }
 
-    public String getAcceptTime() {
-        return acceptTime;
+    public String getReceiveTime() {
+        return receiveTime;
     }
 
-    public void setAcceptTime(String acceptTime) {
-        this.acceptTime = acceptTime;
+    public void setReceiveTime(String receiveTime) {
+        this.receiveTime = receiveTime;
     }
 
     public String getMobile() {
@@ -250,11 +245,11 @@ public class Key implements Serializable {
         return status == 11;
     }
 
-    public String senderOrMobile(){
-        if(TextUtils.isEmpty(sender)) {
+    public String userNameOrMobile(){
+        if(TextUtils.isEmpty(userName)) {
             return mobile;
         }
-        return sender;
+        return userName;
     }
 
     public Drawable getTypeDrawable() {
@@ -269,4 +264,6 @@ public class Key implements Serializable {
     public boolean isForzened() {
         return status == 9;
     }
+
+
 }

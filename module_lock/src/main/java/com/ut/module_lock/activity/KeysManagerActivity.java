@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,6 +16,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.BR;
 import com.ut.module_lock.R;
@@ -50,7 +52,7 @@ public class KeysManagerActivity extends BaseActivity {
 
     private void initTitle() {
         initDarkToolbar();
-        if (lockKey.getUserType() == 1 || lockKey.getUserType() == 2) {
+        if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal() || lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
             initMore(this::popupMoreWindow);
         }
         setTitle(R.string.func_manage_key);
@@ -91,7 +93,7 @@ public class KeysManagerActivity extends BaseActivity {
             Key keyItem = keyList.get(position);
             if (keyItem.getStatus() != 4) {
                 keyItem.setMac(mMac);
-                ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation(this, REQUEST_CODE_KEY_INFO);
+                ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withInt(Constance.USERTYPE,lockKey.getUserType()).withSerializable(Constance.KEY_INFO, keyItem).navigation(this, REQUEST_CODE_KEY_INFO);
             }
         });
     }
@@ -103,16 +105,23 @@ public class KeysManagerActivity extends BaseActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
-                getView(R.id.item1).setOnClickListener(v -> {
-                    new AlertDialog.Builder(KeysManagerActivity.this)
-                            .setMessage(R.string.lock_clear_all_keys_tips)
-                            .setPositiveButton(R.string.lock_clear, ((dialog, which) -> {
-                                clearKey(lockKey.getMac());
-                            }))
-                            .setNegativeButton(R.string.lock_cancel, null)
-                            .show();
-                    getPopupWindow().dismiss();
-                });
+
+                if(lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
+                    getView(R.id.item1).setOnClickListener(v -> {
+                        //todo 弹窗
+                        new AlertDialog.Builder(KeysManagerActivity.this)
+                                .setMessage(R.string.lock_clear_all_keys_tips)
+                                .setPositiveButton(R.string.lock_clear, ((dialog, which) -> {
+                                    clearKey(lockKey.getMac());
+                                }))
+                                .setNegativeButton(R.string.lock_cancel, null)
+                                .show();
+                        getPopupWindow().dismiss();
+                    });
+                } else {
+                    getView(R.id.item1).setVisibility(View.GONE);
+                }
+
                 getView(R.id.item2).setOnClickListener(v -> {
                     sendKey();
                     getPopupWindow().dismiss();

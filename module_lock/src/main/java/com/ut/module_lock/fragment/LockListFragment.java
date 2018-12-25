@@ -224,4 +224,12 @@ public class LockListFragment extends BaseFragment {
         mLockListAdapter = null;
         mLockGroupCommonAdapter = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mLockListFragVM != null) {
+            mLockListFragVM.toGetLockAllList();
+        }
+    }
 }
