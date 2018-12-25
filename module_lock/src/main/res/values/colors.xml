@@ -10,4 +10,5 @@
     <color name="title_bar_bg">#00BDCF</color>
     <color name="color_tv_blue">#FF00BBD2</color>
     <color name="gray3">#333333</color>
+    <color name="lock_carview_shadow">#05333333</color>
 </resources>

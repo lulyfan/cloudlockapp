@@ -62,9 +62,9 @@ public class SearchLockActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
+                if (s.toString().equals("")) {
                     refreshLockListData(new ArrayList<>());
-                }else{
+                } else {
                     mSearchLockVM.getLockKeys(s.toString()).observe(SearchLockActivity.this, lockKeys -> {
                         refreshLockListData(lockKeys);
                     });

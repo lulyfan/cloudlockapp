@@ -1,6 +1,5 @@
 package com.ut.module_lock.activity;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.BindingAdapter;
@@ -18,7 +17,6 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
-import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -26,8 +24,6 @@ import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
 import com.ut.module_lock.viewmodel.LockDetailVM;
 import com.ut.unilink.UnilinkManager;
-
-import org.w3c.dom.Text;
 
 @Route(path = RouterUtil.LockModulePath.LOCK_DETAIL)
 public class LockDetailActivity extends BaseActivity {
@@ -45,6 +41,10 @@ public class LockDetailActivity extends BaseActivity {
         enableImmersive();
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
+        mLockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
+        mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
+        mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
+        mLockKey.setElectricityStr();
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
@@ -62,6 +62,10 @@ public class LockDetailActivity extends BaseActivity {
                 mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_grey);
             }
         });
+        mLockDetailVM.getShowTip().observe(this, tip -> {
+            UTLog.i("open lock show tip:" + tip);
+            toastShort(tip);
+        });
     }
 
 
@@ -76,23 +80,33 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onOpenLockClick(View view) {
-            toScan();
+            toOpenLock();
         }
 
         public void onSendKeyClick(View view) {
-            startActivity(new Intent(LockDetailActivity.this, GrantPermissionActivity.class));
+//            startActivity(new Intent(LockDetailActivity.this, GrantPermissionActivity.class));
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
+                    .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mLockKey.getMac())
+                    .navigation();
         }
 
         public void onMangeKeyClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).withParcelable(Constance.LOCK_KEY, mLockKey).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER).withParcelable(Constance.LOCK_KEY, mLockKey)
+                    .withParcelable(Constance.LOCK_KEY, mLockKey)
+                    .navigation();
         }
 
         public void onOperateRecordClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).withString(Constance.RECORD_TYPE, Constance.BY_LOCK).withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId())).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
+                    .withString(Constance.RECORD_TYPE, Constance.BY_LOCK)
+                    .withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId()))
+                    .navigation();
         }
 
         public void onLockManageClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING).withParcelable(Constance.LOCK_KEY, mLockKey).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING)
+                    .withParcelable(Constance.LOCK_KEY, mLockKey)
+                    .navigation();
         }
     }
 
@@ -141,8 +155,8 @@ public class LockDetailActivity extends BaseActivity {
         }
     }
 
-    private void toScan() {
-        int scanResult = mLockDetailVM.toOpenLock();
+    private void toOpenLock() {
+        int scanResult = mLockDetailVM.openLock();
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 toastShort(getString(R.string.lock_tip_ble_not_support));
@@ -161,7 +175,7 @@ public class LockDetailActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
-                toScan();
+                toOpenLock();
         }
     }
 }

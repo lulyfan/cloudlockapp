@@ -127,6 +127,12 @@ public interface ApiUrl {
     //获取用户锁列表
     String pageUserLock = PREFIX + "/lock/pageUserLock" + SUFFIX;
 
+    //判断是否充许授权
+    String isAuth = PREFIX + "/key/isAuth" + SUFFIX;
+
+    //添加日志
+    String addLog = PREFIX + "/log/addLog" + SUFFIX;
+
     //获取消息列表
     String getMessage = "api/lockMessage/getMessage?json";
 

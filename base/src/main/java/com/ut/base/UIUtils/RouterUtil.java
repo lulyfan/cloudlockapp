@@ -41,11 +41,16 @@ public class RouterUtil {
         //锁详情
         public static final String LOCK_DETAIL = "/lock/detail";
 
-        public static final String SEND_KEY = "/lock/sendKey";
+
+    }
+
+    public static class BaseModulePath {
+        public static final String GRANTPERMISSION = "/base/sendKey";
     }
 
     public interface LockModuleExtraKey {
         String Extra_lock_detail = "extra_lock_key";
+        String EXTRA_LOCK_SENDKEY_MAC = "extra_lock_sendkey";
     }
 
     public interface LoginModuleAction {

@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -19,7 +19,7 @@ import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
 
-@Route(path = RouterUtil.LockModulePath.SEND_KEY)
+@Route(path = RouterUtil.BaseModulePath.GRANTPERMISSION)
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
     private GrantPermisssionViewModel viewModel;
@@ -32,6 +32,7 @@ public class GrantPermissionActivity extends BaseActivity {
         initUI();
         viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class GrantPermissionActivity extends BaseActivity {
             String startTimeRange = viewModel.startTimeRange;
             String endTimeRange = viewModel.endTimeRange;
             String weeks = viewModel.weeks;
-            String mac = "33-33-22-A1-B0-20";
+            String mac = viewModel.mac;
 
             switch (binding.viewPager.getCurrentItem()) {
 
@@ -81,7 +82,7 @@ public class GrantPermissionActivity extends BaseActivity {
                     viewModel.sendLoopKey(phoneNum, mac, keyName, startTime, endTime, weeks, startTimeRange, endTimeRange);
                     break;
 
-                    default:
+                default:
             }
         });
     }
@@ -117,7 +118,7 @@ public class GrantPermissionActivity extends BaseActivity {
             if (cursor != null && cursor.moveToFirst()) {
                 int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                String number = cursor.getString(numberIndex).replace(" ","");
+                String number = cursor.getString(numberIndex).replace(" ", "");
                 String name = cursor.getString(nameIndex);
                 viewModel.receiverPhoneNum.setValue(number);
                 viewModel.keyName.setValue(name);

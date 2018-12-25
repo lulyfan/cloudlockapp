@@ -152,7 +152,7 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void sendKey() {
-        ARouter.getInstance().build(RouterUtil.LockModulePath.SEND_KEY).navigation();
+        ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION).navigation();
     }
 
     private void clearKey(String mac) {

@@ -11,13 +11,17 @@
             type="com.ut.database.entity.LockKey"/>
     </data>
 
-    <android.support.v7.widget.CardView
+    <com.ut.commoncomponent.cardview.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_10dp"
+        android:background="@color/white"
         app:cardCornerRadius="@dimen/base_10dp"
-        app:cardElevation="@dimen/base_6dp"
+        app:cardElevation="@dimen/base_3dp"
         app:cardPreventCornerOverlap="false"
+        app:cardShadowColorEnd="@color/lock_carview_shadow"
+        app:cardShadowColorStart="@color/lock_carview_shadow"
+        app:cardUseCompatPadding="false"
         tools:context=".MainActivity">
 
         <android.support.constraint.ConstraintLayout
@@ -92,7 +96,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_key_type"
                 app:layout_constraintStart_toEndOf="@+id/tv_key_type"/>
         </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
+    </com.ut.commoncomponent.cardview.CardView>
 
 
 </layout>

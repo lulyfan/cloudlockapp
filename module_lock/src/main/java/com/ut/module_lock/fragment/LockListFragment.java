@@ -64,35 +64,32 @@ public class LockListFragment extends BaseFragment {
             mFragmentLocklistBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_locklist, container, false);
             mView = mFragmentLocklistBinding.getRoot();
         }
+        addPaddingTop(mView);
+        mFragmentLocklistBinding.setPresenter(new Present());
+        initRecycleView();
+        initPopupWindow();
+        initViewModel();
         return mView;
     }
 
-    private void addPaddingTop() {
-        View view = getView().findViewById(R.id.parent);
+    private void addPaddingTop(View parent) {
+        View view = parent.findViewById(R.id.parent);
         view.setPadding(view.getPaddingLeft(), Util.getStatusBarHeight(getContext()), view.getPaddingRight(), view.getPaddingBottom());
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        addPaddingTop();
-        mFragmentLocklistBinding.setPresenter(new Present());
-        initRecycleView();
-        initPopupWindow();
-        initViewModel();
-
+        mLockListFragVM.toGetLockAllList();
+        mLockListFragVM.toGetAllGroupList();
     }
 
     private void initViewModel() {
         mLockListFragVM = ViewModelProviders.of(this).get(LockListFragVM.class);
         mLockListFragVM.getLockList().observe(this, lockKeys -> {
-            refreshLockListData(lockKeys);
+            LockListFragment.this.refreshLockListData(lockKeys);
         });
-        mLockListFragVM.getLockGroupList().observe(this, lockGroups -> {
-            refreshGroupList(lockGroups);
-        });
-        mLockListFragVM.toGetLockAllList();
-        mLockListFragVM.toGetAllGroupList();
+        mLockListFragVM.getLockGroupList().observe(this, this::refreshGroupList);
     }
 
     private void initRecycleView() {
@@ -131,6 +128,7 @@ public class LockListFragment extends BaseFragment {
             allGroup.setCurrent(1);
             allGroup.setName(getString(R.string.lock_group_all));
             lockGroups.add(0, allGroup);
+            mFragmentLocklistBinding.lockTvGroup.setText(allGroup.getName());
             ListView listView = popupWindow.getView(R.id.lv_group_list);
 
             mLockGroupCommonAdapter = new CommonAdapter<LockGroup>(getContext(), lockGroups, R.layout.item_goup_list) {
@@ -157,7 +155,9 @@ public class LockListFragment extends BaseFragment {
                 mFragmentLocklistBinding.lockTvGroup.setText(currentGroupName);
                 ((LockGroup) parent.getAdapter().getItem(currentGroupPosition)).setCurrent(0);
                 mLockListFragVM.getGroupLockList(lockGroup).observe(LockListFragment.this,
-                        LockListFragment.this::refreshLockListData);
+                        lockKeys -> {
+                            LockListFragment.this.refreshLockListData(lockKeys);
+                        });
                 popupWindow.getPopupWindow().dismiss();
             });
             listView.setAdapter(mLockGroupCommonAdapter);

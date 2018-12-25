@@ -3,6 +3,7 @@ package com.example.operation;
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.google.gson.JsonElement;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.NearScanLock;
@@ -41,6 +42,18 @@ public class CommonApi {
     //更新锁名称
     public static Observable<Result<Void>> updateLockName(String mac, String name) {
         Observable<Result<Void>> resultObservable = getCommonApiService().updateLockName(mac, name);
+        return ObjectLoader.observe(resultObservable);
+    }
+
+    //判断是否允许开锁
+    public static Observable<Result<JsonElement>> isAuth(String mac) {
+        Observable<Result<JsonElement>> resultObservable = getCommonApiService().isAuth(mac);
+        return ObjectLoader.observe(resultObservable);
+    }
+
+    //添加开锁记录
+    public static Observable<Result<JsonElement>> addLog(long lockId, long keyId, int type) {
+        Observable<Result<JsonElement>> resultObservable = getCommonApiService().addLog(lockId, keyId, type);
         return ObjectLoader.observe(resultObservable);
     }
 

@@ -6,7 +6,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.operation.CommonApi;
+import com.ut.base.Utils.UTLog;
+import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
+import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
 import com.ut.unilink.cloudLock.CloudLock;
@@ -16,6 +20,9 @@ import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 /**
  * author : zhouyubin
  * time   : 2018/12/20
@@ -24,8 +31,11 @@ import java.util.List;
  */
 public class LockDetailVM extends AndroidViewModel {
     private MutableLiveData<Boolean> connectStatus = new MutableLiveData<>();
+    private MutableLiveData<String> showTip = new MutableLiveData<>();
     private LockKey mLockKey = null;
     private volatile boolean isToConnect = false;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private boolean isConnectSuccessed = false;
 
     public LockDetailVM(@NonNull Application application) {
         super(application);
@@ -36,11 +46,16 @@ public class LockDetailVM extends AndroidViewModel {
         return connectStatus;
     }
 
+    public LiveData<String> getShowTip() {
+        return showTip;
+    }
+
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
     }
 
-    public int toOpenLock() {
+    public int openLock() {
+        isConnectSuccessed = false;
         return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
             @Override
             public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
@@ -52,27 +67,49 @@ public class LockDetailVM extends AndroidViewModel {
 
             @Override
             public void onFinish() {
-                //TODO 提示搜索不到
+                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
             }
         }, 20);
     }
 
-    public void toConnect(ScanDevice scanDevice) {
+    private void toConnect(ScanDevice scanDevice) {
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
-                toActOpenLock();
+                if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
+                    toCheckPermission();
+                } else {
+                    toActOpenLock();
+                }
+                isConnectSuccessed = true;
                 connectStatus.postValue(true);
             }
 
             @Override
             public void onDisconnect(int i, String s) {
+                UTLog.i("onDisconnect:" + i + " s:" + s);
                 connectStatus.postValue(false);
-                if (i != -100) {
-                    //TODO 提示连接失败
+                if (!isConnectSuccessed) {
+                    showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
                 }
             }
         });
+    }
+
+    private void toCheckPermission() {
+        Disposable result = CommonApi.isAuth(mLockKey.getMac())
+                .subscribe(jsonElementResult -> {
+                            if (jsonElementResult.code == 200) {
+                                toActOpenLock();
+                            } else {
+                                showTip.postValue(jsonElementResult.msg);
+                            }
+                        },
+                        throwable -> {
+                            UTLog.i("onDisconnect");
+                            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                        });
+        mCompositeDisposable.add(result);
     }
 
     private void toActOpenLock() {
@@ -83,13 +120,33 @@ public class LockDetailVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
-                //TODO 提示开锁成功，并发送记录到后台
+                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_success));
+                toAddLog(1);
             }
 
             @Override
             public void onFailed(int i, String s) {
-                //TODO 提示开锁失败
+                UTLog.i("onFailed");
+                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                toAddLog(2);
             }
         });
+    }
+
+    private void toAddLog(int type) {
+        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type)
+                .subscribe(jsonElementResult -> {
+
+                }, throwable -> {
+                    throwable.printStackTrace();
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    @Override
+
+    protected void onCleared() {
+        super.onCleared();
+        mCompositeDisposable.dispose();
     }
 }

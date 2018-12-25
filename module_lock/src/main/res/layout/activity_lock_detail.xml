@@ -50,12 +50,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_back"/>
 
-        <android.support.v7.widget.CardView
+        <com.ut.commoncomponent.cardview.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/base_23dp"
             android:layout_marginBottom="8dp"
+            android:background="@color/white"
             app:cardCornerRadius="@dimen/base_10dp"
+            app:cardShadowColorEnd="@color/lock_carview_shadow"
+            app:cardShadowColorStart="@color/lock_carview_shadow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.8"
             app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +68,6 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/lock_color_bg_gray"
                 android:paddingLeft="@dimen/base_30dp"
                 android:paddingTop="@dimen/base_30dp"
                 android:paddingRight="@dimen/base_30dp"
@@ -204,7 +206,7 @@
                         app:layout_constraintStart_toEndOf="@+id/function_tv_record"/>
                 </android.support.constraint.ConstraintLayout>
             </android.support.constraint.ConstraintLayout>
-        </android.support.v7.widget.CardView>
+        </com.ut.commoncomponent.cardview.CardView>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -213,10 +213,10 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.sendKey)
     Observable<Result<Integer>> sendKey(@Field("mobile") String mobile, @Field("mac") String mac, @Field("ruleType") int ruleType,
-                                     @Field("keyName") String keyName, @Field("isAdmin") String isAdmin,
-                                     @Field("startTime") String startTime, @Field("endTime") String endTime,
-                                     @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange,
-                                     @Field("endTimeRange") String endTimeRange);
+                                        @Field("keyName") String keyName, @Field("isAdmin") String isAdmin,
+                                        @Field("startTime") String startTime, @Field("endTime") String endTime,
+                                        @Field("weeks") String weeks, @Field("startTimeRange") String startTimeRange,
+                                        @Field("endTimeRange") String endTimeRange);
 
     @FormUrlEncoded
     @POST(ApiUrl.addLockIntoGroup)
@@ -240,7 +240,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.toAuth)
-    Observable<Result<Void>> toAuth(@Field("keyId")long keyId);
+    Observable<Result<Void>> toAuth(@Field("keyId") long keyId);
 
     @FormUrlEncoded
     @POST(ApiUrl.cancelAuth)
@@ -257,4 +257,12 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.readMessages)
     Observable<Result<Void>> readMessages(@Field("lockMac") String mac);
+
+    @POST(ApiUrl.isAuth)
+    @FormUrlEncoded
+    Observable<Result<JsonElement>> isAuth(@Field("mac") String mac);
+
+    @POST(ApiUrl.addLog)
+    @FormUrlEncoded
+    Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId, @Field("type") int type);
 }

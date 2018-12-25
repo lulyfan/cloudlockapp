@@ -32,6 +32,7 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
     public String startTimeRange;
     public String endTimeRange;
     public String weeks;   //用于循环钥匙
+    public String mac;
 
     public GrantPermisssionViewModel(@NonNull Application application) {
         super(application);
@@ -62,7 +63,7 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
 
     public void sendKey(String phoneNum, String mac, String keyName, int keyType, String isAdmin, String startTime, String endTime,
                         String weeks, String startTimeRange, String endTimeRange) {
-        service.sendKey(phoneNum, mac, keyType, keyName, isAdmin,startTime, endTime, weeks, startTimeRange, endTimeRange)
+        service.sendKey(phoneNum, mac, keyType, keyName, isAdmin, startTime, endTime, weeks, startTimeRange, endTimeRange)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
                         throw new NullPointerException(getApplication().getString(R.string.serviceErr));

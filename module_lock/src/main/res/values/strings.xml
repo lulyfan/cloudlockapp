@@ -79,11 +79,17 @@
     <string name="lock_tip_setname_failed">修改锁名称失败</string>
     <string name="lock_tip_ble_not_support">蓝牙不支持</string>
 
+    <string name="lock_tip_ble_not_finded">未找到锁，请确认锁设备是否已激活</string>
+    <string name="lock_tip_ble_unlock_failed">开锁失败</string>
+    <string name="lock_tip_ble_unlock_success">开锁成功</string>
+
+    <string name="lock_tip_ble_unbindlock_failed">解绑失败</string>
     <string-array name="lock_type">
         <item>蓝牙门锁</item>
     </string-array>
 
     <string-array name="key_type">
+        <item>其他</item>
         <item>永久钥匙</item>
         <item>限时钥匙</item>
         <item>单次钥匙</item>

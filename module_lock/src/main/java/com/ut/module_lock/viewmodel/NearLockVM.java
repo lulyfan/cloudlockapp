@@ -138,7 +138,7 @@ public class NearLockVM extends AndroidViewModel {
                 Disposable disposable = CommonApi.bindLock(cloudLock.getAddress(), lock.getName(), cloudLock.getAdminPasswordString(),
                         cloudLock.getOpenLockPasswordString(), cloudLock.getEncryptType() + "", cloudLock.getEntryptKeyString())
                         .subscribe(voidResult -> {
-                            if (voidResult.code == 200) {
+                            if (voidResult.isSuccess()) {
                                 confirmInitLock(cloudLock);
                             } else {
                                 errorMsg.postValue(voidResult.msg);

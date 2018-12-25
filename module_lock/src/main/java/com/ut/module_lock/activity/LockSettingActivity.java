@@ -2,6 +2,8 @@ package com.ut.module_lock.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -26,6 +28,8 @@ import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
+import com.ut.module_lock.viewmodel.LockSettingVM;
+import com.ut.unilink.UnilinkManager;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,19 +50,42 @@ public class LockSettingActivity extends BaseActivity {
     private final int REQUEST_CODE_EDIT_NAME = 1122;
     private final int REQUEST_CODE_CHOOSE_GROUP = 1002;
 
+    private LockSettingVM mLockSettingVM = null;
+
+    private static final int BLEREAUESTCODE = 101;
+    private static final int BLEENABLECODE = 102;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lockKey = getIntent().getParcelableExtra("lock_key");
         mBinding = DataBindingUtil.setContentView(this, R.layout.acitivity_lock_setting);
         mBinding.setLockKey(lockKey);
-        initDarkToolbar();
-        setTitle(R.string.lock_setting);
+        initTitle();
+        initViewModel();
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
         mBinding.layoutLockName.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).navigation(this, REQUEST_CODE_EDIT_NAME);
         });
+    }
+
+    private void initViewModel() {
+        mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
+        mLockSettingVM.isUnlockSuccess().observe(this, isUnlockSuccess -> {
+            if (isUnlockSuccess) {
+                //TODO 退到首页
+                finish();
+            }
+        });
+        mLockSettingVM.getShowTip().observe(this, showTip -> {
+            CLToast.showAtCenter(getBaseContext(), showTip);
+        });
+    }
+
+    private void initTitle() {
+        initDarkToolbar();
+        setTitle(R.string.lock_setting);
     }
 
     @Override
@@ -99,6 +126,7 @@ public class LockSettingActivity extends BaseActivity {
         } else if (lockKey.getUserType() == 2) {
             View contentView = View.inflate(this, R.layout.layout_anthorize_delete_key, null);
             CheckBox checkBox = contentView.findViewById(R.id.check_box);
+            //TODO
             AlertDialog dialog = new AlertDialog.Builder(this).setTitle("确定删除授权钥匙吗？")
                     .setView(contentView)
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
@@ -111,6 +139,7 @@ public class LockSettingActivity extends BaseActivity {
                     .setNegativeButton(getString(R.string.lock_cancel), null)
                     .show();
         } else if (lockKey.getUserType() == 3) {
+            //TODO
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage("确定删除授权钥匙吗？删除后无法恢复。")
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
@@ -137,7 +166,7 @@ public class LockSettingActivity extends BaseActivity {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(result -> {
                                 if (result.isSuccess()) {
-                                    deleteAdminLock();
+                                    toDeleteAdminKey();
                                 }
                             }, new ErrorHandler());
                     dialog.dismiss();
@@ -147,17 +176,29 @@ public class LockSettingActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    private void deleteAdminLock() {
-        MyRetrofit.get().getCommonApiService().deleteAdminLock(lockKey.getMac())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtCenter(getBaseContext(), result.msg);
-                    if (result.isSuccess()) {
-                        finish();
-                    }
-                }, new ErrorHandler());
+    private void toDeleteAdminKey() {//去删除管理员钥匙
+        int result = mLockSettingVM.unbindLock(lockKey);
+        switch (result) {
+            case UnilinkManager.BLE_NOT_SUPPORT:
+                toastShort(getString(R.string.lock_tip_ble_not_support));
+                break;
+            case UnilinkManager.NO_LOCATION_PERMISSION:
+                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
+                break;
+            case UnilinkManager.BLE_NOT_OPEN:
+                UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
+                break;
+        }
     }
+
+//    private void deleteAdminLock() {
+//        MyRetrofit.get().getCommonApiService().deleteAdminLock(lockKey.getMac())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(result -> {
+//
+//                }, new ErrorHandler());
+//    }
 
     private void deleteLockKey(long keyId, int ifAllKey) {
         MyRetrofit.get().getCommonApiService().deleteKey(keyId, ifAllKey)
@@ -180,7 +221,8 @@ public class LockSettingActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(name)) {
                     modifyLockName(name);
                 }
-            }
+            } else if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
+                toDeleteAdminKey();
         }
     }
 

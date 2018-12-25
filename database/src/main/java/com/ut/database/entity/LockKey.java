@@ -75,7 +75,7 @@ public class LockKey implements Parcelable {
     private String encryptKey;
 
     //钥匙id
-    private int keyId;
+    private long keyId;
 
 
     @Ignore
@@ -281,11 +281,11 @@ public class LockKey implements Parcelable {
     }
 
 
-    public int getKeyId() {
+    public long getKeyId() {
         return keyId;
     }
 
-    public void setKeyId(int keyId) {
+    public void setKeyId(long keyId) {
         this.keyId = keyId;
     }
 
@@ -317,7 +317,7 @@ public class LockKey implements Parcelable {
         dest.writeString(this.longitude);
         dest.writeInt(this.encryptType);
         dest.writeString(this.encryptKey);
-        dest.writeInt(this.keyId);
+        dest.writeLong(this.keyId);
         dest.writeString(this.statusStr);
         dest.writeString(this.lockTypeStr);
         dest.writeString(this.keyTypeStr);

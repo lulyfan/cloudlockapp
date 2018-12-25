@@ -67,7 +67,7 @@ public class NearLockActivity extends BaseActivity {
             //TODO 处理理是否正在搜索事件
         });
         mNearLockVM.getErrorCode().observe(this, errorMsg -> {
-            //TODO 处理失败事件提示
+            toastShort(errorMsg);
         });
         mNearLockVM.getBindLock().observe(this, cloudLock -> {
             Bundle bundle = new Bundle();
