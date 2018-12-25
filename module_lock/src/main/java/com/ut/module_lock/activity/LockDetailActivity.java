@@ -88,7 +88,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onOperateRecordClick(View view) {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).navigation();
+            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).withString(Constance.RECORD_TYPE, Constance.BY_LOCK).withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId())).navigation();
         }
 
         public void onLockManageClick(View view) {

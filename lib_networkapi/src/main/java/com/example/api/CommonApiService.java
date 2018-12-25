@@ -185,7 +185,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.checkKeyStatus)
-    Observable<JsonObject> checkKeyStatus(@Field("appId") long appId);
+    Observable<JsonObject> checkKeyStatus(@Field("applyId") int appId);
 
     @FormUrlEncoded
     @POST(ApiUrl.bindLock)
@@ -235,4 +235,16 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.changeLockGroup)
     Observable<Result<Void>> changeLockGroup(@Field("mac") String mac, @Field("groupId") long groupId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.toAuth)
+    Observable<Result<Void>> toAuth(@Field("keyId")long keyId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.cancelAuth)
+    Observable<Result<Void>> cancelAuth(@Field("keyId") long keyId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.clearAllKeys)
+    Observable<Result<Void>> clearAllKey(@Field("mac") String mac);
 }

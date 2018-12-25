@@ -3,6 +3,7 @@ package com.ut.module_lock.entity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 
 import com.ut.base.BaseApplication;
 import com.ut.module_lock.R;
@@ -247,6 +248,13 @@ public class Key implements Serializable {
 
     public boolean isInvalid() {
         return status == 11;
+    }
+
+    public String senderOrMobile(){
+        if(TextUtils.isEmpty(sender)) {
+            return mobile;
+        }
+        return sender;
     }
 
     public Drawable getTypeDrawable() {

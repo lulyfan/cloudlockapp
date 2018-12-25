@@ -52,8 +52,6 @@ public class ApplyFragment extends BaseFragment {
                 if (ams == null || ams.isEmpty()) return;
                 mAdapter.updateDate(ams);
             });
-
-            mApplyMessageVm.loadApplyMessages();
         }
         return mApplyFgBinding.getRoot();
     }
@@ -78,7 +76,7 @@ public class ApplyFragment extends BaseFragment {
                         .setBadgeTextColor(Color.WHITE)
                         .setGravityOffset(0, 0, true)
                         .setBadgeTextSize(9, true)
-                        .setBadgeText(message.getStatus() == 0 ? getString(R.string.wait_for_handle) : null);
+                        .setBadgeText(message.getStatus());
             }
         };
         mApplyFgBinding.applyList.setAdapter(mAdapter);
@@ -93,5 +91,13 @@ public class ApplyFragment extends BaseFragment {
             mApplyMessageVm.loadApplyMessages();
             mApplyFgBinding.swipeRefreshLayout.postDelayed(() -> mApplyFgBinding.swipeRefreshLayout.setRefreshing(false), 3000L);
         });
+    }
+
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+        if(mApplyMessageVm != null) {
+            mApplyMessageVm.loadApplyMessages();
+        }
     }
 }

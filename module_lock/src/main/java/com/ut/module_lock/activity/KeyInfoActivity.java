@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -38,15 +40,6 @@ public class KeyInfoActivity extends BaseActivity {
 
     private KeyManagerVM keyManagerVM = null;
 
-    private void initTitle() {
-        initDarkToolbar();
-        setTitle(R.string.lock_key_info);
-        if (keyInfo.getUserType() < 3) {
-            initMore(this::popupMoreWindow);
-        }
-
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +53,16 @@ public class KeyInfoActivity extends BaseActivity {
 
     }
 
-    private void initListener() {
+    private void initTitle() {
+        initDarkToolbar();
+        setTitle(R.string.lock_key_info);
+        if (keyInfo.getUserType() < 3) {
+            initMore(this::popupMoreWindow);
+        }
 
+    }
+
+    private void initListener() {
         mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
                 .build(RouterUtil.LockModulePath.EDIT_NAME)
                 .withSerializable(Constance.KEY_INFO, keyInfo)
@@ -100,13 +101,36 @@ public class KeyInfoActivity extends BaseActivity {
             @Override
             protected void initView() {
                 TextView item1 = getView(R.id.item1);
-                item1.setText(R.string.lock_to_grant_authorization_or_not);
-                item1.setOnClickListener(v -> {
-                    getPopupWindow().dismiss();
-                    //ToDO
-                    //授权 or not
+                if (keyInfo.getRuleType() == 2) {
+                    item1.setText(keyInfo.getUserType() == 2 ? getString(R.string.lock_cancel_auth) : getString(R.string.lock_to_auth));
+                    item1.setOnClickListener(v -> {
+                        getPopupWindow().dismiss();
+                        //ToDO
+                        //授权 or not
+                        if (keyInfo.getUserType() == 2) {
+                            new AlertDialog.Builder(KeyInfoActivity.this)
+                                    .setTitle(R.string.lock_key_cancel_auth_title)
+                                    .setMessage(R.string.lock_key_cancel_auth_tips)
+                                    .setPositiveButton(R.string.lock_btn_confirm, ((dialog, which) -> {
+                                        keyManagerVM.cancelAuth(keyInfo.getKeyId());
+                                    }))
+                                    .setNegativeButton(R.string.lock_cancel, null);
 
-                });
+                        } else if (keyInfo.getUserType() == 3) {
+                            new AlertDialog.Builder(KeyInfoActivity.this)
+                                    .setMessage(R.string.lock_key_auth_tips)
+                                    .setTitle(getString(R.string.lock_key_auth_title))
+                                    .setPositiveButton(R.string.lock_auth, ((dialog, which) -> {
+                                        keyManagerVM.toAuth(keyInfo.getKeyId());
+                                    }))
+                                    .setNegativeButton(R.string.lock_cancel, null)
+                                    .show();
+                        }
+
+                    });
+                } else {
+                    item1.setVisibility(View.GONE);
+                }
                 TextView item2 = getView(R.id.item2);
                 item2.setText(R.string.lock_to_frozen_or_not);
                 item2.setOnClickListener(v -> {
@@ -147,8 +171,6 @@ public class KeyInfoActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
-    private boolean hasEdit = false;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -168,7 +190,7 @@ public class KeyInfoActivity extends BaseActivity {
                         }
                     }
                     mBinding.setKeyItem(keyInfo);
-                    hasEdit = true;
+                    keyManagerVM.editKey(keyInfo);
                     break;
             }
         }
@@ -176,9 +198,8 @@ public class KeyInfoActivity extends BaseActivity {
 
     @Override
     public void finish() {
-        if (hasEdit) {
-            keyManagerVM.editKey(keyInfo);
-        }
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         super.finish();
     }
 }

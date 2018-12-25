@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -49,6 +50,18 @@ public class OperationRecordAcitivity extends BaseActivity {
             listAdapter.notifyDataSetChanged();
         });
         operationVm.loadRecord(recordType, currentId);
+
+        mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light);
+        mBinding.refreshLayout.setOnRefreshListener(() -> {
+            operationVm.loadRecord(recordType, currentId);
+            mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setRefreshing(false), 1000L);
+        });
+
+//        mBinding.refreshLayout.setListViewFooter(mBinding.refreshLayout.createLoadingFooter());
+//        mBinding.refreshLayout.setOnLoadListener(()->{
+//            mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 1000L);
+//        });
     }
 
     private void initView() {

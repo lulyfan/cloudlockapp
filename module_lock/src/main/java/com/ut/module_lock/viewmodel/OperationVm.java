@@ -19,6 +19,7 @@ import com.ut.module_lock.entity.Record;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +78,23 @@ public class OperationVm extends AndroidViewModel {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
+                    //todo 假数据
                     if (result.isSuccess()) {
+                        for (int i = 0; i < 5; i++) {
+                            Record record = new Record();
+                            record.setCreateTime(System.currentTimeMillis());
+                            record.setDescription("你好吗？");
+                            record.setOperator("bsu " + i);
+                            result.data.add(record);
+                        }
+
+                        for (int i = 0; i < 5; i++) {
+                            Record record = new Record();
+                            record.setCreateTime(1545458719000L);
+                            record.setDescription("how are you?");
+                            record.setOperator("syu " + i);
+                            result.data.add(record);
+                        }
                         List<OperationRecord> operationRecords = handlerRecords(result.data);
                         getOperationRecords().postValue(operationRecords);
                     }
@@ -137,8 +154,9 @@ public class OperationVm extends AndroidViewModel {
         }
         List<OperationRecord> oprs = new ArrayList<>();
         Set<String> keySet = map.keySet();
-        while (keySet.iterator().hasNext()) {
-            String key = keySet.iterator().next();
+        Iterator<String> iterator = keySet.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
             List<Record> rs = map.get(key);
             OperationRecord opr = new OperationRecord();
             opr.setTime(key);

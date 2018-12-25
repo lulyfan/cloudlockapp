@@ -18,5 +18,7 @@ public class ErrorHandler implements Consumer<Throwable> {
         if(throwable instanceof SocketTimeoutException) {
             Toast.makeText(BaseApplication.getAppContext(), "网络连接超时",Toast.LENGTH_SHORT).show();
         }
+
+        throwable.printStackTrace();
     }
 }

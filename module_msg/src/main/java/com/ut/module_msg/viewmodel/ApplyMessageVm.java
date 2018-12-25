@@ -24,7 +24,10 @@ import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.module_msg.model.ApplyMessage;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -54,7 +57,6 @@ public class ApplyMessageVm extends AndroidViewModel {
     }
 
     public void loadApplyMessages() {
-        if (BaseApplication.getUser() == null) return;
         Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
                 .getKeyApplyList(BaseApplication.getUser().id)
@@ -68,15 +70,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                 })
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        List<ApplyMessage> ams = result.data;
-                        ApplyMessage message = new ApplyMessage();
-                        message.setApplyTime(System.currentTimeMillis());
-                        message.setLockName("XYSU");
-                        message.setUserName("秀秀");
-                        message.setLockType(2);
-                        message.setId(System.currentTimeMillis() / 1000L);
-                        ams.add(message);
-                        applyMessages.setValue(ams);
+                        applyMessages.setValue(result.data);
                     }
                     UTLog.d(String.valueOf(result.toString()));
                 }, new ErrorHandler());
@@ -86,9 +80,11 @@ public class ApplyMessageVm extends AndroidViewModel {
         if (BaseApplication.getUser() == null) return;
         MyRetrofit.get().getCommonApiService().ignoreApply(BaseApplication.getUser().id, applyId)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     Log.d("ignoreApply", result.msg);
                     CLToast.showAtBottom(getApplication(), result.msg);
+                    AppManager.getAppManager().currentActivity().finish();
                 }, new ErrorHandler());
     }
 
@@ -104,13 +100,16 @@ public class ApplyMessageVm extends AndroidViewModel {
                     if (code == 200) {
                         ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", message).navigation();
                     } else if (code == 409) {
-                        String dealer = obj.getString("dealUser");
-                        String dealTime = obj.getString("dealTime");
+                        JSONObject data = obj.getJSONObject("data");
+                        String dealer = data.getString("dealUser");
+                        long dealTime = data.getLong("dealTime");
+
+                        String format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(dealTime));
 
                         //TODO
                         new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
                                 .setTitle("提示")
-                                .setMessage(dealer + "已于" + dealTime + "处理这条申请")
+                                .setMessage(dealer + " 已于 " + format + " 处理这条申请")
                                 .setPositiveButton("好的", null)
                                 .show();
                     } else {

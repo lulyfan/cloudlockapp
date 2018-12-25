@@ -137,11 +137,46 @@ public class KeyManagerVM extends AndroidViewModel {
 
     public void editKey(Key keyItem) {
         //ToDo
-        MyRetrofit.get().getCommonApiService().editKey("33-33-22-A1-B0-34", keyItem.getKeyId(), keyItem.getStartTime(), keyItem.getEndTime(), keyItem.getWeeks(), keyItem.getStartTimeRange(), keyItem.getEndTimeRange())
+        MyRetrofit.get().getCommonApiService().editKey(keyItem.getMac(), keyItem.getKeyId(), keyItem.getStartTime(), keyItem.getEndTime(), keyItem.getWeeks(), keyItem.getStartTimeRange(), keyItem.getEndTimeRange())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtBottom(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
+
+    public void clearKeys(String mac) {
+        MyRetrofit.get().getCommonApiService().clearAllKey(mac)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+
+                    }
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
+
+    public void toAuth(long keyId) {
+        MyRetrofit.get().getCommonApiService().toAuth(keyId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+
+                    }
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
+
+    public void cancelAuth(long keyId) {
+        MyRetrofit.get().getCommonApiService().cancelAuth(keyId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+
+                    }
+                    CLToast.showAtCenter(getApplication(), result.msg);
                 }, new ErrorHandler());
     }
 }

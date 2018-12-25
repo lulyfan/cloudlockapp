@@ -6,21 +6,19 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.EditText;
-import android.widget.ImageView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.R;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
 
+@Route(path = RouterUtil.LockModulePath.SEND_KEY)
 public class GrantPermissionActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
     public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();

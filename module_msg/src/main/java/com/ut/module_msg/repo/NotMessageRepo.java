@@ -58,14 +58,6 @@ public class NotMessageRepo {
                 if (result.isSuccess()) {
                     NotificationMessage[] tmp = new NotificationMessage[result.data.size()];
                     notifyDao.insertNotiMessage(result.data.toArray(tmp));
-                    tmp = null;
-                    //toDo
-                    NotificationMessage message = new NotificationMessage();
-                    message.setMessageId(System.currentTimeMillis() / 1000L);
-                    message.setName("Chan的钥匙");
-                    message.setDescription("我开了锁，你知道吗?");
-                    message.setCreateTime("2018/01/01 00:20");
-                    notifyDao.insertNotiMessage(message);
                 } else {
 
                 }

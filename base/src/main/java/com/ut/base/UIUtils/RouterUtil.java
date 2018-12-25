@@ -41,6 +41,7 @@ public class RouterUtil {
         //锁详情
         public static final String LOCK_DETAIL = "/lock/detail";
 
+        public static final String SEND_KEY = "/lock/sendKey";
     }
 
     public interface LockModuleExtraKey {

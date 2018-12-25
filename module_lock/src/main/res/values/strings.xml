@@ -138,4 +138,13 @@
     <string name="lock_create_group">创建新分组</string>
     <string name="lock_create_group_hint">请输入组名称</string>
     <string name="lock_anthorize_delete_lock_tip">同时删除其发送的所有钥匙，删除后无法恢复。</string>
+    <string name="lock_clear">清空</string>
+    <string name="lock_clear_all_keys_tips">确定清空该锁的全部钥匙吗？</string>
+    <string name="lock_auth">授权</string>
+    <string name="lock_key_auth_tips">授权用户拥有管理员的权限，可发送及管理钥匙。</string>
+    <string name="lock_key_auth_title">确定授权该钥匙吗？</string>
+    <string name="lock_key_cancel_auth_title">确定删除该钥匙吗？</string>
+    <string name="lock_key_cancel_auth_tips">取消授权会在用户APP联网后生效。</string>
+    <string name="lock_to_auth">授权</string>
+    <string name="lock_cancel_auth">取消授权</string>
 </resources>

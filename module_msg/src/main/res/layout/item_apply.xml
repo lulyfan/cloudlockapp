@@ -28,7 +28,7 @@
                 android:layout_height="@dimen/base_40dp"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/default_icon_b"
-                app:url="@{apply.url}" />
+                app:url="@{apply.headPic}" />
 
         </FrameLayout>
 

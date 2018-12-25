@@ -150,4 +150,13 @@ public interface ApiUrl {
 
     //将锁从一个分组移动到另一个分组
     String changeLockGroup = "api/lockGroup/changeGroup?json";
+
+    //授权钥匙
+    String toAuth = "api/key/toAuth?json";
+
+    //取消授权钥匙
+    String cancelAuth = "api/key/cancelAuth?json";
+
+    //清空钥匙
+    String clearAllKeys = "api/key/clearKey?json";
 }

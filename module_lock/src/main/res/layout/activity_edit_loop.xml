@@ -42,12 +42,12 @@
                 android:id="@+id/include5"
                 layout="@layout/layout_choose_week"
                 android:layout_width="0dp"
-                android:layout_height="34dp"
+                android:layout_height="@dimen/base_40dp"
                 android:layout_marginEnd="@dimen/base_16dp"
                 app:layout_constraintBottom_toTopOf="@+id/divider11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.7296" />
+                app:layout_constraintWidth_percent="0.74" />
 
             <View
                 android:id="@+id/divider11"

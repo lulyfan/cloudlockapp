@@ -212,7 +212,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_50dp"
-                            android:text="@{keyItem.sender}"
+                            android:text="@{keyItem.senderOrMobile()}"
                             android:textColor="@color/color_base_title"
                             android:textSize="@dimen/base_17sp"/>
 

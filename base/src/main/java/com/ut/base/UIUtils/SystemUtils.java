@@ -78,7 +78,7 @@ public class SystemUtils {
     }
 
     public static String getTimeDate(long time){
-        return new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).format(new Date(time));
+        return new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date(time));
     }
 
 }

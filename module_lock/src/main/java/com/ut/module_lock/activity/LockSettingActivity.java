@@ -76,7 +76,7 @@ public class LockSettingActivity extends BaseActivity {
                 .subscribe(lockKey1 -> {
                     lockKey = lockKey1;
                     mBinding.setLockKey(lockKey);
-                });
+                }, new ErrorHandler());
 
         Observable.just(lockKey.getGroupId())
                 .subscribeOn(Schedulers.io())
@@ -84,7 +84,7 @@ public class LockSettingActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lg -> {
                     mBinding.tvLockGroup.setText(lg.getName());
-                });
+                }, new ErrorHandler());
     }
 
     private void deleteLock() {

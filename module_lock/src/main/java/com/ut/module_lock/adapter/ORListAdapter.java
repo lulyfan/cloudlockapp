@@ -18,8 +18,11 @@ import com.ut.module_lock.R;
 import com.ut.module_lock.entity.OperationRecord;
 import com.ut.module_lock.entity.Record;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * author : chenjiajun
@@ -75,7 +78,7 @@ public class ORListAdapter extends BaseAdapter {
             TextView operatorTv = item.findViewById(R.id.operator);
             operatorTv.setText(r.getOperator());
             TextView descTv = item.findViewById(R.id.desc);
-            descTv.setText(r.getDescription());
+            descTv.setText(new StringBuffer(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(r.getCreateTime())) +"   "+ r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);
             Glide.with(context).load(r.getIcon()).apply(new RequestOptions().placeholder(R.mipmap.default_icon_b)).into(icon);
             holder.container.addView(item, lp);

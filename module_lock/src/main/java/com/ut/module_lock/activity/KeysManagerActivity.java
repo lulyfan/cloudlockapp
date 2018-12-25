@@ -1,8 +1,11 @@
 package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.ViewGroup;
 
@@ -26,27 +29,30 @@ import java.util.List;
 @Route(path = RouterUtil.LockModulePath.KEY_MANAGER)
 public class KeysManagerActivity extends BaseActivity {
 
+    private static final int REQUEST_CODE_KEY_INFO = 1121;
     private KeyManagerVM kmVM = null;
     private ActivityKeysManagerBinding mBinding = null;
     private ListAdapter<Key> mAdapter = null;
     private List<Key> keyList = new ArrayList<>();
     private String mMac = "";
+    private LockKey lockKey = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_manager);
-        LockKey lockKey = getIntent().getParcelableExtra(Constance.LOCK_KEY);
+        lockKey = getIntent().getParcelableExtra(Constance.LOCK_KEY);
         mMac = lockKey.getMac();
-        //ToDo
-        mMac = "33-33-22-A1-B0-34";
         initTitle();
         init();
+        updateData();
     }
 
     private void initTitle() {
         initDarkToolbar();
-        initMore(this::popupMoreWindow);
+        if (lockKey.getUserType() == 1 || lockKey.getUserType() == 2) {
+            initMore(this::popupMoreWindow);
+        }
         setTitle(R.string.func_manage_key);
     }
 
@@ -83,10 +89,11 @@ public class KeysManagerActivity extends BaseActivity {
         });
         mBinding.list.setOnItemClickListener((parent, view, position, id) -> {
             Key keyItem = keyList.get(position);
-            ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation();
+            if (keyItem.getStatus() != 4) {
+                keyItem.setMac(mMac);
+                ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO).withSerializable(Constance.KEY_INFO, keyItem).navigation(this, REQUEST_CODE_KEY_INFO);
+            }
         });
-
-        updateData();
     }
 
     private void popupMoreWindow() {
@@ -97,7 +104,13 @@ public class KeysManagerActivity extends BaseActivity {
             @Override
             protected void initView() {
                 getView(R.id.item1).setOnClickListener(v -> {
-                    clearKey();
+                    new AlertDialog.Builder(KeysManagerActivity.this)
+                            .setMessage(R.string.lock_clear_all_keys_tips)
+                            .setPositiveButton(R.string.lock_clear, ((dialog, which) -> {
+                                clearKey(lockKey.getMac());
+                            }))
+                            .setNegativeButton(R.string.lock_cancel, null)
+                            .show();
                     getPopupWindow().dismiss();
                 });
                 getView(R.id.item2).setOnClickListener(v -> {
@@ -130,11 +143,18 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void sendKey() {
-
+        ARouter.getInstance().build(RouterUtil.LockModulePath.SEND_KEY).navigation();
     }
 
-    private void clearKey() {
-
+    private void clearKey(String mac) {
+        kmVM.clearKeys(mac);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_KEY_INFO) {
+            updateData();
+        }
+    }
 }
