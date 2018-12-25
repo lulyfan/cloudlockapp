@@ -21,4 +21,7 @@ public interface LockUserKeyDao {
 
     @Query("delete from lockuserkey where keyId = :keyId")
     void deleteById(long keyId);
+
+    @Query("delete from lockuserkey where keyId >= 0")
+    void deleteAll();
 }

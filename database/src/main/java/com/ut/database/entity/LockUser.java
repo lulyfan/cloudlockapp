@@ -18,6 +18,15 @@ public class LockUser {
     @PrimaryKey
     private long userId;
     private String telNo;
+    private String headPic;
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
 
     public long getCreateTime() {
         return createTime;

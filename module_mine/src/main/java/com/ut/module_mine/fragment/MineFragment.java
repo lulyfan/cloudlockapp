@@ -60,16 +60,18 @@ public class MineFragment extends BaseFragment {
 
     private void initViewModel() {
         mineViewModel = ViewModelProviders.of(this).get(MineViewModel.class);
-        mineViewModel.getUserInfo();
         mMineBinding.setViewModel(mineViewModel);
 
-        mineViewModel.tip.observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                BaseActivity activity = (BaseActivity) getActivity();
-                activity.toastShort(s);
-            }
+        mineViewModel.tip.observe(this, s -> {
+            BaseActivity activity = (BaseActivity) getActivity();
+            activity.toastShort(s);
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mineViewModel.getUserInfo();
     }
 
     private void initUI() {

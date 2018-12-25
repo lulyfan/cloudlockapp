@@ -1,10 +1,8 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +25,7 @@ import com.ut.module_mine.BR;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityLockGroupBinding;
-import com.ut.module_mine.databinding.ItemLockGroupBinding;
+import com.ut.module_mine.databinding.ListLockGroupBinding;
 import com.ut.module_mine.viewModel.LockGroupViewModel;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ import java.util.List;
 public class LockGroupActivity extends BaseActivity {
 
     private ActivityLockGroupBinding binding;
-    private DataBindingAdapter<LockGroupData, ItemLockGroupBinding> adapter;
+    private DataBindingAdapter<LockGroupData, ListLockGroupBinding> adapter;
     private LockGroupViewModel viewModel;
 
     @Override
@@ -49,16 +47,13 @@ public class LockGroupActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupViewModel.class);
-        viewModel.mLockGroups.observe(this, new Observer<List<LockGroup>>() {
-            @Override
-            public void onChanged(@Nullable List<LockGroup> lockGroups) {
-                List<LockGroupData> lockGroupDataList = new ArrayList<>();
-                for (LockGroup lockGroup : lockGroups) {
-                    LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
-                    lockGroupDataList.add(item);
-                }
-                adapter.setData(lockGroupDataList);
+        viewModel.mLockGroups.observe(this, lockGroups -> {
+            List<LockGroupData> lockGroupDataList = new ArrayList<>();
+            for (LockGroup lockGroup : lockGroups) {
+                LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
+                lockGroupDataList.add(item);
             }
+            adapter.setData(lockGroupDataList);
         });
         viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup());
         viewModel.tip.observe(this, s -> toastShort(s));
@@ -78,15 +73,7 @@ public class LockGroupActivity extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockGroup.setLayoutManager(layoutManager);
 
-        adapter = new DataBindingAdapter<>(this, R.layout.item_lock_group, BR.lockGroupItem);
-
-        List<LockGroupData> list = new ArrayList<>();
-        list.add(new LockGroupData(1,"全部分组", 8));
-        list.add(new LockGroupData(2,"一楼办公区", 18));
-        list.add(new LockGroupData(3,"二楼仓库", 20));
-        list.add(new LockGroupData(4,"五楼会议室", 7));
-        list.add(new LockGroupData(5,"7楼机房", 20));
-        adapter.setData(list);
+        adapter = new DataBindingAdapter<>(this, R.layout.list_lock_group, BR.lockGroupData);
         binding.rvLockGroup.setAdapter(adapter);
 
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {

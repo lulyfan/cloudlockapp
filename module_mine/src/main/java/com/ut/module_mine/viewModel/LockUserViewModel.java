@@ -39,7 +39,6 @@ public class LockUserViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
-                            mLockUsers.postValue(listResult.data);
                             LockUserDaoImpl.get().insert(listResult.data);
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
