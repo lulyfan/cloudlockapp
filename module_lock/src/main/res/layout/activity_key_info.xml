@@ -80,8 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/base_70dp"
                         android:orientation="horizontal"
-                        android:paddingLeft="@dimen/base_20dp"
-                        android:visibility="@{keyItem.ruleType == 3 || keyItem.ruleType == 4 ? View.VISIBLE : View.GONE}">
+                        android:paddingLeft="@dimen/base_20dp">
 
                         <TextView
                             android:layout_width="wrap_content"

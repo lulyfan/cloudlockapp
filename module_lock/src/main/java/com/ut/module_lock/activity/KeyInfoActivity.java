@@ -105,7 +105,7 @@ public class KeyInfoActivity extends BaseActivity {
             @Override
             protected void initView() {
                 TextView item1 = getView(R.id.item1);
-                if (managerUserType == EnumCollection.UserType.ADMIN.ordinal()) {
+                if (managerUserType == EnumCollection.UserType.ADMIN.ordinal() && keyInfo.getUserType() != EnumCollection.UserType.ADMIN.ordinal()) {
                     item1.setText(keyInfo.getUserType() == EnumCollection.UserType.AUTH.ordinal() ? getString(R.string.lock_cancel_auth) : getString(R.string.lock_to_auth));
                     item1.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
