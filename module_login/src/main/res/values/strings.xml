@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">module_login</string>
     <string name="login_title">云锁登录</string>
     <string name="phone_hint">请输入手机号</string>
@@ -11,8 +11,7 @@
     <string name="sure">确认</string>
     <string name="selected_country_title">国家/地区代码</string>
     <string name="default_country_code">中国/+86</string>
-    <string name="reset_pwd">重置密码</string>
-
+    <string name="reset_password">重置密码</string>
     <string-array name="CountryCodes">
         <item>阿富汗/+93</item>
         <item>阿尔巴尼亚/+355</item>

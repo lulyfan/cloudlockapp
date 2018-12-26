@@ -56,7 +56,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         initLightToolbar();
         String action = getIntent().getAction();
         if(RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
-            setTitle(getString(R.string.login_reset_pwd));
+            setTitle(getString(R.string.reset_password));
         } else {
             setTitle(R.string.login_forget_password);
         }
