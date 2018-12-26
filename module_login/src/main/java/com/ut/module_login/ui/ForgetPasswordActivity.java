@@ -12,9 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.google.gson.JsonElement;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
@@ -56,7 +54,12 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private void initUI() {
         initLightToolbar();
-        setTitle(R.string.login_forget_password);
+        String action = getIntent().getAction();
+        if(RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
+            setTitle(R.string.login_reset_pwd);
+        } else {
+            setTitle(R.string.login_forget_password);
+        }
         phoneEdt = (EditText) findViewById(R.id.edt_phone);
         getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
