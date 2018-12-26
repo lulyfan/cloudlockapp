@@ -17,10 +17,12 @@ import okio.ByteString;
 
 
 public class WebSocketHelper {
-    private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
+//    private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
+    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
     private WebSocket webSocket;
     private OkHttpClient client;
     private int userId = -1;
+    private String appId;
     private boolean isSendUserId;
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture scheduledFuture;
@@ -45,20 +47,21 @@ public class WebSocketHelper {
         }
     }
 
-    public void sendUserId(int userId) {
+    public void sendUserId(int userId, String appId) {
 
-        Log.i(TAG, "send userId:" + userId);
+        Log.i(TAG, "send userId:" + userId + " appId:" + appId);
 
         if (userId == -1) {
             return;
         }
 
         this.userId = userId;
-        webSocket.send("userId:" + userId);
+        this.appId = appId;
+        webSocket.send("userId:" + userId + ",appid:" + appId);
     }
 
     public void sendUserId() {
-        sendUserId(userId);
+        sendUserId(userId, appId);
     }
 
     WebSocketListener webSocketListener = new WebSocketListener() {
@@ -66,13 +69,15 @@ public class WebSocketHelper {
         public void onOpen(final WebSocket webSocket, Response response) {
             super.onOpen(webSocket, response);
 
+            Log.i("websocket", "open");
+
             if (isSendUserId) {
                 //每隔一秒发送一次userId,发送5次, 防止过早发送而没有收到推送，太晚发送又丢失某些推送
                 for (int delay=0, i=0; i<5; i++, delay+=1000) {
                     executor.schedule(new Runnable() {
                         @Override
                         public void run() {
-                            sendUserId(userId);
+                            sendUserId();
 
                         }
                     }, delay, TimeUnit.MILLISECONDS);
@@ -83,8 +88,8 @@ public class WebSocketHelper {
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             super.onMessage(webSocket, text);
-            if (dataListener != null) {
-                dataListener.onReceive(text);
+            if (webSocketDataListener != null) {
+                webSocketDataListener.onReceive(text);
             }
         }
 
@@ -130,13 +135,13 @@ public class WebSocketHelper {
         }
     };
 
-    private DataListener dataListener;
+    private WebSocketDataListener webSocketDataListener;
 
-    public void setDataListener(DataListener dataListener) {
-        this.dataListener = dataListener;
+    public void setWebSocketDataListener(WebSocketDataListener webSocketDataListener) {
+        this.webSocketDataListener = webSocketDataListener;
     }
 
-    public interface DataListener {
+    public interface WebSocketDataListener {
         void onReceive(String data);
     }
 }

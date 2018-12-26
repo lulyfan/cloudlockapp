@@ -157,8 +157,12 @@ public class MyRetrofit {
         return retrofit.create(DownloadApi.class);
     }
 
-    public void setWebSocketListener(WebSocketHelper.DataListener dataListener) {
-        mWebSocketHelper.setDataListener(dataListener);
+    public void setWebSocketListener(WebSocketHelper.WebSocketDataListener webSocketDataListener) {
+        mWebSocketHelper.setWebSocketDataListener(webSocketDataListener);
+    }
+
+    public void sendUserId(int userId, String appId) {
+        mWebSocketHelper.sendUserId(userId, appId);
     }
 
     private static class Holder {

@@ -40,9 +40,18 @@ public interface LockKeyDao {
     @Query("DELETE FROM lock_key WHERE mac LIKE :lockMac")
     void deleteByMac(String lockMac);
 
+    @Query("DELETE FROM lock_key WHERE keyId = :keyId")
+    void deleteByKeyId(int keyId);
+
     @Query("SELECT * FROM lock_key WHERE mac LIKE :mac limit 1")
     LockKey getByMac(String mac);
 
     @Query("SELECT * FROM lock_key WHERE userType = 1")
     LiveData<List<LockKey>> getAdminLock();
+
+    @Query("UPDATE lock_key SET keyStatus = :keyStatus WHERE keyId = :keyId")
+    void updateKeyStatus(int keyId, int keyStatus);
+
+    @Query("UPDATE lock_key SET userType = :userType WHERE keyId = :keyId")
+    void updateKeyAuth(int keyId, int userType);  //将钥匙状态改为授权钥匙
 }
