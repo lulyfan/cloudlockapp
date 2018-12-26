@@ -87,6 +87,10 @@ public class LockKeyDaoImpl {
         mLockKeyDao.deleteByMac(mac);
     }
 
+    public void deleteByKeyId(int keyId) {
+        mLockKeyDao.deleteByKeyId(keyId);
+    }
+
     public LiveData<List<LockKey>> getAdminLock() {
         return mLockKeyDao.getAdminLock();
     }
@@ -96,6 +100,14 @@ public class LockKeyDaoImpl {
      */
     public void deleteAll() {
         mLockKeyDao.deleteAll();
+    }
+
+    public void updateKeyStatus(int keyId, int keyStatus) {
+        mLockKeyDao.updateKeyStatus(keyId, keyStatus);
+    }
+
+    public void updateKeyAuth(int keyId, int userType) {
+        mLockKeyDao.updateKeyAuth(keyId, userType);
     }
 
     private static class Holder {

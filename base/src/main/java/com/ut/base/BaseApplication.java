@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.ut.database.database.CloudLockDatabaseHolder;
@@ -21,6 +22,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class BaseApplication extends MultiDexApplication {
     private static Context INSTANCE = null;
+    public static final String WEBSOCKET_APP_ID = "cloudlockbuss";
 
     public static Context getAppContext() {
         return INSTANCE;
@@ -47,7 +49,6 @@ public class BaseApplication extends MultiDexApplication {
 
         //主线程调度器，用于RxJava
         uiScheduler = Schedulers.from(new UiExecutor());
-
     }
 
     private void initDatabase() {
@@ -68,6 +69,12 @@ public class BaseApplication extends MultiDexApplication {
 
     public static void setUser(User user) {
         mUser = user;
+
+        if (user == null) {
+            return;
+        }
+        MyRetrofit.get().setWebSocketListener(new WebSocketDataHandler());
+        MyRetrofit.get().sendUserId((int) user.getId(), WEBSOCKET_APP_ID);
     }
 
     public static User getUser() {
