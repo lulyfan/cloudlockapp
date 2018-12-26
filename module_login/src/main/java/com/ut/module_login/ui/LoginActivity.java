@@ -72,6 +72,8 @@ public class LoginActivity extends BaseActivity {
             parent.setSelected(isFocus);
         });
 
+        phoneEdt.requestFocus();
+
         findViewById(R.id.img_clear).setOnClickListener((v) -> {
             if (v.isSelected()) {
                 phoneEdt.setText("");

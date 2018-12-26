@@ -3,6 +3,7 @@ package com.ut.module_lock.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.R;
@@ -80,9 +82,10 @@ public class ORListAdapter extends BaseAdapter {
             TextView descTv = item.findViewById(R.id.desc);
             descTv.setText(new StringBuffer(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(r.getCreateTime())) +"   "+ r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);
-            Glide.with(context).load(r.getIcon()).apply(new RequestOptions().placeholder(R.mipmap.default_icon_b)).into(icon);
+            if(!TextUtils.isEmpty(r.getIcon())) {
+                Glide.with(context).load(r.getIcon()).apply( RequestOptions.circleCropTransform().placeholder(R.mipmap.default_icon_b)).into(icon);
+            }
             holder.container.addView(item, lp);
-            Log.d("records", " " + records.indexOf(r));
             if (records.indexOf(r) == records.size() - 1) {
                continue;
             }

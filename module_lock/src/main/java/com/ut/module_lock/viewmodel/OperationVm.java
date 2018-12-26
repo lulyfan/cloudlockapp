@@ -35,7 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("CheckResult")
 public class OperationVm extends AndroidViewModel {
-    private int currentPage = 0;
+    private int currentPage = 1;
     private static int DEFAULT_PAGE_SIZE = 10;
     private long currentId = -1;
 
@@ -55,7 +55,7 @@ public class OperationVm extends AndroidViewModel {
 
     public void loadRecord(String recordType, long id) {
         if (id != currentId) {
-            currentPage = 0;
+            currentPage = 1;
             currentId = id;
         }
         if (Constance.BY_KEY.equals(recordType)) {
@@ -78,23 +78,7 @@ public class OperationVm extends AndroidViewModel {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    //todo 假数据
                     if (result.isSuccess()) {
-                        for (int i = 0; i < 5; i++) {
-                            Record record = new Record();
-                            record.setCreateTime(System.currentTimeMillis());
-                            record.setDescription("你好吗？");
-                            record.setOperator("bsu " + i);
-                            result.data.add(record);
-                        }
-
-                        for (int i = 0; i < 5; i++) {
-                            Record record = new Record();
-                            record.setCreateTime(1545458719000L);
-                            record.setDescription("how are you?");
-                            record.setOperator("syu " + i);
-                            result.data.add(record);
-                        }
                         List<OperationRecord> operationRecords = handlerRecords(result.data);
                         getOperationRecords().postValue(operationRecords);
                     }

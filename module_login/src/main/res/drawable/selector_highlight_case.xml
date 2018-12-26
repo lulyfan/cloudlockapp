@@ -19,7 +19,7 @@
         <shape>
             <corners android:radius="@dimen/base_3dp" />
             <solid android:color="#F5F5F5" />
-            <stroke android:width="@dimen/base_2dp" android:color="@color/color_base_divider" />
+            <stroke android:width="@dimen/base_1dp" android:color="@color/color_base_divider" />
         </shape>
     </item>
 </selector>
