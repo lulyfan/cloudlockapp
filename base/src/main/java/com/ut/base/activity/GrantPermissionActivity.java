@@ -59,8 +59,8 @@ public class GrantPermissionActivity extends BaseActivity {
         binding.viewPager.setAdapter(new GrantPermissionAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
-        int rulerType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, -1);
-        binding.viewPager.setCurrentItem(rulerType + 1);
+        int rulerType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, 1);
+        binding.viewPager.setCurrentItem(rulerType - 1);
 
         binding.sendKey.setOnClickListener(v -> {
 
