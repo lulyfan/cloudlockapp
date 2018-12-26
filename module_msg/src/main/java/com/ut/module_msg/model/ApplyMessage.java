@@ -31,23 +31,23 @@ public class ApplyMessage implements Serializable {
     private long applyTime;// 申请时间
     private String reason;
     private String headPic;// "http://cloudlockbuss.oss-cn-shenzhen.aliyuncs.com/img/f11ddf63f16a48d9bd17f8f07ba8f7c7",
-
+    private String mobile;//申请人电话
     private int ruleType;
 
-    public int getRuleType() {
-        return ruleType;
+    public int getId() {
+        return id;
     }
 
-    public void setRuleType(int ruleType) {
-        this.ruleType = ruleType;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getHint() {
@@ -58,27 +58,20 @@ public class ApplyMessage implements Serializable {
         this.hint = hint;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public int getKeyType() {
         return keyType;
     }
 
     public void setKeyType(int keyType) {
         this.keyType = keyType;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getLockType() {
@@ -97,22 +90,6 @@ public class ApplyMessage implements Serializable {
         this.status = status;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getHeadPic() {
-        return headPic;
-    }
-
-    public void setHeadPic(String headPic) {
-        this.headPic = headPic;
-    }
-
     public String getLockName() {
         return lockName;
     }
@@ -127,6 +104,38 @@ public class ApplyMessage implements Serializable {
 
     public void setApplyTime(long applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public int getRuleType() {
+        return ruleType;
+    }
+
+    public void setRuleType(int ruleType) {
+        this.ruleType = ruleType;
     }
 
     public String applyTimeString() {

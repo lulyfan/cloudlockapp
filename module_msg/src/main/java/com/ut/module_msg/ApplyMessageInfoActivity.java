@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.databinding.ActivityApplyMessageInfoBinding;
@@ -42,6 +43,9 @@ public class ApplyMessageInfoActivity extends BaseActivity {
         mBinding.btnIgnoreApply.setOnClickListener(v -> applyMessageVm.ignoreApply(mApplyMessage.getId()));
 
         mBinding.btnSendKey.setOnClickListener(v -> {
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
+                    .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, mApplyMessage.getRuleType())
+                    .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile()).navigation();
         });
     }
 

@@ -174,6 +174,8 @@ public class KeyInfoActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
+    private boolean hasEdited = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -185,11 +187,13 @@ public class KeyInfoActivity extends BaseActivity {
                         Key item = (Key) data.getSerializableExtra(Constance.KEY_INFO);
                         if (item != null) {
                             keyInfo = item;
+                            hasEdited = true;
                         }
                     } else if (data.hasExtra(Constance.EDIT_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
                             keyInfo.setKeyName(keyName);
+                            hasEdited = true;
                         }
                     }
                     mBinding.setKeyItem(keyInfo);
@@ -201,8 +205,10 @@ public class KeyInfoActivity extends BaseActivity {
 
     @Override
     public void finish() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
+        if (hasEdited) {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+        }
         super.finish();
     }
 }

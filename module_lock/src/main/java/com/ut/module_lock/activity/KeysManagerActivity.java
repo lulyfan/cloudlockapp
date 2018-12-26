@@ -163,7 +163,7 @@ public class KeysManagerActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_KEY_INFO) {
-            updateData();
+            mBinding.refreshLayout.setRefreshing(true);
         }
     }
 }
