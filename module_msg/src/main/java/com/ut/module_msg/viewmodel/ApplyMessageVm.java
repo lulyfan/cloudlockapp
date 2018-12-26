@@ -82,7 +82,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    Log.d("ignoreApply", result.msg);
+                    UTLog.d("ignoreApply", result.msg);
                     CLToast.showAtBottom(getApplication(), result.msg);
                     AppManager.getAppManager().currentActivity().finish();
                 }, new ErrorHandler());
