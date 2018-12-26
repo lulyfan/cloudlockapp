@@ -105,7 +105,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                         long dealTime = data.getLong("dealTime");
                         String phone = data.getString("dealMobile");
                         if(BaseApplication.getUser().account.equals(phone)) {
-                            ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", message).navigation();
+                            ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withBoolean("hasDealt", true).withSerializable("applyMessage", message).navigation();
                         } else {
                             String format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(dealTime));
                             //TODO

@@ -37,6 +37,10 @@ public class ApplyMessageInfoActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_apply_message_info);
         initLightToolbar();
         mApplyMessage = (ApplyMessage) getIntent().getSerializableExtra("applyMessage");
+        boolean hasDealt = getIntent().getBooleanExtra("hasDealt", false);
+        if(hasDealt) {
+            mBinding.btnLayout.setVisibility(View.GONE);
+        }
         setTitle(mApplyMessage.getLockName());
         mBinding.setApplyMessage(mApplyMessage);
         applyMessageVm = ViewModelProviders.of(this).get(ApplyMessageVm.class);
