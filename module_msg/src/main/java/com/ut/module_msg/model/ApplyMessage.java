@@ -33,6 +33,15 @@ public class ApplyMessage implements Serializable {
     private String headPic;// "http://cloudlockbuss.oss-cn-shenzhen.aliyuncs.com/img/f11ddf63f16a48d9bd17f8f07ba8f7c7",
     private String mobile;//申请人电话
     private int ruleType;
+    private String mac;
+
+    public String getMac() {
+        return mac;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
 
     public int getId() {
         return id;

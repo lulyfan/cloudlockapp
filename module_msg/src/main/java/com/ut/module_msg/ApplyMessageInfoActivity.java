@@ -49,6 +49,7 @@ public class ApplyMessageInfoActivity extends BaseActivity {
         mBinding.btnSendKey.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, mApplyMessage.getRuleType())
+                    .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mApplyMessage.getMac())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile()).navigation();
         });
     }
