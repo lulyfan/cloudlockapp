@@ -171,4 +171,7 @@ public interface ApiUrl {
 
     //读消息
     String readMessages = "api/lockMessage/readMessage?json";
+
+    //版本更新
+    String updateAppVersion = "/api/version/getNewVersion?json&typeId=1";
 }

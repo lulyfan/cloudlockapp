@@ -14,14 +14,12 @@ import com.bumptech.glide.request.RequestOptions;
  */
 public class ImageViewAttrAdapter {
 
-    @BindingAdapter({"url"})
-    public static void loadImg(ImageView imageView, String url) {
+    @BindingAdapter(value = {"url", "circle"}, requireAll = false)
+    public static void loadImg(ImageView imageView, String url, boolean isCircle) {
         if (!TextUtils.isEmpty(url)) {
-            RequestOptions options = new RequestOptions();
-            options.centerCrop();
             Glide.with(imageView.getContext())
                     .load(url)
-                    .apply(options)
+                    .apply(isCircle ? RequestOptions.circleCropTransform() : new RequestOptions())
                     .into(imageView);
         }
     }

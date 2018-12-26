@@ -1,5 +1,6 @@
 package com.example.operation;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.api.CommonApiService;
@@ -118,6 +119,7 @@ public class MyRetrofit {
             rBody = buffer.clone().readString(charset);
             String json = rBody;
             Log.d("response", json);
+            if(TextUtils.isEmpty(json)) return;
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.getInt("code");

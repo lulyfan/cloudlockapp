@@ -54,28 +54,33 @@ public class BaseActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(url -> {
-                        try {
-                            if (noLoginDialog != null && noLoginDialog.isShowing()) {
-                                noLoginDialog.dismiss();
-                            }
-                            noLoginDialog = new AlertDialog.Builder(BaseActivity.this)
-                                    .setMessage(R.string.base_auto_login_time_out)
-                                    .setPositiveButton("好的", (dialog1, which) -> {
-                                        ARouter.getInstance().build(url).navigation();
-                                        if (dialog1 != null) {
-                                            dialog1.dismiss();
-                                        }
-                                    }).setOnDismissListener(dialog -> {
-                                        noLoginDialog = null;
-                                    }).create();
-                            if (!noLoginDialog.isShowing()) {
-                                noLoginDialog.show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        handlerNotLogin(url);
                     });
         });
+    }
+
+    private void handlerNotLogin(String url) {
+        //todo
+        try {
+            if (noLoginDialog != null && noLoginDialog.isShowing()) {
+                noLoginDialog.dismiss();
+            }
+            noLoginDialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
+                    .setMessage(R.string.base_auto_login_time_out)
+                    .setPositiveButton("好的", (dialog1, which) -> {
+                        ARouter.getInstance().build(url).navigation();
+                        if (dialog1 != null) {
+                            dialog1.dismiss();
+                        }
+                    }).setOnDismissListener(dialog -> {
+                        noLoginDialog = null;
+                    }).create();
+            if (!noLoginDialog.isShowing()) {
+                noLoginDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setLightStatusBar() {
@@ -233,6 +238,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(noLoginDialog != null) {
+            noLoginDialog.dismiss();
+        }
         AppManager.getAppManager().finishActivity(this);
     }
 }

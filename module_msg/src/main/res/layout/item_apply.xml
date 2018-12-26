@@ -24,10 +24,11 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="@dimen/base_40dp"
-                android:layout_height="@dimen/base_40dp"
+                android:layout_width="@dimen/base_44dp"
+                android:layout_height="@dimen/base_44dp"
                 android:layout_gravity="center_vertical"
                 android:src="@mipmap/default_icon_b"
+                app:circle="@{true}"
                 app:url="@{apply.headPic}" />
 
         </FrameLayout>

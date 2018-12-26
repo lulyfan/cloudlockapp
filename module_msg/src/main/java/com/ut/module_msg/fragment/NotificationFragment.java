@@ -97,4 +97,12 @@ public class NotificationFragment extends BaseFragment {
             }, 2000L);
         });
     }
+
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+        if (notificationViewModel != null) {
+            notificationViewModel.loadNotifications();
+        }
+    }
 }
