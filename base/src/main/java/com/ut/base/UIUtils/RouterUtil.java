@@ -51,6 +51,8 @@ public class RouterUtil {
     public interface LockModuleExtraKey {
         String Extra_lock_detail = "extra_lock_key";
         String EXTRA_LOCK_SENDKEY_MAC = "extra_lock_sendkey";
+        String EXTRA_LOCK_SENDKEY_MOBILE = "extra_lock_sendKey_mobile";
+        String EXTRA_LOCK_SENDKEY_RULER_TYPE = "extra_lock_sendKey_rulerType";
     }
 
     public interface LoginModuleAction {

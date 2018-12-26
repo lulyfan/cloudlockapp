@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Switch;
 
 import com.example.api.CommonApiService;
@@ -38,7 +39,7 @@ public class MineViewModel extends BaseViewModel {
         isWebLoginEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
-                UTLog.d("onPropertyChanged isWebLoginEnable");
+                Log.d("debug", "onPropertyChanged isWebLoginEnable");
                 enableWebLogin(isWebLoginEnable.get());
             }
         });
@@ -46,7 +47,7 @@ public class MineViewModel extends BaseViewModel {
         isOpenLockVolumeEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
-                UTLog.d("onPropertyChanged isOpenLockVolumeEnable");
+                Log.d("debug","onPropertyChanged isOpenLockVolumeEnable");
                 enableOpenLockVolume(isOpenLockVolumeEnable.get());
             }
         });
@@ -54,7 +55,16 @@ public class MineViewModel extends BaseViewModel {
 
     public void getUserInfo() {
         User user = BaseApplication.getUser();
-        phoneNum.set(user.getAccount());
+
+        String mobile = user.getAccount();
+        if (mobile != null && mobile.length() >= 11) {
+            String first = mobile.substring(0, 3) + " ";
+            String second = mobile.substring(3, 7) + " ";
+            String third = mobile.substring(7, 11);
+            mobile = first + second + third;
+        }
+
+        phoneNum.set(mobile);
         userName.set(user.getName());
         headImgUrl.set(user.getHeadPic());
     }
@@ -80,6 +90,7 @@ public class MineViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(voidResult -> {
+                    Log.d("debug", voidResult.msg);
                     tip.postValue(voidResult.msg);
                     if (Constant.CONFIG_TYPE_WEB_LOGIN.equals(type)) {
                         user.enableWebLogin = enable ? 1 : 0;
@@ -88,6 +99,7 @@ public class MineViewModel extends BaseViewModel {
                     }
                 },
                     throwable -> {
+                        Log.d("debug", throwable.getMessage());
                         tip.postValue(throwable.getMessage());
 
                 });

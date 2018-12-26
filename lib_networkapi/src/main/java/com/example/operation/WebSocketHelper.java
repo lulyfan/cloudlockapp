@@ -69,7 +69,7 @@ public class WebSocketHelper {
         public void onOpen(final WebSocket webSocket, Response response) {
             super.onOpen(webSocket, response);
 
-            Log.i("websocket", "open");
+            Log.i(TAG, "open");
 
             if (isSendUserId) {
                 //每隔一秒发送一次userId,发送5次, 防止过早发送而没有收到推送，太晚发送又丢失某些推送
@@ -106,7 +106,7 @@ public class WebSocketHelper {
         @Override
         public void onClosed(WebSocket webSocket, int code, String reason) {
             super.onClosed(webSocket, code, reason);
-//            Log.i(TAG, "websocket onClosed:" + reason);
+            Log.i(TAG, "websocket onClosed:" + reason);
 
             executor.schedule(new Runnable() {
                 @Override
@@ -119,7 +119,7 @@ public class WebSocketHelper {
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
             super.onFailure(webSocket, t, response);
-//            Log.i(TAG, "websocket onFailure:" + t.getMessage());
+            Log.i(TAG, "websocket onFailure:" + t.getMessage());
 
             if (scheduledFuture != null) {
                 scheduledFuture.cancel(true);

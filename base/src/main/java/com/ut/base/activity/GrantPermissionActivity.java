@@ -30,15 +30,22 @@ public class GrantPermissionActivity extends BaseActivity {
         enableImmersive();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_grant_permission);
         initUI();
-        viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
-        viewModel.tip.observe(this, s -> toastShort(s));
-        viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
+        initViewModel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Util.setTabWidth(binding.tabLayout);
+    }
+
+    private void initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
+        viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
+
+        String mobile = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
+        viewModel.receiverPhoneNum.setValue(mobile);
     }
 
     private void initUI() {
@@ -51,6 +58,9 @@ public class GrantPermissionActivity extends BaseActivity {
         binding.headContainer.setPadding(0, Util.getStatusBarHeight(this), 0, 0);
         binding.viewPager.setAdapter(new GrantPermissionAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
+
+        int rulerType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, -1);
+        binding.viewPager.setCurrentItem(rulerType + 1);
 
         binding.sendKey.setOnClickListener(v -> {
 

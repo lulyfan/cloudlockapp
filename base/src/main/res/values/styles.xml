@@ -19,7 +19,7 @@
 
 
     <style name="tabStyle">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">@dimen/m</item>
     </style>
 
     <style name="styleGrayE">

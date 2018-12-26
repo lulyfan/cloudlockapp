@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.Utils.UTLog;
 import com.ut.module_mine.Constant;
 import com.ut.module_mine.activity.ChangeLockPermissionActivity;
 import com.ut.module_mine.activity.EditUserInfoActivity;
@@ -46,21 +48,26 @@ public class MineFragment extends BaseFragment {
     FragmentMineBinding mMineBinding = null;
     MineViewModel mineViewModel;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initViewModel();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mView == null) {
             mMineBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_mine, container, false);
             mView = mMineBinding.getRoot();
+            mMineBinding.setViewModel(mineViewModel);
         }
         initUI();
-        initViewModel();
         return mView;
     }
 
     private void initViewModel() {
         mineViewModel = ViewModelProviders.of(this).get(MineViewModel.class);
-        mMineBinding.setViewModel(mineViewModel);
 
         mineViewModel.tip.observe(this, s -> {
             BaseActivity activity = (BaseActivity) getActivity();

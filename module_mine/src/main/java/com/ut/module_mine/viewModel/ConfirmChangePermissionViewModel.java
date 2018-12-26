@@ -26,7 +26,15 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
 
     public ConfirmChangePermissionViewModel(@NonNull Application application) {
         super(application);
-        receiverPhone.set(GlobalData.getInstance().receiverPhone);
+
+        String mobile = GlobalData.getInstance().receiverPhone;
+        if (mobile != null && mobile.length() >= 11) {
+            String first = mobile.substring(0, 3) + " ";
+            String second = mobile.substring(3, 7) + " ";
+            String third = mobile.substring(7, 11);
+            mobile = first + second + third;
+        }
+        receiverPhone.set(mobile);
     }
 
     public void getChangeAdminCode() {
@@ -82,7 +90,7 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
     }
 
     public void getUserInfoByMobile() {
-        service.getUserInfoByMobile(receiverPhone.get())
+        service.getUserInfoByMobile(GlobalData.getInstance().receiverPhone)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
                         throw new NullPointerException(getApplication().getString(R.string.serviceErr));

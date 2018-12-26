@@ -3,7 +3,9 @@ package com.ut.base;
 import com.example.entity.base.Result;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
@@ -25,10 +27,10 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
 
-        TypeToken<Result<JsonObject>> typeToken = new TypeToken<Result<JsonObject>>() {};
+        TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {};
 
         Gson gson = new Gson();
-        Result<JsonObject> result = gson.fromJson(data, typeToken.getType());
+        Result<JsonElement> result = gson.fromJson(data, typeToken.getType());
 
         int keyId = -1;
         switch (result.code) {
