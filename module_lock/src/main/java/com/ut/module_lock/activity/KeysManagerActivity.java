@@ -75,13 +75,7 @@ public class KeysManagerActivity extends BaseActivity {
         mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light);
         mBinding.refreshLayout.setListViewFooter(mBinding.refreshLayout.createLoadingFooter());
-        mBinding.refreshLayout.setOnRefreshListener(() -> {
-            mBinding.refreshLayout.setRefreshing(true);
-            kmVM.updateKeyItems();
-            mBinding.refreshLayout.postDelayed(() -> {
-                mBinding.refreshLayout.setRefreshing(false);
-            }, 2000L);
-        });
+        mBinding.refreshLayout.setOnRefreshListener(this::updateData);
         mBinding.refreshLayout.setOnLoadListener(() -> {
             if (!keyList.isEmpty() && keyList.size() - 1 >= kmVM.getDefaultPageSize()) {
                 loadData();
@@ -113,6 +107,7 @@ public class KeysManagerActivity extends BaseActivity {
                                 .setMessage(R.string.lock_clear_all_keys_tips)
                                 .setPositiveButton(R.string.lock_clear, ((dialog, which) -> {
                                     clearKey(lockKey.getMac());
+                                    mBinding.refreshLayout.postDelayed(KeysManagerActivity.this::updateData, 500L);
                                 }))
                                 .setNegativeButton(R.string.lock_cancel, null)
                                 .show();
@@ -144,7 +139,11 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void updateData() {
+        mBinding.refreshLayout.setRefreshing(true);
         kmVM.updateKeyItems();
+        mBinding.refreshLayout.postDelayed(() -> {
+            mBinding.refreshLayout.setRefreshing(false);
+        }, 1200L);
     }
 
     private void loadData() {
@@ -162,7 +161,8 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_KEY_INFO) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_KEY_INFO) {
+            updateData();
         }
     }
 }

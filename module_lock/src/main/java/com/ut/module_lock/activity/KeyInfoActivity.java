@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -41,6 +40,7 @@ public class KeyInfoActivity extends BaseActivity {
 
     private KeyManagerVM keyManagerVM = null;
     private int managerUserType = -1;
+    private boolean hasEdited = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +48,13 @@ public class KeyInfoActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_key_info);
         keyInfo = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
         keyManagerVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
-        keyManagerVM.getFeedbackMessage().observe(this, message -> CLToast.showAtBottom(KeyInfoActivity.this, message));
+        keyManagerVM.getFeedbackMessage().observe(this, message -> {
+            CLToast.showAtBottom(KeyInfoActivity.this, message);
+            hasEdited = true;
+            finish();
+        });
         mBinding.setKeyItem(keyInfo);
+        keyManagerVM.setKey(keyInfo);
         managerUserType = getIntent().getIntExtra(Constance.USERTYPE, -1);
         initTitle();
         initListener();
@@ -134,13 +139,13 @@ public class KeyInfoActivity extends BaseActivity {
                 }
 
                 TextView item2 = getView(R.id.item2);
-                if(keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
                     item2.setVisibility(View.GONE);
                 } else {
-                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ? getString(R.string.lock_unfrozen): getString(R.string.lock_frozen));
+                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ? getString(R.string.lock_unfrozen) : getString(R.string.lock_frozen));
                     item2.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
-                        if (keyInfo.isForzened()) {
+                        if (keyInfo.isFrozened()) {
                             new CustomerAlertDialog(KeyInfoActivity.this, false)
                                     .setMsg(getString(R.string.lock_unfrozen_tips))
                                     .setConfirmText(getString(R.string.lock_unfrozen))
@@ -179,7 +184,6 @@ public class KeyInfoActivity extends BaseActivity {
         popupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
     }
 
-    private boolean hasEdited = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -192,20 +196,30 @@ public class KeyInfoActivity extends BaseActivity {
                         Key item = (Key) data.getSerializableExtra(Constance.KEY_INFO);
                         if (item != null) {
                             keyInfo = item;
-                            hasEdited = true;
                         }
                     } else if (data.hasExtra(Constance.EDIT_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
                             keyInfo.setKeyName(keyName);
-                            hasEdited = true;
                         }
                     }
-                    mBinding.setKeyItem(keyInfo);
-                    keyManagerVM.editKey(keyInfo);
+                    editKey();
                     break;
             }
         }
+    }
+
+    private void editKey() {
+        keyManagerVM.editKey(keyInfo, result -> {
+            if (result.isSuccess()) {
+                mBinding.setKeyItem(keyInfo);
+                hasEdited = true;
+            } else {
+                CLToast.showAtBottom(this, result.msg);
+                keyInfo = keyManagerVM.getKey();
+                mBinding.setKeyItem(keyInfo);
+            }
+        });
     }
 
     @Override

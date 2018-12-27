@@ -18,8 +18,9 @@ import java.util.Locale;
  * time   : 2018/11/29
  * desc   :
  */
-public class Key implements Serializable {
 
+
+public class Key implements Serializable, Cloneable {
     private long keyId;//
     private String userName; //钥匙名字
     private String desc; //描述
@@ -36,7 +37,6 @@ public class Key implements Serializable {
     private String endTimeRange; //循环钥匙的停止日期
     private String mac;
     private int userType;//userType;//类型(1:管理员,2:授权用户,3:普通用户)
-    private int isAdmin;
 
 
     public long getKeyId() {
@@ -168,14 +168,6 @@ public class Key implements Serializable {
         this.userType = userType;
     }
 
-    public int getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(int isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
     public boolean isAuthorized() {
         return userType == 2;
     }
@@ -261,9 +253,18 @@ public class Key implements Serializable {
         return null;
     }
 
-    public boolean isForzened() {
+    public boolean isFrozened() {
         return status == 9;
     }
 
 
+    @Override
+    public Object clone() {
+        try{
+            return super.clone();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

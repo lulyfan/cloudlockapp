@@ -20,6 +20,7 @@ import com.ut.module_lock.entity.Key;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -32,9 +33,19 @@ import io.reactivex.schedulers.Schedulers;
 public class KeyManagerVM extends AndroidViewModel {
     private MutableLiveData<List<Key>> keys = null;
     private MutableLiveData<String> feedbackMessage = null;
-    private int currentPage = 0;
+    private int currentPage = 1;
     private static int DEFAULT_PAGE_SIZE = 10;
     private String mac;
+
+    private Key key;
+
+    public void setKey(Key k) {
+        key = (Key) k.clone();
+    }
+
+    public Key getKey(){
+        return (Key) key.clone();
+    }
 
     public KeyManagerVM(@NonNull Application application) {
         super(application);
@@ -135,14 +146,18 @@ public class KeyManagerVM extends AndroidViewModel {
         return DEFAULT_PAGE_SIZE;
     }
 
-    public void editKey(Key keyItem) {
+    public void editKey(Key keyItem, Consumer<Result<Void>> subscriber) {
         //ToDo
-        MyRetrofit.get().getCommonApiService().editKey(keyItem.getMac(), keyItem.getKeyId(), keyItem.getStartTime(), keyItem.getEndTime(), keyItem.getWeeks(), keyItem.getStartTimeRange(), keyItem.getEndTimeRange())
+        MyRetrofit.get().getCommonApiService().editKey(keyItem.getMac(),
+                keyItem.getKeyId(),
+                keyItem.getStartTime(),
+                keyItem.getEndTime(),
+                keyItem.getWeeks(),
+                keyItem.getStartTimeRange(),
+                keyItem.getEndTimeRange())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtBottom(getApplication(), result.msg);
-                }, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
     }
 
     public void clearKeys(String mac) {
@@ -153,7 +168,7 @@ public class KeyManagerVM extends AndroidViewModel {
                     if (result.isSuccess()) {
 
                     }
-                    CLToast.showAtCenter(getApplication(), result.msg);
+                    getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
     }
 
@@ -165,7 +180,7 @@ public class KeyManagerVM extends AndroidViewModel {
                     if (result.isSuccess()) {
 
                     }
-                    CLToast.showAtCenter(getApplication(), result.msg);
+                    getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
     }
 
@@ -176,7 +191,7 @@ public class KeyManagerVM extends AndroidViewModel {
                     if (result.isSuccess()) {
 
                     }
-                    CLToast.showAtCenter(getApplication(), result.msg);
+                    getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
     }
 }
