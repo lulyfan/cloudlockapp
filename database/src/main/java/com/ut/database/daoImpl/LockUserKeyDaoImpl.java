@@ -37,6 +37,6 @@ public class LockUserKeyDaoImpl {
     }
 
     public void deleteAll() {
-        mLockUserKeyDao.deleteAll();;
+        mLockUserKeyDao.deleteAll();
     }
 }

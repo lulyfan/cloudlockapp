@@ -41,5 +41,5 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.roomVersion"
     androidTestImplementation "android.arch.persistence.room:testing:$rootProject.ext.roomVersion"
 
-    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+    debugApi 'com.amitshekhar.android:debug-db:1.0.1'
 }

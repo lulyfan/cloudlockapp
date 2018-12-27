@@ -79,7 +79,7 @@ public class LockKeyDaoImpl {
         return mLockKeyDao.getLockByName(name+"%");
     }
 
-    public LockKey getLockByMac(String mac) {
+    public LiveData<LockKey> getLockByMac(String mac) {
         return mLockKeyDao.getByMac(mac);
     }
 

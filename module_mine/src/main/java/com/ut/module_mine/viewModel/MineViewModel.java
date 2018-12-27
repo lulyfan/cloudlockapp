@@ -33,8 +33,8 @@ public class MineViewModel extends BaseViewModel {
     public MineViewModel(@NonNull Application application) {
         super(application);
 
-        isWebLoginEnable.set(user.enableWebLogin == 1 ? true : false);
-        isOpenLockVolumeEnable.set(user.enableSound == 1 ? true : false);
+        isWebLoginEnable.set(user.enableWebLogin == 1);
+        isOpenLockVolumeEnable.set(user.enableSound == 1);
 
         isWebLoginEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override

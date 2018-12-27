@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity {
         setTitle(R.string.login_title);
         initLightToolbar();
         hideNavigationIcon();
-        phoneEdt = (EditText) findViewById(R.id.edt_phone);
+        phoneEdt = findViewById(R.id.edt_phone);
         phoneEdt.setOnFocusChangeListener((view, isFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
             parent.setSelected(isFocus);
@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity {
                 phoneEdt.setText("");
             }
         });
-        passwordEdt = (EditText) findViewById(R.id.edt_password);
+        passwordEdt = findViewById(R.id.edt_password);
         passwordEdt.setOnFocusChangeListener((view, isFocus) -> {
             ViewGroup parent = (ViewGroup) passwordEdt.getParent();
             parent.setSelected(isFocus);
@@ -138,10 +138,7 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
 
-        if (LoginUtil.isPhone(phone) && LoginUtil.isPassword(password)) {
-            return true;
-        }
-        return false;
+        return LoginUtil.isPhone(phone) && LoginUtil.isPassword(password);
     }
 
     private void onLogin() {

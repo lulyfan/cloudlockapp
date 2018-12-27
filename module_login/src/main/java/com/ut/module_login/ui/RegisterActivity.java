@@ -63,9 +63,9 @@ public class RegisterActivity extends BaseActivity {
         initLightToolbar();
         setTitle(R.string.register);
         countryAreaCode = getText(R.string.default_country_code).toString();
-        phoneEdt = (EditText) findViewById(R.id.edt_phone);
+        phoneEdt = findViewById(R.id.edt_phone);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
-        getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
+        getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             String value = Objects.requireNonNull(event.getEditable()).toString();
             if (!isReciprocal) {
@@ -84,7 +84,7 @@ public class RegisterActivity extends BaseActivity {
                 phoneEdt.setText("");
             }
         });
-        passwordEdt = (EditText) findViewById(R.id.edt_password);
+        passwordEdt = findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             if (passwordEdt.isFocused()) {
                 mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
@@ -161,7 +161,7 @@ public class RegisterActivity extends BaseActivity {
             switch (requestCode) {
                 case REQ_COUNTRY_AREA_CODE:
                     countryAreaCode = data.getStringExtra("code");
-                    TextView telEdt = (TextView) findViewById(R.id.tel_belong_of_place);
+                    TextView telEdt = findViewById(R.id.tel_belong_of_place);
                     telEdt.setText(countryAreaCode);
                     break;
             }

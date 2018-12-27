@@ -24,11 +24,8 @@ public class EnumCollection {
         HAS_OVERDUE;//"已过期");
 
         public static boolean isKeyValue(int keyStatus) {
-            if (keyStatus == SENDING.ordinal() || keyStatus == AUTHORITYING.ordinal()
-                    || keyStatus == NORMAL.ordinal()) {
-                return true;
-            }
-            return false;
+            return keyStatus == SENDING.ordinal() || keyStatus == AUTHORITYING.ordinal()
+                    || keyStatus == NORMAL.ordinal();
         }
     }
 

@@ -37,21 +37,21 @@ public class PermissionHelperJava {
         this.activity = activity;
         this.fragment = fragment;
 //        this.permissions = permissions;
-        this.REQUEST_CODE = requestCode;
+        REQUEST_CODE = requestCode;
 //        checkIfPermissionPresentInAndroidManifest();
     }
 
     public PermissionHelperJava(Activity activity, int requestCode) {
         this.activity = activity;
 //        this.permissions = permissions;
-        this.REQUEST_CODE = requestCode;
+        REQUEST_CODE = requestCode;
 //        checkIfPermissionPresentInAndroidManifest();
     }
 
     public PermissionHelperJava(Fragment fragment, int requestCode) {
         this.fragment = fragment;
 //        this.permissions = permissions;
-        this.REQUEST_CODE = requestCode;
+        REQUEST_CODE = requestCode;
 //        checkIfPermissionPresentInAndroidManifest();
     }
 
@@ -125,13 +125,13 @@ public class PermissionHelperJava {
     //====================================
 
     public interface PermissionCallback {
-        public void onPermissionGranted();
+        void onPermissionGranted();
 
-        public void onIndividualPermissionGranted(String grantedPermission[]);
+        void onIndividualPermissionGranted(String grantedPermission[]);
 
-        public void onPermissionDenied();
+        void onPermissionDenied();
 
-        public void onPermissionDeniedBySystem();
+        void onPermissionDeniedBySystem();
     }
 
 

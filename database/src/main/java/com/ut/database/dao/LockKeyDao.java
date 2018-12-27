@@ -44,7 +44,7 @@ public interface LockKeyDao {
     void deleteByKeyId(int keyId);
 
     @Query("SELECT * FROM lock_key WHERE mac LIKE :mac limit 1")
-    LockKey getByMac(String mac);
+    LiveData<LockKey> getByMac(String mac);
 
     @Query("SELECT * FROM lock_key WHERE userType = 1")
     LiveData<List<LockKey>> getAdminLock();

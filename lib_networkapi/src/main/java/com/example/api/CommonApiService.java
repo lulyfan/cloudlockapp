@@ -101,7 +101,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.addGroup)
-    Observable<Result<Void>> addGroup(@Field("name") String name);
+    Observable<Result<Integer>> addGroup(@Field("name") String name);
 
     @FormUrlEncoded
     @POST(ApiUrl.getLockInfoFromGroup)

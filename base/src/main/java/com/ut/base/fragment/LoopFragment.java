@@ -110,7 +110,7 @@ public class LoopFragment extends Fragment {
             textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.validTime).equals(title)) {
-                viewModel.startTimeRange = textView.getText().toString().concat(":00");;
+                viewModel.startTimeRange = textView.getText().toString().concat(":00");
             } else if (getString(R.string.invalidTime).equals(title)) {
                 viewModel.endTimeRange = textView.getText().toString().concat(":00");
             }

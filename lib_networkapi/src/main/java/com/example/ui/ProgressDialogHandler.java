@@ -47,7 +47,7 @@ public class ProgressDialogHandler extends Handler {
         if (mProgressDialog == null) {
             mProgressDialog = new Dialog(mContext);
             View view = mProgressDialog.getLayoutInflater().inflate(R.layout.dialog_progress, null);
-            txtMessage = (TextView) view.findViewById(R.id.txt_tip);
+            txtMessage = view.findViewById(R.id.txt_tip);
             mProgressDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             mProgressDialog.setContentView(view);
             mProgressDialog.setCancelable(mCancelable);

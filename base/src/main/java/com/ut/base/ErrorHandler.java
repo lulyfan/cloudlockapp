@@ -14,7 +14,7 @@ import io.reactivex.functions.Consumer;
 public class ErrorHandler implements Consumer<Throwable> {
 
     @Override
-    public void accept(Throwable throwable) throws Exception {
+    public void accept(Throwable throwable) {
         if(throwable instanceof SocketTimeoutException) {
             Toast.makeText(BaseApplication.getAppContext(), "网络连接超时",Toast.LENGTH_SHORT).show();
         }

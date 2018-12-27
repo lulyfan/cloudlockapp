@@ -60,8 +60,8 @@ public class ForgetPasswordActivity extends BaseActivity {
         } else {
             setTitle(R.string.login_forget_password);
         }
-        phoneEdt = (EditText) findViewById(R.id.edt_phone);
-        getVerifyCodeTv = (TextView) findViewById(R.id.tv_get_verify_code);
+        phoneEdt = findViewById(R.id.edt_phone);
+        getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             String value = Objects.requireNonNull(event.getEditable()).toString();
@@ -81,7 +81,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                 phoneEdt.setText("");
             }
         });
-        passwordEdt = (EditText) findViewById(R.id.edt_password);
+        passwordEdt = findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             if (passwordEdt.isFocused()) {
                 mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
