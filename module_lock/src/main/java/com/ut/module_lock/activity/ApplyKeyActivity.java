@@ -14,6 +14,7 @@ import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.commoncomponent.CLToast;
+import com.ut.database.entity.NearScanLock;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityApplyKeyBinding;
 
@@ -27,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @Route(path = RouterUtil.LockModulePath.APPLY_KEY)
-public class  ApplyKeyActivity extends BaseActivity {
+public class ApplyKeyActivity extends BaseActivity {
     public static final String EXTRA_KEY_DATA = "extra_key_data";
 
     private ActivityApplyKeyBinding mBinding;
@@ -46,11 +47,16 @@ public class  ApplyKeyActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_apply_key);
+        initData();
         initLightToolbar();
         setTitle(R.string.lock_apply_key);
         initView();
-        //todo
-        mac = "33-33-22-A1-B0-34";
+//        mac = "33-33-22-A1-B0-34";
+    }
+
+    private void initData() {
+        NearScanLock nearScanLock = getIntent().getParcelableExtra(EXTRA_KEY_DATA);
+        mac = nearScanLock.getMac();
     }
 
     private void initView() {

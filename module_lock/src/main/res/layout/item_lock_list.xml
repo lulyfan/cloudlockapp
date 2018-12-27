@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_10dp"
         android:background="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/base_10dp"
         app:cardElevation="@dimen/base_3dp"
         app:cardPreventCornerOverlap="false"
@@ -27,7 +28,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_160dp"
-            android:foreground="?android:attr/selectableItemBackground"
             android:paddingLeft="@dimen/base_20dp"
             >
             <!--android:src="@mipmap/icon_user_manager"-->

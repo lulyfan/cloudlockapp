@@ -76,21 +76,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/lock_tv_search"/>
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lock_rv_lock"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swf_lock_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/base_84dp"
-            android:paddingLeft="@dimen/base_10dp"
-            android:paddingRight="@dimen/base_10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lock_rv_lock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/base_10dp"
+                android:paddingRight="@dimen/base_10dp"
+                />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </android.support.constraint.ConstraintLayout>

@@ -30,6 +30,7 @@ import io.reactivex.disposables.Disposable;
  * version: 1.0
  */
 public class LockDetailVM extends AndroidViewModel {
+    private MutableLiveData<Boolean> unlockSuccess = new MutableLiveData<>();
     private MutableLiveData<Boolean> connectStatus = new MutableLiveData<>();
     private MutableLiveData<String> showTip = new MutableLiveData<>();
     private LockKey mLockKey = null;
@@ -50,6 +51,10 @@ public class LockDetailVM extends AndroidViewModel {
         return showTip;
     }
 
+    public LiveData<Boolean> getUnlockSuccessStatus(){
+        return unlockSuccess;
+    }
+
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
     }
@@ -61,7 +66,6 @@ public class LockDetailVM extends AndroidViewModel {
             public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
                 if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
                     toConnect(scanDevice);
-                    //TODO 去停止搜索
                 }
             }
 
@@ -73,6 +77,7 @@ public class LockDetailVM extends AndroidViewModel {
     }
 
     private void toConnect(ScanDevice scanDevice) {
+        UnilinkManager.getInstance(getApplication()).stopScan();
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
@@ -120,7 +125,8 @@ public class LockDetailVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
-                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_success));
+//                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_success));
+                unlockSuccess.postValue(true);
                 toAddLog(1);
             }
 
@@ -136,9 +142,10 @@ public class LockDetailVM extends AndroidViewModel {
     private void toAddLog(int type) {
         Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type)
                 .subscribe(jsonElementResult -> {
-
+                    UTLog.i(jsonElementResult.toString());
                 }, throwable -> {
                     throwable.printStackTrace();
+                    //TODO 将未成功提交的记录保存在本地，后面继续提交
                 });
         mCompositeDisposable.add(disposable);
     }

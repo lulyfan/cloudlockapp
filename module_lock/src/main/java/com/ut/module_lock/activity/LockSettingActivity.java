@@ -2,7 +2,6 @@ package com.ut.module_lock.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -23,7 +22,6 @@ import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
-import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
@@ -72,10 +70,12 @@ public class LockSettingActivity extends BaseActivity {
 
     private void initViewModel() {
         mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
-        mLockSettingVM.isUnlockSuccess().observe(this, isUnlockSuccess -> {
+        mLockSettingVM.isDeleteSuccess().observe(this, isUnlockSuccess -> {
             if (isUnlockSuccess) {
                 //TODO 退到首页
                 finish();
+                lockKey = null;
+                ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
             }
         });
         mLockSettingVM.getShowTip().observe(this, showTip -> {
@@ -131,9 +131,10 @@ public class LockSettingActivity extends BaseActivity {
                     .setView(contentView)
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         if (checkBox.isChecked()) {
-                            deleteLockKey(lockKey.getKeyId(), 1);
+                            mLockSettingVM.deleteLockKey(lockKey, 1);
+
                         } else {
-                            deleteLockKey(lockKey.getKeyId(), 0);
+                            mLockSettingVM.deleteLockKey(lockKey, 0);
                         }
                     }))
                     .setNegativeButton(getString(R.string.lock_cancel), null)
@@ -143,7 +144,7 @@ public class LockSettingActivity extends BaseActivity {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setMessage("确定删除授权钥匙吗？删除后无法恢复。")
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
-                        deleteLockKey(lockKey.getKeyId(), 0);
+                        mLockSettingVM.deleteLockKey(lockKey, 0);
                     }))
                     .setNegativeButton(getString(R.string.lock_cancel), null)
                     .show();
@@ -200,14 +201,6 @@ public class LockSettingActivity extends BaseActivity {
 //                }, new ErrorHandler());
 //    }
 
-    private void deleteLockKey(long keyId, int ifAllKey) {
-        MyRetrofit.get().getCommonApiService().deleteKey(keyId, ifAllKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-
-                }, new ErrorHandler());
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

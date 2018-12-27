@@ -9,12 +9,13 @@
     </style>
 
     <style name="ImmersiveAppTheme" parent="AppTheme">
-        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:windowIsTranslucent">true</item>
         <!--<item name="android:windowContentOverlay">@null</item>-->
         <!--&lt;!&ndash; 界面不沉浸到状态栏下方 &ndash;&gt;-->
         <!--&lt;!&ndash;<item name="android:fitsSystemWindows">true</item>&ndash;&gt;-->
         <!--&lt;!&ndash; 虚拟按键不透明 &ndash;&gt;-->
         <!--<item name="android:windowTranslucentNavigation">false</item>-->
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 

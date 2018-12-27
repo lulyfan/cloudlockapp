@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ImageButton
+            android:id="@+id/iBtn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_20dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_close"
+            app:layout_constraintBottom_toTopOf="@+id/iv_content"
+            app:layout_constraintEnd_toEndOf="@+id/iv_content"/>
+        <ImageView
+            android:id="@+id/iv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@mipmap/bitmap_unlock_success"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:id="@+id/constraintLayout"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/bg_dialog_addsuccess"-->
+            <!--android:paddingLeft="@dimen/base_20dp"-->
+            <!--android:paddingRight="@dimen/base_20dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_lock_add_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@mipmap/bitmap_add_success"-->
+                <!--android:gravity="center"-->
+                <!--android:lines="2"-->
+                <!--android:maxLength="20"-->
+                <!--android:paddingLeft="@dimen/base_20dp"-->
+                <!--android:paddingTop="@dimen/base_50dp"-->
+                <!--android:paddingRight="20dp"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="@dimen/base_17sp"-->
+                <!--android:textStyle="bold"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/btn_addSuccess_confirm"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@null"-->
+                <!--android:text="@string/lock_btn_confirm"-->
+                <!--android:textColor="@color/color_tv_blue"-->
+                <!--android:textSize="@dimen/base_17sp"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/tv_lock_add_name"/>-->
+        <!--</android.support.constraint.ConstraintLayout>-->
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

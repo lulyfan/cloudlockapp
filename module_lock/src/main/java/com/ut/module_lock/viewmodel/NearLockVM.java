@@ -36,7 +36,7 @@ import io.reactivex.disposables.Disposable;
 public class NearLockVM extends AndroidViewModel {
     private MutableLiveData<List<NearScanLock>> nearScanLocks = new MutableLiveData<>();//显示搜索到的数据
     private MutableLiveData<String> errorMsg = new MutableLiveData<>();//出错提示
-    private MutableLiveData<Boolean> scanning = new MutableLiveData<>();//提示是否正在搜索
+    private MutableLiveData<Boolean> operating = new MutableLiveData<>();//提示是否正在搜索
     private MutableLiveData<CloudLock> mBindLock = new MutableLiveData<>();//绑定成功的锁，用于修改名称
     private Map<String, ScanDevice> mStringScanDeviceMap = new HashMap<>();//缓存原始搜索数据
     private List<NearScanLock> nearLockList = new ArrayList<>();//存放后台放回的对象
@@ -45,15 +45,15 @@ public class NearLockVM extends AndroidViewModel {
 
     public NearLockVM(@NonNull Application application) {
         super(application);
-        scanning.setValue(false);
+        operating.setValue(false);
     }
 
     public MutableLiveData<List<NearScanLock>> getNearScanLocks() {
         return nearScanLocks;
     }
 
-    public MutableLiveData<Boolean> isScanning() {
-        return scanning;
+    public MutableLiveData<Boolean> isOperating() {
+        return operating;
     }
 
     public MutableLiveData<String> getErrorCode() {
@@ -66,7 +66,7 @@ public class NearLockVM extends AndroidViewModel {
 
     //开始搜索
     public int startScan() {
-        scanning.setValue(true);
+        operating.setValue(true);
         nearLockList.clear();
         mStringScanDeviceMap.clear();
         nearScanLocks.setValue(nearLockList);
@@ -79,7 +79,7 @@ public class NearLockVM extends AndroidViewModel {
 
             @Override
             public void onFinish() {
-                scanning.postValue(false);
+                operating.postValue(false);
                 UTLog.i("scan finish");
             }
         }, 10);
@@ -109,7 +109,9 @@ public class NearLockVM extends AndroidViewModel {
     }
 
     //绑定锁
-    public void toBindLock(NearScanLock lock) {
+    public void bindLock(NearScanLock lock) {
+        operating.postValue(false);
+        UnilinkManager.getInstance(getApplication()).stopScan();
         UnilinkManager.getInstance(getApplication()).connect(lock.getMac(), new ConnectListener() {
             @Override
             public void onConnect() {
@@ -152,7 +154,7 @@ public class NearLockVM extends AndroidViewModel {
             @Override
             public void onFailed(int i, String s) {
                 errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
-                UTLog.i("ble init failed");
+                UTLog.i("ble init failed:" + s);
             }
         });
     }

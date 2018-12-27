@@ -22,6 +22,7 @@ import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
+import com.ut.module_lock.dialog.UnlockSuccessDialog;
 import com.ut.module_lock.viewmodel.LockDetailVM;
 import com.ut.unilink.UnilinkManager;
 
@@ -65,6 +66,9 @@ public class LockDetailActivity extends BaseActivity {
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
             toastShort(tip);
+        });
+        mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
+            new UnlockSuccessDialog(this, false).show();
         });
     }
 

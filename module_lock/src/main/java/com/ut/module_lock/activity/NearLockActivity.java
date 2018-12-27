@@ -47,6 +47,9 @@ public class NearLockActivity extends BaseActivity {
 
     private void toScan() {
         int scanResult = mNearLockVM.startScan();
+        mNearLockBinding.swfBleDevice.postDelayed(()->{
+            mNearLockBinding.swfBleDevice.setRefreshing(false);
+        },1500);
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 toastShort(getString(R.string.lock_tip_ble_not_support));
@@ -63,8 +66,12 @@ public class NearLockActivity extends BaseActivity {
     private void initViewModel() {
         mNearLockVM = ViewModelProviders.of(this).get(NearLockVM.class);
         mNearLockVM.getNearScanLocks().observe(this, this::refreshListData);
-        mNearLockVM.isScanning().observe(this, isScanning -> {
-            //TODO 处理理是否正在搜索事件
+        mNearLockVM.isOperating().observe(this, isScanning -> {
+            if (isScanning){
+                mNearLockBinding.progressBarGreen.setVisibility(View.VISIBLE);
+            }else{
+                mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
+            }
         });
         mNearLockVM.getErrorCode().observe(this, errorMsg -> {
             toastShort(errorMsg);
@@ -94,6 +101,10 @@ public class NearLockActivity extends BaseActivity {
                     }
                 }
         );
+        mNearLockBinding.swfBleDevice.setColorSchemeResources(R.color.color_tv_blue);
+        mNearLockBinding.swfBleDevice.setOnRefreshListener(() -> {
+          toScan();
+        });
     }
 
 
@@ -132,7 +143,7 @@ public class NearLockActivity extends BaseActivity {
                     ImageButton imageButton = commonViewHolder.getView(R.id.iBtn_ble_add);
                     imageButton.setVisibility(item.getBindStatus() == EnumCollection.BindStatus.UNBIND.ordinal() ? View.VISIBLE : View.GONE);
                     imageButton.setOnClickListener(v -> {
-                        mNearLockVM.toBindLock(item);
+                        mNearLockVM.bindLock(item);
                     });
                 }
             };

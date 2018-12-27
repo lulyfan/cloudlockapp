@@ -32,6 +32,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setLightStatusBar();
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
 
         new Handler().postDelayed(() -> {

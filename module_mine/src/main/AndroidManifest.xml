@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ut.module_mine">
+          package="com.ut.module_mine">
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
+        android:required="true"/>
 
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/ImmersiveAppTheme">
+        >
         <activity android:name=".activity.MainActivity">
 
             <!-- <intent-filter> -->
@@ -30,7 +30,7 @@
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.MainActivity"/>
         </activity>
         <activity
             android:name=".activity.LockGroupItemActivity"
@@ -38,16 +38,16 @@
             android:parentActivityName=".activity.LockGroupActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.LockGroupActivity" />
+                android:value=".activity.LockGroupActivity"/>
         </activity>
         <activity
             android:name=".activity.KeyManageActivity"
             android:parentActivityName=".activity.LockGroupItemActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.LockGroupItemActivity" />
+                android:value=".activity.LockGroupItemActivity"/>
         </activity>
-        <activity android:name="com.ut.base.activity.GrantPermissionActivity" />
+        <activity android:name="com.ut.base.activity.GrantPermissionActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -56,39 +56,40 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".activity.EditUserInfoActivity" />
-        <activity android:name=".activity.LockUserActivity" />
+        <activity android:name=".activity.EditUserInfoActivity"/>
+        <activity android:name=".activity.LockUserActivity"/>
         <activity
             android:name=".activity.LockUserItemActivity"
             android:parentActivityName=".activity.LockUserActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.LockUserActivity" />
+                android:value=".activity.LockUserActivity"/>
         </activity>
-        <activity android:name=".activity.ChangeLockPermissionActivity" />
+        <activity android:name=".activity.ChangeLockPermissionActivity"/>
         <activity
             android:name=".activity.ReceiverSettingActivity"
             android:parentActivityName=".activity.ChangeLockPermissionActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ChangeLockPermissionActivity" />
+                android:value=".activity.ChangeLockPermissionActivity"/>
         </activity>
         <activity
             android:name=".activity.ConfirmChangePermissionActivity"
             android:parentActivityName=".activity.ReceiverSettingActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ReceiverSettingActivity" />
+                android:value=".activity.ReceiverSettingActivity"/>
         </activity>
-        <activity android:name=".activity.SystemSettingActivity" />
-        <activity android:name=".activity.AboutUsActivity"
+        <activity android:name=".activity.SystemSettingActivity"/>
+        <activity
+            android:name=".activity.AboutUsActivity"
             android:parentActivityName=".activity.SystemSettingActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.SystemSettingActivity" />
+                android:value=".activity.SystemSettingActivity"/>
         </activity>
     </application>
 

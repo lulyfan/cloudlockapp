@@ -5,13 +5,14 @@ import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
+import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_mine.R;
 
 import io.reactivex.functions.Consumer;
 
-public class SystemSettingViewModel extends BaseViewModel{
+public class SystemSettingViewModel extends BaseViewModel {
     public SystemSettingViewModel(@NonNull Application application) {
         super(application);
     }
@@ -28,11 +29,12 @@ public class SystemSettingViewModel extends BaseViewModel{
                     }
                 })
                 .subscribe(voidResult -> {
-                    tip.postValue(voidResult.msg);
-                    CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-                    CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
-                    ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
-                },
-                    throwable -> tip.postValue(throwable.getMessage()));
+                            tip.postValue(voidResult.msg);
+                            CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
+                            CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
+                            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+                            BaseApplication.deleteJpushAlias();
+                        },
+                        throwable -> tip.postValue(throwable.getMessage()));
     }
 }

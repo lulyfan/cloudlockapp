@@ -39,7 +39,6 @@ import com.ut.module_lock.adapter.OnRcvItemClickListener;
 import com.ut.module_lock.databinding.FragmentLocklistBinding;
 import com.ut.module_lock.viewmodel.LockListFragVM;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +65,7 @@ public class LockListFragment extends BaseFragment {
         }
         addPaddingTop(mView);
         mFragmentLocklistBinding.setPresenter(new Present());
-        initRecycleView();
+        initView();
         initPopupWindow();
         initViewModel();
         return mView;
@@ -80,22 +79,30 @@ public class LockListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLockListFragVM.toGetLockAllList();
-        mLockListFragVM.toGetAllGroupList();
+        mLockListFragVM.toGetLockAllList(false);
+        mLockListFragVM.toGetAllGroupList(false);
     }
 
     private void initViewModel() {
         mLockListFragVM = ViewModelProviders.of(this).get(LockListFragVM.class);
         mLockListFragVM.getLockList().observe(this, lockKeys -> {
-            LockListFragment.this.refreshLockListData(lockKeys);
+            if (mFragmentLocklistBinding.swfLockList.isRefreshing()) {
+                mFragmentLocklistBinding.swfLockList.setRefreshing(false);
+            }
+            refreshLockListData(lockKeys);
         });
         mLockListFragVM.getLockGroupList().observe(this, this::refreshGroupList);
     }
 
-    private void initRecycleView() {
+    private void initView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mFragmentLocklistBinding.lockRvLock.setLayoutManager(linearLayoutManager);
+        mFragmentLocklistBinding.swfLockList.setColorSchemeResources(R.color.color_tv_blue);
+        mFragmentLocklistBinding.swfLockList.setOnRefreshListener(() -> {
+            mLockListFragVM.toGetLockAllList(true);
+            mLockListFragVM.toGetAllGroupList(true);
+        });
     }
 
     public void refreshLockListData(List<LockKey> datas) {
@@ -156,7 +163,7 @@ public class LockListFragment extends BaseFragment {
                 ((LockGroup) parent.getAdapter().getItem(currentGroupPosition)).setCurrent(0);
                 mLockListFragVM.getGroupLockList(lockGroup).observe(LockListFragment.this,
                         lockKeys -> {
-                            LockListFragment.this.refreshLockListData(lockKeys);
+                            refreshLockListData(lockKeys);
                         });
                 popupWindow.getPopupWindow().dismiss();
             });
@@ -228,8 +235,8 @@ public class LockListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mLockListFragVM != null) {
-            mLockListFragVM.toGetLockAllList();
-        }
+//        if (mLockListFragVM != null) {
+//            mLockListFragVM.toGetLockAllList();
+//        }
     }
 }

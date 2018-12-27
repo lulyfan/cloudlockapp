@@ -11,6 +11,7 @@ import com.orhanobut.logger.Logger;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
@@ -49,6 +50,14 @@ public class BaseApplication extends MultiDexApplication {
 
         //主线程调度器，用于RxJava
         uiScheduler = Schedulers.from(new UiExecutor());
+
+        //TODO 临时只添加极光推送，后面改为多种推送
+        initJpush();
+    }
+
+    private void initJpush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     private void initDatabase() {
@@ -67,14 +76,21 @@ public class BaseApplication extends MultiDexApplication {
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
     }
 
+    private static int sequence = 0;
+
     public static void setUser(User user) {
         mUser = user;
-
         if (user == null) {
             return;
         }
+        JPushInterface.setAlias(getAppContext(), sequence++, String.valueOf(mUser.getId()));
         MyRetrofit.get().setWebSocketListener(new WebSocketDataHandler());
         MyRetrofit.get().sendUserId((int) user.getId(), WEBSOCKET_APP_ID);
+    }
+
+    //TODO 临时用极光
+    public static void deleteJpushAlias() {
+        JPushInterface.deleteAlias(getAppContext(), sequence++);
     }
 
     public static User getUser() {

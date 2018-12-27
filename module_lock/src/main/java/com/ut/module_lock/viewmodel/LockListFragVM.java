@@ -7,7 +7,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
-import com.ut.database.dao.LockGroupDao_Impl;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockGroup;
@@ -41,7 +40,7 @@ public class LockListFragVM extends AndroidViewModel {
         return LockGroupDaoImpl.get().getAllLockGroup();
     }
 
-    public void toGetLockAllList() {
+    public void toGetLockAllList(boolean isReset) {
         Disposable disposable = CommonApi.pageUserLock(1, -1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -49,7 +48,9 @@ public class LockListFragVM extends AndroidViewModel {
                     List<LockKey> list = lockKeyResults.getData();
                     LockKey[] lockKeys = new LockKey[list.size()];
                     //TODO 先清除数据,后面再做优化
-                    LockKeyDaoImpl.get().deleteAll();
+                    if (isReset) {
+                        LockKeyDaoImpl.get().deleteAll();
+                    }
                     LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                 }, throwable -> {
                     //TODO 获取锁列表失败处理
@@ -57,13 +58,17 @@ public class LockListFragVM extends AndroidViewModel {
         mCompositeDisposable.add(disposable);
     }
 
-    public void toGetAllGroupList() {
+
+    public void toGetAllGroupList(boolean isReset) {
         Disposable disposable = CommonApi.getGroup()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(lockGroupResult -> {
                     List<LockGroup> list = lockGroupResult.getData();
                     LockGroup[] lockGroups = new LockGroup[list.size()];
+                    if (isReset) {//刷新时清除所有组数据
+                        LockKeyDaoImpl.get().deleteAll();
+                    }
                     LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                 }, throwable -> {
                     throwable.printStackTrace();

@@ -34,6 +34,7 @@
                 android:paddingBottom="@dimen/base_8dp"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/base_14sp"
+                android:singleLine="true"
                 android:transitionName="@string/lock_share_string_search"
                 />
 

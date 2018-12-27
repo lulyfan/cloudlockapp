@@ -106,8 +106,6 @@ public class Flowlayout extends ViewGroup {
                 int ct = top + lp.topMargin;
                 int cb = ct + child.getMeasuredHeight();
 
-                Log.i("Flowlayout", "-----" + child + "aa , l = " + cl + " , t = " + ct + " , r ="
-                        + cr + " , b = " + cb);
 
                 child.layout(cl, ct, cr, cb);
 
