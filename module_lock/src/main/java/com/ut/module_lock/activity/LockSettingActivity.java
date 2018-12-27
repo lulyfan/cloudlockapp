@@ -22,12 +22,16 @@ import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
 import com.ut.module_lock.viewmodel.LockSettingVM;
 import com.ut.unilink.UnilinkManager;
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,9 +53,6 @@ public class LockSettingActivity extends BaseActivity {
     private final int REQUEST_CODE_CHOOSE_GROUP = 1002;
 
     private LockSettingVM mLockSettingVM = null;
-
-    private static final int BLEREAUESTCODE = 101;
-    private static final int BLEENABLECODE = 102;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +82,12 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM.getShowTip().observe(this, showTip -> {
             CLToast.showAtCenter(getBaseContext(), showTip);
         });
+        mLockSettingVM.setLockKey(lockKey);
+        mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
+            lockKey = lk;
+            mBinding.setLockKey(lockKey);
+            loadGroupName();
+        });
     }
 
     private void initTitle() {
@@ -91,31 +98,19 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadLockInfo();
+        loadGroupName();
     }
 
-    private void loadLockInfo() {
-        if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
-        Observable.just(lockKey.getMac())
-                .subscribeOn(Schedulers.io())
-                .map(mac -> LockKeyDaoImpl.get().getLockByMac(mac))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lockKey1 -> {
-                    lockKey = lockKey1;
-                    mBinding.setLockKey(lockKey);
-                }, new ErrorHandler());
-
+    private void loadGroupName() {
         Observable.just(lockKey.getGroupId())
                 .subscribeOn(Schedulers.io())
-                .map(id -> LockGroupDaoImpl.get().getLockGroupById(id))
+                .map(id -> LockGroupDaoImpl.get().getLockGroupById(id).getName())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lg -> {
-                    mBinding.tvLockGroup.setText(lg.getName());
-                }, new ErrorHandler());
+                .subscribe(name -> mBinding.tvLockGroup.setText(name));
     }
 
     private void deleteLock() {
-        if (lockKey.getUserType() == 1) {
+        if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
             CustomerAlertDialog dialog = new CustomerAlertDialog(LockSettingActivity.this, false);
             dialog.setMsg(getString(R.string.lock_delete_lock_tips));
             dialog.setConfirmText(getString(R.string.lock_btn_confirm));
@@ -123,11 +118,11 @@ public class LockSettingActivity extends BaseActivity {
             dialog.setCancelText(getString(R.string.lock_cancel));
             dialog.setCancelLister(null);
             dialog.show();
-        } else if (lockKey.getUserType() == 2) {
+        } else if (lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
             View contentView = View.inflate(this, R.layout.layout_anthorize_delete_key, null);
             CheckBox checkBox = contentView.findViewById(R.id.check_box);
             //TODO
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle("确定删除授权钥匙吗？")
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.lock_make_sure_delete_auth_key))
                     .setView(contentView)
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         if (checkBox.isChecked()) {
@@ -139,10 +134,10 @@ public class LockSettingActivity extends BaseActivity {
                     }))
                     .setNegativeButton(getString(R.string.lock_cancel), null)
                     .show();
-        } else if (lockKey.getUserType() == 3) {
+        } else if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             //TODO
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setMessage("确定删除授权钥匙吗？删除后无法恢复。")
+                    .setMessage(getString(R.string.lock_make_sure_delete_auth_key_2))
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         mLockSettingVM.deleteLockKey(lockKey, 0);
                     }))
@@ -162,14 +157,7 @@ public class LockSettingActivity extends BaseActivity {
                 .setPositiveButton(getText(R.string.lock_btn_confirm), (dialog, which) -> {
                     //todo
                     //verify
-                    MyRetrofit.get().getCommonApiService().verifyUserPwd(edtPwd.getText().toString().trim())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(result -> {
-                                if (result.isSuccess()) {
-                                    toDeleteAdminKey();
-                                }
-                            }, new ErrorHandler());
+                    mLockSettingVM.verifyAdmin(edtPwd.getText().toString().trim());
                     dialog.dismiss();
                 })
                 .setNegativeButton(getText(R.string.lock_cancel), null)
@@ -177,30 +165,14 @@ public class LockSettingActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    private void toDeleteAdminKey() {//去删除管理员钥匙
-        int result = mLockSettingVM.unbindLock(lockKey);
-        switch (result) {
-            case UnilinkManager.BLE_NOT_SUPPORT:
-                toastShort(getString(R.string.lock_tip_ble_not_support));
-                break;
-            case UnilinkManager.NO_LOCATION_PERMISSION:
-                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
-                break;
-            case UnilinkManager.BLE_NOT_OPEN:
-                UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
-                break;
-        }
+    private void deleteLockKey(long keyId, int ifAllKey) {
+        MyRetrofit.get().getCommonApiService().deleteKey(keyId, ifAllKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+
+                }, new ErrorHandler());
     }
-
-//    private void deleteAdminLock() {
-//        MyRetrofit.get().getCommonApiService().deleteAdminLock(lockKey.getMac())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(result -> {
-//
-//                }, new ErrorHandler());
-//    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -209,28 +181,20 @@ public class LockSettingActivity extends BaseActivity {
             if (requestCode == REQUEST_CODE_CHOOSE_GROUP && data != null) {
                 lockKey.setGroupId((int) data.getLongExtra("lock_group_id", lockKey.getGroupId()));
                 mBinding.setLockKey(lockKey);
+
             } else if (requestCode == REQUEST_CODE_EDIT_NAME && data != null) {
                 String name = data.getStringExtra(Constance.EDIT_NAME);
                 if (!TextUtils.isEmpty(name)) {
                     modifyLockName(name);
                 }
-            } else if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
-                toDeleteAdminKey();
+            } else if (requestCode == LockSettingVM.BLEREAUESTCODE || requestCode == LockSettingVM.BLEENABLECODE) {
+                mLockSettingVM.toDeleteAdminKey();
+            }
         }
     }
 
     private void modifyLockName(String name) {
-        MyRetrofit.get().getCommonApiService().editLockName(lockKey.getMac(), name)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result ->
-                {
-                    if (result.isSuccess()) {
-                        lockKey.setName(name);
-                        mBinding.setLockKey(lockKey);
-                    }
-                    CLToast.showAtCenter(getBaseContext(), result.msg);
-                }, new ErrorHandler());
+        mLockSettingVM.modifyLockName(lockKey.getMac(), name);
     }
 
     @Override

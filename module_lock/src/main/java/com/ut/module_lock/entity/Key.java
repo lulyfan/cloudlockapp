@@ -224,7 +224,7 @@ public class Key implements Serializable {
             case 7:
                 return BaseApplication.getAppContext().getString(R.string.lock_key_status_fix);
             case 8:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_normal);
+                return "";
             case 9:
                 return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_frozen);
             case 10:

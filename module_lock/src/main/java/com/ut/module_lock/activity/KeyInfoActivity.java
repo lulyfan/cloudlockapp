@@ -132,32 +132,37 @@ public class KeyInfoActivity extends BaseActivity {
                 } else {
                     item1.setVisibility(View.GONE);
                 }
+
                 TextView item2 = getView(R.id.item2);
-                item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal() ? getString(R.string.lock_unfrozen): getString(R.string.lock_frozen));
-                item2.setOnClickListener(v -> {
-                    getPopupWindow().dismiss();
-                    if (keyInfo.isForzened()) {
-                        new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                .setMsg(getString(R.string.lock_unfrozen_tips))
-                                .setConfirmText(getString(R.string.lock_unfrozen))
-                                .setConfirmListener(v1 ->
-                                        keyManagerVM.unFrozenKey(keyInfo.getKeyId()))
-                                .setCancelText(getString(R.string.lock_cancel))
-                                .setCancelLister(null)
-                                .show();
+                if(keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                    item2.setVisibility(View.GONE);
+                } else {
+                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ? getString(R.string.lock_unfrozen): getString(R.string.lock_frozen));
+                    item2.setOnClickListener(v -> {
+                        getPopupWindow().dismiss();
+                        if (keyInfo.isForzened()) {
+                            new CustomerAlertDialog(KeyInfoActivity.this, false)
+                                    .setMsg(getString(R.string.lock_unfrozen_tips))
+                                    .setConfirmText(getString(R.string.lock_unfrozen))
+                                    .setConfirmListener(v1 ->
+                                            keyManagerVM.unFrozenKey(keyInfo.getKeyId()))
+                                    .setCancelText(getString(R.string.lock_cancel))
+                                    .setCancelLister(null)
+                                    .show();
 
-                    } else {
-                        new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                .setMsg(getString(R.string.lock_frozen_tips))
-                                .setConfirmText(getString(R.string.lock_frozen))
-                                .setConfirmListener(v1 ->
-                                        keyManagerVM.frozenKey(keyInfo.getKeyId()))
-                                .setCancelText(getString(R.string.lock_cancel))
-                                .setCancelLister(null)
-                                .show();
-                    }
+                        } else {
+                            new CustomerAlertDialog(KeyInfoActivity.this, false)
+                                    .setMsg(getString(R.string.lock_frozen_tips))
+                                    .setConfirmText(getString(R.string.lock_frozen))
+                                    .setConfirmListener(v1 ->
+                                            keyManagerVM.frozenKey(keyInfo.getKeyId()))
+                                    .setCancelText(getString(R.string.lock_cancel))
+                                    .setCancelLister(null)
+                                    .show();
+                        }
 
-                });
+                    });
+                }
                 getView(R.id.close_window).setOnClickListener(v -> getPopupWindow().dismiss());
             }
 

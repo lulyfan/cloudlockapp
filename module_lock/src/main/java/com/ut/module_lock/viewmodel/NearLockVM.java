@@ -96,9 +96,7 @@ public class NearLockVM extends AndroidViewModel {
                 if (scanDevice1 != null && !scanDevice1.isActive()) {
                     nearScanLock1.setBindStatus(EnumCollection.BindStatus.UNBIND.ordinal());
                 }
-                if (nearLockList.contains(nearScanLock1)) {
-                    nearLockList.remove(nearScanLock1);
-                }
+                nearLockList.remove(nearScanLock1);
                 nearLockList.add(nearScanLock1);
                 nearScanLocks.postValue(nearLockList);
             }

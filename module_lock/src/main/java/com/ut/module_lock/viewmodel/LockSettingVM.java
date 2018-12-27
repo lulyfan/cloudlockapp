@@ -1,5 +1,6 @@
 package com.ut.module_lock.viewmodel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
@@ -7,9 +8,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.MyRetrofit;
+import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.commoncomponent.CLToast;
+import com.ut.database.daoImpl.LockGroupDaoImpl;
+import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
@@ -32,11 +37,23 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  * version: 1.0
  */
+
+@SuppressLint("CheckResult")
 public class LockSettingVM extends AndroidViewModel {
     private MutableLiveData<String> showTip = new MutableLiveData<>();
     private boolean isConnected = false;
     private MutableLiveData<Boolean> isDeleteSuccess = new MutableLiveData<>();
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private MutableLiveData<Long> selectedGroupId = new MutableLiveData<>();
+    private LockKey lockKey;
+
+    public static final int BLEREAUESTCODE = 101;
+
+    public static final int BLEENABLECODE = 102;
+
+    public void setLockKey(LockKey lockKey) {
+        this.lockKey = lockKey;
+    }
 
     public LockSettingVM(@NonNull Application application) {
         super(application);
@@ -48,6 +65,40 @@ public class LockSettingVM extends AndroidViewModel {
 
     public LiveData<String> getShowTip() {
         return showTip;
+    }
+
+    public MutableLiveData<Long> getSelectedGroupId() {
+        if (selectedGroupId == null) {
+            selectedGroupId = new MutableLiveData<>();
+        }
+        return selectedGroupId;
+    }
+
+    public void verifyAdmin(String pwd) {
+        MyRetrofit.get().getCommonApiService().verifyUserPwd(pwd)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        toDeleteAdminKey();
+                    }
+                }, new ErrorHandler());
+    }
+
+
+    public void toDeleteAdminKey() {
+        int result = unbindLock(lockKey);
+        switch (result) {
+            case UnilinkManager.BLE_NOT_SUPPORT:
+                CLToast.showAtBottom(getApplication(), getApplication().getString(R.string.lock_tip_ble_not_support));
+                break;
+            case UnilinkManager.NO_LOCATION_PERMISSION:
+                UnilinkManager.getInstance(getApplication()).requestPermission(AppManager.getAppManager().currentActivity(), BLEREAUESTCODE);
+                break;
+            case UnilinkManager.BLE_NOT_OPEN:
+                UnilinkManager.getInstance(getApplication()).enableBluetooth(AppManager.getAppManager().currentActivity(), BLEENABLECODE);
+                break;
+        }
     }
 
 
@@ -138,6 +189,98 @@ public class LockSettingVM extends AndroidViewModel {
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
         mCompositeDisposable.add(disposable);
+    }
+
+    public LiveData<LockKey> loadLockKey(String mac) {
+        return LockKeyDaoImpl.get().getLockByMac(mac);
+    }
+
+    private void loadLockGroups() {
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getGroup()
+                .subscribeOn(Schedulers.io())
+                .map(listResult -> {
+                    LockGroup[] lockGroups = new LockGroup[listResult.data.size()];
+                    LockGroupDaoImpl.get().insertAll(listResult.data.toArray(lockGroups));
+                    return listResult;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                    }
+                }, new ErrorHandler());
+    }
+
+    public LiveData<List<LockGroup>> getLockGroups() {
+        return LockGroupDaoImpl.get().getAllLockGroup();
+    }
+
+    public void createGroup(String newGroupName) {
+        MyRetrofit.get().getCommonApiService().addGroup(newGroupName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                    if (result.isSuccess()) {
+                        loadLockGroups();
+                        changeLockGroup(lockKey.getMac(), result.data);
+                        selectedGroupId.postValue(Long.valueOf(result.data));
+                        new Thread(() -> {
+                            lockKey.setGroupId(result.data);
+                            saveLockKey(lockKey);
+                        }).start();
+                    }
+                }, new ErrorHandler());
+    }
+
+    public void modifyLockName(String mac, String newName) {
+        MyRetrofit.get().getCommonApiService().editLockName(mac, newName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        new Thread(()-> {
+                            lockKey.setName(newName);
+                            saveLockKey(lockKey);
+                        }).start();
+                    }
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                }, new ErrorHandler());
+    }
+
+    public void addLockIntoGroup(String mac, long groupId) {
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
+                .addLockIntoGroup(mac, groupId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                    new Thread(() -> {
+                        lockKey.setGroupId((int) groupId);
+                        saveLockKey(lockKey);
+                    }).start();
+                }, new ErrorHandler());
+    }
+
+
+    public void changeLockGroup(String mac, long groupId) {
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
+                .changeLockGroup(mac, groupId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        CLToast.showAtCenter(getApplication(), result.msg);
+                        selectedGroupId.postValue(groupId);
+                        new Thread(() -> {
+                            lockKey.setGroupId((int) groupId);
+                            saveLockKey(lockKey);
+                        }).start();
+                    }
+                }, new ErrorHandler());
+    }
+
+    public void saveLockKey(LockKey lockKey) {
+        LockKeyDaoImpl.get().insert(lockKey);
     }
 
     @Override

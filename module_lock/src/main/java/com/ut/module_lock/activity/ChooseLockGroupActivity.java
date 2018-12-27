@@ -2,7 +2,7 @@ package com.ut.module_lock.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,25 +12,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
-import com.ut.commoncomponent.CLToast;
-import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
-import com.ut.module_lock.R;
 import com.ut.module_lock.BR;
+import com.ut.module_lock.R;
+import com.ut.module_lock.viewmodel.LockSettingVM;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : chenjiajun
@@ -46,7 +39,8 @@ public class ChooseLockGroupActivity extends BaseActivity {
     private LockKey lockKey;
     private ListAdapter<LockGroup> adapter;
     private long currentGroupId = -1;
-    private boolean ifInsert = false;
+    private LockSettingVM lockSettingVM;
+    private String addGroupName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,12 +48,23 @@ public class ChooseLockGroupActivity extends BaseActivity {
         setContentView(R.layout.acitivity_choose_group);
         lockKey = getIntent().getParcelableExtra("lock_key");
         currentGroupId = lockKey.getGroupId();
-        ifInsert = currentGroupId == 0;
-
+        lockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
+        lockSettingVM.setLockKey(lockKey);
         initDarkToolbar();
         setTitle(getString(R.string.choose_group));
-        initAdd(() -> createGroup());
+        initAdd(this::createGroup);
+        initUI();
+        lockSettingVM.getLockGroups().observe(this, lgs -> {
+            adapter.updateDate(lgs);
+        });
 
+        lockSettingVM.getSelectedGroupId().observe(this, id -> {
+            currentGroupId = id;
+            adapter.notifyDataSetChanged();
+        });
+    }
+
+    private void initUI() {
         ListView listView = findViewById(R.id.group_list);
         adapter = new ListAdapter<LockGroup>(this, R.layout.item_lock_group, lockGroups, BR.lockGroup) {
             @Override
@@ -67,30 +72,17 @@ public class ChooseLockGroupActivity extends BaseActivity {
                 super.addBadge(binding, position);
                 long lockKeyId = lockGroups.get(position).getId();
                 CheckBox checkBox = binding.getRoot().findViewById(R.id.check_box);
-                if (lockGroups.get(position).getName().equals(newGroupName)) {
-                    newGroupName = null;
-                    currentGroupId = lockKeyId;
-                }
                 checkBox.setChecked(currentGroupId == lockKeyId);
                 checkBox.setOnClickListener(v -> {
                     if (checkBox.isChecked()) {
-                        if (lockKeyId == currentGroupId) {
-                            currentGroupId = -1;
-                        } else {
-                            currentGroupId = lockKeyId;
-                        }
-                    } else {
                         currentGroupId = lockKeyId;
+                        lockSettingVM.changeLockGroup(lockKey.getMac(), lockKeyId);
                     }
-                    notifyDataSetChanged();
                 });
             }
         };
         listView.setAdapter(adapter);
-        loadGroup();
     }
-
-    private String newGroupName = null;
 
     private void createGroup() {
         View contentView = View.inflate(this, R.layout.dialog_edit, null);
@@ -101,73 +93,14 @@ public class ChooseLockGroupActivity extends BaseActivity {
                 .setTitle(R.string.lock_create_group)
                 .setPositiveButton(getText(R.string.lock_btn_confirm), (dialog, which) -> {
                     dialog.dismiss();
-                    MyRetrofit.get().getCommonApiService().addGroup(edt.getText().toString().trim())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(result -> {
-                                CLToast.showAtCenter(getBaseContext(), result.msg);
-                                if (result.isSuccess()) {
-                                    newGroupName = edt.getText().toString().trim();
-                                    currentGroupId = -1;
-                                    loadGroup();
-                                }
-                            }, new ErrorHandler());
+                    lockSettingVM.createGroup(edt.getText().toString().trim());
                 })
                 .setNegativeButton(getText(R.string.lock_cancel), null)
                 .create();
         alertDialog.show();
     }
 
-    private void loadGroup() {
-        Disposable subscribe = MyRetrofit.get().getCommonApiService().getGroup()
-                .subscribeOn(Schedulers.io())
-                .map(listResult -> {
-                    LockGroup[] lockGroups = new LockGroup[listResult.data.size()];
-                    LockGroupDaoImpl.get().insertAll(listResult.data.toArray(lockGroups));
-                    return listResult;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        adapter.updateDate(result.data);
-                    }
-                }, new ErrorHandler());
-    }
-
-    @Override
-    public void finish() {
-        if (currentGroupId != lockKey.getGroupId()) {
-            final long tmp = currentGroupId;
-            currentGroupId = lockKey.getGroupId();
-            if(ifInsert) {
-                Disposable subscribe = MyRetrofit.get().getCommonApiService().addLockIntoGroup(lockKey.getMac(), tmp)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {
-                            CLToast.showAtCenter(getApplication(), result.msg);
-                            if (result.isSuccess()) {
-                                Intent intent = new Intent();
-                                intent.putExtra("lock_group_id", tmp);
-                                setResult(RESULT_OK, intent);
-                            }
-                            super.finish();
-                        }, error -> super.finish());
-            } else {
-                MyRetrofit.get().getCommonApiService().changeLockGroup(lockKey.getMac(), tmp)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(result -> {
-                            CLToast.showAtCenter(getApplication(), result.msg);
-                            if (result.isSuccess()) {
-                                Intent intent = new Intent();
-                                intent.putExtra("lock_group_id", tmp);
-                                setResult(RESULT_OK, intent);
-                            }
-                            super.finish();
-                        }, error -> super.finish());
-            }
-        } else {
-            super.finish();
-        }
-    }
+//    private void loadGroup() {
+//        lockSettingVM.loadLockGroups();
+//    }
 }

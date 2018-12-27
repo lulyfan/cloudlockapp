@@ -46,6 +46,7 @@ public class OperationRecordAcitivity extends BaseActivity {
         operationVm = ViewModelProviders.of(this).get(OperationVm.class);
         operationVm.getOperationRecords().observe(this, operationRecords -> {
             if (operationRecords == null || operationRecords.isEmpty()) return;
+            oprs.clear();
             oprs.addAll(operationRecords);
             listAdapter.notifyDataSetChanged();
         });
@@ -57,11 +58,6 @@ public class OperationRecordAcitivity extends BaseActivity {
             operationVm.loadRecord(recordType, currentId);
             mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setRefreshing(false), 1000L);
         });
-
-//        mBinding.refreshLayout.setListViewFooter(mBinding.refreshLayout.createLoadingFooter());
-//        mBinding.refreshLayout.setOnLoadListener(()->{
-//            mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 1000L);
-//        });
     }
 
     private void initView() {
