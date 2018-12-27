@@ -44,6 +44,7 @@ public class LockGroupViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
+                            LockGroupDaoImpl.get().deleteAll();
                             LockGroupDaoImpl.get().insertAll(listResult.data);
                         },
                         throwable -> tip.postValue(throwable.getMessage()));

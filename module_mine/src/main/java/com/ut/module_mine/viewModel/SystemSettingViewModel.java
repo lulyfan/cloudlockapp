@@ -30,10 +30,11 @@ public class SystemSettingViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
-                            CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-                            CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
-                            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+                            CloudLockDatabaseHolder.get().clear();
+//                    CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
+//                    CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
                             BaseApplication.deleteJpushAlias();
+                            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
     }

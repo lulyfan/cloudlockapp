@@ -27,6 +27,10 @@ public class LockUserDaoImpl {
         mLockUserDao.insert(lockUsers);
     }
 
+    public void deleteAll() {
+        mLockUserDao.deleteAll();
+    }
+
     static class Holder {
         static LockUserDaoImpl lockUserDao = new LockUserDaoImpl();
     }

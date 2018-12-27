@@ -4,15 +4,11 @@ import com.example.entity.base.Result;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
-
-import java.lang.reflect.Type;
 
 public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListener {
 

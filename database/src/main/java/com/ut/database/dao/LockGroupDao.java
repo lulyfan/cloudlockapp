@@ -24,6 +24,9 @@ public interface LockGroupDao {
     @Delete
     void delete(LockGroup lockGroup);
 
+    @Query("delete from lock_group where id >= 0")
+    void deleteAll();
+
     @Update
     void updata(LockGroup lockGroup);
 

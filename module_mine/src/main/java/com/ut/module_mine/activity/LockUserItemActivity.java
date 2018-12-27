@@ -3,6 +3,7 @@ package com.ut.module_mine.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -45,6 +46,8 @@ public class LockUserItemActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(LockUserItemViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
         viewModel.mLockUserKeys.observe(this, lockUserKeys -> {
+            binding.swipeLayout.setRefreshing(false);
+
             List<Data> dataList = new ArrayList<>();
             for (LockUserKey key : lockUserKeys) {
                 String keyType = "";
@@ -87,6 +90,9 @@ public class LockUserItemActivity extends BaseActivity {
         if (getIntent() != null) {
             viewModel.userId = getIntent().getLongExtra(EXTRA_USER_ID, -1);
         }
+
+        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockUserKey());
+        binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
     }
 
     private void setActionBar() {
