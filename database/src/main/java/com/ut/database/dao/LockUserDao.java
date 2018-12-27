@@ -18,4 +18,7 @@ public interface LockUserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<LockUser> lockUsers);
+
+    @Query("delete from lockuser where userId >= 0")
+    void deleteAll();
 }

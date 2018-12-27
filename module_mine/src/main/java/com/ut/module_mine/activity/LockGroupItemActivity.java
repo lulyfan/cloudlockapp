@@ -51,14 +51,25 @@ public class LockGroupItemActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lock_group_item);
+
         initViewModel();
         initUI();
+
+        String lockGroupName = "";
+        if (getIntent() != null) {
+            lockGroupName = getIntent().getStringExtra(EXTRA_LOCK_GROUP_NAME);
+            setTitle(lockGroupName);
+            viewModel.groupId = getIntent().getLongExtra(EXTRA_LOCK_GROUP_ID, -1);
+        }
+        viewModel.getLockByGroupId();
     }
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupItemViewModel.class);
 
-        viewModel.locks.observe(this, locks -> adapter.setData(locks));
+        viewModel.locks.observe(this, locks -> {
+            adapter.setData(locks);
+        });
         viewModel.updateGroupName.observe(this, groupName -> setTitle(groupName));
         viewModel.delGroupSuccess.observe(this, aVoid -> onBackPressed());
         viewModel.tip.observe(this, s -> toastShort(s));
@@ -87,25 +98,17 @@ public class LockGroupItemActivity extends BaseActivity {
         Toolbar toolbar = getToolBar();
         toolbar.setOverflowIcon(ActivityCompat.getDrawable(this, R.drawable.overflow_black));
 
-        String lockGroupName = "";
-        if (getIntent() != null) {
-            lockGroupName = getIntent().getStringExtra(EXTRA_LOCK_GROUP_NAME);
-            setTitle(lockGroupName);
-            viewModel.groupId = getIntent().getLongExtra(EXTRA_LOCK_GROUP_ID, -1);
-        }
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.rvLockList.setLayoutManager(layoutManager);
 
         adapter = new DataBindingAdapter<>(this, R.layout.item_lock, BR.lock);
-        binding.rvLockList.setAdapter(adapter);
-
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
             LockKey lockKey = selectedbinding.getLock();
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, lockKey)
                     .navigation();
         });
+        binding.rvLockList.setAdapter(adapter);
     }
 
     public void editGroupName() {

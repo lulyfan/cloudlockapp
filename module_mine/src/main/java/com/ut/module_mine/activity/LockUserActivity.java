@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -38,6 +39,8 @@ public class LockUserActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
         viewModel.mLockUsers.observe(this, lockUsers -> {
+            binding.swipeLayout.setRefreshing(false);
+
             List<User> userList = new ArrayList<>();
             for (LockUser lockUser : lockUsers) {
                 User user = new User(lockUser.getUserId(), lockUser.getHeadPic(), lockUser.getName(), lockUser.getTelNo());
@@ -70,6 +73,9 @@ public class LockUserActivity extends BaseActivity {
         });
 
         binding.userList.setAdapter(adapter);
+
+        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockUser());
+        binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
     }
 
     public static class User {

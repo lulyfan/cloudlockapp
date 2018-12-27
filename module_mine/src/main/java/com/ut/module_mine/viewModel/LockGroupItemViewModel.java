@@ -27,8 +27,13 @@ public class LockGroupItemViewModel extends BaseViewModel {
 
     public LockGroupItemViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public void getLockByGroupId() {
         LockKeyDaoImpl.get().getLockByGroupId((int) groupId)
-                .observeForever(lockKeys -> locks.setValue(lockKeys));
+                .observeForever(lockKeys -> {
+                    locks.setValue(lockKeys);
+                });
     }
 
     public void editGroupName(String groupName) {

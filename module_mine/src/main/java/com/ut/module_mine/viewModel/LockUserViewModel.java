@@ -13,18 +13,13 @@ import com.ut.module_mine.R;
 import java.util.List;
 
 public class LockUserViewModel extends BaseViewModel {
-    private int mCurrentPage = 1;
+    private int mCurrentPage = -1;
     private static final int PAGE_SIZE = 10;
     public MutableLiveData<List<LockUser>> mLockUsers = new MutableLiveData<>();
 
     public LockUserViewModel(@NonNull Application application) {
         super(application);
-        LockUserDaoImpl.get().getAll().observeForever(new Observer<List<LockUser>>() {
-            @Override
-            public void onChanged(@Nullable List<LockUser> lockUsers) {
-                mLockUsers.postValue(lockUsers);
-            }
-        });
+        LockUserDaoImpl.get().getAll().observeForever(lockUsers -> mLockUsers.postValue(lockUsers));
     }
 
     public void loadLockUser() {
@@ -39,6 +34,7 @@ public class LockUserViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
+                            LockUserDaoImpl.get().deleteAll();
                             LockUserDaoImpl.get().insert(listResult.data);
                         },
                         throwable -> tip.postValue(throwable.getMessage()));

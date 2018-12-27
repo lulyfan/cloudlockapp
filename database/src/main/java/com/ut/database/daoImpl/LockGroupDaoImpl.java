@@ -80,6 +80,10 @@ public class LockGroupDaoImpl {
         mLockGroupDao.delete(lockGroup);
     }
 
+    public void deleteAll() {
+        mLockGroupDao.deleteAll();
+    }
+
     public void updateGroupName(long groupId, String groupName) {
         mLockGroupDao.updateGroupName(groupId, groupName);
     }

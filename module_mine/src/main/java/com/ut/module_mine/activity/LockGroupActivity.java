@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -48,6 +49,8 @@ public class LockGroupActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupViewModel.class);
         viewModel.mLockGroups.observe(this, lockGroups -> {
+            binding.swipeLayout.setRefreshing(false);
+
             List<LockGroupData> lockGroupDataList = new ArrayList<>();
             for (LockGroup lockGroup : lockGroups) {
                 LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
@@ -82,6 +85,9 @@ public class LockGroupActivity extends BaseActivity {
             intent.putExtra(LockGroupItemActivity.EXTRA_LOCK_GROUP_ID, adapter.getItemData(position).groupId);
             startActivity(intent);
         });
+
+        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockGroup());
+        binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
     }
 
     public static class LockGroupData {
