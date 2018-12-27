@@ -79,8 +79,6 @@ public class LockListFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mLockListFragVM.toGetLockAllList(false);
-        mLockListFragVM.toGetAllGroupList(false);
     }
 
     private void initViewModel() {
@@ -235,8 +233,9 @@ public class LockListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (mLockListFragVM != null) {
-//            mLockListFragVM.toGetLockAllList();
-//        }
+        if (mLockListFragVM != null) {
+            mLockListFragVM.toGetLockAllList(false);
+            mLockListFragVM.toGetAllGroupList(false);
+        }
     }
 }

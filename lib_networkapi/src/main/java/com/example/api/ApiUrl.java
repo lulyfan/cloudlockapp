@@ -145,6 +145,9 @@ public interface ApiUrl {
     //添加锁进分组
     String addLockIntoGroup = "api/lockGroup/addLockIntoGroup?json";
 
+    //从分组中移除锁
+    String delLockFromGroup = "api/lockGroup/delLockFromGroup?json";
+
     //验证用户
     String verifyUserPwd = "api/user/veriPassword?json";
 

@@ -223,6 +223,10 @@ public interface CommonApiService {
     Observable<Result<Void>> addLockIntoGroup(@Field("macs") String mac, @Field("groupId") long groupId);
 
     @FormUrlEncoded
+    @POST(ApiUrl.delLockFromGroup)
+    Observable<Result<Void>> delLockFromGroup(@Field("macs") String mac, @Field("groupId") long groupId);
+
+    @FormUrlEncoded
     @POST(ApiUrl.verifyUserPwd)
     Observable<Result<Void>> verifyUserPwd(@Field("password") String password);
 
