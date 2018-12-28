@@ -129,7 +129,7 @@ public class OperationVm extends AndroidViewModel {
             if (map.containsKey(date)) {
                 ArrayList<Record> tmps = (ArrayList<Record>) map.get(date);
                 tmps.add(li);
-                Collections.sort(tmps,comparator);
+                Collections.sort(tmps, comparator);
             } else {
                 ArrayList<Record> newtmps = new ArrayList<Record>();
                 newtmps.add(li);

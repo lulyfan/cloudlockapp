@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -57,9 +58,9 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lockKey = getIntent().getParcelableExtra("lock_key");
         mBinding = DataBindingUtil.setContentView(this, R.layout.acitivity_lock_setting);
-        mBinding.setLockKey(lockKey);
+        lockKey = getIntent().getParcelableExtra(Constance.LOCK_KEY);
+        setBindingLockKey();
         initTitle();
         initViewModel();
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
@@ -85,7 +86,7 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
             lockKey = lk;
-            mBinding.setLockKey(lockKey);
+            setBindingLockKey();
             loadGroupName();
         });
     }
@@ -104,7 +105,14 @@ public class LockSettingActivity extends BaseActivity {
     private void loadGroupName() {
         Observable.just(lockKey.getGroupId())
                 .subscribeOn(Schedulers.io())
-                .map(id -> LockGroupDaoImpl.get().getLockGroupById(id).getName())
+                .map(id -> {
+                    LockGroup lockGroup = LockGroupDaoImpl.get().getLockGroupById(id);
+                    if (lockGroup == null) {
+                        return "";
+                    } else {
+                        return lockGroup.getName();
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(name -> mBinding.tvLockGroup.setText(name));
     }
@@ -165,14 +173,6 @@ public class LockSettingActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    private void deleteLockKey(long keyId, int ifAllKey) {
-        MyRetrofit.get().getCommonApiService().deleteKey(keyId, ifAllKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-
-                }, new ErrorHandler());
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -180,7 +180,7 @@ public class LockSettingActivity extends BaseActivity {
         if (RESULT_OK == resultCode) {
             if (requestCode == REQUEST_CODE_CHOOSE_GROUP && data != null) {
                 lockKey.setGroupId((int) data.getLongExtra("lock_group_id", lockKey.getGroupId()));
-                mBinding.setLockKey(lockKey);
+                setBindingLockKey();
 
             } else if (requestCode == REQUEST_CODE_EDIT_NAME && data != null) {
                 String name = data.getStringExtra(Constance.EDIT_NAME);
@@ -191,6 +191,14 @@ public class LockSettingActivity extends BaseActivity {
                 mLockSettingVM.toDeleteAdminKey();
             }
         }
+    }
+
+    private void setBindingLockKey() {
+        lockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
+        lockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
+        lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
+        lockKey.setElectricityStr();
+        mBinding.setLockKey(lockKey);
     }
 
     private void modifyLockName(String name) {

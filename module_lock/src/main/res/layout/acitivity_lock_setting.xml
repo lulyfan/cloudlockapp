@@ -108,7 +108,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_power"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_device_power"
@@ -118,14 +118,14 @@
                             android:layout_marginRight="@dimen/base_53dp"
                             android:text="@{lockKey.electricityStr}"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
 
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="@color/color_base_divider" />
+                            android:background="@color/color_base_divider"/>
                     </FrameLayout>
 
                     <FrameLayout

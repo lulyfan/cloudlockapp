@@ -7,6 +7,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
@@ -152,11 +153,13 @@ public class LockSettingVM extends AndroidViewModel {
                     @Override
                     public void onSuccess(CloudLock cloudLock) {
                         deleteAdminLock(lockKey);
+                        UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
                     }
 
                     @Override
                     public void onFailed(int i, String s) {
                         showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
+                        UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
                     }
                 });
     }
@@ -238,7 +241,7 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        new Thread(()-> {
+                        new Thread(() -> {
                             lockKey.setName(newName);
                             saveLockKey(lockKey);
                         }).start();
@@ -261,6 +264,18 @@ public class LockSettingVM extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
+
+    public void delLockFromGroup(String mac, long groupId) {
+        Disposable subscribe = CommonApi
+                .delLockFromGroup(mac, groupId)
+                .subscribe(result -> {
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                    new Thread(() -> {
+                        lockKey.setGroupId(-1);
+                        saveLockKey(lockKey);
+                    }).start();
+                }, new ErrorHandler());
+    }
 
     public void changeLockGroup(String mac, long groupId) {
         Disposable subscribe = MyRetrofit.get().getCommonApiService()

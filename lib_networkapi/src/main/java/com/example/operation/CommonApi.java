@@ -57,6 +57,12 @@ public class CommonApi {
         return ObjectLoader.observe(resultObservable);
     }
 
+    //删除锁分组
+    public static Observable<Result<Void>> delLockFromGroup(String mac, long groupId) {
+        Observable<Result<Void>> resultObservable = getCommonApiService().delLockFromGroup(mac, groupId);
+        return ObjectLoader.observe(resultObservable);
+    }
+
     /**
      * 获取锁列表
      *

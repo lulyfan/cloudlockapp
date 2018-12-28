@@ -151,6 +151,7 @@ public class NearLockVM extends AndroidViewModel {
 
             @Override
             public void onFailed(int i, String s) {
+                UnilinkManager.getInstance(getApplication()).disconnect(lock.getMac());
                 errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                 UTLog.i("ble init failed:" + s);
             }
@@ -163,6 +164,7 @@ public class NearLockVM extends AndroidViewModel {
             @Override
             public void onSuccess(CloudLock cloudLock) {
                 mBindLock.postValue(cloudLock);
+                UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
             }
 
             @Override
@@ -173,6 +175,7 @@ public class NearLockVM extends AndroidViewModel {
                         .subscribe(voidResult -> {
                         });
                 mCompositeDisposable.add(disposable);
+                UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
             }
         });
     }

@@ -47,9 +47,9 @@ public class NearLockActivity extends BaseActivity {
 
     private void toScan() {
         int scanResult = mNearLockVM.startScan();
-        mNearLockBinding.swfBleDevice.postDelayed(()->{
+        mNearLockBinding.swfBleDevice.postDelayed(() -> {
             mNearLockBinding.swfBleDevice.setRefreshing(false);
-        },1500);
+        }, 1500);
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 toastShort(getString(R.string.lock_tip_ble_not_support));
@@ -67,9 +67,9 @@ public class NearLockActivity extends BaseActivity {
         mNearLockVM = ViewModelProviders.of(this).get(NearLockVM.class);
         mNearLockVM.getNearScanLocks().observe(this, this::refreshListData);
         mNearLockVM.isOperating().observe(this, isScanning -> {
-            if (isScanning){
+            if (isScanning) {
                 mNearLockBinding.progressBarGreen.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
             }
         });
@@ -103,7 +103,7 @@ public class NearLockActivity extends BaseActivity {
         );
         mNearLockBinding.swfBleDevice.setColorSchemeResources(R.color.color_tv_blue);
         mNearLockBinding.swfBleDevice.setOnRefreshListener(() -> {
-          toScan();
+            toScan();
         });
     }
 
