@@ -272,4 +272,9 @@ public interface CommonApiService {
 
     @GET(ApiUrl.updateAppVersion)
     Observable<Result<JsonObject>> updateVersion();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.editKeyName)
+    Observable<Result<Void>> editKeyName(@Field("keyId") long keyId, @Field("keyName") String name);
+
 }

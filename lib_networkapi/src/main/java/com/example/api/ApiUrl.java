@@ -177,4 +177,7 @@ public interface ApiUrl {
 
     //版本更新
     String updateAppVersion = "/api/version/getNewVersion?json&typeId=1004";
+
+    //修改钥匙名称
+    String editKeyName = "api/key/updateKeyName";
 }
