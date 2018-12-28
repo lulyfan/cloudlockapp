@@ -1,4 +1,4 @@
-package com.ut.module_mine;
+package com.ut.base;
 
 /**
  * author : chenjiajun

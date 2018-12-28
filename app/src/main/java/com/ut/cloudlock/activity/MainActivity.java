@@ -16,7 +16,6 @@ import com.ut.base.UIUtils.FragmentUtil;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UserRepository;
 import com.ut.base.Utils.UTLog;
-import com.ut.module_mine.VersionUpdateHelper;
 import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"  tools:ignore="MissingTranslation">
     <string name="app_name">base</string>
     <string name="grantPermission">分配权限</string>
     <string name="mine_limitTime">限时</string>
@@ -30,4 +30,13 @@
     <string name="loading">加载中...</string>
     <string name="serviceErr">服务器开小差</string>
     <string name="base_auto_login_time_out">自动登录已过期，请重新登陆。</string>
+    <string name="mine_version_update_title">云锁App版本更新</string>
+    <string name="mine_version_update_waiting">正在等待...</string>
+    <string name="mine_version_update_has_downloaded">已下载</string>
+    <string name="mine_version_update_install">下载完成，点击安装</string>
+    <string name="mine_version_update_tips">发现有新的版本，需要升级吗？</string>
+    <string name="mine_version_update_comfirm">升级</string>
+    <string name="mine_version_update_toast">正在升级...</string>
+    <string name="mine_version_update_dont">暂时不需要</string>
+    <string name="mine_version_update_is_newest_version">已是最新版本</string>
 </resources>

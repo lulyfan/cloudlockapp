@@ -1,16 +1,11 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,7 +16,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.R;
-import com.ut.module_mine.VersionUpdateHelper;
+import com.ut.base.VersionUpdateHelper;
 import com.ut.module_mine.databinding.ActivitySystemSettingBinding;
 import com.ut.module_mine.viewModel.SystemSettingViewModel;
 
@@ -48,11 +43,11 @@ public class SystemSettingActivity extends BaseActivity {
         setTitle(getString(R.string.systemSetting));
 
         binding.constraintLayout9.setOnClickListener(v -> {
-            try {
-                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionName, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionName, null);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         });
 
         binding.aboutUs.setOnClickListener(v -> {

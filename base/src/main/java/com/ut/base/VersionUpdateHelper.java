@@ -1,29 +1,19 @@
-package com.ut.module_mine;
+package com.ut.base;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.widget.ProgressBar;
 
 import com.alibaba.fastjson.JSON;
 import com.example.operation.MyRetrofit;
-import com.ut.base.AppManager;
-import com.ut.base.BaseApplication;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
@@ -48,9 +38,7 @@ import retrofit2.Response;
  */
 public class VersionUpdateHelper {
 
-    private static final String DEFAULT_DOWNLOAD_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     private static final String APP_NAME = "cloudLock.apk";
-
     private static Notification.Builder builder = null;
 
     @SuppressLint("CheckResult")
@@ -66,13 +54,14 @@ public class VersionUpdateHelper {
                             callback.needToUpdate(compare == 1, versionInfo.getVersion(), versionInfo.getFileUrl());
                         }
                         if (compare == 1) {
+                            //todo
                             new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
                                     .setMessage(R.string.mine_version_update_tips)
                                     .setPositiveButton(R.string.mine_version_update_comfirm, ((dialog, which) -> {
                                         download(versionInfo.getFileUrl());
                                         CLToast.showAtBottom(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(R.string.mine_version_update_toast));
                                     }))
-                                    .setNegativeButton(R.string.mine_versionn_update_dont, null)
+                                    .setNegativeButton(R.string.mine_version_update_dont, null)
                                     .show();
 
                         } else {
@@ -89,7 +78,7 @@ public class VersionUpdateHelper {
             builder = new Notification.Builder(BaseApplication.getAppContext())
                     .setContentTitle(BaseApplication.getAppContext().getString(R.string.mine_version_update_title))
                     .setContentText(BaseApplication.getAppContext().getString(R.string.mine_version_update_waiting))
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.loading_icon)
                     .setOngoing(true)
                     .setProgress(100, 0, true);
         }
