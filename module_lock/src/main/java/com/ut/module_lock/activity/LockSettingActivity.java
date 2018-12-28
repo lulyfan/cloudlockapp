@@ -66,7 +66,7 @@ public class LockSettingActivity extends BaseActivity {
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
         mBinding.layoutLockName.setOnClickListener(v -> {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).navigation(this, REQUEST_CODE_EDIT_NAME);
+            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).withString("edit_name_title", getString(R.string.lock_name)).withBoolean("is_lock", true).withString("mac", lockKey.getMac()).navigation(this, REQUEST_CODE_EDIT_NAME);
         });
     }
 

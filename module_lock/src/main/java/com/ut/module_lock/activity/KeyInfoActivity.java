@@ -73,7 +73,8 @@ public class KeyInfoActivity extends BaseActivity {
     private void initListener() {
         mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
                 .build(RouterUtil.LockModulePath.EDIT_NAME)
-                .withSerializable(Constance.KEY_INFO, keyInfo)
+                .withString("edit_name_title", getString(R.string.key_name))
+                .withLong("key_id", keyInfo.getKeyId())
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
             String url;
@@ -196,14 +197,16 @@ public class KeyInfoActivity extends BaseActivity {
                         Key item = (Key) data.getSerializableExtra(Constance.KEY_INFO);
                         if (item != null) {
                             keyInfo = item;
+                            editKey();
                         }
                     } else if (data.hasExtra(Constance.EDIT_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
                             keyInfo.setKeyName(keyName);
+                            mBinding.setKeyItem(keyInfo);
+                            hasEdited = true;
                         }
                     }
-                    editKey();
                     break;
             }
         }

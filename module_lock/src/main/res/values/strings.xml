@@ -155,4 +155,5 @@
     <string name="lock_cancel_auth">取消授权</string>
     <string name="lock_make_sure_delete_auth_key">确定删除授权钥匙吗？</string>
     <string name="lock_make_sure_delete_auth_key_2">确定删除该钥匙吗？删除后无法恢复。</string>
+    <string name="key_name">名称</string>
 </resources>

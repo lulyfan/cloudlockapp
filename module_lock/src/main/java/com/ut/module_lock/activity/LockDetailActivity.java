@@ -49,7 +49,6 @@ public class LockDetailActivity extends BaseActivity {
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
-
         initViewModel();
     }
 
@@ -69,6 +68,10 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
             new UnlockSuccessDialog(this, false).show();
+        });
+        mLockDetailVM.getLockKey().observe(this, lockKey -> {
+            mLockKey = lockKey;
+            mDetailBinding.setLockKey(mLockKey);
         });
     }
 

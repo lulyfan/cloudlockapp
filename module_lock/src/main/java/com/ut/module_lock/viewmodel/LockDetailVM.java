@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
 import com.ut.base.Utils.UTLog;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -57,6 +58,10 @@ public class LockDetailVM extends AndroidViewModel {
 
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
+    }
+
+    public LiveData<LockKey> getLockKey(){
+        return LockKeyDaoImpl.get().getLockByMac(mLockKey.getMac());
     }
 
     public int openLock() {

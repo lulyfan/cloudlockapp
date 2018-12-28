@@ -1,5 +1,6 @@
 package com.ut.module_lock.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,12 +10,20 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SimpleTextWatcher;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.commoncomponent.CLToast;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : chenjiajun
@@ -26,17 +35,24 @@ import com.ut.module_lock.common.Constance;
 public class EditNameActivity extends BaseActivity {
 
     private EditText nameEdt = null;
+    private boolean isLock = false;
+    private String mac = null;
+    private long keyId = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_name);
+        String title = getIntent().getStringExtra("edit_name_title");
+        isLock = getIntent().getBooleanExtra("is_lock", false);
+        mac = getIntent().getStringExtra("mac");
+        keyId = getIntent().getLongExtra("key_id", 0L);
         initView();
+        setTitle(title);
     }
 
     private void initView() {
         initDarkToolbar();
-        setTitle(R.string.lock_name);
         nameEdt = findViewById(R.id.edt_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {
             saveName();
@@ -50,7 +66,7 @@ public class EditNameActivity extends BaseActivity {
             }
         });
         nameEdt.setOnFocusChangeListener((v, hasFocus) -> {
-            if(!hasFocus) {
+            if (!hasFocus) {
                 SystemUtils.hideKeyboard(getBaseContext(), nameEdt.getRootView());
             }
         });
@@ -58,11 +74,48 @@ public class EditNameActivity extends BaseActivity {
         findViewById(R.id.btn_save).setOnClickListener(v -> saveName());
     }
 
+    @SuppressLint("CheckResult")
     private void saveName() {
-        Intent intent = new Intent();
-        intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
-        setResult(RESULT_OK, intent);
-        finish();
+//        Intent intent = new Intent();
+//        intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
+//        setResult(RESULT_OK, intent);
+//        finish();
+        String name = nameEdt.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name)) {
+            CLToast.showAtBottom(this, "名称不能为空");
+            return;
+        }
+
+        if (isLock) {
+            if (TextUtils.isEmpty(mac)) return;
+//            MyRetrofit.get().getCommonApiService().editLockName(mac, name)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(result -> {
+//                        CLToast.showAtBottom(getBaseContext(), result.msg);
+//                        if (result.isSuccess()) {
+//                            finish();
+//                        }
+//                    }, new ErrorHandler());
+            Intent intent = new Intent();
+            intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
+            setResult(RESULT_OK, intent);
+            finish();
+        } else if (keyId != 0) {
+            MyRetrofit.get().getCommonApiService().editKeyName(keyId, name)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        if (result.isSuccess()) {
+                            Intent intent = new Intent();
+                            intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                        CLToast.showAtBottom(getBaseContext(), result.msg);
+                    }, new ErrorHandler());
+        }
     }
 
     @Override

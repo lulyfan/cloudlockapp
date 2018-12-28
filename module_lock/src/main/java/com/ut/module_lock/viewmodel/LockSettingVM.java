@@ -241,12 +241,13 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        new Thread(() -> {
-                            lockKey.setName(newName);
-                            saveLockKey(lockKey);
-                        }).start();
+
                     }
-                    CLToast.showAtCenter(getApplication(), result.msg);
+                    new Thread(() -> {
+                        lockKey.setName(newName);
+                        saveLockKey(lockKey);
+                    }).start();
+                    CLToast.showAtBottom(getApplication(), result.msg);
                 }, new ErrorHandler());
     }
 

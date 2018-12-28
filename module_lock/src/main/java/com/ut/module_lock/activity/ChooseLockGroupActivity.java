@@ -40,7 +40,6 @@ public class ChooseLockGroupActivity extends BaseActivity {
     private ListAdapter<LockGroup> adapter;
     private long currentGroupId = -1;
     private LockSettingVM lockSettingVM;
-    private String addGroupName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,26 +63,17 @@ public class ChooseLockGroupActivity extends BaseActivity {
         });
     }
 
-    private boolean hasGroup = false;
-
     private void initUI() {
         ListView listView = findViewById(R.id.group_list);
         adapter = new ListAdapter<LockGroup>(this, R.layout.item_lock_group, lockGroups, BR.lockGroup) {
             @Override
             public void addBadge(ViewDataBinding binding, int position) {
-                super.addBadge(binding, position);
                 long groupId = lockGroups.get(position).getId();
                 CheckBox checkBox = binding.getRoot().findViewById(R.id.check_box);
-                hasGroup = currentGroupId == groupId;
-                checkBox.setChecked(hasGroup);
+                checkBox.setChecked(currentGroupId == groupId);
                 checkBox.setOnClickListener(v -> {
                     if (checkBox.isChecked()) {
-                        if (hasGroup) {
-                            lockSettingVM.changeLockGroup(lockKey.getMac(), groupId);
-                        } else {
-                            lockSettingVM.addLockIntoGroup(lockKey.getMac(), groupId);
-                        }
-                        currentGroupId = groupId;
+                        lockSettingVM.changeLockGroup(lockKey.getMac(), groupId);
                     } else {
                         lockSettingVM.delLockFromGroup(lockKey.getMac(), currentGroupId);
                     }
