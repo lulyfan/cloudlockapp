@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">module_mine</string>
     <string name="title_mine">我的</string>
     <string name="webLoginPermission">WEB端登录权限</string>
@@ -67,4 +67,13 @@
     <string name="mine_loop">循环</string>
     <string name="confirmDeleteKey">确定删除该钥匙吗？删除会在用户APP联网后生效。</string>
     <string name="isLogout">是否退出登录?</string>
+    <string name="mine_version_update_title">云锁App版本更新</string>
+    <string name="mine_version_update_waiting">正在等待...</string>
+    <string name="mine_version_update_has_downloaded">已下载</string>
+    <string name="mine_version_update_install">下载完成，点击安装</string>
+    <string name="mine_version_update_tips">发现有新的版本，需要升级吗？</string>
+    <string name="mine_version_update_comfirm">升级</string>
+    <string name="mine_version_update_toast">正在升级...</string>
+    <string name="mine_versionn_update_dont">暂时不需要</string>
+    <string name="mine_version_update_is_newest_version">已是最新版本</string>
 </resources>

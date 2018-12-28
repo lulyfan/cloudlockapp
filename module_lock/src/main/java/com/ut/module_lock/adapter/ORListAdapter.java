@@ -78,12 +78,12 @@ public class ORListAdapter extends BaseAdapter {
             lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, SystemUtils.dp2px(context, 70));
             ViewGroup item = (ViewGroup) View.inflate(context, R.layout.item_record_body, null);
             TextView operatorTv = item.findViewById(R.id.operator);
-            operatorTv.setText(r.getOperator());
+            operatorTv.setText(r.getUserName());
             TextView descTv = item.findViewById(R.id.desc);
             descTv.setText(new StringBuffer(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(r.getCreateTime())) +"   "+ r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);
-            if(!TextUtils.isEmpty(r.getIcon())) {
-                Glide.with(context).load(r.getIcon()).apply( RequestOptions.circleCropTransform().placeholder(R.mipmap.default_icon_b)).into(icon);
+            if(!TextUtils.isEmpty(r.getHeadPic())) {
+                Glide.with(context).load(r.getHeadPic()).apply( RequestOptions.circleCropTransform().placeholder(R.mipmap.default_icon_b)).into(icon);
             }
             holder.container.addView(item, lp);
             if (records.indexOf(r) == records.size() - 1) {

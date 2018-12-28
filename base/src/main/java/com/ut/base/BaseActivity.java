@@ -236,6 +236,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(noLoginDialog != null) {
+            noLoginDialog.dismiss();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(noLoginDialog != null) {

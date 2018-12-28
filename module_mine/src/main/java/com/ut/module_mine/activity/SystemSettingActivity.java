@@ -3,6 +3,7 @@ package com.ut.module_mine.activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.R;
+import com.ut.module_mine.VersionUpdateHelper;
 import com.ut.module_mine.databinding.ActivitySystemSettingBinding;
 import com.ut.module_mine.viewModel.SystemSettingViewModel;
 
@@ -44,6 +46,14 @@ public class SystemSettingActivity extends BaseActivity {
     private void initUI() {
         initLightToolbar();
         setTitle(getString(R.string.systemSetting));
+
+        binding.constraintLayout9.setOnClickListener(v -> {
+            try {
+                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionName, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         binding.aboutUs.setOnClickListener(v -> {
             Intent intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
