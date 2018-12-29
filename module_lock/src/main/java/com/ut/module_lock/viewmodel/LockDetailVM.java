@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.example.operation.CommonApi;
 import com.ut.base.Utils.UTLog;
@@ -16,13 +18,18 @@ import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
 import com.ut.unilink.cloudLock.CloudLock;
 import com.ut.unilink.cloudLock.ConnectListener;
+import com.ut.unilink.cloudLock.LockStateListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
+import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import java.util.List;
+import java.util.Observable;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import rx.Scheduler;
+import rx.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -52,7 +59,7 @@ public class LockDetailVM extends AndroidViewModel {
         return showTip;
     }
 
-    public LiveData<Boolean> getUnlockSuccessStatus(){
+    public LiveData<Boolean> getUnlockSuccessStatus() {
         return unlockSuccess;
     }
 
@@ -60,9 +67,10 @@ public class LockDetailVM extends AndroidViewModel {
         this.mLockKey = lockKey;
     }
 
-    public LiveData<LockKey> getLockKey(){
+    public LiveData<LockKey> getLockKey() {
         return LockKeyDaoImpl.get().getLockByMac(mLockKey.getMac());
     }
+
 
     public int openLock() {
         isConnectSuccessed = false;
@@ -103,8 +111,23 @@ public class LockDetailVM extends AndroidViewModel {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
                 }
             }
-        });
+        }, mLockStateListener);
     }
+
+    private LockStateListener mLockStateListener = new LockStateListener() {
+        @Override
+        public void onState(LockState lockState) {
+            if (TextUtils.isDigitsOnly(lockState.getElect())) {
+                mLockKey.setElectric(Integer.parseInt(lockState.getElect()));
+                rx.Observable.just(mLockKey)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe(lockKey -> {
+                            LockKeyDaoImpl.get().insert(lockKey);
+                        });
+            }
+        }
+    };
 
     private void toCheckPermission() {
         Disposable result = CommonApi.isAuth(mLockKey.getMac())
