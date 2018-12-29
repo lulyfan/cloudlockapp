@@ -23,6 +23,7 @@ public class LockGroupViewModel extends BaseViewModel {
 
     public MutableLiveData<List<LockGroup>> mLockGroups = new MutableLiveData<>();
     public MutableLiveData<Void> addGroupSuccess = new MutableLiveData<>();
+    public MutableLiveData<Boolean> loadLockGroupState = new MutableLiveData<>();
 
     public LockGroupViewModel(@NonNull Application application) {
         super(application);
@@ -46,8 +47,12 @@ public class LockGroupViewModel extends BaseViewModel {
                 .subscribe(listResult -> {
                             LockGroupDaoImpl.get().deleteAll();
                             LockGroupDaoImpl.get().insertAll(listResult.data);
+                            loadLockGroupState.postValue(true);
                         },
-                        throwable -> tip.postValue(throwable.getMessage()));
+                        throwable -> {
+                            tip.postValue(throwable.getMessage());
+                            loadLockGroupState.postValue(false);
+                        });
 
     }
 

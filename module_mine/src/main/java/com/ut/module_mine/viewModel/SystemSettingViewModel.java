@@ -7,6 +7,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.VersionUpdateHelper;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_mine.R;
 
@@ -37,5 +38,8 @@ public class SystemSettingViewModel extends BaseViewModel {
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
+    }
+
+    public void checkVersion(String currentVersion) {
     }
 }

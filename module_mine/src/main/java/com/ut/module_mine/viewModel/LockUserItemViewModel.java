@@ -13,9 +13,10 @@ import com.ut.module_mine.R;
 import java.util.List;
 
 public class LockUserItemViewModel extends BaseViewModel {
-    private int mCurrentPage;
+    private int mCurrentPage = -1;
     private static final int PAGE_SIZE = 10;
     public long userId;
+    public MutableLiveData<Boolean> loadLockUserKeyState = new MutableLiveData<>();
 
     public MutableLiveData<List<LockUserKey>> mLockUserKeys = new MutableLiveData<>();
 
@@ -38,13 +39,18 @@ public class LockUserItemViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
-                    LockUserKeyDaoImpl.get().deleteAll();
-                    LockUserKeyDaoImpl.get().insert(listResult.data);},
-                        throwable -> tip.postValue(throwable.getMessage()));
+                            LockUserKeyDaoImpl.get().deleteAll();
+                            LockUserKeyDaoImpl.get().insert(listResult.data);
+                            loadLockUserKeyState.postValue(true);
+                        },
+                        throwable -> {
+                            tip.postValue(throwable.getMessage());
+                            loadLockUserKeyState.postValue(false);
+                        });
     }
 
     public void deleteKey(long keyId) {
-        service.deleteKey(keyId,0)
+        service.deleteKey(keyId, 0)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
                         throw new NullPointerException(getApplication().getString(R.string.serviceErr));
@@ -54,8 +60,10 @@ public class LockUserItemViewModel extends BaseViewModel {
                         throw new Exception(stringResult.msg);
                     }
                 })
-                .subscribe(voidResult -> {tip.postValue(voidResult.msg);
-                            LockUserKeyDaoImpl.get().deleteById((int) keyId);},
+                .subscribe(voidResult -> {
+                            tip.postValue(voidResult.msg);
+                            LockUserKeyDaoImpl.get().deleteById((int) keyId);
+                        },
                         throwable -> tip.postValue(throwable.getMessage()));
     }
 }

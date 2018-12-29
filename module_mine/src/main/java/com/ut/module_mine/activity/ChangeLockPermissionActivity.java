@@ -88,13 +88,6 @@ public class ChangeLockPermissionActivity extends BaseActivity {
             boolean isChecked = selectedbinding.checkBox.isChecked();
             selectedbinding.checkBox.setChecked(!isChecked);
         });
-
-        List<Data> list = new ArrayList<>();
-        list.add(new Data("优特智能锁", "",false));
-        list.add(new Data("优特智能锁", "",false));
-        list.add(new Data("优特智能锁", "",false));
-
-        adapter.setData(list);
         mBinding.rvLockList.setAdapter(adapter);
     }
 

@@ -49,6 +49,10 @@ public class LockKeyDaoImpl {
         mLockKeyDao.insertAll(lockKeys);
     }
 
+    public void insertAll(List<LockKey> lockKeys) {
+        mLockKeyDao.insertAll(lockKeys);
+    }
+
     /**
      * 单个添加
      *
@@ -108,6 +112,10 @@ public class LockKeyDaoImpl {
 
     public void updateKeyAuth(int keyId, int userType) {
         mLockKeyDao.updateKeyAuth(keyId, userType);
+    }
+
+    public void updateLockName(int lockId, String lockName) {
+        mLockKeyDao.updateLockName(lockId, lockName);
     }
 
     private static class Holder {

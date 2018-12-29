@@ -1,14 +1,21 @@
 package com.ut.base;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
+
 import com.example.entity.base.Result;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
+
+import java.util.List;
 
 public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListener {
 
@@ -18,10 +25,15 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public static final int CODE_UNFREEZE_KEY = 1060;    //解冻钥匙
     public static final int CODE_AUTH_KEY = 1070;        //授权钥匙
     public static final int CODE_CANCEL_AUTH_KEY = 1080; //取消授权钥匙
+    public static final int CODE_UPDATE_LOCK_NAME = 1100; //修改锁名称
+    public static final int CODE_TRANSFORM_ADMIN = 1200;  //转移管理员
 
     @Override
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> Toast.makeText(BaseApplication.getAppContext(), data, Toast.LENGTH_LONG).show());
 
         TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {};
 
@@ -31,8 +43,9 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
         int keyId = -1;
         switch (result.code) {
             case CODE_SEND_KEY:
-                LockKey lockKey = gson.fromJson(result.data, LockKey.class);
-                LockKeyDaoImpl.get().insert(lockKey);
+                TypeToken<List<LockKey>> typeToken_ = new TypeToken<List<LockKey>>() {};
+                List<LockKey> lockKeys_ = gson.fromJson(result.data, typeToken_.getType());
+                LockKeyDaoImpl.get().insertAll(lockKeys_);
                 break;
 
             case CODE_DELETE_KEY:
@@ -58,6 +71,19 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
             case CODE_CANCEL_AUTH_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().updateKeyAuth(keyId, EnumCollection.UserType.NORMAL.ordinal());
+                break;
+
+            case CODE_UPDATE_LOCK_NAME:
+                JsonObject jsonObject = result.data.getAsJsonObject();
+                int lockId = jsonObject.get("lockId").getAsInt();
+                String lockName = jsonObject.get("lockName").getAsString();
+                LockKeyDaoImpl.get().updateLockName(lockId, lockName);
+                break;
+
+            case CODE_TRANSFORM_ADMIN:
+                TypeToken<List<LockKey>> typeToken1 = new TypeToken<List<LockKey>>() {};
+                List<LockKey> lockKeys = gson.fromJson(result.data, typeToken1.getType());
+                LockKeyDaoImpl.get().insertAll(lockKeys);
                 break;
 
                 default:

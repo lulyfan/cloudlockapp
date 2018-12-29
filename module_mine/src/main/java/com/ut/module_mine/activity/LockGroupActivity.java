@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -49,8 +48,6 @@ public class LockGroupActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupViewModel.class);
         viewModel.mLockGroups.observe(this, lockGroups -> {
-            binding.swipeLayout.setRefreshing(false);
-
             List<LockGroupData> lockGroupDataList = new ArrayList<>();
             for (LockGroup lockGroup : lockGroups) {
                 LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
@@ -60,6 +57,7 @@ public class LockGroupActivity extends BaseActivity {
         });
         viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup());
         viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.loadLockGroupState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));
     }
 
     @Override
@@ -139,7 +137,7 @@ public class LockGroupActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -71,7 +72,22 @@ public class MineFragment extends BaseFragment {
 
         mineViewModel.tip.observe(this, s -> {
             BaseActivity activity = (BaseActivity) getActivity();
+            activity.endLoad();
             activity.toastShort(s);
+        });
+
+        mineViewModel.isWebLoginEnable.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                ((BaseActivity)getActivity()).startLoad();
+            }
+        });
+
+        mineViewModel.isOpenLockVolumeEnable.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                ((BaseActivity)getActivity()).startLoad();
+            }
         });
     }
 

@@ -67,4 +67,7 @@
     <string name="mine_loop">循环</string>
     <string name="confirmDeleteKey">确定删除该钥匙吗？删除会在用户APP联网后生效。</string>
     <string name="isLogout">是否退出登录?</string>
+    <string name="newestVersion">已经是最新版本</string>
+    <string name="input_11">请输入1-11位中文、字母或数字</string>
+    <string name="input_20">请输入1-20位中文、字母或数字</string>
 </resources>

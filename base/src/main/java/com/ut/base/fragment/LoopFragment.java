@@ -4,6 +4,8 @@ package com.ut.base.fragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +43,35 @@ public class LoopFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_loop, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
         init();
+        initData();
 
         return binding.getRoot();
+    }
+
+    private void initData() {
+        String loopStartTime = viewModel.loopStartTime.getValue();
+        if (loopStartTime != null && !"".equals(loopStartTime)) {
+            binding.startDate.setText(loopStartTime.replace("-", "/"));
+            binding.startDate.setTextColor(getResources().getColor(R.color.gray3));
+        }
+
+        String loopEndTime = viewModel.loopEndTime.getValue();
+        if (loopEndTime != null && !"".equals(loopEndTime)) {
+            binding.endDate.setText(loopEndTime.replace("-", "/"));
+            binding.endDate.setTextColor(getResources().getColor(R.color.gray3));
+        }
+
+        String startTimeRange = viewModel.startTimeRange.getValue();
+        if (startTimeRange != null && !"".equals(startTimeRange)) {
+            binding.validTime.setText(startTimeRange.replace(":00", ""));
+            binding.validTime.setTextColor(getResources().getColor(R.color.gray3));
+        }
+
+        String endTimeRange = viewModel.endTimeRange.getValue();
+        if (endTimeRange != null && !"".equals(endTimeRange)) {
+            binding.invalidTime.setText(endTimeRange.replace(":00", ""));
+            binding.invalidTime.setTextColor(getResources().getColor(R.color.gray3));
+        }
     }
 
     private void init() {
@@ -95,10 +124,12 @@ public class LoopFragment extends Fragment {
             textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.startDate).equals(title)) {
-                viewModel.startTime = textView.getText().toString().replace("/", "-");
+                String startTime = textView.getText().toString().replace("/", "-");
+                viewModel.loopStartTime.setValue(startTime);
 
             } else if (getString(R.string.endDate).equals(title)) {
-                viewModel.endTime = textView.getText().toString().replace("/", "-");
+                String endTime = textView.getText().toString().replace("/", "-");
+                viewModel.loopEndTime.setValue(endTime);
             }
         });
     }
@@ -110,9 +141,11 @@ public class LoopFragment extends Fragment {
             textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.validTime).equals(title)) {
-                viewModel.startTimeRange = textView.getText().toString().concat(":00");
+                String startTimeRange = textView.getText().toString().concat(":00");
+                viewModel.startTimeRange.setValue(startTimeRange);
             } else if (getString(R.string.invalidTime).equals(title)) {
-                viewModel.endTimeRange = textView.getText().toString().concat(":00");
+                String endTimeRange = textView.getText().toString().concat(":00");
+                viewModel.endTimeRange.setValue(endTimeRange);
             }
         });
     }
@@ -138,7 +171,7 @@ public class LoopFragment extends Fragment {
             weeks += checkBox5.isChecked() ? "5," : "";
             weeks += checkBox6.isChecked() ? "6," : "";
             weeks += checkBox7.isChecked() ? "7," : "";
-            viewModel.weeks = weeks;
+            viewModel.weeks.setValue(weeks);
         }
     };
 

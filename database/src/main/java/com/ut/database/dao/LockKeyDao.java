@@ -28,6 +28,9 @@ public interface LockKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(LockKey... lockKeys);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<LockKey> lockKeys);
+
     @Query("SELECT * FROM lock_key WHERE groupId = :groupId ORDER BY userType ASC")
     LiveData<List<LockKey>> getLockByGroupId(long groupId);
 
@@ -54,4 +57,7 @@ public interface LockKeyDao {
 
     @Query("UPDATE lock_key SET userType = :userType WHERE keyId = :keyId")
     void updateKeyAuth(int keyId, int userType);  //将钥匙状态改为授权钥匙
+
+    @Query("UPDATE lock_key SET name = :lockName WHERE id = :lockId")
+    void updateLockName(int lockId, String lockName);
 }

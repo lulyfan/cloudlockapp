@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,8 +38,23 @@ public class LimitTimeFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_limit_time, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
         initUI();
+        initData();
 
         return binding.getRoot();
+    }
+
+    private void initData() {
+        String limitStartTime = viewModel.limitStartTime.getValue();
+        if (limitStartTime != null && !"".equals(limitStartTime)) {
+            binding.tvValidTime.setText(limitStartTime);
+            binding.tvValidTime.setTextColor(getResources().getColor(R.color.gray3));
+        }
+
+        String limitEndTime = viewModel.limitEndTime.getValue();
+        if (limitEndTime != null && !"".equals(limitEndTime)) {
+            binding.tvInvalidTime.setText(limitEndTime);
+            binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
+        }
     }
 
     private void initUI() {
@@ -74,10 +90,12 @@ public class LimitTimeFragment extends Fragment {
             textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.validTime).equals(title)) {
-                viewModel.startTime = textView.getText().toString().replace("/", "-").concat(":00");
+                String startTime = textView.getText().toString().replace("/", "-").concat(":00");
+                viewModel.limitStartTime.setValue(startTime);
 
             } else if (getString(R.string.invalidTime).equals(title)) {
-                viewModel.endTime = textView.getText().toString().replace("/", "-").concat(":00");
+                String endTime = textView.getText().toString().replace("/", "-").concat(":00");
+                viewModel.limitEndTime.setValue(endTime);
             }
         });
 

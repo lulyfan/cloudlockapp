@@ -25,19 +25,18 @@
         android:id="@+id/et_phoneNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/base_16dp"
         android:background="@null"
-        android:ems="10"
+        android:ems="11"
         android:gravity="right|center_vertical"
         android:hint="请输入接收者手机号"
-        android:inputType="textPersonName"
+        android:inputType="phone"
+        android:maxLength="11"
         android:textColorHint="@color/grayC"
         android:textSize="@dimen/s"
         app:layout_constraintBottom_toBottomOf="@+id/textView14"
         app:layout_constraintEnd_toStartOf="@+id/contact"
         app:layout_constraintTop_toTopOf="@+id/textView14" />
-
-
 
     <TextView
         android:id="@+id/textView15"
@@ -59,7 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:ems="10"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:inputType="text"
         android:gravity="right|center_vertical"
         android:hint="@string/nameKey"
         android:textColorHint="@color/grayC"

@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
@@ -27,11 +28,13 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
     public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();
     public MutableLiveData<String> keyName = new MutableLiveData<>();
     public boolean isAdmin;
-    public String startTime;
-    public String endTime;
-    public String startTimeRange;
-    public String endTimeRange;
-    public String weeks;   //用于循环钥匙
+    public MutableLiveData<String> limitStartTime = new MutableLiveData<>();
+    public MutableLiveData<String> limitEndTime = new MutableLiveData<>();
+    public MutableLiveData<String> loopStartTime = new MutableLiveData<>();
+    public MutableLiveData<String> loopEndTime = new MutableLiveData<>();
+    public MutableLiveData<String> startTimeRange = new MutableLiveData<>();
+    public MutableLiveData<String> endTimeRange = new MutableLiveData<>();
+    public MutableLiveData<String> weeks = new MutableLiveData<>();  //用于循环钥匙
     public String mac;
 
     public GrantPermisssionViewModel(@NonNull Application application) {
@@ -90,7 +93,9 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
 
         @Override
         public void afterTextChanged(Editable s) {
-            receiverPhoneNum.setValue(s.toString());
+            if (!"".equals(s.toString())) {
+                receiverPhoneNum.setValue(s.toString());
+            }
         }
     };
 
@@ -107,7 +112,9 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
 
         @Override
         public void afterTextChanged(Editable s) {
-            keyName.setValue(s.toString());
+            if (!"".equals(s.toString())) {
+                keyName.setValue(s.toString());
+            }
         }
     };
 

@@ -193,6 +193,7 @@ public class LockSettingActivity extends BaseActivity {
     }
 
     private void setBindingLockKey() {
+        if (lockKey==null)return;
         lockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
         lockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));

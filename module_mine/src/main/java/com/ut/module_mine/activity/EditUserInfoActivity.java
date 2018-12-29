@@ -1,22 +1,15 @@
 package com.ut.module_mine.activity;
 
 import android.Manifest;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
@@ -24,9 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,10 +25,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
-import com.ut.module_mine.Constant;
 import com.ut.module_mine.R;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.databinding.ActivityEditUserInfoBinding;
@@ -46,7 +35,6 @@ import com.ut.module_mine.viewModel.EditUserInfoViewModel;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -111,7 +99,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
 
@@ -225,7 +213,7 @@ public class EditUserInfoActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {

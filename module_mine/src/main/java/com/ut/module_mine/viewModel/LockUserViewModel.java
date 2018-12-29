@@ -16,6 +16,7 @@ public class LockUserViewModel extends BaseViewModel {
     private int mCurrentPage = -1;
     private static final int PAGE_SIZE = 10;
     public MutableLiveData<List<LockUser>> mLockUsers = new MutableLiveData<>();
+    public MutableLiveData<Boolean> loadLockUserState = new MutableLiveData<>();
 
     public LockUserViewModel(@NonNull Application application) {
         super(application);
@@ -36,7 +37,11 @@ public class LockUserViewModel extends BaseViewModel {
                 .subscribe(listResult -> {
                             LockUserDaoImpl.get().deleteAll();
                             LockUserDaoImpl.get().insert(listResult.data);
+                            loadLockUserState.postValue(true);
                         },
-                        throwable -> tip.postValue(throwable.getMessage()));
+                        throwable -> {
+                            tip.postValue(throwable.getMessage());
+                            loadLockUserState.postValue(false);
+                        });
     }
 }

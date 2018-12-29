@@ -38,9 +38,8 @@ public class LockUserActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
-        viewModel.mLockUsers.observe(this, lockUsers -> {
-            binding.swipeLayout.setRefreshing(false);
 
+        viewModel.mLockUsers.observe(this, lockUsers -> {
             List<User> userList = new ArrayList<>();
             for (LockUser lockUser : lockUsers) {
                 User user = new User(lockUser.getUserId(), lockUser.getHeadPic(), lockUser.getName(), lockUser.getTelNo());
@@ -48,6 +47,9 @@ public class LockUserActivity extends BaseActivity {
             }
             adapter.setData(userList);
         });
+
+        viewModel.loadLockUserState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));
+        viewModel.tip.observe(this, s -> toastShort(s));
     }
 
     @Override

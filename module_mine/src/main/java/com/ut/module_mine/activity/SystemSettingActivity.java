@@ -16,7 +16,6 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.module_mine.R;
-import com.ut.base.VersionUpdateHelper;
 import com.ut.module_mine.databinding.ActivitySystemSettingBinding;
 import com.ut.module_mine.viewModel.SystemSettingViewModel;
 
@@ -42,7 +41,7 @@ public class SystemSettingActivity extends BaseActivity {
         initLightToolbar();
         setTitle(getString(R.string.systemSetting));
 
-        binding.constraintLayout9.setOnClickListener(v -> {
+        binding.checkVersion.setOnClickListener(v -> {
 //            try {
 //                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionName, null);
 //            } catch (Exception e) {
@@ -64,6 +63,12 @@ public class SystemSettingActivity extends BaseActivity {
         binding.logout.setOnClickListener(v -> {
             logout();
         });
+
+        binding.checkVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 
     private void logout() {
@@ -75,7 +80,7 @@ public class SystemSettingActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {
