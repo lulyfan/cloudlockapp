@@ -85,6 +85,7 @@ public class LockSettingActivity extends BaseActivity {
         });
         mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
+            if (lk == null) return;
             lockKey = lk;
             setBindingLockKey();
             loadGroupName();
@@ -193,7 +194,7 @@ public class LockSettingActivity extends BaseActivity {
     }
 
     private void setBindingLockKey() {
-        if (lockKey==null)return;
+        if (lockKey == null) return;
         lockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
         lockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
