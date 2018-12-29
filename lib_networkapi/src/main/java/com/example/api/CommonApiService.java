@@ -268,7 +268,8 @@ public interface CommonApiService {
 
     @POST(ApiUrl.addLog)
     @FormUrlEncoded
-    Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId, @Field("type") int type);
+    Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
+            , @Field("type") int type, @Field("electric") int electric);
 
     @GET(ApiUrl.updateAppVersion)
     Observable<Result<JsonObject>> updateVersion();

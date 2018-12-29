@@ -207,9 +207,10 @@ public class LockListFragment extends BaseFragment {
         public void onSearchClick(View view) {
             UTLog.i("onSearchClick");
             Intent intent = new Intent(getContext(), SearchLockActivity.class);
-            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                    mFragmentLocklistBinding.lockTvSearch, getString(R.string.lock_share_string_search)).toBundle();
-            getActivity().startActivity(intent, bundle);
+//            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+//                    mFragmentLocklistBinding.lockTvSearch, getString(R.string.lock_share_string_search)).toBundle();
+//            getActivity().startActivity(intent, bundle);
+            getActivity().startActivity(intent);
         }
 
         public void onAddClick(View view) {

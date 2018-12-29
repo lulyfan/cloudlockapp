@@ -74,6 +74,7 @@ public class NearLockActivity extends BaseActivity {
             }
         });
         mNearLockVM.getErrorCode().observe(this, errorMsg -> {
+            endLoad();
             toastShort(errorMsg);
         });
         mNearLockVM.getBindLock().observe(this, cloudLock -> {
@@ -143,6 +144,7 @@ public class NearLockActivity extends BaseActivity {
                     ImageButton imageButton = commonViewHolder.getView(R.id.iBtn_ble_add);
                     imageButton.setVisibility(item.getBindStatus() == EnumCollection.BindStatus.UNBIND.ordinal() ? View.VISIBLE : View.GONE);
                     imageButton.setOnClickListener(v -> {
+                        startLoad();
                         mNearLockVM.bindLock(item);
                     });
                 }

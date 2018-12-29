@@ -86,7 +86,7 @@ public class LockDetailVM extends AndroidViewModel {
             public void onFinish() {
                 showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
             }
-        }, 20);
+        }, 10);
     }
 
     private void toConnect(ScanDevice scanDevice) {
@@ -94,10 +94,12 @@ public class LockDetailVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
+                CloudLock cloudLock = getCloucLockFromLockKey();
+                toGetElect(cloudLock);
                 if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
                     toCheckPermission();
                 } else {
-                    toActOpenLock();
+                    toActOpenLock(cloudLock);
                 }
                 isConnectSuccessed = true;
                 connectStatus.postValue(true);
@@ -112,6 +114,35 @@ public class LockDetailVM extends AndroidViewModel {
                 }
             }
         }, mLockStateListener);
+    }
+
+    @NonNull
+    private CloudLock getCloucLockFromLockKey() {
+        CloudLock cloudLock = new CloudLock(mLockKey.getMac());
+        cloudLock.setOpenLockPassword(mLockKey.getBlueKey());
+        cloudLock.setEncryptType(mLockKey.getEncryptType());
+        cloudLock.setEntryptKey(mLockKey.getEncryptKey());
+        return cloudLock;
+    }
+
+    private void toGetElect(CloudLock cloudLock) {
+        UnilinkManager.getInstance(getApplication()).getElect(cloudLock, new CallBack() {
+            @Override
+            public void onSuccess(CloudLock cloudLock) {
+                mLockKey.setElectric(cloudLock.getElect());
+                rx.Observable.just(mLockKey)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe(lockKey -> {
+                            LockKeyDaoImpl.get().insert(lockKey);
+                        });
+            }
+
+            @Override
+            public void onFailed(int i, String s) {
+
+            }
+        });
     }
 
     private LockStateListener mLockStateListener = new LockStateListener() {
@@ -133,7 +164,7 @@ public class LockDetailVM extends AndroidViewModel {
         Disposable result = CommonApi.isAuth(mLockKey.getMac())
                 .subscribe(jsonElementResult -> {
                             if (jsonElementResult.code == 200) {
-                                toActOpenLock();
+                                toActOpenLock(getCloucLockFromLockKey());
                             } else {
                                 showTip.postValue(jsonElementResult.msg);
                             }
@@ -145,15 +176,11 @@ public class LockDetailVM extends AndroidViewModel {
         mCompositeDisposable.add(result);
     }
 
-    private void toActOpenLock() {
-        CloudLock cloudLock = new CloudLock(mLockKey.getMac());
-        cloudLock.setOpenLockPassword(mLockKey.getBlueKey());
-        cloudLock.setEncryptType(mLockKey.getEncryptType());
-        cloudLock.setEntryptKey(mLockKey.getEncryptKey());
+    private void toActOpenLock(CloudLock cloudLock) {
+
         UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
-//                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_success));
                 unlockSuccess.postValue(true);
                 toAddLog(1);
             }
@@ -168,7 +195,7 @@ public class LockDetailVM extends AndroidViewModel {
     }
 
     private void toAddLog(int type) {
-        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type)
+        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type, mLockKey.getElectric())
                 .subscribe(jsonElementResult -> {
                     UTLog.i(jsonElementResult.toString());
                 }, throwable -> {

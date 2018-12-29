@@ -119,10 +119,11 @@ public class MainActivity extends BaseActivity {
             case 1:
                 id = R.id.action_msg;
                 break;
+            //TODO 隐藏商城页面
             case 2:
-                id = R.id.action_mall;
-                break;
-            case 3:
+//                id = R.id.action_mall;
+//                break;
+//            case 3:
                 id = R.id.action_mime;
                 break;
         }
@@ -133,7 +134,8 @@ public class MainActivity extends BaseActivity {
         MainPageAdapter mainPageAdapter = new MainPageAdapter(getSupportFragmentManager());
         mainPageAdapter.addFragment(FragmentUtil.getLockFragment());
         mainPageAdapter.addFragment(FragmentUtil.getMsgFragment());
-        mainPageAdapter.addFragment(FragmentUtil.getMallFragment());
+        //TODO 隐藏商城页面
+//        mainPageAdapter.addFragment(FragmentUtil.getMallFragment());
         mainPageAdapter.addFragment(FragmentUtil.getMineFragment());
         mBinding.vpMain.setAdapter(mainPageAdapter);
     }

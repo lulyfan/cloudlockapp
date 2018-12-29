@@ -11,7 +11,8 @@
     <item
         android:id="@+id/action_mall"
         android:icon="@mipmap/icon_mall"
-        android:title="@string/bottom_title_mall"/>
+        android:title="@string/bottom_title_mall"
+        android:visible="false"/>
     <item
         android:id="@+id/action_mime"
         android:icon="@mipmap/icon_mime"

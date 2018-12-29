@@ -68,9 +68,11 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
+            endLoad();
             toastShort(tip);
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
+            endLoad();
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
@@ -178,6 +180,9 @@ public class LockDetailActivity extends BaseActivity {
                 break;
             case UnilinkManager.BLE_NOT_OPEN:
                 UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
+                break;
+            case UnilinkManager.SCAN_SUCCESS:
+                startLoad();
                 break;
         }
     }

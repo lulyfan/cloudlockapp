@@ -44,7 +44,7 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener moreListener = null;
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
-    private AlertDialog noLoginDialog = null;
+    private static AlertDialog noLoginDialog = null;
     private LoadDialogFragment loadDialogFragment = new LoadDialogFragment();
     private DialogPlus loadDialog;
 
@@ -247,7 +247,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(noLoginDialog != null) {
+        if (noLoginDialog != null) {
             noLoginDialog.dismiss();
         }
     }
@@ -255,7 +255,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(noLoginDialog != null) {
+        if (noLoginDialog != null) {
             noLoginDialog.dismiss();
         }
         AppManager.getAppManager().finishActivity(this);
@@ -310,7 +310,7 @@ public class BaseActivity extends AppCompatActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setPadding(padding, padding_24, 0, padding_24)
                 .setMargin(padding, 0, padding, 0)
-//                .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.9))
+                .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
                 .setGravity(Gravity.CENTER)
                 .create();
     }

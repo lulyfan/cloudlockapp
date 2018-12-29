@@ -145,9 +145,8 @@ public class NearLockVM extends AndroidViewModel {
                         .subscribe(voidResult -> {
                             if (voidResult.isSuccess()) {
                                 confirmInitLock(cloudLock);
-                            } else {
-                                errorMsg.postValue(voidResult.msg);
                             }
+                            errorMsg.postValue(voidResult.msg);
                         }, throwable -> {
                             errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                         });
