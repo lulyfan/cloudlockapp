@@ -54,7 +54,7 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
 
     public void changeLockAdmin(String verifyCode) {
         String macs = GlobalData.getInstance().changeLockMacs;
-        String phoneNum = receiverPhone.get();
+        String phoneNum = receiverPhone.get().replaceAll(" ", "");
 
         service.changeLockAdmin(macs, phoneNum, verifyCode)
                 .doOnNext(stringResult -> {

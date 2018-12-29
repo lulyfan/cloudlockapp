@@ -1,13 +1,16 @@
 package com.ut.base;
 
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +22,11 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+import com.ut.base.dialog.LoadDialogFragment;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,6 +45,8 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
     private AlertDialog noLoginDialog = null;
+    private LoadDialogFragment loadDialogFragment = new LoadDialogFragment();
+    private DialogPlus loadDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +54,7 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppManager.getAppManager().addActivity(this);
         initNoLoginListener();
+        initLoadDialog();
     }
 
     private void initNoLoginListener() {
@@ -251,4 +260,60 @@ public class BaseActivity extends AppCompatActivity {
         }
         AppManager.getAppManager().finishActivity(this);
     }
+
+    public void showLoadDialog(String message) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        loadDialogFragment.setMessage(message);
+        loadDialogFragment.show(fragmentManager, "load");
+    }
+
+    public void startLoad(String msg) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+
+        TextView textView = (TextView) loadDialog.findViewById(R.id.tip);
+        textView.setText(msg);
+
+        if (msg == null || "".equals(msg)) {
+            textView.setVisibility(View.GONE);
+        }
+
+        loadDialog.show();
+    }
+
+    public void startLoad() {
+        startLoad("请稍候...");
+    }
+
+    public void endLoad() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+    }
+
+    public void showLoadDialog() {
+        showLoadDialog("");
+    }
+
+    public void dismissLoadDialog() {
+        loadDialogFragment.dismiss();
+    }
+
+    public void initLoadDialog() {
+        int padding = Util.dip2px(this, 16);
+        int padding_24 = Util.dip2px(this, 24);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.load, null);
+        loadDialog = DialogPlus.newDialog(this)
+                .setCancelable(true)
+                .setContentHolder(new ViewHolder(view))
+                .setPadding(padding, padding_24, 0, padding_24)
+                .setMargin(padding, 0, padding, 0)
+//                .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.9))
+                .setGravity(Gravity.CENTER)
+                .create();
+    }
+
+
 }

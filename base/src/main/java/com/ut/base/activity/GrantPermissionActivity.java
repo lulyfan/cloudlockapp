@@ -1,5 +1,6 @@
 package com.ut.base.activity;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,8 +8,13 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -46,6 +52,16 @@ public class GrantPermissionActivity extends BaseActivity {
 
         String mobile = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
         viewModel.receiverPhoneNum.setValue(mobile);
+
+        viewModel.receiverPhoneNum.observe(this, inputObserver);
+        viewModel.keyName.observe(this, inputObserver);
+        viewModel.limitStartTime.observe(this, inputObserver);
+        viewModel.limitEndTime.observe(this, inputObserver);
+        viewModel.loopStartTime.observe(this, inputObserver);
+        viewModel.loopEndTime.observe(this, inputObserver);
+        viewModel.startTimeRange.observe(this, inputObserver);
+        viewModel.endTimeRange.observe(this, inputObserver);
+        viewModel.weeks.observe(this, inputObserver);
     }
 
     private void initUI() {
@@ -61,17 +77,38 @@ public class GrantPermissionActivity extends BaseActivity {
 
         int rulerType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, 1);
         binding.viewPager.setCurrentItem(rulerType - 1);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                checkInputInfo();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         binding.sendKey.setOnClickListener(v -> {
 
             String phoneNum = viewModel.receiverPhoneNum.getValue();
             String keyName = viewModel.keyName.getValue();
+            if (keyName == null || "".equals(keyName.trim())) {
+                keyName = phoneNum;
+            }
             boolean isAdmin = viewModel.isAdmin;
-            String startTime = viewModel.startTime;
-            String endTime = viewModel.endTime;
-            String startTimeRange = viewModel.startTimeRange;
-            String endTimeRange = viewModel.endTimeRange;
-            String weeks = viewModel.weeks;
+            String limitStartTime = viewModel.limitStartTime.getValue();
+            String limitEndTime = viewModel.limitEndTime.getValue();
+            String loopStartTime = viewModel.loopStartTime.getValue();
+            String loopEndTime = viewModel.loopEndTime.getValue();
+            String startTimeRange = viewModel.startTimeRange.getValue();
+            String endTimeRange = viewModel.endTimeRange.getValue();
+            String weeks = viewModel.weeks.getValue();
             String mac = viewModel.mac;
 
             switch (binding.viewPager.getCurrentItem()) {
@@ -81,7 +118,7 @@ public class GrantPermissionActivity extends BaseActivity {
                     break;
 
                 case 1:
-                    viewModel.sendLimitTimeKey(phoneNum, mac, keyName, startTime, endTime);
+                    viewModel.sendLimitTimeKey(phoneNum, mac, keyName, limitStartTime, limitEndTime);
                     break;
 
                 case 2:
@@ -89,12 +126,69 @@ public class GrantPermissionActivity extends BaseActivity {
                     break;
 
                 case 3:
-                    viewModel.sendLoopKey(phoneNum, mac, keyName, startTime, endTime, weeks, startTimeRange, endTimeRange);
+                    viewModel.sendLoopKey(phoneNum, mac, keyName, loopStartTime, loopEndTime, weeks, startTimeRange, endTimeRange);
                     break;
 
                 default:
             }
         });
+    }
+
+    private Observer inputObserver = o -> {
+        checkInputInfo();
+    };
+
+    private void checkInputInfo() {
+
+//        String keyName = viewModel.keyName.getValue();
+//        if (keyName != null && keyName.length() > 20) {
+//            toastShort("钥匙名称不能超过20个字符");
+//        }
+
+        String receiverPhoneNum = viewModel.receiverPhoneNum.getValue();
+        String limitStartTime = viewModel.limitStartTime.getValue();
+        String limitEndTime = viewModel.limitEndTime.getValue();
+        String loopStartTime = viewModel.loopStartTime.getValue();
+        String loopEndTime = viewModel.loopEndTime.getValue();
+        String startTimeRange = viewModel.startTimeRange.getValue();
+        String endTimeRange = viewModel.endTimeRange.getValue();
+        String weeks = viewModel.weeks.getValue();
+
+        if (!(receiverPhoneNum != null && !"".equals(receiverPhoneNum.trim()))) {
+            binding.sendKey.setEnabled(false);
+            return;
+        }
+
+        switch (binding.viewPager.getCurrentItem()) {
+            case 0:
+                break;
+
+            case 1:
+                if (!(limitStartTime != null && !"".equals(limitStartTime.trim()) &&
+                        limitEndTime != null && !"".equals(limitEndTime.trim()))) {
+                    binding.sendKey.setEnabled(false);
+                    return;
+                }
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                if (!(startTimeRange != null && !"".equals(startTimeRange.trim()) &&
+                        endTimeRange != null && !"".equals(endTimeRange.trim()) &&
+                        loopStartTime != null && !"".equals(loopStartTime.trim()) &&
+                        loopEndTime != null && !"".equals(loopEndTime.trim()) &&
+                        weeks != null && !"".equals(weeks.trim()))) {
+                    binding.sendKey.setEnabled(false);
+                    return;
+                }
+                break;
+
+            default:
+        }
+
+        binding.sendKey.setEnabled(true);
     }
 
     @Override

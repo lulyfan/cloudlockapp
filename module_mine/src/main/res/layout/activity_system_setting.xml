@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/resetPW" />
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout9"
+                android:id="@+id/checkVersion"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
@@ -97,7 +97,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout9" />
+                app:layout_constraintTop_toBottomOf="@+id/checkVersion" />
 
             <TextView
                 android:id="@+id/aboutUs"

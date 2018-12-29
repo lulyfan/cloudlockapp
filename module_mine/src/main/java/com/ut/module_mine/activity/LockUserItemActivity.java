@@ -3,7 +3,6 @@ package com.ut.module_mine.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -45,6 +44,7 @@ public class LockUserItemActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserItemViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
+
         viewModel.mLockUserKeys.observe(this, lockUserKeys -> {
             binding.swipeLayout.setRefreshing(false);
 
@@ -75,6 +75,8 @@ public class LockUserItemActivity extends BaseActivity {
             }
             adapter.setData(dataList);
         });
+
+        viewModel.loadLockUserKeyState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));
     }
 
     @Override
@@ -121,7 +123,7 @@ public class LockUserItemActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {

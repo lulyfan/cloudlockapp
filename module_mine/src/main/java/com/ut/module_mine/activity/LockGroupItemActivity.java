@@ -1,12 +1,8 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,19 +21,13 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
-import com.ut.database.daoImpl.LockKeyDaoImpl;
-import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockKey;
 import com.ut.module_mine.BR;
-import com.ut.module_mine.util.BottomLineItemDecoration;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityLockGroupItemBinding;
 import com.ut.module_mine.databinding.ItemLockBinding;
 import com.ut.module_mine.viewModel.LockGroupItemViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LockGroupItemActivity extends BaseActivity {
 
@@ -121,7 +111,7 @@ public class LockGroupItemActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {
@@ -149,7 +139,7 @@ public class LockGroupItemActivity extends BaseActivity {
                 .setContentHolder(new ViewHolder(view))
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
-                .setContentBackgroundResource(R.drawable.bg_dialog)
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {

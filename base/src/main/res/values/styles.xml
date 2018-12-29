@@ -28,5 +28,10 @@
         <item name="android:background">@drawable/select_gray_e</item>
     </style>
 
+    <style name="DialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground"> @android:color/transparent </item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 
 </resources>
