@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -31,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/lock_key_name"
+                    android:text="@string/lock_name"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
 
@@ -56,82 +57,95 @@
                 android:background="@android:color/white"
                 android:gravity="top"
                 android:hint="@string/lock_apply_ask_for_hint"
-                android:padding="@dimen/base_10dp"
+                android:paddingLeft="@dimen/base_20dp"
+                android:paddingTop="@dimen/base_10dp"
+                android:paddingRight="@dimen/base_10dp"
+                android:paddingBottom="@dimen/base_10dp"
                 android:textColor="@color/color_base_title"
                 android:textColorHint="#CCCCCC"
                 android:textSize="@dimen/base_14sp"/>
         </LinearLayout>
 
 
-        <RadioGroup
-            android:id="@+id/rbtn_group"
+        <com.ut.commoncomponent.cardview.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_20dp"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/base_20dp"
-            android:paddingRight="@dimen/base_20dp">
+            app:cardCornerRadius="@dimen/base_10dp"
+            app:cardShadowColorEnd="@color/lock_carview_shadow"
+            app:cardShadowColorStart="@color/lock_carview_shadow"
+            app:cardUseCompatPadding="false">
 
-            <RadioButton
-                android:id="@+id/rbtn_forever"
+            <RadioGroup
+                android:id="@+id/rbtn_group"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/base_50dp"
-                android:background="@android:color/transparent"
-                android:button="@null"
-                android:drawableRight="@drawable/selector_bg_radio"
-                android:text="@string/lock_permanent_key"
-                android:textColor="@color/color_base_text"
-                android:textSize="@dimen/base_14sp"/>
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/base_20dp"
+                android:paddingRight="@dimen/base_20dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/lock_color_btn_gray"/>
+                <RadioButton
+                    android:id="@+id/rbtn_forever"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_50dp"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableRight="@drawable/selector_bg_radio"
+                    android:text="@string/lock_permanent_key"
+                    android:textColor="@color/color_base_text"
+                    android:textSize="@dimen/base_14sp"/>
 
-            <RadioButton
-                android:id="@+id/rbtn_limited"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_50dp"
-                android:background="@android:color/transparent"
-                android:button="@null"
-                android:drawableRight="@drawable/selector_bg_radio"
-                android:text="@string/lock_limited_time_key"
-                android:textColor="@color/color_base_text"
-                android:textSize="@dimen/base_14sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/lock_color_btn_gray"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/lock_color_btn_gray"/>
+                <RadioButton
+                    android:id="@+id/rbtn_limited"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_50dp"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableRight="@drawable/selector_bg_radio"
+                    android:text="@string/lock_limited_time_key"
+                    android:textColor="@color/color_base_text"
+                    android:textSize="@dimen/base_14sp"/>
 
-            <RadioButton
-                android:id="@+id/rbtn_once"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_50dp"
-                android:background="@android:color/transparent"
-                android:button="@null"
-                android:drawableRight="@drawable/selector_bg_radio"
-                android:text="@string/lock_once_key"
-                android:textColor="@color/color_base_text"
-                android:textSize="@dimen/base_14sp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/lock_color_btn_gray"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/lock_color_btn_gray"/>
+                <RadioButton
+                    android:id="@+id/rbtn_once"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_50dp"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableRight="@drawable/selector_bg_radio"
+                    android:text="@string/lock_once_key"
+                    android:textColor="@color/color_base_text"
+                    android:textSize="@dimen/base_14sp"/>
 
-            <RadioButton
-                android:id="@+id/rbtn_loop"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_50dp"
-                android:background="@android:color/transparent"
-                android:button="@null"
-                android:drawableRight="@drawable/selector_bg_radio"
-                android:text="@string/lock_loop_key"
-                android:textColor="@color/color_base_text"
-                android:textSize="@dimen/base_14sp"/>
-        </RadioGroup>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/lock_color_btn_gray"/>
+
+                <RadioButton
+                    android:id="@+id/rbtn_loop"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_50dp"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableRight="@drawable/selector_bg_radio"
+                    android:text="@string/lock_loop_key"
+                    android:textColor="@color/color_base_text"
+                    android:textSize="@dimen/base_14sp"/>
+            </RadioGroup>
+
+        </com.ut.commoncomponent.cardview.CardView>
 
 
         <View
@@ -141,11 +155,12 @@
 
         <Button
             android:id="@+id/btn_apply_key"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_50dp"
             android:layout_marginLeft="@dimen/base_20dp"
             android:layout_marginRight="@dimen/base_20dp"
-            android:layout_marginBottom="@dimen/base_10dp"
+            android:layout_marginBottom="@dimen/base_20dp"
             android:background="@drawable/selector_btn_save"
             android:text="@string/lock_commit_apply"
             android:textColor="@android:color/white"/>
