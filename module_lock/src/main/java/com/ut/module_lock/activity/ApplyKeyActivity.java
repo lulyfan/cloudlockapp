@@ -80,7 +80,7 @@ public class ApplyKeyActivity extends BaseActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(result -> {
                         if (result.isSuccess()) {
-                        } else {
+                            finish();
                         }
                         CLToast.showAtCenter(getBaseContext(), result.msg);
                         Log.d("applyKey", result.msg);
