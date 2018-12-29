@@ -98,7 +98,7 @@ public class KeyManagerVM extends AndroidViewModel {
 
     public void updateKeyItems() {
         MyRetrofit.get().getCommonApiService()
-                .pageKeys(BaseApplication.getUser().id, mac, 0, DEFAULT_PAGE_SIZE)
+                .pageKeys(BaseApplication.getUser().id, mac, 1, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.newThread())
                 .map(JsonElement::toString)
                 .observeOn(AndroidSchedulers.mainThread())
