@@ -42,14 +42,18 @@ public class LockDetailActivity extends BaseActivity {
         enableImmersive();
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
-        mLockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
-        mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
-        mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
-        mLockKey.setElectricityStr();
+        initLockKeyString();
         addPaddingTop();
         mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
         initViewModel();
+    }
+
+    private void initLockKeyString() {
+        mLockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
+        mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
+        mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
+        mLockKey.setElectricityStr();
     }
 
     private void initViewModel() {
@@ -71,6 +75,7 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
             mLockKey = lockKey;
+            initLockKeyString();
             mDetailBinding.setLockKey(mLockKey);
         });
     }

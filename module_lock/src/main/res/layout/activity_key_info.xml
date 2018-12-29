@@ -220,6 +220,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_20dp"
+                            android:visibility="invisible"
                             android:src="@mipmap/more_black"/>
 
                         <View

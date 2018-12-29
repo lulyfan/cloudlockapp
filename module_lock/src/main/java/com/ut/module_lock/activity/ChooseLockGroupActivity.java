@@ -73,10 +73,13 @@ public class ChooseLockGroupActivity extends BaseActivity {
                 checkBox.setChecked(currentGroupId == groupId);
                 checkBox.setOnClickListener(v -> {
                     if (checkBox.isChecked()) {
+                        currentGroupId = groupId;
                         lockSettingVM.changeLockGroup(lockKey.getMac(), groupId);
                     } else {
                         lockSettingVM.delLockFromGroup(lockKey.getMac(), currentGroupId);
+                        currentGroupId = -1;
                     }
+                    notifyDataSetChanged();
                 });
             }
         };

@@ -227,10 +227,8 @@ public class LockSettingVM extends AndroidViewModel {
                         loadLockGroups();
                         changeLockGroup(lockKey.getMac(), result.data);
                         selectedGroupId.postValue(Long.valueOf(result.data));
-                        new Thread(() -> {
-                            lockKey.setGroupId(result.data);
-                            saveLockKey(lockKey);
-                        }).start();
+                        lockKey.setGroupId(result.data);
+                        saveLockKey(lockKey);
                     }
                 }, new ErrorHandler());
     }
@@ -241,68 +239,93 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-
-                    }
-                    new Thread(() -> {
                         lockKey.setName(newName);
                         saveLockKey(lockKey);
-                    }).start();
+                    }
                     CLToast.showAtBottom(getApplication(), result.msg);
                 }, new ErrorHandler());
     }
 
     public void addLockIntoGroup(String mac, long groupId) {
+        final long lastId = lockKey.getGroupId();
         Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .addLockIntoGroup(mac, groupId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtCenter(getApplication(), result.msg);
-                    if(result.isSuccess()) {
-                        new Thread(() -> {
-                            lockKey.setGroupId((int) groupId);
-                            saveLockKey(lockKey);
-                        }).start();
+                    if (result.isSuccess()) {
+                        lockKey.setGroupId((int) groupId);
+                        saveLockKey(lockKey);
                     }
-                }, new ErrorHandler());
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        lockKey.setGroupId((int) lastId);
+                        saveLockKey(lockKey);
+                        selectedGroupId.postValue(lastId);
+                        CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
+                    }
+                });
     }
 
 
     public void delLockFromGroup(String mac, long groupId) {
+        final long lastId = lockKey.getGroupId();
         Disposable subscribe = CommonApi
                 .delLockFromGroup(mac, groupId)
                 .subscribe(result -> {
-                    CLToast.showAtCenter(getApplication(), result.msg);
-                    new Thread(() -> {
+                    if (result.isSuccess()) {
                         lockKey.setGroupId(-1);
                         saveLockKey(lockKey);
-                    }).start();
-                }, new ErrorHandler());
+                    }
+                    CLToast.showAtCenter(getApplication(), result.msg);
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        lockKey.setGroupId((int) lastId);
+                        saveLockKey(lockKey);
+                        selectedGroupId.postValue(lastId);
+                        CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
+                    }
+                });
     }
 
     public void changeLockGroup(String mac, long groupId) {
         if (lockKey.getGroupId() < 1) {
             addLockIntoGroup(mac, groupId);
         } else {
+            final long lastId = lockKey.getGroupId();
             Disposable subscribe = MyRetrofit.get().getCommonApiService()
                     .changeLockGroup(mac, groupId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(result -> {
                         if (result.isSuccess()) {
-                            CLToast.showAtCenter(getApplication(), result.msg);
                             selectedGroupId.postValue(groupId);
-                            new Thread(() -> {
-                                lockKey.setGroupId((int) groupId);
-                                saveLockKey(lockKey);
-                            }).start();
+                            lockKey.setGroupId((int) groupId);
+                            saveLockKey(lockKey);
                         }
-                    }, new ErrorHandler());
+                        CLToast.showAtCenter(getApplication(), result.msg);
+                    }, new ErrorHandler() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            super.accept(throwable);
+                            lockKey.setGroupId((int) lastId);
+                            saveLockKey(lockKey);
+                            selectedGroupId.postValue(lastId);
+                            CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
+                        }
+                    });
         }
     }
 
     public void saveLockKey(LockKey lockKey) {
-        LockKeyDaoImpl.get().insert(lockKey);
+        Schedulers.io().scheduleDirect(() -> {
+            LockKeyDaoImpl.get().insert(lockKey);
+        });
     }
 
     @Override

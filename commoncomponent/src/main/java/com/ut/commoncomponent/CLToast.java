@@ -1,6 +1,7 @@
 package com.ut.commoncomponent;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import android.widget.Toast;
  */
 public class CLToast {
     public static void showAtCenter(Context context, String message) {
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
         Toast toast = new Toast(context);
         ViewGroup contentView = (ViewGroup) View.inflate(context, R.layout.toast_view, null);
         TextView messageTv = contentView.findViewById(R.id.message);
@@ -24,6 +28,9 @@ public class CLToast {
     }
 
     public static void showAtBottom(Context context, String message) {
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
         Toast toast = new Toast(context);
         ViewGroup contentView = (ViewGroup) View.inflate(context, R.layout.toast_view, null);
         TextView messageTv = contentView.findViewById(R.id.message);
