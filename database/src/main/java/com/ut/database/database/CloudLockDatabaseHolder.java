@@ -6,12 +6,13 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.ut.database.dao.KeyDao;
+import com.ut.database.dao.LockMessageInfoDao;
 import com.ut.database.dao.LockGroupDao;
 import com.ut.database.dao.LockKeyDao;
 import com.ut.database.dao.LockMessageDao;
 import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
-import com.ut.database.dao.NotifyDao;
 import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
@@ -68,6 +69,14 @@ public class CloudLockDatabaseHolder {
 
     public SearchRecordDao getSearchRecordDao() {
         return mDb.searchRecordDao();
+    }
+
+    public LockMessageInfoDao getLockMessageInfoDao() {
+        return mDb.lockMessageInfoDao();
+    }
+
+    public KeyDao getKeyDao() {
+        return mDb.keyDao();
     }
 
     public void clear() {

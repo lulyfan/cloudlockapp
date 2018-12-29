@@ -7,7 +7,7 @@
 
         <variable
             name="keyItem"
-            type="com.ut.module_lock.entity.Key"/>
+            type="com.ut.database.entity.Key"/>
     </data>
 
     <LinearLayout
@@ -135,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
                             android:layout_marginEnd="@dimen/base_50dp"
-                            android:text="@{keyItem.typeString()}"
+                            android:text="@{keyItem.ruleTypeString}"
                             android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
 

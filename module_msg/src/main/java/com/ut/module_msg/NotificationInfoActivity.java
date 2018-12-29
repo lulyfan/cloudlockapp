@@ -36,7 +36,7 @@ public class NotificationInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lockMessage = (LockMessage) getIntent().getSerializableExtra("notificationInfo");
+        lockMessage = (LockMessage) getIntent().getSerializableExtra(RouterUtil.MsgModulePath.IntentKey.EXTRA_MESSAGE_INFO);
         notMessageVm = ViewModelProviders.of(this).get(NotMessageVm.class);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_notifi_info);
         setTitle(lockMessage.getLockName());
@@ -48,15 +48,18 @@ public class NotificationInfoActivity extends BaseActivity {
                 mAdapter.updateDate(lockMessageInfos);
             }
         });
-        loadData();
-        readMessages();
-    }
 
-    private void readMessages() {
-        notMessageVm.readMessages(lockMessage.getLockMac());
+        mBinding.refreshLayout.setOnRefreshListener(() -> {
+            loadData();
+            mBinding.refreshLayout.postDelayed(() -> {
+                mBinding.refreshLayout.setRefreshing(false);
+            }, 1200L);
+        });
+
+        loadData();
     }
 
     private void loadData() {
-        notMessageVm.getLockMessageInfos(lockMessage.getLockMac());
+        notMessageVm.loadMessageInfos(lockMessage.getLockMac());
     }
 }

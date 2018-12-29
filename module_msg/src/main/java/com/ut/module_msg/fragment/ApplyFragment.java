@@ -59,7 +59,7 @@ public class ApplyFragment extends BaseFragment {
     private void initView() {
         mAdapter = new ListAdapter<ApplyMessage>(getContext(), R.layout.item_apply, applyMessages, BR.apply) {
             @Override
-            public void addBadge(ViewDataBinding binding, int position) {
+            public void handleItem(ViewDataBinding binding, int position) {
                 Badge badge = null;
                 ViewGroup icon = binding.getRoot().findViewById(R.id.icon_layout);
                 if (icon.getTag() == null) {

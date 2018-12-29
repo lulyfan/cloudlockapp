@@ -22,7 +22,7 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityKeyInfoBinding;
-import com.ut.module_lock.entity.Key;
+import com.ut.database.entity.Key;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 /**
@@ -53,8 +53,14 @@ public class KeyInfoActivity extends BaseActivity {
             hasEdited = true;
             finish();
         });
+
         mBinding.setKeyItem(keyInfo);
         keyManagerVM.setKey(keyInfo);
+        keyManagerVM.getKeyById(keyInfo.getKeyId()).observe(this, key -> {
+            keyInfo = key;
+            mBinding.setKeyItem(keyInfo);
+        });
+
         managerUserType = getIntent().getIntExtra(Constance.USERTYPE, -1);
         initTitle();
         initListener();
@@ -85,9 +91,11 @@ public class KeyInfoActivity extends BaseActivity {
             }
             ARouter.getInstance().build(url).withSerializable(Constance.KEY_INFO, keyInfo).navigation(this, REQUEST_EDIT_KEY);
         });
-        mBinding.operationRecord.setOnClickListener(v ->
-                {
-                    ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD).withString(Constance.RECORD_TYPE, Constance.BY_KEY).withLong(Constance.KEY_ID, keyInfo.getKeyId()).navigation();
+        mBinding.operationRecord.setOnClickListener(v -> {
+                    ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
+                            .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
+                            .withLong(Constance.KEY_ID, keyInfo.getKeyId())
+                            .navigation();
                 }
         );
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteKey());
@@ -196,15 +204,12 @@ public class KeyInfoActivity extends BaseActivity {
                     if (data.hasExtra(Constance.KEY_INFO)) {
                         Key item = (Key) data.getSerializableExtra(Constance.KEY_INFO);
                         if (item != null) {
-                            keyInfo = item;
-                            editKey();
+                            editKey(item);
                         }
                     } else if (data.hasExtra(Constance.EDIT_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
-                            keyInfo.setKeyName(keyName);
-                            mBinding.setKeyItem(keyInfo);
-                            hasEdited = true;
+                            editkeyName(keyInfo, keyName);
                         }
                     }
                     break;
@@ -212,18 +217,14 @@ public class KeyInfoActivity extends BaseActivity {
         }
     }
 
-    private void editKey() {
-        keyManagerVM.editKey(keyInfo, result -> {
-            if (result.isSuccess()) {
-                mBinding.setKeyItem(keyInfo);
-                hasEdited = true;
-            } else {
-                keyInfo = keyManagerVM.getKey();
-                mBinding.setKeyItem(keyInfo);
-            }
-            CLToast.showAtBottom(this, result.msg);
-        });
+    private void editkeyName(Key k, String name) {
+        keyManagerVM.editKeyName(k, name);
     }
+
+    private void editKey(Key k) {
+        keyManagerVM.editKey(k);
+    }
+
 
     @Override
     public void finish() {

@@ -1,6 +1,7 @@
 package com.ut.database.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,13 +14,14 @@ import java.util.Locale;
  */
 @Entity
 public class LockMessageInfo {
-    private long id;// 6,
-    private String name;// "4",
-    private String description;// "4",
-    private long createTime;// 1544595271000,
-    private int type;// 1,
-    private String lockMac;// "123",
-    private long meetingRomeId;// 1
+    @PrimaryKey
+    private long id;// 422,
+    private String name;// "锁相关通知",
+    private String description;// "您的🎃🎃🎃电子钥匙已被删除",
+    private long createTime;// 1546063528000,
+    private int type;// 0,
+    private String lockMac;// "33-33-22-A1-B0-60",
+    private long meetingRomeId;// 0
 
     public long getId() {
         return id;
@@ -77,7 +79,7 @@ public class LockMessageInfo {
         this.meetingRomeId = meetingRomeId;
     }
 
-    public String createTimeformat(){
+    public String createTimeformat() {
         return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.CHINA).format(new Date(createTime));
     }
 }

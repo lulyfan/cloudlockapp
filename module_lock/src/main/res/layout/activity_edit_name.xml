@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_base_bg"
@@ -47,18 +48,15 @@
 
     </LinearLayout>
 
-    <Button
+    <com.ut.commoncomponent.LoadingButton
         android:id="@+id/btn_save"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginLeft="@dimen/base_20dp"
         android:layout_marginRight="@dimen/base_20dp"
         android:layout_marginBottom="@dimen/base_20dp"
-        android:background="@drawable/selector_btn_save"
-        android:enabled="false"
-        android:text="@string/lock_save"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/base_17sp" />
+        app:button_label="@string/lock_save"
+        app:button_label_color="@android:color/white"
+        app:button_label_text_size="@dimen/base_17sp" />
 </FrameLayout>

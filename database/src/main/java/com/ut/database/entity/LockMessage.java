@@ -2,6 +2,7 @@ package com.ut.database.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -16,12 +17,13 @@ import java.util.Locale;
 
 @Entity
 public class LockMessage implements Serializable {
+    @NonNull
     @PrimaryKey
+    private String lockMac;// "123",
     private long id;// 4,
     private String name;// "4",
     private String lockName;// "蓝牙锁",
     private String description;// "4",
-    private String lockMac;// "123",
     private int type;// 1,
     private int unReadCount;// 3,
     private long createTime;// 1544595271000
@@ -91,7 +93,7 @@ public class LockMessage implements Serializable {
         this.createTime = createTime;
     }
 
-    public String createTimeformat(){
+    public String createTimeformat() {
         return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.CHINA).format(new Date(createTime));
     }
 }

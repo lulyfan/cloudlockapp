@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "13a09e997ed2fc2893a0d70635148d4e",
+    "identityHash": "f47cc7587a858cb237f1c9353cde8fae",
     "entities": [
       {
         "tableName": "lock_key",
@@ -497,8 +497,14 @@
       },
       {
         "tableName": "LockMessage",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `lockName` TEXT, `description` TEXT, `lockMac` TEXT, `type` INTEGER NOT NULL, `unReadCount` INTEGER NOT NULL, `createTime` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lockMac` TEXT NOT NULL, `id` INTEGER NOT NULL, `name` TEXT, `lockName` TEXT, `description` TEXT, `type` INTEGER NOT NULL, `unReadCount` INTEGER NOT NULL, `createTime` INTEGER NOT NULL, PRIMARY KEY(`lockMac`))",
         "fields": [
+          {
+            "fieldPath": "lockMac",
+            "columnName": "lockMac",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "id",
             "columnName": "id",
@@ -524,12 +530,6 @@
             "notNull": false
           },
           {
-            "fieldPath": "lockMac",
-            "columnName": "lockMac",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "INTEGER",
@@ -550,7 +550,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "lockMac"
           ],
           "autoGenerate": false
         },
@@ -560,7 +560,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"13a09e997ed2fc2893a0d70635148d4e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f47cc7587a858cb237f1c9353cde8fae\")"
     ]
   }
 }

@@ -67,7 +67,7 @@ public class ChooseLockGroupActivity extends BaseActivity {
         ListView listView = findViewById(R.id.group_list);
         adapter = new ListAdapter<LockGroup>(this, R.layout.item_lock_group, lockGroups, BR.lockGroup) {
             @Override
-            public void addBadge(ViewDataBinding binding, int position) {
+            public void handleItem(ViewDataBinding binding, int position) {
                 long groupId = lockGroups.get(position).getId();
                 CheckBox checkBox = binding.getRoot().findViewById(R.id.check_box);
                 checkBox.setChecked(currentGroupId == groupId);

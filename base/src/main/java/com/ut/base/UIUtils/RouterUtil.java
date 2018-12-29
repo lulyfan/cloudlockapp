@@ -65,6 +65,11 @@ public class RouterUtil {
 
         public static final String NOTIFICATION_INFO = "/msg/notificationInfo";
         public final static String APPLY_INFO = "/msg/applyInfo";
+
+
+        public interface IntentKey {
+            String EXTRA_MESSAGE_INFO = "extra_message_info";
+        }
     }
 
     public static class MallModulePath {

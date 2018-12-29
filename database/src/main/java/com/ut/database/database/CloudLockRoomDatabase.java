@@ -3,6 +3,8 @@ package com.ut.database.database;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
+import com.ut.database.dao.KeyDao;
+import com.ut.database.dao.LockMessageInfoDao;
 import com.ut.database.dao.LockGroupDao;
 import com.ut.database.dao.LockKeyDao;
 import com.ut.database.dao.LockMessageDao;
@@ -12,10 +14,11 @@ import com.ut.database.dao.NotifyDao;
 import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
-import com.ut.database.entity.LockGroup;
+import com.ut.database.entity.Key;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.LockMessage;
+import com.ut.database.entity.LockMessageInfo;
 import com.ut.database.entity.LockUser;
 import com.ut.database.entity.LockUserKey;
 import com.ut.database.entity.NotificationMessage;
@@ -30,7 +33,7 @@ import com.ut.database.entity.User;
  * version: 1.0
  */
 @Database(entities = {LockKey.class, User.class, UUID.class, NotificationMessage.class, LockGroup.class,
-        LockUser.class, LockUserKey.class, SearchRecord.class, LockMessage.class}, version = 6)
+        LockUser.class, LockUserKey.class, SearchRecord.class, LockMessage.class, LockMessageInfo.class, Key.class}, version = 7)
 public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public abstract LockKeyDao lockKeyDao();
@@ -50,4 +53,8 @@ public abstract class CloudLockRoomDatabase extends RoomDatabase {
     public abstract SearchRecordDao searchRecordDao();
 
     public abstract LockMessageDao lockMessageDao();
+
+    public abstract LockMessageInfoDao lockMessageInfoDao();
+
+    public abstract KeyDao keyDao();
 }

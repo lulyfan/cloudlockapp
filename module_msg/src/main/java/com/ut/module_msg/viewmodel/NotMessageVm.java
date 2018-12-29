@@ -3,30 +3,22 @@ package com.ut.module_msg.viewmodel;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
-import com.ut.commoncomponent.CLToast;
+import com.ut.database.dao.LockMessageInfoDao;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.LockMessage;
 import com.ut.database.entity.LockMessageInfo;
-import com.ut.module_msg.model.NotifyCarrier;
-import com.ut.database.entity.NotificationMessage;
 import com.ut.module_msg.repo.NotMessageRepo;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -40,18 +32,11 @@ public class NotMessageVm extends AndroidViewModel {
 
     private MutableLiveData<List<LockMessage>> lockMessages;
 
-    private MutableLiveData<List<LockMessageInfo>> lockMessageInfos;
+    private LockMessageInfoDao lockMessageInfoDao;
 
     public NotMessageVm(@NonNull Application application) {
         super(application);
-    }
-
-    public MutableLiveData<List<LockMessageInfo>> getLockMessageInfos(String mac) {
-        if (lockMessageInfos == null) {
-            lockMessageInfos = new MutableLiveData<>();
-            loadMessageInfos(mac);
-        }
-        return lockMessageInfos;
+        lockMessageInfoDao = CloudLockDatabaseHolder.get().getLockMessageInfoDao();
     }
 
     public MutableLiveData<List<LockMessage>> getLockMessages() {
@@ -75,10 +60,14 @@ public class NotMessageVm extends AndroidViewModel {
     public void loadMessageInfos(String mac) {
         MyRetrofit.get().getCommonApiService().getLockMessageInfos(mac)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(listResult -> {
                     if (listResult.isSuccess()) {
-                        lockMessageInfos.postValue(listResult.data);
+                        if (listResult.data != null) {
+                            LockMessageInfo[] tmp = new LockMessageInfo[listResult.data.size()];
+                            lockMessageInfoDao.insert(listResult.data.toArray(tmp));
+                            tmp = null;
+                        }
+
                     }
                 }, new ErrorHandler());
     }
@@ -90,5 +79,10 @@ public class NotMessageVm extends AndroidViewModel {
                 .subscribe(result -> {
 
                 }, new ErrorHandler());
+    }
+
+
+    public LiveData<List<LockMessageInfo>> getLockMessageInfos(String mac) {
+        return CloudLockDatabaseHolder.get().getLockMessageInfoDao().findLMessageDetailsByMac(mac);
     }
 }

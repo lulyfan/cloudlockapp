@@ -19,6 +19,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SimpleTextWatcher;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
+import com.ut.commoncomponent.LoadingButton;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 
@@ -39,6 +40,7 @@ public class EditNameActivity extends BaseActivity {
     private String mac = null;
     private long keyId = 0;
 
+    private LoadingButton loadingButton = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,15 +73,12 @@ public class EditNameActivity extends BaseActivity {
             }
         });
         findViewById(R.id.clear).setOnClickListener(v -> nameEdt.setText(""));
-        findViewById(R.id.btn_save).setOnClickListener(v -> saveName());
+        loadingButton = findViewById(R.id.btn_save);
+        loadingButton.setOnClickListener(v -> saveName());
     }
 
     @SuppressLint("CheckResult")
     private void saveName() {
-//        Intent intent = new Intent();
-//        intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
-//        setResult(RESULT_OK, intent);
-//        finish();
         String name = nameEdt.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
@@ -89,32 +88,31 @@ public class EditNameActivity extends BaseActivity {
 
         if (isLock) {
             if (TextUtils.isEmpty(mac)) return;
-//            MyRetrofit.get().getCommonApiService().editLockName(mac, name)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(result -> {
-//                        CLToast.showAtBottom(getBaseContext(), result.msg);
-//                        if (result.isSuccess()) {
-//                            finish();
-//                        }
-//                    }, new ErrorHandler());
             Intent intent = new Intent();
             intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
             setResult(RESULT_OK, intent);
             finish();
         } else if (keyId != 0) {
+            loadingButton.startLoading();
             MyRetrofit.get().getCommonApiService().editKeyName(keyId, name)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(result -> {
                         if (result.isSuccess()) {
+                            loadingButton.endLoading();
                             Intent intent = new Intent();
                             intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
                             setResult(RESULT_OK, intent);
                             finish();
                         }
                         CLToast.showAtBottom(getBaseContext(), result.msg);
-                    }, new ErrorHandler());
+                    }, new ErrorHandler(){
+                        @Override
+                        public void accept(Throwable throwable) {
+                            super.accept(throwable);
+                            loadingButton.endLoading();
+                        }
+                    });
         }
     }
 

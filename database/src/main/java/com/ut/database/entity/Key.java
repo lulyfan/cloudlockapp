@@ -1,17 +1,14 @@
-package com.ut.module_lock.entity;
+package com.ut.database.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.TextUtils;
 
-import com.ut.base.BaseApplication;
-import com.ut.module_lock.R;
-
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 
 /**
  * author : chenjiajun
@@ -19,8 +16,9 @@ import java.util.Locale;
  * desc   :
  */
 
-
+@Entity(tableName = "ut_key")
 public class Key implements Serializable, Cloneable {
+    @PrimaryKey
     private long keyId;//
     private String userName; //钥匙名字
     private String desc; //描述
@@ -33,10 +31,15 @@ public class Key implements Serializable, Cloneable {
     private String mobile;
     private String keyName;
     private String weeks;
+    private String sendUser;
     private String startTimeRange; //循环钥匙的启动日期
     private String endTimeRange; //循环钥匙的停止日期
     private String mac;
     private int userType;//userType;//类型(1:管理员,2:授权用户,3:普通用户)
+
+    private String ruleTypeString;
+    private int ruleTypeDrawableId;
+    private String statusString;
 
 
     public long getKeyId() {
@@ -168,6 +171,14 @@ public class Key implements Serializable, Cloneable {
         this.userType = userType;
     }
 
+    public String getSendUser() {
+        return sendUser;
+    }
+
+    public void setSendUser(String sendUser) {
+        this.sendUser = sendUser;
+    }
+
     public boolean isAuthorized() {
         return userType == 2;
     }
@@ -183,74 +194,15 @@ public class Key implements Serializable, Cloneable {
         return "";
     }
 
-    public String typeString() {
-//        1永久 2限时 3单次 4循环
-        switch (ruleType) {
-            case 1:
-                return BaseApplication.getAppContext().getString(R.string.permanent);
-            case 2:
-                return BaseApplication.getAppContext().getString(R.string.limit_time);
-            case 3:
-                return BaseApplication.getAppContext().getString(R.string.once_time);
-            case 4:
-                return BaseApplication.getAppContext().getString(R.string.loop);
-        }
-        return "";
-    }
-
-    public String getStateString() {
-//       //status 1,"发送中" 2,"冻结中" 3,"解除冻结中" 4,"删除中" 5,"授权中" 6,"取消授权中" 7,"修改中 8,"正常"  9,"已冻结" 10,"已删除" 11,"已失效" 12,"已过期"
-        switch (status) {
-            case 1:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_sending);
-            case 2:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_frozening);
-            case 3:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_cancel_frozen);
-            case 4:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_delete);
-            case 5:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_authorize);
-            case 6:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_cancel_authorize);
-            case 7:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_fix);
-            case 8:
-                return "";
-            case 9:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_frozen);
-            case 10:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_deleted);
-            case 11:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_has_invailed);
-            case 12:
-                return BaseApplication.getAppContext().getString(R.string.lock_key_status_out_of_date);
-        }
-        return "";
-    }
-
-    public int stateColor() {
-        return Color.parseColor(status >= 9 ? "#999999" : "#F55D54");
-    }
-
     public boolean isInvalid() {
         return status == 11;
     }
 
-    public String userNameOrMobile(){
-        if(TextUtils.isEmpty(userName)) {
+    public String userNameOrMobile() {
+        if (TextUtils.isEmpty(sendUser)) {
             return mobile;
         }
-        return userName;
-    }
-
-    public Drawable getTypeDrawable() {
-        if (ruleType == 0) ruleType = 1;
-        int[] rids = {R.mipmap.permanent, R.mipmap.limited_time, R.mipmap.once, R.mipmap.loop};
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return BaseApplication.getAppContext().getDrawable(rids[ruleType - 1]);
-        }
-        return null;
+        return sendUser;
     }
 
     public boolean isFrozened() {
@@ -258,11 +210,40 @@ public class Key implements Serializable, Cloneable {
     }
 
 
+    public int statusColor() {
+        return Color.parseColor(status >= 9 ? "#999999" : "#F55D54");
+    }
+
+
+    public String getRuleTypeString() {
+        return ruleTypeString;
+    }
+
+    public void setRuleTypeString(String ruleTypeString) {
+        this.ruleTypeString = ruleTypeString;
+    }
+
+    public String getStatusString() {
+        return statusString;
+    }
+
+    public void setStatusString(String statusString) {
+        this.statusString = statusString;
+    }
+
+    public int getRuleTypeDrawableId() {
+        return ruleTypeDrawableId;
+    }
+
+    public void setRuleTypeDrawableId(int ruleTypeDrawableId) {
+        this.ruleTypeDrawableId = ruleTypeDrawableId;
+    }
+
     @Override
     public Object clone() {
-        try{
+        try {
             return super.clone();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

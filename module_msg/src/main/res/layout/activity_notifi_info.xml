@@ -11,17 +11,25 @@
         android:layout_height="match_parent"
         android:background="@color/color_base_bg">
 
-        <include layout="@layout/toolbar_white" android:id="@+id/top"/>
+        <include
+            android:id="@+id/top"
+            layout="@layout/toolbar_white" />
 
-        <ListView
-            android:id="@+id/message_list"
+        <com.ut.commoncomponent.RefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:divider="@null"
-            android:listSelector="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top"
-            app:layout_constraintVertical_weight="1" />
+            app:layout_constraintVertical_weight="1">
+
+            <ListView
+                android:id="@+id/message_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent" />
+        </com.ut.commoncomponent.RefreshLayout>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -11,12 +11,12 @@
 
         <variable
             name="keyItem"
-            type="com.ut.module_lock.entity.Key" />
+            type="com.ut.database.entity.Key" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/base_52dp"
+        android:layout_height="@dimen/base_60dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:paddingLeft="@dimen/base_20dp"
         android:paddingRight="@dimen/base_20dp">
@@ -26,7 +26,6 @@
             android:layout_width="@dimen/base_40dp"
             android:layout_height="@dimen/base_20dp"
             android:alpha="@{keyItem.invalid ? 0.3f: 1f}"
-            android:background="@{keyItem.typeDrawable}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,8 +64,8 @@
             android:id="@+id/state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{keyItem.getStateString()}"
-            android:textColor="@{keyItem.stateColor()}"
+            android:text="@{keyItem.statusString}"
+            android:textColor="@{keyItem.statusColor}"
             android:textSize="@dimen/base_12sp"
             app:layout_constraintBaseline_toBaselineOf="@id/keyName"
             app:layout_constraintRight_toRightOf="parent" />

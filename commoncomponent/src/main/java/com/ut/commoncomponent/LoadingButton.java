@@ -90,6 +90,7 @@ public class LoadingButton extends FrameLayout {
         rotateAnimation.setRepeatCount(Animation.INFINITE);
         rotateAnimation.setInterpolator(new LinearInterpolator());
         mLoadingImageView.startAnimation(rotateAnimation);
+        setEnabled(false);
     }
 
     public void endLoading() {
@@ -98,27 +99,30 @@ public class LoadingButton extends FrameLayout {
             mLoadingImageView.getAnimation().cancel();
             mLoadingImageView.clearAnimation();
         }
+        setEnabled(true);
     }
 
     /**
      * 将dp转换成px
+     *
      * @param context
      * @param dpValue
      * @return
      */
-    private int dip2px(Context context,float dpValue){
-        final float scale = context.getResources ().getDisplayMetrics ().density;
+    private int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
     /**
      * 将像素转换成dp
+     *
      * @param context
      * @param pxValue
      * @return
      */
-    private int px2dip(Context context,float pxValue){
-        final float scale = context.getResources ().getDisplayMetrics ().density;
+    private int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 }

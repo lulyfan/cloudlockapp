@@ -14,7 +14,7 @@ import com.ut.base.Utils.DialogUtil;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLoopBinding;
-import com.ut.module_lock.entity.Key;
+import com.ut.database.entity.Key;
 
 import java.util.Locale;
 

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +59,8 @@ public class NotificationFragment extends BaseFragment {
     private void initView() {
         listAdapter = new ListAdapter<LockMessage>(getContext(), R.layout.item_notification_carrier, list, BR.lockMessage) {
             @Override
-            public void addBadge(ViewDataBinding binding, int position) {
-                super.addBadge(binding, position);
+            public void handleItem(ViewDataBinding binding, int position) {
+                super.handleItem(binding, position);
                 Badge badge = null;
                 ImageView icon = binding.getRoot().findViewById(R.id.icon);
                 if (icon.getTag() == null) {
@@ -86,10 +85,13 @@ public class NotificationFragment extends BaseFragment {
         });
 
         mNotifyFgBinding.notificationList.setOnItemClickListener((parent, view, position, id) -> {
+
             ARouter.getInstance()
                     .build(RouterUtil.MsgModulePath.NOTIFICATION_INFO)
-                    .withSerializable("notificationInfo", list.get(position))
+                    .withSerializable(RouterUtil.MsgModulePath.IntentKey.EXTRA_MESSAGE_INFO, list.get(position))
                     .navigation();
+
+            readMessages(list.get(position).getLockMac());
         });
         mNotifyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
@@ -100,6 +102,11 @@ public class NotificationFragment extends BaseFragment {
             }, 2000L);
         });
     }
+
+    private void readMessages(String mac) {
+        notificationViewModel.readMessages(mac);
+    }
+
 
     @Override
     protected void onUserVisible() {
