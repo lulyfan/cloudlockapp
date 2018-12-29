@@ -258,10 +258,12 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtCenter(getApplication(), result.msg);
-                    new Thread(() -> {
-                        lockKey.setGroupId((int) groupId);
-                        saveLockKey(lockKey);
-                    }).start();
+                    if(result.isSuccess()) {
+                        new Thread(() -> {
+                            lockKey.setGroupId((int) groupId);
+                            saveLockKey(lockKey);
+                        }).start();
+                    }
                 }, new ErrorHandler());
     }
 
@@ -279,20 +281,24 @@ public class LockSettingVM extends AndroidViewModel {
     }
 
     public void changeLockGroup(String mac, long groupId) {
-        Disposable subscribe = MyRetrofit.get().getCommonApiService()
-                .changeLockGroup(mac, groupId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        CLToast.showAtCenter(getApplication(), result.msg);
-                        selectedGroupId.postValue(groupId);
-                        new Thread(() -> {
-                            lockKey.setGroupId((int) groupId);
-                            saveLockKey(lockKey);
-                        }).start();
-                    }
-                }, new ErrorHandler());
+        if (lockKey.getGroupId() < 1) {
+            addLockIntoGroup(mac, groupId);
+        } else {
+            Disposable subscribe = MyRetrofit.get().getCommonApiService()
+                    .changeLockGroup(mac, groupId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(result -> {
+                        if (result.isSuccess()) {
+                            CLToast.showAtCenter(getApplication(), result.msg);
+                            selectedGroupId.postValue(groupId);
+                            new Thread(() -> {
+                                lockKey.setGroupId((int) groupId);
+                                saveLockKey(lockKey);
+                            }).start();
+                        }
+                    }, new ErrorHandler());
+        }
     }
 
     public void saveLockKey(LockKey lockKey) {

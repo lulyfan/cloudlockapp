@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentNotificationBinding;
-import com.ut.module_msg.model.NotifyCarrier;
 import com.ut.module_msg.viewmodel.NotMessageVm;
 
 import java.util.ArrayList;
@@ -58,27 +58,27 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initView() {
-       listAdapter = new  ListAdapter<LockMessage>(getContext(), R.layout.item_notification_carrier, list, BR.lockMessage) {
-           @Override
-           public void addBadge(ViewDataBinding binding, int position) {
-               super.addBadge(binding, position);
-               Badge badge = null;
-               ImageView icon = binding.getRoot().findViewById(R.id.icon);
-               if (icon.getTag() == null) {
-                   badge = new QBadgeView(getActivity());
-                   icon.setTag(badge);
-               } else {
-                   badge = (Badge) icon.getTag();
-               }
-               LockMessage lockMessage = list.get(position);
-               badge.bindTarget((View) icon.getParent())
-                       .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
-                       .setBadgeTextColor(Color.WHITE)
-                       .setShowShadow(false)
-                       .setBadgeTextSize(9, true)
-                       .setBadgeNumber(lockMessage.getUnReadCount());
-           }
-       };
+        listAdapter = new ListAdapter<LockMessage>(getContext(), R.layout.item_notification_carrier, list, BR.lockMessage) {
+            @Override
+            public void addBadge(ViewDataBinding binding, int position) {
+                super.addBadge(binding, position);
+                Badge badge = null;
+                ImageView icon = binding.getRoot().findViewById(R.id.icon);
+                if (icon.getTag() == null) {
+                    badge = new QBadgeView(getActivity());
+                    icon.setTag(badge);
+                } else {
+                    badge = (Badge) icon.getTag();
+                }
+                LockMessage lockMessage = list.get(position);
+                badge.bindTarget((View) icon.getParent())
+                        .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
+                        .setBadgeTextColor(Color.WHITE)
+                        .setShowShadow(false)
+                        .setBadgeTextSize(9, true)
+                        .setBadgeNumber(lockMessage.getUnReadCount());
+            }
+        };
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
         notificationViewModel.getLockMessages().observe(getActivity(), carriers -> {
@@ -86,7 +86,10 @@ public class NotificationFragment extends BaseFragment {
         });
 
         mNotifyFgBinding.notificationList.setOnItemClickListener((parent, view, position, id) -> {
-            ARouter.getInstance().build(RouterUtil.MsgModulePath.NOTIFICATION_INFO).withSerializable("notificationInfo", list.get(position)).navigation();
+            ARouter.getInstance()
+                    .build(RouterUtil.MsgModulePath.NOTIFICATION_INFO)
+                    .withSerializable("notificationInfo", list.get(position))
+                    .navigation();
         });
         mNotifyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);

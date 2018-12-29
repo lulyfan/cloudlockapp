@@ -51,6 +51,7 @@ public class NotMessageRepo {
                 if(result != null) {
                     if (result.isSuccess()) {
                         LockMessage[] tmp = new LockMessage[result.data.size()];
+                        messageDao.deleteAll();
                         messageDao.insert(result.data.toArray(tmp));
                     } else {
 

@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseApplication;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
@@ -62,12 +63,12 @@ public class LockListFragment extends BaseFragment {
         if (mView == null) {
             mFragmentLocklistBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_locklist, container, false);
             mView = mFragmentLocklistBinding.getRoot();
+            addPaddingTop(mView);
+            mFragmentLocklistBinding.setPresenter(new Present());
+            initView();
+            initPopupWindow();
+            initViewModel();
         }
-        addPaddingTop(mView);
-        mFragmentLocklistBinding.setPresenter(new Present());
-        initView();
-        initPopupWindow();
-        initViewModel();
         return mView;
     }
 
@@ -112,9 +113,13 @@ public class LockListFragment extends BaseFragment {
                 public void onItemClick(View view, List<?> datas, int position) {
                     LockKey lockKey = (LockKey) datas.get(position);
                     if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
-                        Intent intent = new Intent(getContext(), LockDetailActivity.class);
-                        intent.putExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail, (Parcelable) datas.get(position));
-                        startActivity(intent);
+//                        Intent intent = new Intent(getContext(), LockDetailActivity.class);
+//                        intent.putExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail, (Parcelable) datas.get(position));
+//                        startActivity(intent);
+                        ARouter.getInstance()
+                                .build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                                .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, (Parcelable) datas.get(position))
+                                .navigation();
                     }
                 }
             });

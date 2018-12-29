@@ -218,10 +218,10 @@ public class KeyInfoActivity extends BaseActivity {
                 mBinding.setKeyItem(keyInfo);
                 hasEdited = true;
             } else {
-                CLToast.showAtBottom(this, result.msg);
                 keyInfo = keyManagerVM.getKey();
                 mBinding.setKeyItem(keyInfo);
             }
+            CLToast.showAtBottom(this, result.msg);
         });
     }
 

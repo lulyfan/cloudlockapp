@@ -93,7 +93,6 @@ public class KeyManagerVM extends AndroidViewModel {
                     } else {
                         CLToast.showAtBottom(getApplication(), result.msg);
                     }
-                    Log.d("pageKeys", result.msg);
                 }, new ErrorHandler());
     }
 
@@ -106,7 +105,6 @@ public class KeyManagerVM extends AndroidViewModel {
                 .map(json -> JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
                 }))
                 .subscribe(result -> {
-                    Log.d("pageKeys", result.msg);
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
                             getKeys().postValue(result.data);

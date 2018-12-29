@@ -99,7 +99,6 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadGroupName();
     }
 
     private void loadGroupName() {

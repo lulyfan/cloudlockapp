@@ -49,8 +49,8 @@ public class LockListFragVM extends AndroidViewModel {
                     LockKey[] lockKeys = new LockKey[list.size()];
                     //TODO 先清除数据,后面再做优化
                     if (isReset) {
-                        LockKeyDaoImpl.get().deleteAll();
                     }
+                    LockKeyDaoImpl.get().deleteAll();
                     LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                 }, throwable -> {
                     //TODO 获取锁列表失败处理

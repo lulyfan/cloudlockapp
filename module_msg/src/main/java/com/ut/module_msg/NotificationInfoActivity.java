@@ -39,7 +39,7 @@ public class NotificationInfoActivity extends BaseActivity {
         lockMessage = (LockMessage) getIntent().getSerializableExtra("notificationInfo");
         notMessageVm = ViewModelProviders.of(this).get(NotMessageVm.class);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_notifi_info);
-        setTitle(lockMessage.getName());
+        setTitle(lockMessage.getLockName());
         initLightToolbar();
         mAdapter = new ListAdapter<LockMessageInfo>(this, R.layout.item_message_content, notificationMessages, BR.lockMessageInfo);
         mBinding.messageList.setAdapter(mAdapter);
