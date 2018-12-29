@@ -197,14 +197,14 @@
                             android:layout_marginEnd="@dimen/base_27dp"
                             android:src="@mipmap/more_black"
                             android:visibility="@{lockKey.userType == 1 ? View.VISIBLE: View.INVISIBLE}" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:layout_gravity="bottom"
-                            android:background="@color/color_base_divider" />
                     </RelativeLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="@dimen/base_20dp"
+                        android:background="@color/color_base_divider" />
 
                     <FrameLayout
                         android:id="@+id/choose_group"
@@ -244,7 +244,7 @@
                     android:layout_marginRight="@dimen/base_20dp"
                     android:layout_marginBottom="@dimen/base_20dp"
                     android:background="@drawable/shape_btn_delete_key"
-                    android:text="@string/lock_delete"
+                    android:text="@string/lock_delete_lock"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>

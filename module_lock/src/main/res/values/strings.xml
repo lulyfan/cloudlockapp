@@ -131,7 +131,7 @@
     <string name="lock_key_status_has_invailed">已失效</string>
     <string name="lock_key_status_out_of_date">已过期</string>
     <string name="lock_delete_key_tips">确定删除该钥匙吗？删除会在用户APP联网后生效。</string>
-    <string name="lock_delete">删除</string>
+    <string name="lock_delete_lock">删除锁</string>
     <string name="lock_to_grant_authorization_or_not">授权/取消授权</string>
     <string name="lock_to_frozen_or_not">冻结/解除冻结</string>
     <string name="lock_unfrozen">解除冻结</string>
