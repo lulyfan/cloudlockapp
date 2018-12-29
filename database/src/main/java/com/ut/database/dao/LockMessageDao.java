@@ -31,4 +31,7 @@ public interface LockMessageDao {
 
     @Delete
     void delete(LockMessage... lockMessages);
+
+    @Query("Delete from LockMessage")
+    void deleteAll();
 }
