@@ -26,6 +26,7 @@ import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -83,6 +84,7 @@ public class LockSettingVM extends AndroidViewModel {
                     if (result.isSuccess()) {
                         toDeleteAdminKey();
                     }
+                    showTip.postValue(result.msg);
                 }, new ErrorHandler());
     }
 
@@ -170,24 +172,30 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(Schedulers.io())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        deleteLockKey(lockKey);
                         isDeleteSuccess.postValue(true);
                         //删除数据库相应的锁数据
-                        LockKeyDaoImpl.get().deleteByMac(lockKey.getMac());
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
         mCompositeDisposable.add(disposable);
     }
 
+    private void deleteLockKey(LockKey lockKey) {
+        Schedulers.newThread().scheduleDirect(() -> {
+            LockKeyDaoImpl.get().deleteByMac(lockKey.getMac());
+        }, 500, TimeUnit.MILLISECONDS);
+    }
+
     public void deleteLockKey(LockKey lockKey, int ifAllKey) {
         Disposable disposable = MyRetrofit.get().getCommonApiService().deleteKey(lockKey.getKeyId(), ifAllKey)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        deleteLockKey(lockKey);
                         isDeleteSuccess.postValue(true);
                         //删除数据库相应的锁数据
-                        LockKeyDaoImpl.get().deleteByMac(lockKey.getMac());
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());

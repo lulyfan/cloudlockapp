@@ -41,6 +41,7 @@ public class NearLockVM extends AndroidViewModel {
     private Map<String, ScanDevice> mStringScanDeviceMap = new HashMap<>();//缓存原始搜索数据
     private List<NearScanLock> nearLockList = new ArrayList<>();//存放后台放回的对象
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private boolean hasConnected = false;
 
 
     public NearLockVM(@NonNull Application application) {
@@ -109,16 +110,20 @@ public class NearLockVM extends AndroidViewModel {
     //绑定锁
     public void bindLock(NearScanLock lock) {
         operating.postValue(false);
+        hasConnected = false;
         UnilinkManager.getInstance(getApplication()).stopScan();
         UnilinkManager.getInstance(getApplication()).connect(lock.getMac(), new ConnectListener() {
             @Override
             public void onConnect() {
+                hasConnected = true;
                 actBind(lock);
             }
 
             @Override
             public void onDisconnect(int i, String s) {
-                errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                if (!hasConnected) {
+                    errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                }
                 UTLog.i("ble has been disconnected");
             }
         });
