@@ -42,23 +42,23 @@ public class LockDetailActivity extends BaseActivity {
         enableImmersive();
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
-        initLockKeyString();
+        initLockData();
         addPaddingTop();
-        mDetailBinding.setLockKey(mLockKey);
         mDetailBinding.setPresent(new Present());
         initViewModel();
     }
 
-    private void initLockKeyString() {
+    private void initLockData() {
         mLockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
         mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         mLockKey.setElectricityStr();
+        mDetailBinding.setLockKey(mLockKey);
+        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
+        mLockDetailVM.setLockKey(mLockKey);
     }
 
     private void initViewModel() {
-        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
-        mLockDetailVM.setLockKey(mLockKey);
         mLockDetailVM.getConnectStatus().observe(this, isConnected -> {
             if (isConnected) {
                 mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_green);
@@ -74,9 +74,9 @@ public class LockDetailActivity extends BaseActivity {
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
+            if (lockKey == null) return;
             mLockKey = lockKey;
-            initLockKeyString();
-            mDetailBinding.setLockKey(mLockKey);
+            initLockData();
         });
     }
 

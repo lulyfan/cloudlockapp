@@ -83,7 +83,7 @@
     <string name="lock_tip_ble_unlock_failed">开锁失败</string>
     <string name="lock_tip_ble_unlock_success">开锁成功</string>
 
-    <string name="lock_tip_ble_unbindlock_failed">解绑失败</string>
+    <string name="lock_tip_ble_unbindlock_failed">删除失败</string>
     <string-array name="lock_type">
         <item>蓝牙门锁</item>
     </string-array>
