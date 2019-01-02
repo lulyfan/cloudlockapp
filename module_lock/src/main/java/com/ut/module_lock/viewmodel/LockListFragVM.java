@@ -7,8 +7,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 
@@ -27,14 +29,36 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class LockListFragVM extends AndroidViewModel {
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private MutableLiveData<Boolean> refreshStatus = new MutableLiveData<>();
+    private MutableLiveData<List<LockKey>> mLockKeys = new MutableLiveData<>();
+    private volatile boolean mIsReset = false;
+    private LiveData<List<LockKey>> lock1 = null;//全部分组的锁
+    private LiveData<List<LockKey>> lock2 = null;//当前分组的锁
+    private long currentGroupId = -1;
 
     public LockListFragVM(@NonNull Application application) {
         super(application);
+        getLockKeyFromDb();//先从数据库获取数据
+    }
+
+    public MutableLiveData<Boolean> getRefreshStatus() {
+        return refreshStatus;
     }
 
     public LiveData<List<LockKey>> getLockList() {
-        return LockKeyDaoImpl.get().getAllLockKey();
+        return mLockKeys;
     }
+
+    private void getLockKeyFromDb() {//监听数据库变化
+        lock1 = LockKeyDaoImpl.get().getAllLockKey();
+        lock1.observeForever(lockKeys -> {
+            assert lockKeys != null;
+            if (currentGroupId != -1) return;
+            if (mIsReset && lockKeys.size() < 1) return;
+            mLockKeys.setValue(lockKeys);
+        });
+    }
+
 
     public LiveData<List<LockGroup>> getLockGroupList() {
         return LockGroupDaoImpl.get().getAllLockGroup();
@@ -49,11 +73,15 @@ public class LockListFragVM extends AndroidViewModel {
                     LockKey[] lockKeys = new LockKey[list.size()];
                     //TODO 先清除数据,后面再做优化
                     if (isReset) {
+                        mIsReset = true;
                         LockKeyDaoImpl.get().deleteAll();
                     }
                     LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
+                    if (isReset)
+                        refreshStatus.postValue(true);
                 }, throwable -> {
                     //TODO 获取锁列表失败处理
+                    refreshStatus.postValue(false);
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -70,9 +98,12 @@ public class LockListFragVM extends AndroidViewModel {
                         LockKeyDaoImpl.get().deleteAll();
                     }
                     LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
+                    if (isReset)
+                        refreshStatus.postValue(true);
                 }, throwable -> {
                     throwable.printStackTrace();
                     //TODO
+                    refreshStatus.postValue(false);
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -83,11 +114,17 @@ public class LockListFragVM extends AndroidViewModel {
      * @param lockGroup
      * @return
      */
-    public LiveData<List<LockKey>> getGroupLockList(LockGroup lockGroup) {
-        if (lockGroup.getId() == -1) {
-            return LockKeyDaoImpl.get().getAllLockKey();
+    public void getGroupLockList(LockGroup lockGroup) {
+        currentGroupId = lockGroup.getId();
+        if (lockGroup.getId() == -1) {//当组id为-1时获取全部锁
+            getLockKeyFromDb();
         } else {
-            return LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
+            lock2 = LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
+            lock2.observeForever(lockKeys -> {
+                if (currentGroupId == -1 || lockKeys == null) return;
+                if (mIsReset && lockKeys.size() < 1) return;
+                mLockKeys.setValue(lockKeys);
+            });
         }
     }
 
@@ -97,5 +134,9 @@ public class LockListFragVM extends AndroidViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
+//        lock1.removeObservers(getApplication());
+//        lock2.removeObserver(getApplication());
     }
+
+
 }

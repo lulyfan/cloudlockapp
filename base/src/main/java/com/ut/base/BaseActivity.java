@@ -76,14 +76,17 @@ public class BaseActivity extends AppCompatActivity {
             }
             noLoginDialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
                     .setMessage(R.string.base_auto_login_time_out)
-                    .setPositiveButton("好的", (dialog1, which) -> {
-                        ARouter.getInstance().build(url).navigation();
+                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
                         if (dialog1 != null) {
                             dialog1.dismiss();
                         }
+                        ARouter.getInstance().build(url).navigation();
+
                     }).setOnDismissListener(dialog -> {
                         noLoginDialog = null;
-                    }).create();
+                    })
+                    .setCancelable(false)
+                    .create();
             if (!noLoginDialog.isShowing()) {
                 noLoginDialog.show();
             }

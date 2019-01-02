@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"  tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">base</string>
     <string name="grantPermission">分配权限</string>
     <string name="mine_limitTime">限时</string>
@@ -39,4 +39,5 @@
     <string name="mine_version_update_toast">正在升级...</string>
     <string name="mine_version_update_dont">暂时不需要</string>
     <string name="mine_version_update_is_newest_version">已是最新版本</string>
+    <string name="fine">好的</string>
 </resources>

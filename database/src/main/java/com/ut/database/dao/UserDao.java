@@ -22,7 +22,7 @@ import java.util.List;
 public interface UserDao {
 
     @Query("SELECT * FROM USER ORDER BY id ASC")
-    List<User> findAllUsers();
+    LiveData<List<User>> findAllUsers();
 
     @Query("SELECT * FROM user ORDER BY id DESC LIMIT 1")
     LiveData<User> findLastOne();
@@ -37,7 +37,7 @@ public interface UserDao {
     void deleteUser(long id);
 
     @Delete
-    void deleteUsers(User...users);
+    void deleteUsers(User... users);
 
     @Update
     void updateUser(User user);

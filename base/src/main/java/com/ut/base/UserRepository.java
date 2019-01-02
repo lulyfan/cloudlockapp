@@ -10,6 +10,7 @@ import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import io.reactivex.schedulers.Schedulers;
@@ -45,6 +46,11 @@ public class UserRepository {
     public LiveData<User> getUser() {
         refreshUser();
         return userDao.findLastOne();
+    }
+
+
+    public LiveData<List<User>> getAllUser() {
+        return userDao.findAllUsers();
     }
 
     public void refreshUser() {
