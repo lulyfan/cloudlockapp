@@ -1,9 +1,5 @@
 package com.ut.base;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
-
 import com.example.entity.base.Result;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
@@ -11,15 +7,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
+import com.ut.database.dao.KeyDao_Impl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.Key;
 import com.ut.database.entity.LockKey;
 
 import java.util.List;
 
 public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListener {
 
-    public static final int CODE_SEND_KEY = 1010;
+    public static final int CODE_SEND_KEY_RECEIVER = 1010; //发送钥匙的接收端
+    public static final int CODE_SEND_KEY_SENDER = 1015; //发送钥匙的发送端
     public static final int CODE_DELETE_KEY = 1030;
     public static final int CODE_FREEZE_KEY = 1050;      //冻结钥匙
     public static final int CODE_UNFREEZE_KEY = 1060;    //解冻钥匙
@@ -39,10 +39,15 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
 
         int keyId = -1;
         switch (result.code) {
-            case CODE_SEND_KEY:
+            case CODE_SEND_KEY_RECEIVER:
                 TypeToken<List<LockKey>> typeToken_ = new TypeToken<List<LockKey>>() {};
                 List<LockKey> lockKeys_ = gson.fromJson(result.data, typeToken_.getType());
                 LockKeyDaoImpl.get().insertAll(lockKeys_);
+                break;
+
+            case CODE_SEND_KEY_SENDER:
+                Key key = gson.fromJson(result.data, Key.class);
+                CloudLockDatabaseHolder.get().getKeyDao().insertKeys(key);
                 break;
 
             case CODE_DELETE_KEY:

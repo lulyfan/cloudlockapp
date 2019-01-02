@@ -19,7 +19,7 @@ import io.reactivex.Observable;
 
 public class ConfirmChangePermissionViewModel extends BaseViewModel {
 
-    private static final int TIME = 20;
+    private static final int TIME = 60;
     public ObservableField<String> receiverPhone = new ObservableField<>();
     public ObservableField<String> receiverName = new ObservableField<>();
     public ObservableField<String> receiverHeadImgUrl = new ObservableField<>();
@@ -83,7 +83,7 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
                 .intervalRange(0, TIME - 1, 0, 1, TimeUnit.SECONDS)
                 .observeOn(BaseApplication.getUiScheduler())
                 .doOnComplete(() -> {
-                    textView.setText(getApplication().getString(R.string.sendAgain));
+                    textView.setText(getApplication().getString(R.string.getVerifyCode));
                     textView.setEnabled(true);
                 })
                 .subscribe(aLong -> textView.setText((TIME - aLong) + "s"));
