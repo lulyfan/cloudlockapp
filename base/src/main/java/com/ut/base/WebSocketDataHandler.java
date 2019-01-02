@@ -32,9 +32,6 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(() -> Toast.makeText(BaseApplication.getAppContext(), data, Toast.LENGTH_LONG).show());
-
         TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {};
 
         Gson gson = new Gson();

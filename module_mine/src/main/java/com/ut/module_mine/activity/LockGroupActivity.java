@@ -144,10 +144,10 @@ public class LockGroupActivity extends BaseActivity {
                         dialog1.dismiss();
 
                     } else if (i == R.id.confirm) {
-                        String groupName = et_groupName.getText().toString();
-                        viewModel.addLockGroup(groupName);
                         dialog1.dismiss();
 
+                        String groupName = et_groupName.getText().toString();
+                        viewModel.addLockGroup(groupName);
                     } else if (i == R.id.clear){
                         et_groupName.setText("");
                     }

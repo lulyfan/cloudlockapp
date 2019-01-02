@@ -17,6 +17,9 @@ public interface LockGroupDao {
     @Query("select * from lock_group ORDER By name ASC")
     LiveData<List<LockGroup>> getAll();
 
+    @Query("select * from lock_group ORDER By name ASC")
+    List<LockGroup> syncGetAll();
+
     @Query("select * from lock_group where id = :groupId limit 1")
     LockGroup getById(long groupId);
 

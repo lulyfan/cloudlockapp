@@ -11,6 +11,7 @@ import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
 import com.ut.module_mine.R;
@@ -45,9 +46,9 @@ public class LockGroupViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
+                            mLockGroups.postValue(listResult.data);
                             LockGroupDaoImpl.get().deleteAll();
                             LockGroupDaoImpl.get().insertAll(listResult.data);
-                            loadLockGroupState.postValue(true);
                         },
                         throwable -> {
                             tip.postValue(throwable.getMessage());

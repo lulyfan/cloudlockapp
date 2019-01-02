@@ -42,6 +42,10 @@ public class LockGroupDaoImpl {
         return mLockGroupDao.getAll();
     }
 
+    public List<LockGroup> syncGetAll() {
+        return mLockGroupDao.syncGetAll();
+    }
+
     /**
      * 通过id获取分组
      */
