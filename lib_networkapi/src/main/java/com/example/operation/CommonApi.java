@@ -12,6 +12,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -95,6 +96,14 @@ class ObjectLoader {
     protected static <T> Observable<T> observe(Observable<T> observable) {
         return observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io());
+                .unsubscribeOn(Schedulers.io())
+//                .onErrorReturn(new Function<Throwable, T>() {
+//                    @Override
+//                    public T apply(Throwable throwable) throws Exception {
+//                        throwable.printStackTrace();
+//                        return null;
+//                    }
+//                })
+                ;
     }
 }

@@ -28,6 +28,7 @@ import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
@@ -85,12 +86,18 @@ public class LockListFragment extends BaseFragment {
     private void initViewModel() {
         mLockListFragVM = ViewModelProviders.of(this).get(LockListFragVM.class);
         mLockListFragVM.getLockList().observe(this, lockKeys -> {
-            if (mFragmentLocklistBinding.swfLockList.isRefreshing()) {
-                mFragmentLocklistBinding.swfLockList.setRefreshing(false);
-            }
             refreshLockListData(lockKeys);
         });
         mLockListFragVM.getLockGroupList().observe(this, this::refreshGroupList);
+        mLockListFragVM.getRefreshStatus().observe(this, isRefresh -> {
+            if (mFragmentLocklistBinding.swfLockList.isRefreshing()) {
+                mFragmentLocklistBinding.swfLockList.setRefreshing(false);
+            }
+            //TODO 提示刷新错误
+//            if (isRefresh) {
+//                CLToast.showAtBottom(getContext(), getString(R.string.refresh_success));
+//            }
+        });
     }
 
     private void initView() {
@@ -100,11 +107,11 @@ public class LockListFragment extends BaseFragment {
         mFragmentLocklistBinding.swfLockList.setColorSchemeResources(R.color.color_tv_blue);
         mFragmentLocklistBinding.swfLockList.setOnRefreshListener(() -> {
             mLockListFragVM.toGetLockAllList(true);
-            mLockListFragVM.toGetAllGroupList(true);
+//            mLockListFragVM.toGetAllGroupList(true);
         });
     }
 
-    public void refreshLockListData(List<LockKey> datas) {
+    public synchronized void refreshLockListData(List<LockKey> datas) {
         if (mLockListAdapter == null) {
             mLockListAdapter = new LockListAdapter(getContext(), datas, BaseApplication.getUser());
             mFragmentLocklistBinding.lockRvLock.setAdapter(mLockListAdapter);
@@ -128,7 +135,7 @@ public class LockListFragment extends BaseFragment {
     private LockGroup allGroup = new LockGroup();
     int currentGroupPosition = -1;
 
-    private void refreshGroupList(List<LockGroup> lockGroups) {
+    private synchronized void refreshGroupList(List<LockGroup> lockGroups) {
         if (popupWindow == null || lockGroups == null) return;
         if (mLockGroupCommonAdapter == null) {
             allGroup.setId(-1);
@@ -161,10 +168,7 @@ public class LockListFragment extends BaseFragment {
                 ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(currentGroupName);
                 mFragmentLocklistBinding.lockTvGroup.setText(currentGroupName);
                 ((LockGroup) parent.getAdapter().getItem(currentGroupPosition)).setCurrent(0);
-                mLockListFragVM.getGroupLockList(lockGroup).observe(LockListFragment.this,
-                        lockKeys -> {
-                            refreshLockListData(lockKeys);
-                        });
+                mLockListFragVM.getGroupLockList(lockGroup);
                 popupWindow.getPopupWindow().dismiss();
             });
             listView.setAdapter(mLockGroupCommonAdapter);
@@ -200,8 +204,8 @@ public class LockListFragment extends BaseFragment {
         public void onGroupClick(View view) {
             UTLog.i("onGroupClick");
             setLightStatusBarFont();
-            setWindowAlpha(0.5f);
             popupWindow.showAtLocationWithAnim(getView().getRootView(), Gravity.TOP, 0, 0, R.style.animTranslate);
+            setWindowAlpha(0.5f);
         }
 
         public void onSearchClick(View view) {

@@ -3,6 +3,8 @@ package com.ut.cloudlock.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -28,32 +30,33 @@ import io.reactivex.schedulers.Schedulers;
  */
 @SuppressLint("Registered")
 public class SplashActivity extends BaseActivity {
+    Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 100:
+                    ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                    break;
+                case 200:
+                    ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+                    break;
+            }
+            finish();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLightStatusBar();
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
-
-        new Handler().postDelayed(() -> {
-//            Observable.just(this).subscribeOn(Schedulers.io()).map(context -> {
-//                List<User> allUsers = CloudLockDatabaseHolder.get().getUserDao().findAllUsers();
-//                String url = null;
-//                if (allUsers.isEmpty()) {
-//                    url = RouterUtil.LoginModulePath.Login;
-//                } else {
-//                    User user = allUsers.get(allUsers.size() - 1);
-//                    url = RouterUtil.MainModulePath.Main_Module;
-//                    BaseApplication.setUser(user);
-//                }
-//                return url;
-//            }).observeOn(AndroidSchedulers.mainThread()).subscribe(url -> {
-//                ARouter.getInstance().build(url).navigation();
-//                finish();
-//            });
-
-            ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-            finish();
-        }, 2000L);
+        mHandler.sendEmptyMessageDelayed(100, 2000L);
+        UserRepository.getInstance().getAllUser().observe(this, users -> {
+            if (users == null || users.size() < 1) {
+                mHandler.removeMessages(100);
+                mHandler.sendEmptyMessageDelayed(200, 800);
+            }
+        });
     }
 }

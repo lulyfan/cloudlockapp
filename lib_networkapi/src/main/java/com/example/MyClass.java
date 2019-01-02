@@ -17,14 +17,17 @@ public class MyClass {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        System.out.print(System.currentTimeMillis());
-        byte[] temp = new byte[]{(byte) 0xff, 0x11};
-        List<byte[]> list = new ArrayList<>();
-        list.add(temp);
-        if (list.get(0)[0] == (byte) 0xff) {
-            System.out.println("true" + (byte)0xff);
-        } else {
-            System.out.println("false");
+//        System.out.print(System.currentTimeMillis());
+//        byte[] temp = new byte[]{(byte) 0xff, 0x11};
+//        List<byte[]> list = new ArrayList<>();
+//        list.add(temp);
+//        if (list.get(0)[0] == (byte) 0xff) {
+//            System.out.println("true" + (byte)0xff);
+//        } else {
+//            System.out.println("false");
+        List<String> list = null;
+        if (list == null || list.size()<1){
+            System.out.println("list");
         }
 //        try {
 //            String result = DES.encryptDES("123456", DES.mypassword());
