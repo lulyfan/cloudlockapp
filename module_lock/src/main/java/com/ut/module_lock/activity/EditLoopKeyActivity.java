@@ -51,8 +51,8 @@ public class EditLoopKeyActivity extends BaseActivity {
         checkBox5 = mBinding.include5.findViewById(R.id.friday);
         checkBox6 = mBinding.include5.findViewById(R.id.saturday);
         checkBox7 = mBinding.include5.findViewById(R.id.sunday);
-        mBinding.validTime.setOnClickListener(v -> chooseDateTime(v, getString(R.string.enable_time)));
-        mBinding.invalidTime.setOnClickListener(v -> chooseDateTime(v, getString(R.string.invalid_time)));
+        mBinding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.enable_time)));
+        mBinding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalid_time)));
 
         mBinding.startDate.setOnClickListener(v -> {
             chooseDate(v, getString(R.string.lock_start_date));
@@ -89,20 +89,16 @@ public class EditLoopKeyActivity extends BaseActivity {
         }
     }
 
-    private void chooseDateTime(View v, String title) {
-        DialogUtil.chooseDateTime(v.getContext(), title, (year, month, day, hour, minute) -> {
-            String dateTime = String.valueOf(year + "/"
-                    + String.format(Locale.getDefault(), "%02d", month) + "/"
-                    + String.format(Locale.getDefault(), "%02d", day) + " "
-                    + String.format(Locale.getDefault(), "%02d", hour) + ":"
-                    + String.format(Locale.getDefault(), "%02d", minute));
-            if ("生效时间".equals(title)) {
-                mKey.setStartTime(dateTime);
+    private void chooseTime(View v, String title) {
+        DialogUtil.chooseTime(v.getContext(), title, (hour, minute) -> {
+            String dateTime = String.format(Locale.getDefault(), "%02d", hour) + ":"
+                    + String.format(Locale.getDefault(), "%02d", minute);
+            if (getString(R.string.enable_time).equals(title)) {
+                mKey.setStartTimeRange(dateTime);
             } else {
-                mKey.setEndTime(dateTime);
+                mKey.setEndTimeRange(dateTime);
             }
-            mBinding.setKeyItem(mKey);
-        });
+            mBinding.setKeyItem(mKey); });
     }
 
     private void save() {
@@ -139,10 +135,10 @@ public class EditLoopKeyActivity extends BaseActivity {
     private void chooseDate(View v, String title) {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
             String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
-            if ("启用时期".equals(title)) {
-                mKey.setStartTimeRange(date);
+            if (getString(R.string.lock_start_date).equals(title)) {
+                mKey.setStartTime(date);
             } else {
-                mKey.setEndTimeRange(date);
+                mKey.setEndTime(date);
             }
             mBinding.setKeyItem(mKey);
         });

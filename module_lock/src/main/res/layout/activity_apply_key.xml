@@ -19,13 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_bg_left_right_bottom_corner"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/base_20dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_70dp"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/base_20dp"
                 android:paddingRight="@dimen/base_20dp">
 
                 <TextView
@@ -57,7 +57,6 @@
                 android:background="@android:color/white"
                 android:gravity="top"
                 android:hint="@string/lock_apply_ask_for_hint"
-                android:paddingLeft="@dimen/base_20dp"
                 android:paddingTop="@dimen/base_10dp"
                 android:paddingRight="@dimen/base_10dp"
                 android:paddingBottom="@dimen/base_10dp"
@@ -83,7 +82,7 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/base_20dp"
-                android:paddingRight="@dimen/base_20dp">
+                >
 
                 <RadioButton
                     android:id="@+id/rbtn_forever"
@@ -92,6 +91,7 @@
                     android:background="@android:color/transparent"
                     android:button="@null"
                     android:drawableRight="@drawable/selector_bg_radio"
+                    android:paddingRight="@dimen/base_20dp"
                     android:text="@string/lock_permanent_key"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
@@ -108,6 +108,7 @@
                     android:background="@android:color/transparent"
                     android:button="@null"
                     android:drawableRight="@drawable/selector_bg_radio"
+                    android:paddingRight="@dimen/base_20dp"
                     android:text="@string/lock_limited_time_key"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
@@ -124,6 +125,7 @@
                     android:background="@android:color/transparent"
                     android:button="@null"
                     android:drawableRight="@drawable/selector_bg_radio"
+                    android:paddingRight="@dimen/base_20dp"
                     android:text="@string/lock_once_key"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
@@ -140,6 +142,7 @@
                     android:background="@android:color/transparent"
                     android:button="@null"
                     android:drawableRight="@drawable/selector_bg_radio"
+                    android:paddingRight="@dimen/base_20dp"
                     android:text="@string/lock_loop_key"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_14sp"/>
