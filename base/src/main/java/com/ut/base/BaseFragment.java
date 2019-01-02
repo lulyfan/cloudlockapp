@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.mobstat.StatService;
 import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.Utils.UTLog;
 
@@ -96,6 +97,8 @@ public class BaseFragment extends Fragment {
         super.onResume();
         UTLog.i(this.getClass().getSimpleName() + ":onResume");
         onUserVisible();
+        StatService.onPageStart(getActivity(), this.getClass().getSimpleName());
+
     }
 
     @Override
@@ -103,6 +106,7 @@ public class BaseFragment extends Fragment {
         super.onPause();
         UTLog.i(this.getClass().getSimpleName() + ":onPause");
         onUserInvisible();
+        StatService.onPageEnd(getActivity(), this.getClass().getSimpleName());
     }
 
     @Override
@@ -130,7 +134,8 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     *用于 viewpager + fragment， 切换时生效
+     * 用于 viewpager + fragment， 切换时生效
+     *
      * @param isVisibleToUser
      */
     @Override
@@ -145,6 +150,7 @@ public class BaseFragment extends Fragment {
 
     /**
      * 用户fragment hide() or show()
+     *
      * @param hidden
      */
     @Override
@@ -157,11 +163,11 @@ public class BaseFragment extends Fragment {
     }
 
 
-    protected void onUserVisible(){
+    protected void onUserVisible() {
 
     }
 
-    protected void onUserInvisible(){
+    protected void onUserInvisible() {
 
     }
 }

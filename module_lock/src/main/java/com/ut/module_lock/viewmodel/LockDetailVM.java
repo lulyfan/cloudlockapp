@@ -74,19 +74,24 @@ public class LockDetailVM extends AndroidViewModel {
 
     public int openLock() {
         isConnectSuccessed = false;
-        return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
-            @Override
-            public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
-                if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
-                    toConnect(scanDevice);
+        if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {
+            toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
+            return 0;
+        } else {
+            return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
+                @Override
+                public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+                    if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
+                        toConnect(scanDevice);
+                    }
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
-            }
-        }, 10);
+                @Override
+                public void onFinish() {
+                    showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+                }
+            }, 10);
+        }
     }
 
     private void toConnect(ScanDevice scanDevice) {
@@ -96,11 +101,7 @@ public class LockDetailVM extends AndroidViewModel {
             public void onConnect() {
                 CloudLock cloudLock = getCloucLockFromLockKey();
                 toGetElect(cloudLock);
-                if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
-                    toCheckPermission();
-                } else {
-                    toActOpenLock(cloudLock);
-                }
+                toCheckPermissionOrOpenLock(cloudLock);
                 isConnectSuccessed = true;
                 connectStatus.postValue(true);
             }
@@ -114,6 +115,14 @@ public class LockDetailVM extends AndroidViewModel {
                 }
             }
         }, mLockStateListener);
+    }
+
+    private void toCheckPermissionOrOpenLock(CloudLock cloudLock) {
+        if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
+            toCheckPermission();
+        } else {
+            toActOpenLock(cloudLock);
+        }
     }
 
     @NonNull
@@ -210,5 +219,6 @@ public class LockDetailVM extends AndroidViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
+        UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
     }
 }

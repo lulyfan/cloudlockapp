@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+// 获取当前日期时间
+def releaseTime() {
+    return new Date().format("yyyyMMdd")
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -7,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "V1.0"
+        versionName "V1.0.0_" + releaseTime() + "_beta"
 
         javaCompileOptions {
             annotationProcessorOptions {

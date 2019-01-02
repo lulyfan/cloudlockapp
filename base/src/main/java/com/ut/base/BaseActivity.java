@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.baidu.mobstat.StatService;
 import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -57,6 +58,12 @@ public class BaseActivity extends AppCompatActivity {
         initLoadDialog();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StatService.onPageStart(this, this.getClass().getSimpleName());
+    }
+
     private void initNoLoginListener() {
         MyRetrofit.get().setNoLoginListener(() -> {
             Observable.just(RouterUtil.LoginModulePath.Login)
@@ -68,7 +75,7 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
-    private void handlerNotLogin(String url) {
+    private synchronized void handlerNotLogin(String url) {
         //todo
         try {
             if (noLoginDialog != null && noLoginDialog.isShowing()) {
@@ -250,9 +257,10 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (noLoginDialog != null) {
+        if (noLoginDialog != null && noLoginDialog.isShowing()) {
             noLoginDialog.dismiss();
         }
+        StatService.onPageEnd(this, this.getClass().getSimpleName());
     }
 
     @Override
