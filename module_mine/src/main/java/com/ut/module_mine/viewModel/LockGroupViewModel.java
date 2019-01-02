@@ -47,6 +47,7 @@ public class LockGroupViewModel extends BaseViewModel {
                 })
                 .subscribe(listResult -> {
                             mLockGroups.postValue(listResult.data);
+                            loadLockGroupState.postValue(true);
                             LockGroupDaoImpl.get().deleteAll();
                             LockGroupDaoImpl.get().insertAll(listResult.data);
                         },
