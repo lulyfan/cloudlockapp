@@ -36,7 +36,7 @@
     <string name="mine_version_update_install">下载完成，点击安装</string>
     <string name="mine_version_update_tips">发现有新的版本，需要升级吗？</string>
     <string name="mine_version_update_comfirm">升级</string>
-    <string name="mine_version_update_toast">正在升级...</string>
+    <string name="mine_version_update_toast">开始下载...</string>
     <string name="mine_version_update_dont">暂时不需要</string>
     <string name="mine_version_update_is_newest_version">已是最新版本</string>
 </resources>

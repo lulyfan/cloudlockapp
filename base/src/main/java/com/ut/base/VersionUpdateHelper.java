@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import com.alibaba.fastjson.JSON;
 import com.example.operation.MyRetrofit;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.DownloadUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 
@@ -42,23 +43,26 @@ public class VersionUpdateHelper {
     private static Notification.Builder builder = null;
 
     @SuppressLint("CheckResult")
-    public static void updateVersion(Context context, final String currentVersion, final UpdateCallback callback) {
+    public static void updateVersion(Context context, long currentVersion, final UpdateCallback callback) {
         MyRetrofit.get().getCommonApiService().updateVersion()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         VersionInfo versionInfo = JSON.parseObject(result.data.toString(), VersionInfo.class);
-                        int compare = SystemUtils.compareVersions(currentVersion, versionInfo.getVersion());
+
+                        int remoteVersion = Integer.parseInt(versionInfo.getExtProps());
+                        boolean isNeedUpdate = currentVersion < remoteVersion ? true : false;
                         if (callback != null) {
-                            callback.needToUpdate(compare == 1, versionInfo.getVersion(), versionInfo.getFileUrl());
+                            callback.needToUpdate(isNeedUpdate, versionInfo.getVersion(), versionInfo.getFileUrl());
                         }
-                        if (compare == 1) {
+
+                        if (isNeedUpdate) {
                             //todo
                             new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
                                     .setMessage(R.string.mine_version_update_tips)
                                     .setPositiveButton(R.string.mine_version_update_comfirm, ((dialog, which) -> {
-                                        download(versionInfo.getFileUrl());
+                                        download(context, versionInfo.getFileUrl(), versionInfo.getDescription());
                                         CLToast.showAtBottom(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(R.string.mine_version_update_toast));
                                     }))
                                     .setNegativeButton(R.string.mine_version_update_dont, null)
@@ -70,6 +74,11 @@ public class VersionUpdateHelper {
 
                     }
                 }, new ErrorHandler());
+    }
+
+    public static void download(Context context, String url, String appName) {
+        DownloadUtil downloadUtil = new DownloadUtil(context);
+        downloadUtil.downloadAPK(url, appName);
     }
 
     public static void download(String url) {

@@ -2,8 +2,11 @@ package com.ut.module_mine.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+import com.ut.base.VersionUpdateHelper;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivitySystemSettingBinding;
 import com.ut.module_mine.viewModel.SystemSettingViewModel;
@@ -41,12 +45,19 @@ public class SystemSettingActivity extends BaseActivity {
         initLightToolbar();
         setTitle(getString(R.string.systemSetting));
 
+        try {
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            binding.version.setText(versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         binding.checkVersion.setOnClickListener(v -> {
-//            try {
-//                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionName, null);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            try {
+                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionCode,null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         binding.aboutUs.setOnClickListener(v -> {
@@ -62,12 +73,6 @@ public class SystemSettingActivity extends BaseActivity {
 
         binding.logout.setOnClickListener(v -> {
             logout();
-        });
-
-        binding.checkVersion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
         });
     }
 

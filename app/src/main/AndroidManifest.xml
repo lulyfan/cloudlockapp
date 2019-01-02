@@ -8,9 +8,9 @@
     <application
         android:name="com.ut.cloudlock.MyApplication"
         android:debuggable="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/cloudlock_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/cloudlock_icon"
         android:supportsRtl="true"
         android:theme="@style/ImmersiveAppTheme"
         tools:ignore="HardcodedDebugMode">
