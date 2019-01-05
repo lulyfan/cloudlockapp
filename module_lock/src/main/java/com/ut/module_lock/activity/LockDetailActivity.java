@@ -121,6 +121,7 @@ public class LockDetailActivity extends BaseActivity {
 //            startActivity(new Intent(LockDetailActivity.this, GrantPermissionActivity.class));
             ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mLockKey.getMac())
+                    .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, mLockKey.getUserType())
                     .navigation();
         }
 

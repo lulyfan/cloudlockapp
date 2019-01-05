@@ -11,7 +11,10 @@ import com.ut.module_lock.R;
 
 public class DeviceKeyFragment extends Fragment {
     private static final String EXTRA_KEY_TYPE = "extra_key_type";
-    private static final String KEY_TYPE_FINGER = "key_type_finger";
+    public static final int KEY_TYPE_FINGER = 0;
+    public static final int KEY_TYPE_PWD = 1;
+    public static final int KEY_TYPE_IC = 2;
+    public static final int KEY_TYPE_ELEC_KEY = 3;
 
     public DeviceKeyFragment() {
     }

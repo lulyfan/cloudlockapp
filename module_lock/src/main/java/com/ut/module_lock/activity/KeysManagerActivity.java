@@ -165,6 +165,7 @@ public class KeysManagerActivity extends BaseActivity {
     private void sendKey() {
         ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
                 .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mMac)
+                .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, lockKey.getUserType())
                 .navigation();
     }
 

@@ -19,6 +19,9 @@ import com.ut.base.Utils.Util;
 import com.ut.module_lock.R;
 import com.ut.module_lock.fragment.DeviceKeyFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Route(path = RouterUtil.LockModulePath.LOCK_DEVICE_KEY)
 public class DeviceKeyActivity extends BaseActivity {
@@ -33,13 +36,15 @@ public class DeviceKeyActivity extends BaseActivity {
 
         enableImmersive();
         initToolbar();
-        mSectionsPagerAdapter = new DevicePagerAdapter(getSupportFragmentManager());
+        initView();
+    }
 
+    private void initView() {
+        mSectionsPagerAdapter = new DevicePagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
@@ -64,18 +69,31 @@ public class DeviceKeyActivity extends BaseActivity {
 
     public class DevicePagerAdapter extends FragmentPagerAdapter {
 
+        private List<Fragment> mFragments = null;
+
         public DevicePagerAdapter(FragmentManager fm) {
             super(fm);
+            initFragment();
+        }
+
+        private void initFragment() {
+            mFragments = new ArrayList<>();
+            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_FINGER));
+            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_PWD));
+            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_IC));
+            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_ELEC_KEY));
         }
 
         @Override
         public Fragment getItem(int position) {
-            return DeviceKeyFragment.newInstance(position + 1);
+            return mFragments.get(position);
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return mFragments.size();
         }
+
+
     }
 }
