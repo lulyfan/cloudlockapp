@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
+import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
@@ -56,6 +57,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppManager.getAppManager().finishAllActivity();//TODO 暂时退到登录界面时清除所有界面
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initLoginUI();

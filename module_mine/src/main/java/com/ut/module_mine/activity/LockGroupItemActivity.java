@@ -95,7 +95,7 @@ public class LockGroupItemActivity extends BaseActivity {
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
             LockKey lockKey = selectedbinding.getLock();
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                    .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, lockKey)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                     .navigation();
         });
         binding.rvLockList.setAdapter(adapter);

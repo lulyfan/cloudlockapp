@@ -26,4 +26,5 @@
     <color name="color_base_grayC7C7CC">#C7C7CC</color>
     <color name="color_base_highlight">#00BBD2</color>
     <color name="color_base_bg_search">#fff4f5f7</color>
+    <color name="color_half_translate_white">#80FFFFFF</color>
 </resources>

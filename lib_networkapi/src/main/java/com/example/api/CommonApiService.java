@@ -278,4 +278,8 @@ public interface CommonApiService {
     @POST(ApiUrl.editKeyName)
     Observable<Result<Void>> editKeyName(@Field("keyId") long keyId, @Field("keyName") String name);
 
+    @FormUrlEncoded
+    @POST(ApiUrl.setCanOpen)
+    Observable<Result<Void>> setCanOpen(@Field("keyId") long keyId, @Field("canOpen") int canOpen);
+
 }

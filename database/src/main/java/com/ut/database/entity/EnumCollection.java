@@ -53,4 +53,17 @@ public class EnumCollection {
         ONCE,//当次
         CYCLE//循环
     }
+
+    public enum LockType{
+        SMARTLOCK(0xA010);
+        int type;
+
+        LockType(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+    }
 }

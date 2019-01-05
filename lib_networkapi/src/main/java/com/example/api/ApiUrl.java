@@ -133,6 +133,9 @@ public interface ApiUrl {
     //添加日志
     String addLog = PREFIX + "/log/addLog" + SUFFIX;
 
+    //设置是否触摸开
+    String setCanOpen = PREFIX + "/key/setCanOpen" + SUFFIX;
+
     //获取消息列表
     String getMessage = "api/lockMessage/getMessage?json";
 

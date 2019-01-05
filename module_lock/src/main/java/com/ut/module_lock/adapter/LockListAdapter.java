@@ -115,6 +115,14 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
         }
     }
 
+    @BindingAdapter("touchSrc")
+    public static void loadTouchSrc(ImageView imageView, int canOpen) {
+        if (canOpen == 1) {
+            imageView.setImageResource(R.mipmap.icon_touch_enable);
+        }
+    }
+
+
     @BindingAdapter("encryptText")
     public static void loadText(TextView textView, String account) {
         textView.setText(TxtUtils.toEncryptAccount(account));

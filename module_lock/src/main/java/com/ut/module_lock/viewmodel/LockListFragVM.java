@@ -7,16 +7,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
-import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
-import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -54,7 +51,7 @@ public class LockListFragVM extends AndroidViewModel {
         lock1.observeForever(lockKeys -> {
             assert lockKeys != null;
             if (currentGroupId != -1) return;
-            if (mIsReset && lockKeys.size() < 1) return;
+//            if (mIsReset && lockKeys.size() < 1) return;
             mLockKeys.setValue(lockKeys);
         });
     }
@@ -122,7 +119,7 @@ public class LockListFragVM extends AndroidViewModel {
             lock2 = LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
             lock2.observeForever(lockKeys -> {
                 if (currentGroupId == -1 || lockKeys == null) return;
-                if (mIsReset && lockKeys.size() < 1) return;
+//                if (mIsReset && lockKeys.size() < 1) return;
                 mLockKeys.setValue(lockKeys);
             });
         }

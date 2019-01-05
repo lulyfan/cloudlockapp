@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.ut.module_lock">
 
-
-
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -37,6 +35,9 @@
         <activity android:name=".activity.ChooseLockGroupActivity"/>
         <activity android:name=".activity.EditLoopKeyActivity"/>
         <activity android:name=".activity.SearchLockActivity">
+        </activity>
+        <activity
+            android:name=".activity.DeviceKeyActivity">
         </activity>
     </application>
 

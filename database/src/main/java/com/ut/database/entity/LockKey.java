@@ -77,6 +77,17 @@ public class LockKey implements Parcelable {
     //钥匙id
     private long keyId;
 
+    public int getCanOpen() {
+        return canOpen;
+    }
+
+    public void setCanOpen(int canOpen) {
+        this.canOpen = canOpen;
+    }
+
+    //是否触摸开锁
+    private int canOpen=0;// 0：关闭  1：开启
+
 
     @Ignore
     String statusStr;//状态字符串

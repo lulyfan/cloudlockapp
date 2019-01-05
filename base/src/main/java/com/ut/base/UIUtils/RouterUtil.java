@@ -41,6 +41,8 @@ public class RouterUtil {
         //锁详情
         public static final String LOCK_DETAIL = "/lock/detail";
 
+        public static final String LOCK_DEVICE_KEY = "/lock/lockKey";
+
 
     }
 
@@ -49,7 +51,7 @@ public class RouterUtil {
     }
 
     public interface LockModuleExtraKey {
-        String Extra_lock_detail = "extra_lock_key";
+        String EXTRA_LOCK_KEY = "extra_lock_key";
         String EXTRA_LOCK_SENDKEY_MAC = "extra_lock_sendkey";
         String EXTRA_LOCK_SENDKEY_MOBILE = "extra_lock_sendKey_mobile";
         String EXTRA_LOCK_SENDKEY_RULER_TYPE = "extra_lock_sendKey_rulerType";

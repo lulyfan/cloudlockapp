@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,16 +27,13 @@ import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
-import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
-import com.ut.module_lock.activity.LockDetailActivity;
 import com.ut.module_lock.activity.SearchLockActivity;
 import com.ut.module_lock.adapter.LockListAdapter;
-import com.ut.module_lock.adapter.OnRcvItemClickListener;
 import com.ut.module_lock.databinding.FragmentLocklistBinding;
 import com.ut.module_lock.viewmodel.LockListFragVM;
 
@@ -115,16 +111,13 @@ public class LockListFragment extends BaseFragment {
         if (mLockListAdapter == null) {
             mLockListAdapter = new LockListAdapter(getContext(), datas, BaseApplication.getUser());
             mFragmentLocklistBinding.lockRvLock.setAdapter(mLockListAdapter);
-            mLockListAdapter.setOnRcvItemClickListener(new OnRcvItemClickListener() {
-                @Override
-                public void onItemClick(View view, List<?> datas, int position) {
-                    LockKey lockKey = (LockKey) datas.get(position);
-                    if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
-                        ARouter.getInstance()
-                                .build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                                .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, (Parcelable) datas.get(position))
-                                .navigation();
-                    }
+            mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
+                LockKey lockKey = (LockKey) datas1.get(position);
+                if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
+                    ARouter.getInstance()
+                            .build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                            .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, (Parcelable) datas1.get(position))
+                            .navigation();
                 }
             });
         } else {

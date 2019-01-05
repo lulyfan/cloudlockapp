@@ -34,6 +34,7 @@ public class ApplyKeyActivity extends BaseActivity {
     private ActivityApplyKeyBinding mBinding;
     private String mac;
     private int ruleType;
+    private String name;
 
     public static void start(Context context, Bundle data) {
         Intent intent = new Intent(context, ApplyKeyActivity.class);
@@ -71,6 +72,8 @@ public class ApplyKeyActivity extends BaseActivity {
                 ruleType = 4;
             }
         });
+
+        mBinding.tvKeyName.setText(mac);
 
         mBinding.btnApplyKey.setOnClickListener(v -> {
             if (BaseApplication.getUser() == null) return;

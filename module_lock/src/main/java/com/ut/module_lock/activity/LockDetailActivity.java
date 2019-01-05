@@ -41,11 +41,29 @@ public class LockDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         enableImmersive();
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
-        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.Extra_lock_detail);
+        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
         initLockData();
         addPaddingTop();
+        initView();
         mDetailBinding.setPresent(new Present());
         initViewModel();
+    }
+
+    private void initView() {
+        if (mLockKey.getUserType() != EnumCollection.UserType.ADMIN.ordinal() &&
+                mLockKey.getUserType() != EnumCollection.UserType.AUTH.ordinal()) {
+            mDetailBinding.functionTvBleKey.setVisibility(View.GONE);
+            mDetailBinding.functionTvDeviceKey.setVisibility(View.GONE);
+            mDetailBinding.functionTvManagekey.setVisibility(View.GONE);
+            mDetailBinding.functionTvSendkey.setVisibility(View.GONE);
+            return;
+        }
+        if (mLockKey.getType() == EnumCollection.LockType.SMARTLOCK.getType()) {
+            mDetailBinding.functionTvManagekey.setVisibility(View.GONE);
+            mDetailBinding.functionTvSendkey.setVisibility(View.GONE);
+            mDetailBinding.functionTvBleKey.setVisibility(View.VISIBLE);
+            mDetailBinding.functionTvDeviceKey.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initLockData() {
@@ -53,6 +71,8 @@ public class LockDetailActivity extends BaseActivity {
         mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         mLockKey.setElectricityStr();
+        //TODO 设置假数据
+        mLockKey.setType(0xA010);
         mDetailBinding.setLockKey(mLockKey);
         mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
         mLockDetailVM.setLockKey(mLockKey);
@@ -122,6 +142,12 @@ public class LockDetailActivity extends BaseActivity {
                     .withParcelable(Constance.LOCK_KEY, mLockKey)
                     .navigation();
         }
+
+        public void onDeviceKeyClick(View view) {
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mLockKey)
+                    .navigation();
+        }
     }
 
     @BindingAdapter("electricityDrawable")
@@ -160,13 +186,17 @@ public class LockDetailActivity extends BaseActivity {
         }
     }
 
-    @BindingAdapter("setVisiable")
-    public static void setVisiable(TextView textView, int userType) {
-        if (userType == EnumCollection.UserType.ADMIN.ordinal() || userType == EnumCollection.UserType.AUTH.ordinal()) {
-            textView.setVisibility(View.VISIBLE);
-        } else {
-            textView.setVisibility(View.GONE);
+
+    @BindingAdapter("touchDrawableLeft")
+    public static void touchDrawableLeft(TextView textView, int canOpen) {
+        UTLog.i("canOpen:" + canOpen);
+        Drawable leftDrawable = textView.getResources().getDrawable(R.mipmap.icon_touch_unable);
+        if (canOpen == 1) {
+            leftDrawable = textView.getResources().getDrawable(R.mipmap.icon_touch_enable);
         }
+        leftDrawable.setBounds(0, 0, leftDrawable.getIntrinsicWidth(), leftDrawable.getIntrinsicHeight());
+        textView.setCompoundDrawables(leftDrawable, textView.getCompoundDrawables()[1],
+                textView.getCompoundDrawables()[2], textView.getCompoundDrawables()[3]);
     }
 
     private void toOpenLock() {

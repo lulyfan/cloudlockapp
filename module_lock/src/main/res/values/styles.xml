@@ -25,6 +25,7 @@
     <style name="AddGuideTV.drawableLeft">
         <item name="android:drawableLeft">@mipmap/icon_oval</item>
     </style>
+
     <style name="function_tv">
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:paddingLeft">@dimen/base_5dp</item>
@@ -43,5 +44,18 @@
     <style name="animTranslate">
         <item name="android:windowEnterAnimation">@anim/translate_topin</item>
         <item name="android:windowExitAnimation">@anim/translate_topout</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="TabItemDeviceKey">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TabTextViewStyle">
+        <item name="android:textSize">@dimen/base_17sp</item>
     </style>
 </resources>

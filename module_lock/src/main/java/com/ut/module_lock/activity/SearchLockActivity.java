@@ -1,18 +1,13 @@
 package com.ut.module_lock.activity;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
@@ -80,7 +75,7 @@ public class SearchLockActivity extends BaseActivity {
             LockKey lockKey = (LockKey) parent.getAdapter().getItem(position);
             mSearchLockVM.insertSearchRecord(lockKey.getName());
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                    .withParcelable(RouterUtil.LockModuleExtraKey.Extra_lock_detail, lockKey)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                     .navigation();
             this.finish();
         });

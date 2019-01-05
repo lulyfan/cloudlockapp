@@ -92,9 +92,9 @@ public class MyRetrofit {
                         return response;
                     }
                 })
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(2, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS);
+                .writeTimeout(3, TimeUnit.SECONDS);
         builder.addInterceptor(httpLoggingInterceptor);
         mOkHttpClient = builder.build();
         mWebSocketHelper = new WebSocketHelper(mOkHttpClient);

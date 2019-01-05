@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main"
+    android:orientation="vertical"
+    tools:context=".activity.DeviceKeyActivity">
+
+    <RelativeLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_44dp"
+            app:navigationIcon="@mipmap/icon_back_white"
+            >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/base_17sp"/>
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleBar"
+            android:layout_marginTop="@dimen/base_22dp"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="@dimen/base_3dp"
+            app:tabPaddingBottom="@dimen/base_10dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/TabTextViewStyle"
+            app:tabTextColor="@color/white">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem"
+                style="@style/TabItemDeviceKey"
+                android:text="@string/tab_text_finger"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem2"
+                style="@style/TabItemDeviceKey"
+                android:text="@string/tab_text_pwd"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem3"
+                style="@style/TabItemDeviceKey"
+                android:text="@string/tab_text_ic"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem4"
+                style="@style/TabItemDeviceKey"
+                android:text="@string/tab_text_key"/>
+        </android.support.design.widget.TabLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_3dp"
+            android:layout_alignBottom="@+id/tabs"
+            android:background="@color/color_half_translate_white"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/base_10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_62dp"
+            android:background="@color/gray3"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="13"
+                android:gravity="center"
+                android:text="@string/lock_tip_open_ble_lock"
+                android:textColor="@color/white"
+                android:textSize="@dimen/base_14sp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_lock_connect_1"
+                    android:clickable="true"
+                    android:drawableLeft="@mipmap/icon_lock_mini_white"
+                    android:drawablePadding="@dimen/base_2dp"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/base_2dp"
+                    android:text="@string/connect_lock"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_14sp"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+</LinearLayout>

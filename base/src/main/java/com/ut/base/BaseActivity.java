@@ -28,6 +28,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.dialog.LoadDialogFragment;
+import com.ut.database.database.CloudLockDatabaseHolder;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -88,7 +89,12 @@ public class BaseActivity extends AppCompatActivity {
                             dialog1.dismiss();
                         }
                         ARouter.getInstance().build(url).navigation();
-
+                        Schedulers.io().scheduleDirect(new Runnable() {
+                            @Override
+                            public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
+                                CloudLockDatabaseHolder.get().clear();
+                            }
+                        });
                     }).setOnDismissListener(dialog -> {
                         noLoginDialog = null;
                     })

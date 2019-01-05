@@ -18,6 +18,7 @@ import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
+import com.ut.module_lock.entity.SwitchResult;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
 import com.ut.unilink.cloudLock.CloudLock;
@@ -47,6 +48,7 @@ public class LockSettingVM extends AndroidViewModel {
     private MutableLiveData<Boolean> isDeleteSuccess = new MutableLiveData<>();
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<Long> selectedGroupId = new MutableLiveData<>();
+    private MutableLiveData<SwitchResult> setCanOpenSwitchResult = new MutableLiveData<>();
     private LockKey lockKey;
 
     public static final int BLEREAUESTCODE = 101;
@@ -76,6 +78,10 @@ public class LockSettingVM extends AndroidViewModel {
         return selectedGroupId;
     }
 
+    public LiveData<SwitchResult> getSetCanOpenSwitchResult() {
+        return setCanOpenSwitchResult;
+    }
+
     public void verifyAdmin(String pwd) {
         MyRetrofit.get().getCommonApiService().verifyUserPwd(pwd)
                 .subscribeOn(Schedulers.io())
@@ -86,6 +92,30 @@ public class LockSettingVM extends AndroidViewModel {
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
+    }
+
+    public void changeCanOpen(boolean canOpen) {
+        Disposable disposable = CommonApi.setCanOpen(lockKey.getKeyId(), canOpen ? 1 : 0)
+                .subscribe(voidResult -> {
+                    if (voidResult.isSuccess()) {
+                        setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, true));
+                        lockKey.setCanOpen(canOpen ? 1 : 0);
+                        updateLockKey();
+                    } else {
+                        setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
+                    }
+                    showTip.postValue(voidResult.msg);
+                }, throwable -> {
+                    setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
+                    showTip.setValue(getApplication().getString(R.string.lock_tip_setting_failed));
+                });
+        mCompositeDisposable.add(disposable);
+    }
+
+    private void updateLockKey() {
+        Schedulers.io().scheduleDirect(() -> {
+            LockKeyDaoImpl.get().insert(lockKey);
+        });
     }
 
 
@@ -132,7 +162,9 @@ public class LockSettingVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
-                toUnbind(lockKey);
+                Schedulers.io().scheduleDirect(() -> {
+                    toUnbind(lockKey);
+                }, 100, TimeUnit.MILLISECONDS);
                 isConnected = true;
             }
 

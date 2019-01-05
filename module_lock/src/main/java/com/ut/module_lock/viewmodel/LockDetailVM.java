@@ -25,6 +25,7 @@ import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -100,7 +101,10 @@ public class LockDetailVM extends AndroidViewModel {
             @Override
             public void onConnect() {
                 CloudLock cloudLock = getCloucLockFromLockKey();
-                toGetElect(cloudLock);
+                io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
+                    toGetElect(cloudLock);
+                }, 100, TimeUnit.MILLISECONDS);
+
                 toCheckPermissionOrOpenLock(cloudLock);
                 isConnectSuccessed = true;
                 connectStatus.postValue(true);
@@ -121,7 +125,9 @@ public class LockDetailVM extends AndroidViewModel {
         if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             toCheckPermission();
         } else {
-            toActOpenLock(cloudLock);
+            io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
+                toActOpenLock(cloudLock);
+            }, 100, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -179,7 +185,7 @@ public class LockDetailVM extends AndroidViewModel {
                             }
                         },
                         throwable -> {
-                            UTLog.i("onDisconnect");
+                            UTLog.i("鉴权时网络错误");
                             showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
                         });
         mCompositeDisposable.add(result);
@@ -196,7 +202,7 @@ public class LockDetailVM extends AndroidViewModel {
 
             @Override
             public void onFailed(int i, String s) {
-                UTLog.i("onFailed");
+                UTLog.i("onOpen Fail:" + i + " s:" + s);
                 showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
                 toAddLog(2);
             }

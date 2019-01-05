@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -65,10 +66,20 @@ public class LockSettingActivity extends BaseActivity {
         initViewModel();
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
+        mBinding.switchCanOpen.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isResetChecked) {
+                isResetChecked = false;
+                return;
+            }
+            mLockSettingVM.changeCanOpen(isChecked);
+        });
         mBinding.layoutLockName.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).withString("edit_name_title", getString(R.string.lock_name)).withBoolean("is_lock", true).withString("mac", lockKey.getMac()).navigation(this, REQUEST_CODE_EDIT_NAME);
         });
     }
+
+    private volatile boolean isResetChecked = false;
+
 
     private void initViewModel() {
         mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
@@ -89,6 +100,12 @@ public class LockSettingActivity extends BaseActivity {
             lockKey = lk;
             setBindingLockKey();
             loadGroupName();
+        });
+        mLockSettingVM.getSetCanOpenSwitchResult().observe(this, operateSuccess -> {
+            if (!operateSuccess.result) {
+                isResetChecked = true;
+                mBinding.switchCanOpen.setChecked(operateSuccess.oldVar);
+            }
         });
     }
 

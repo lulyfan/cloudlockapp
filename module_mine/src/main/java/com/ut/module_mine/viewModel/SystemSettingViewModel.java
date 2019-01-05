@@ -5,11 +5,13 @@ import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
+import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.VersionUpdateHelper;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_mine.R;
+import com.ut.module_mine.activity.MainActivity;
 
 import io.reactivex.functions.Consumer;
 

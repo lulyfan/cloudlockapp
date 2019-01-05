@@ -27,6 +27,7 @@
             android:drawablePadding="@dimen/base_20dp"
             android:gravity="center_vertical"
             android:hint="@string/lock_hint_set_name"
+            android:maxLength="20"
             android:paddingLeft="@dimen/base_23dp"
             android:paddingTop="@dimen/base_17dp"
             android:paddingRight="@dimen/base_23dp"

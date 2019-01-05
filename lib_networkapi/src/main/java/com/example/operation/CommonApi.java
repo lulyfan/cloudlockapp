@@ -77,6 +77,18 @@ public class CommonApi {
     }
 
     /**
+     * 设置锁是否可以触摸开锁
+     *
+     * @param keyId
+     * @param canOpen
+     * @return
+     */
+    public static Observable<Result<Void>> setCanOpen(long keyId, int canOpen) {
+        Observable<Result<Void>> resultObservable = getCommonApiService().setCanOpen(keyId, canOpen);
+        return ObjectLoader.observe(resultObservable);
+    }
+
+    /**
      * 获取锁分组列表
      *
      * @return

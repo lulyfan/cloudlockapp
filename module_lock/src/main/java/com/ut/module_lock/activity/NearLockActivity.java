@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.NearScanLock;
 import com.ut.base.BaseActivity;
@@ -37,12 +38,12 @@ public class NearLockActivity extends BaseActivity {
         initToolbar();
         initListListener();
         initViewModel();
+        toScan();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        toScan();
     }
 
     private void toScan() {
@@ -162,6 +163,13 @@ public class NearLockActivity extends BaseActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
                 toScan();
+        } else {
+            mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
+            if (requestCode == BLEREAUESTCODE) {
+                CLToast.showAtBottom(this, getString(R.string.lock_tip_ble_permission_not_allow));
+            } else if (requestCode == BLEENABLECODE) {
+                CLToast.showAtBottom(this, getString(R.string.lock_tip_open_ble));
+            }
         }
     }
 }

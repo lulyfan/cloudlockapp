@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -88,6 +90,7 @@ public class NearLockVM extends AndroidViewModel {
 
     //获取锁信息
     public void checkLock(ScanDevice scanDevice) {
+        if (mStringScanDeviceMap.get(scanDevice.getAddress()) != null) return;
         mStringScanDeviceMap.put(scanDevice.getAddress(), scanDevice);
         Observable<Result<NearScanLock>> nearScanLock = CommonApi.getLockInfo(scanDevice.getAddress());
         Disposable disposable = nearScanLock.subscribe(nearScanLockResult -> {
@@ -116,7 +119,9 @@ public class NearLockVM extends AndroidViewModel {
             @Override
             public void onConnect() {
                 hasConnected = true;
-                actBind(lock);
+                Schedulers.io().scheduleDirect(() -> {
+                    actBind(lock);
+                }, 100, TimeUnit.MILLISECONDS);
             }
 
             @Override

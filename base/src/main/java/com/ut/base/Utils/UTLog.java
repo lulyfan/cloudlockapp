@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class UTLog {
     public static final boolean isDebug = true;
-    public static final boolean isSaveToFile = false;
+    public static final boolean isSaveToFile = true;
 
     static {
         if (isDebug) {

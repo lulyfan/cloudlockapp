@@ -62,6 +62,8 @@
     <string name="func_manage_key">管理钥匙</string>
     <string name="func_operate_record">操作记录</string>
     <string name="func_lock_manage">锁管理</string>
+    <string name="func_key_device">设备钥匙</string>
+    <string name="func_key_ble">蓝牙钥匙</string>
 
     <string name="lock_search_lock">搜索设备</string>
 
@@ -86,6 +88,16 @@
     <string name="lock_tip_ble_unbindlock_failed">删除失败</string>
 
     <string name="refresh_success">刷新成功</string>
+
+    <string name="touch_unlock">Touch开锁</string>
+    <string name="lock_tip_setting_failed">设置失败</string>
+
+    <string name="lock_tip_open_ble">请打开蓝牙锁</string>
+    <string name="lock_tip_ble_permission_not_allow">请授予蓝牙权限</string>
+
+    <string name="lock_tip_open_ble_lock">请唤醒并连接锁设备获取最新钥匙信息</string>
+    <string name="connect_lock">连接锁</string>
+
     <string-array name="lock_type">
         <item>蓝牙门锁</item>
     </string-array>
@@ -159,4 +171,11 @@
     <string name="lock_make_sure_delete_auth_key_2">确定删除该钥匙吗？删除后无法恢复。</string>
     <string name="key_name">钥匙名称</string>
     <string name="lock_delete">删除</string>
+    <string name="title_activity_device_key">DeviceKeyActivity</string>
+    <string name="tab_text_finger">指纹</string>
+    <string name="tab_text_pwd">密码</string>
+    <string name="tab_text_ic">IC卡</string>
+    <string name="tab_text_key">电子钥匙</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

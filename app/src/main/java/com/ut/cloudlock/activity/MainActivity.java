@@ -19,6 +19,7 @@ import com.ut.base.Utils.UTLog;
 import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 
 import io.reactivex.Flowable;
@@ -140,6 +141,19 @@ public class MainActivity extends BaseActivity {
         mBinding.vpMain.setAdapter(mainPageAdapter);
     }
 
+
+    private long lastTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastTime < 2000) {
+            super.onBackPressed();
+        } else {
+            lastTime = currentTime;
+            CLToast.showAtBottom(this, getString(R.string.double_click_to_back));
+        }
+    }
 
     @Override
     protected void onResume() {
