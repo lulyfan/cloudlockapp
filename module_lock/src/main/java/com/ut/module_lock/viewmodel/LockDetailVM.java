@@ -179,14 +179,16 @@ public class LockDetailVM extends AndroidViewModel {
         Disposable result = CommonApi.isAuth(mLockKey.getMac())
                 .subscribe(jsonElementResult -> {
                             if (jsonElementResult.code == 200) {
-                                toActOpenLock(getCloucLockFromLockKey());
+                                io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
+                                    toActOpenLock(getCloucLockFromLockKey());
+                                }, 100, TimeUnit.MILLISECONDS);
                             } else {
                                 showTip.postValue(jsonElementResult.msg);
                             }
                         },
                         throwable -> {
                             UTLog.i("鉴权时网络错误");
-                            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                            showTip.postValue(getApplication().getString(R.string.tip_network_error));
                         });
         mCompositeDisposable.add(result);
     }

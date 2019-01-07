@@ -11,4 +11,7 @@
     <color name="color_tv_blue">#FF00BBD2</color>
     <color name="gray3">#333333</color>
     <color name="lock_carview_shadow">#05333333</color>
+    <color name="light_blue">#E5F8FA</color>
+    <color name="light_blue1">#7FDDE8</color>
+    <color name="light_blue2">#F2FBFC</color>
 </resources>
