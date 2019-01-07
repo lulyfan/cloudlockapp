@@ -24,6 +24,7 @@ import com.ut.base.Utils.Util;
 import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.database.entity.EnumCollection;
 
 @Route(path = RouterUtil.BaseModulePath.GRANTPERMISSION)
 public class GrantPermissionActivity extends BaseActivity {
@@ -52,6 +53,9 @@ public class GrantPermissionActivity extends BaseActivity {
 
         String mobile = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
         viewModel.receiverPhoneNum.setValue(mobile);
+
+        viewModel.userType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE,
+                EnumCollection.UserType.ADMIN.ordinal());
 
         viewModel.receiverPhoneNum.observe(this, inputObserver);
         viewModel.keyName.observe(this, inputObserver);

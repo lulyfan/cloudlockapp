@@ -118,10 +118,15 @@ public class LockGroupItemActivity extends BaseActivity {
                         dialog1.dismiss();
 
                     } else if (i == R.id.confirm) {
-                        dialog1.dismiss();
 
                         String groupName = et_groupName.getText().toString();
+                        if ("".equals(groupName.trim())) {
+                            toastShort(getString(R.string.inputGroupName));
+                            return;
+                        }
                         viewModel.editGroupName(groupName);
+                        dialog1.dismiss();
+
                     } else {
                     }
                 })

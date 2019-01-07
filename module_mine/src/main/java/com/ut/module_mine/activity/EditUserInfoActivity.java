@@ -221,6 +221,10 @@ public class EditUserInfoActivity extends BaseActivity {
 
                     } else if (i == R.id.confirm) {
                         String userName = et_userName.getText().toString();
+                        if ("".equals(userName.trim())) {
+                            toastShort(getString(R.string.inputName));
+                            return;
+                        }
                         viewModel.editUserName(userName);
                         dialog1.dismiss();
 

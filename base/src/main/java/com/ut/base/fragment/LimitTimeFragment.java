@@ -45,13 +45,21 @@ public class LimitTimeFragment extends Fragment {
 
     private void initData() {
         String limitStartTime = viewModel.limitStartTime.getValue();
+
         if (limitStartTime != null && !"".equals(limitStartTime)) {
+            limitStartTime = limitStartTime.replace("-", "/");
+            limitStartTime = limitStartTime.substring(0, limitStartTime.length() - 3);
+
             binding.tvValidTime.setText(limitStartTime);
             binding.tvValidTime.setTextColor(getResources().getColor(R.color.gray3));
         }
 
         String limitEndTime = viewModel.limitEndTime.getValue();
+
         if (limitEndTime != null && !"".equals(limitEndTime)) {
+            limitEndTime = limitEndTime.replace("-", "/");
+            limitEndTime = limitEndTime.substring(0, limitEndTime.length() - 3);
+
             binding.tvInvalidTime.setText(limitEndTime);
             binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
         }
@@ -86,7 +94,8 @@ public class LimitTimeFragment extends Fragment {
     private void chooseTime(View v, String title) {
         DialogUtil.chooseDateTime(getContext(), title, (year, month, day, hour, minute) -> {
             TextView textView = (TextView) v;
-            textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day) + " " + hour + ":" + minute);
+            textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day)
+                    + " " + String.format("%02d", hour) + ":" + String.format("%02d", minute));
             textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.validTime).equals(title)) {

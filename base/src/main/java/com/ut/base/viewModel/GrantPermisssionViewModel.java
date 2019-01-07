@@ -13,6 +13,7 @@ import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.R;
+import com.ut.database.entity.EnumCollection;
 
 import io.reactivex.functions.Consumer;
 
@@ -36,6 +37,7 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
     public MutableLiveData<String> endTimeRange = new MutableLiveData<>();
     public MutableLiveData<String> weeks = new MutableLiveData<>();  //用于循环钥匙
     public String mac;
+    public int userType = EnumCollection.UserType.ADMIN.ordinal();
 
     public GrantPermisssionViewModel(@NonNull Application application) {
         super(application);

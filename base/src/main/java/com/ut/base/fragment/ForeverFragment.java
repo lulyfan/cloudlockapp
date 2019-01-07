@@ -19,6 +19,7 @@ import com.ut.base.R;
 import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.base.databinding.FragmentForeverBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.database.entity.EnumCollection;
 
 
 /**
@@ -66,5 +67,8 @@ public class ForeverFragment extends Fragment {
         });
 
         binding.swIsAdmin.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.isAdmin = isChecked);
+        if (viewModel.userType != EnumCollection.UserType.ADMIN.ordinal()) {
+            binding.swIsAdmin.setVisibility(View.GONE);
+        }
     }
 }
