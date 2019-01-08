@@ -2,6 +2,7 @@ package com.example.api;
 
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.ut.database.entity.Key;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.LockMessage;
 import com.ut.database.entity.LockMessageInfo;
@@ -66,7 +67,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.pageKey)
-    Observable<JsonObject> pageKeys(@Field("userId") long userId, @Field("mac") String mac, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<Result<List<Key>>> pageKeys(@Field("userId") long userId, @Field("mac") String mac, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
     @POST(ApiUrl.applyKey)
@@ -281,5 +282,9 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.setCanOpen)
     Observable<Result<Void>> setCanOpen(@Field("keyId") long keyId, @Field("canOpen") int canOpen);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.verifyPhoneCode)
+    Observable<Result<Void>> verifyPhobeCode(@Field("mobile") String mobile, @Field("code") String code);
 
 }

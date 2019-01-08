@@ -44,7 +44,7 @@ public class OperationRecordAcitivity extends BaseActivity {
         handlerIntent();
         initView();
         operationVm = ViewModelProviders.of(this).get(OperationVm.class);
-        operationVm.getOperationRecords().observe(this, operationRecords -> {
+        operationVm.getOperationRecords(recordType, currentId).observe(this, operationRecords -> {
             if (operationRecords == null || operationRecords.isEmpty()) return;
             oprs.clear();
             oprs.addAll(operationRecords);

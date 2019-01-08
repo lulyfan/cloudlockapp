@@ -32,7 +32,8 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
 
-        TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {};
+        TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {
+        };
 
         Gson gson = new Gson();
         Result<JsonElement> result = gson.fromJson(data, typeToken.getType());
@@ -40,7 +41,8 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
         int keyId = -1;
         switch (result.code) {
             case CODE_SEND_KEY_RECEIVER:
-                TypeToken<List<LockKey>> typeToken_ = new TypeToken<List<LockKey>>() {};
+                TypeToken<List<LockKey>> typeToken_ = new TypeToken<List<LockKey>>() {
+                };
                 List<LockKey> lockKeys_ = gson.fromJson(result.data, typeToken_.getType());
                 LockKeyDaoImpl.get().insertAll(lockKeys_);
                 break;
@@ -53,26 +55,43 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
             case CODE_DELETE_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().deleteByKeyId(keyId);
+                CloudLockDatabaseHolder.get().getKeyDao().deleteKeyByKeyId(keyId);
                 break;
 
             case CODE_FREEZE_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().updateKeyStatus(keyId, EnumCollection.KeyStatus.HAS_FREEZE.ordinal());
+                Key k = CloudLockDatabaseHolder.get().getKeyDao().findKeyByKeyId(keyId);
+                if(k != null) {
+                    k.setStatus(EnumCollection.KeyStatus.HAS_FREEZE.ordinal());
+                    CloudLockDatabaseHolder.get().getKeyDao().insertKeys(k);
+                }
                 break;
 
             case CODE_UNFREEZE_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().updateKeyStatus(keyId, EnumCollection.KeyStatus.NORMAL.ordinal());
+                k = CloudLockDatabaseHolder.get().getKeyDao().findKeyByKeyId(keyId);
+                k.setStatus(EnumCollection.KeyStatus.NORMAL.ordinal());
+                CloudLockDatabaseHolder.get().getKeyDao().insertKeys(k);
                 break;
 
             case CODE_AUTH_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().updateKeyAuth(keyId, EnumCollection.UserType.AUTH.ordinal());
+                k = CloudLockDatabaseHolder.get().getKeyDao().findKeyByKeyId(keyId);
+                k.setUserType(EnumCollection.UserType.AUTH.ordinal());
+                k.setStatus(EnumCollection.KeyStatus.NORMAL.ordinal());
+                CloudLockDatabaseHolder.get().getKeyDao().insertKeys(k);
                 break;
 
             case CODE_CANCEL_AUTH_KEY:
                 keyId = gson.fromJson(result.data, Integer.class);
                 LockKeyDaoImpl.get().updateKeyAuth(keyId, EnumCollection.UserType.NORMAL.ordinal());
+                k = CloudLockDatabaseHolder.get().getKeyDao().findKeyByKeyId(keyId);
+                k.setUserType(EnumCollection.UserType.NORMAL.ordinal());
+                k.setStatus(EnumCollection.KeyStatus.NORMAL.ordinal());
+                CloudLockDatabaseHolder.get().getKeyDao().insertKeys(k);
                 break;
 
             case CODE_UPDATE_LOCK_NAME:
@@ -83,12 +102,13 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
                 break;
 
             case CODE_TRANSFORM_ADMIN:
-                TypeToken<List<LockKey>> typeToken1 = new TypeToken<List<LockKey>>() {};
+                TypeToken<List<LockKey>> typeToken1 = new TypeToken<List<LockKey>>() {
+                };
                 List<LockKey> lockKeys = gson.fromJson(result.data, typeToken1.getType());
                 LockKeyDaoImpl.get().insertAll(lockKeys);
                 break;
 
-                default:
+            default:
         }
     }
 }

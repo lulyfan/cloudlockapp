@@ -1,5 +1,7 @@
 package com.ut.module_lock.entity;
 
+import com.ut.database.entity.Record;
+
 import java.io.Serializable;
 import java.util.List;
 

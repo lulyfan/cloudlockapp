@@ -86,7 +86,18 @@ public class LockKey implements Parcelable {
     }
 
     //是否触摸开锁
-    private int canOpen=0;// 0：关闭  1：开启
+    private int canOpen = 0;// 0：关闭  1：开启
+
+    //启动日期
+    private String startTime;// "",
+    //停止日期
+    private String endTime;// "",
+    //生效时间
+    private String startTimeRange;// "",
+    //失效时间
+    private String endTimeRange;// ""
+
+    private String weeks;
 
 
     @Ignore
@@ -259,6 +270,10 @@ public class LockKey implements Parcelable {
         this.keyTypeStr = keyTypeStrs[ruleType];
     }
 
+    public void setKeyTypeStr(String typeStr) {
+        this.keyTypeStr = typeStr;
+    }
+
     public String getElectricityStr() {
         return electricityStr;
     }
@@ -300,6 +315,45 @@ public class LockKey implements Parcelable {
         this.keyId = keyId;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStartTimeRange() {
+        return startTimeRange;
+    }
+
+    public void setStartTimeRange(String startTimeRange) {
+        this.startTimeRange = startTimeRange;
+    }
+
+    public String getEndTimeRange() {
+        return endTimeRange;
+    }
+
+    public void setEndTimeRange(String endTimeRange) {
+        this.endTimeRange = endTimeRange;
+    }
+
+    public String getWeeks() {
+        return weeks;
+    }
+
+    public void setWeeks(String weeks) {
+        this.weeks = weeks;
+    }
 
     @Override
     public int describeContents() {
@@ -333,6 +387,11 @@ public class LockKey implements Parcelable {
         dest.writeString(this.lockTypeStr);
         dest.writeString(this.keyTypeStr);
         dest.writeString(this.electricityStr);
+        dest.writeString(this.startTime);
+        dest.writeString(this.endTime);
+        dest.writeString(this.startTimeRange);
+        dest.writeString(this.endTimeRange);
+        dest.writeString(this.weeks);
     }
 
     public LockKey() {
@@ -364,6 +423,11 @@ public class LockKey implements Parcelable {
         this.lockTypeStr = in.readString();
         this.keyTypeStr = in.readString();
         this.electricityStr = in.readString();
+        this.startTime = in.readString();
+        this.endTime = in.readString();
+        this.startTimeRange = in.readString();
+        this.endTimeRange = in.readString();
+        this.weeks = in.readString();
     }
 
     public static final Parcelable.Creator<LockKey> CREATOR = new Parcelable.Creator<LockKey>() {

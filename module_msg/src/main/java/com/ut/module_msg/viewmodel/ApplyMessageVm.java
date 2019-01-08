@@ -99,7 +99,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                     String msg = obj.getString("msg");
                     if (code == 200) {
                         ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withSerializable("applyMessage", message).navigation();
-                    } else if (code == 409) {
+                    } else if (code == 203021) {
                         JSONObject data = obj.getJSONObject("data");
                         String dealer = data.getString("dealUser");
                         long dealTime = data.getLong("dealTime");

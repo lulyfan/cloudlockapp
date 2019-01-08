@@ -50,7 +50,7 @@ public class KeyInfoActivity extends BaseActivity {
         keyManagerVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         keyManagerVM.getFeedbackMessage().observe(this, message -> {
             CLToast.showAtBottom(KeyInfoActivity.this, message);
-            hasEdited = true;
+//            hasEdited = true;
             finish();
         });
 
@@ -81,6 +81,7 @@ public class KeyInfoActivity extends BaseActivity {
                 .build(RouterUtil.LockModulePath.EDIT_NAME)
                 .withString("edit_name_title", getString(R.string.key_name))
                 .withLong("key_id", keyInfo.getKeyId())
+                .withString("name", keyInfo.getKeyName())
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
             String url;

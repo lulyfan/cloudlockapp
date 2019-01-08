@@ -1,6 +1,7 @@
 package com.ut.module_login.ui;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -20,9 +21,12 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
+import com.ut.commoncomponent.ZpPhoneEditText;
 import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.database.entity.User;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
+import com.ut.module_login.viewmodel.LoginVm;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -41,19 +45,19 @@ import io.reactivex.schedulers.Schedulers;
 @SuppressLint("CheckResult")
 @Route(path = RouterUtil.LoginModulePath.Login)
 public class LoginActivity extends BaseActivity {
-
-    private EditText phoneEdt;
+    private ZpPhoneEditText phoneEdt;
     private EditText passwordEdt;
 
     private final int CHECK_PHONE_PASSWORD = 1000;
-
     private Handler mainHandler = new Handler(msg -> {
         if (msg.what == CHECK_PHONE_PASSWORD) {
-            boolean result = verifyPhoneAndPassword(phoneEdt.getText().toString(), passwordEdt.getText().toString());
+            boolean result = verifyPhoneAndPassword(phoneEdt.getPhoneText(), passwordEdt.getText().toString());
             findViewById(R.id.btn_login).setEnabled(result);
         }
         return false;
     });
+
+    private LoginVm loginVm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         initLoginUI();
         subscribeEvent();
+        loginVm = ViewModelProviders.of(this).get(LoginVm.class);
     }
 
     private void initLoginUI() {
@@ -118,11 +123,15 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
+
+        mainHandler.postDelayed(() -> {
+            SystemUtils.showKeyboard(this, phoneEdt);
+        }, 500L);
     }
 
     private void subscribeEvent() {
-        RxTextView.afterTextChangeEvents(phoneEdt).debounce(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).doOnNext((textViewAfterTextChangeEvent) -> {
-            findViewById(R.id.img_clear).setSelected(!TextUtils.isEmpty(Objects.requireNonNull(textViewAfterTextChangeEvent.getEditable()).toString()));
+        RxTextView.afterTextChangeEvents(phoneEdt).debounce(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
+            findViewById(R.id.img_clear).setSelected(!TextUtils.isEmpty(Objects.requireNonNull(event.getEditable()).toString()));
             if (phoneEdt.isFocused()) {
                 mainHandler.sendEmptyMessage(CHECK_PHONE_PASSWORD);
             }
@@ -145,30 +154,9 @@ public class LoginActivity extends BaseActivity {
 
     private void onLogin() {
         SystemUtils.hideKeyboard(this, phoneEdt);
-        String phone = phoneEdt.getText().toString().trim();
+        String phone = phoneEdt.getPhoneText();
         String password = passwordEdt.getText().toString().trim();
-        MyRetrofit.get()
-                .getCommonApiService()
-                .login(phone, password)
-                .subscribeOn(Schedulers.io())
-                .map(result -> {
-                    if (result.isSuccess()) {
-                        CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-                        CloudLockDatabaseHolder.get().getUserDao().insertUser(result.data);
-                    }
-                    return result;
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                        finish();
-                    } else {
-                        mainHandler.post(() -> {
-                            CLToast.showAtCenter(LoginActivity.this, result.msg);
-                        });
-                    }
-                }, new ErrorHandler());
+        loginVm.login(phone, password);
     }
 
     @Override
@@ -176,4 +164,5 @@ public class LoginActivity extends BaseActivity {
         super.finish();
         SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
+
 }

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -79,7 +80,20 @@ public class LockMessageInfo {
         this.meetingRomeId = meetingRomeId;
     }
 
-    public String createTimeformat() {
-        return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.CHINA).format(new Date(createTime));
+    public String createTimeFormat() {
+        if (isToday(createTime)) {
+            return new SimpleDateFormat("hh:mm", Locale.getDefault()).format(new Date(createTime));
+        }
+
+        return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.getDefault()).format(new Date(createTime));
+    }
+
+    private boolean isToday(long time) {
+        Calendar today = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(time);
+        return today.get(Calendar.YEAR) == date.get(Calendar.YEAR)
+                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
+                && today.get(Calendar.DATE) == date.get(Calendar.DATE);
     }
 }

@@ -81,6 +81,7 @@ public class NotificationFragment extends BaseFragment {
         mNotifyFgBinding.notificationList.setAdapter(listAdapter);
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
         notificationViewModel.getLockMessages().observe(getActivity(), carriers -> {
+            mNotifyFgBinding.noData.setVisibility(carriers == null || carriers.isEmpty() ? View.VISIBLE : View.GONE);
             listAdapter.updateDate(carriers);
         });
 

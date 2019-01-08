@@ -40,4 +40,6 @@
     <string name="mine_version_update_dont">暂时不需要</string>
     <string name="mine_version_update_is_newest_version">已是最新版本</string>
     <string name="fine">好的</string>
+    <string name="base_no_data">暂无数据</string>
+    <string name="base_kongkongruye">本页面数据空空如也</string>
 </resources>

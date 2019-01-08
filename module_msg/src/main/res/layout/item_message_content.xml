@@ -28,7 +28,7 @@
                 android:background="#EBEFF1"
                 android:gravity="center"
                 android:padding="@dimen/base_4dp"
-                android:text="@{lockMessageInfo.createTimeformat()}"
+                android:text="@{lockMessageInfo.createTimeFormat()}"
                 android:textColor="@color/gray9"
                 android:textSize="@dimen/base_10dp" />
         </FrameLayout>

@@ -183,4 +183,7 @@ public interface ApiUrl {
 
     //修改钥匙名称
     String editKeyName = "api/key/updateKeyName";
+
+    //验证短信验证码（除注册和忘记密码的发送验证码）
+    String verifyPhoneCode = "api/user/veriMobileCode?json";
 }

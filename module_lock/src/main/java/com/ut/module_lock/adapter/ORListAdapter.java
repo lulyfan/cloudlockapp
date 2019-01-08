@@ -2,9 +2,7 @@ package com.ut.module_lock.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,12 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.module_lock.R;
 import com.ut.module_lock.entity.OperationRecord;
-import com.ut.module_lock.entity.Record;
+import com.ut.database.entity.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

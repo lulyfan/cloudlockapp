@@ -67,13 +67,14 @@ public class KeysManagerActivity extends BaseActivity {
                 ImageView ruleTypeIv = binding.getRoot().findViewById(R.id.tip);
                 int rId = keyList.get(position).getRuleTypeDrawableId();
                 ruleTypeIv.setBackgroundResource(rId);
+                kmVM.initKey(keyList);
             }
         };
         mBinding.list.setAdapter(mAdapter);
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.setMac(mMac);
         kmVM.getKeys(mMac).observe(this, (keyItems) -> {
-            if (keyItems == null || keyItems.isEmpty()) return;
+            endLoad();
             if (mBinding.refreshLayout.isLoading()) {
                 mAdapter.loadDate(keyItems);
                 mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 200L);
@@ -112,7 +113,7 @@ public class KeysManagerActivity extends BaseActivity {
             @Override
             protected void initView() {
 
-                if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
+                if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal() || lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
                     getView(R.id.item1).setOnClickListener(v -> {
                         //todo 弹窗
                         new AlertDialog.Builder(KeysManagerActivity.this)
@@ -176,9 +177,15 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_KEY_INFO) {
-            updateData();
-        }
+//        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_KEY_INFO) {
+//            updateData();
+//        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLoad();
+        kmVM.updateKeyItems();
+    }
 }

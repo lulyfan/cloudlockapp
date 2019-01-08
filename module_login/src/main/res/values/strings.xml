@@ -2,7 +2,7 @@
     <string name="app_name">module_login</string>
     <string name="login_title">云锁登录</string>
     <string name="phone_hint">请输入手机号</string>
-    <string name="password_hint">6位以上字母和数字组合密码</string>
+    <string name="password_hint">请输入6-20位数字或字母作为密码</string>
     <string name="login">登录</string>
     <string name="login_forget_password">忘记密码</string>
     <string name="new_user_register">新用户注册</string>
@@ -12,6 +12,12 @@
     <string name="selected_country_title">国家/地区代码</string>
     <string name="default_country_code">中国/+86</string>
     <string name="reset_password">重置密码</string>
+    <string name="wait">等待</string>
+    <string name="login_register_rule">注册即表示您同意隐私条款及使用协议</string>
+    <string name="login_place_input_verify_code">请输入验证码</string>
+    <string name="login_pwd_modify_success">密码修改成功，请用新密码登录</string>
+    <string name="login_sure">确定</string>
+    <string name="login_please_input_right_num">请正确输入手机号码</string>
     <string-array name="CountryCodes">
         <item>阿富汗/+93</item>
         <item>阿尔巴尼亚/+355</item>

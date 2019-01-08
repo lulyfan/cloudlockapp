@@ -72,6 +72,9 @@ public class EditNameActivity extends BaseActivity {
                 SystemUtils.hideKeyboard(getBaseContext(), nameEdt.getRootView());
             }
         });
+        if(getIntent().hasExtra("name")) {
+            nameEdt.setText(getIntent().getStringExtra("name"));
+        }
         findViewById(R.id.clear).setOnClickListener(v -> nameEdt.setText(""));
         loadingButton = findViewById(R.id.btn_save);
         loadingButton.setOnClickListener(v -> saveName());

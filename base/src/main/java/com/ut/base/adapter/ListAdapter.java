@@ -76,8 +76,8 @@ public class ListAdapter<T> extends BaseAdapter {
         }
 
         assert binding != null;
-        binding.setVariable(variableId, dataSource.get(position));
         handleItem(binding, position);
+        binding.setVariable(variableId, dataSource.get(position));
         return binding.getRoot();
     }
 

@@ -16,6 +16,9 @@ import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLoopBinding;
 import com.ut.database.entity.Key;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -51,7 +54,7 @@ public class EditLoopKeyActivity extends BaseActivity {
         checkBox5 = mBinding.include5.findViewById(R.id.friday);
         checkBox6 = mBinding.include5.findViewById(R.id.saturday);
         checkBox7 = mBinding.include5.findViewById(R.id.sunday);
-        mBinding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.enable_time)));
+        mBinding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.valid_time)));
         mBinding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalid_time)));
 
         mBinding.startDate.setOnClickListener(v -> {
@@ -93,12 +96,13 @@ public class EditLoopKeyActivity extends BaseActivity {
         DialogUtil.chooseTime(v.getContext(), title, (hour, minute) -> {
             String dateTime = String.format(Locale.getDefault(), "%02d", hour) + ":"
                     + String.format(Locale.getDefault(), "%02d", minute);
-            if (getString(R.string.enable_time).equals(title)) {
+            if (getString(R.string.valid_time).equals(title)) {
                 mKey.setStartTimeRange(dateTime);
             } else {
                 mKey.setEndTimeRange(dateTime);
             }
-            mBinding.setKeyItem(mKey); });
+            mBinding.setKeyItem(mKey);
+        });
     }
 
     private void save() {
@@ -135,10 +139,19 @@ public class EditLoopKeyActivity extends BaseActivity {
     private void chooseDate(View v, String title) {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
             String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month - 1, day);
             if (getString(R.string.lock_start_date).equals(title)) {
-                mKey.setStartTime(date);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                mKey.setStartTime(sdf.format(new Date(calendar.getTimeInMillis())));
             } else {
-                mKey.setEndTime(date);
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                calendar.set(Calendar.MINUTE, 59);
+                calendar.set(Calendar.SECOND, 59);
+                mKey.setEndTime(sdf.format(new Date(calendar.getTimeInMillis())));
             }
             mBinding.setKeyItem(mKey);
         });

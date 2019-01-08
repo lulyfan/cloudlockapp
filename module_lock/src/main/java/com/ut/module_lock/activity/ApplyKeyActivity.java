@@ -52,7 +52,6 @@ public class ApplyKeyActivity extends BaseActivity {
         initLightToolbar();
         setTitle(R.string.lock_apply_key);
         initView();
-//        mac = "33-33-22-A1-B0-34";
     }
 
     private void initData() {

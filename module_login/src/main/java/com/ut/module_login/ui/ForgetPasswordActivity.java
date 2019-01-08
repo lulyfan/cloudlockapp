@@ -1,9 +1,11 @@
 package com.ut.module_login.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.ViewGroup;
@@ -20,8 +22,10 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
+import com.ut.commoncomponent.ZpPhoneEditText;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
+import com.ut.module_login.viewmodel.LoginVm;
 
 import java.util.Objects;
 
@@ -34,7 +38,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private static final int CHECK_PHONE_AND_PASSWORD = 1000;
     private static final int RECIPROCAL = 1001;
-    private EditText phoneEdt = null;
+    private ZpPhoneEditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
     private EditText verifyCodeEdt = null;
@@ -45,33 +49,28 @@ public class ForgetPasswordActivity extends BaseActivity {
     private int timeCount = DEFAULT_TIME_COUNT;
     private boolean isReciprocal = false;
 
+    private LoginVm loginVm;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget);
         initUI();
+        loginVm = ViewModelProviders.of(this).get(LoginVm.class);
     }
 
     private void initUI() {
         initLightToolbar();
         String action = getIntent().getAction();
-        if(RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
+        if (RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
             setTitle(getString(R.string.reset_password));
         } else {
             setTitle(R.string.login_forget_password);
         }
         phoneEdt = findViewById(R.id.edt_phone);
         getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
+        getVerifyCodeTv.setEnabled(false);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
-        RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
-            String value = Objects.requireNonNull(event.getEditable()).toString();
-            if (!isReciprocal) {
-                getVerifyCodeTv.setEnabled(!TextUtils.isEmpty(value));
-            }
-            if (phoneEdt.isFocused()) {
-                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
-            }
-        }).subscribe();
         phoneEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
             parent.setSelected(hasFocus);
@@ -81,6 +80,13 @@ public class ForgetPasswordActivity extends BaseActivity {
                 phoneEdt.setText("");
             }
         });
+
+        RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
+            if (phoneEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
+        }).subscribe();
+
         passwordEdt = findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             if (passwordEdt.isFocused()) {
@@ -88,6 +94,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             }
 
         }).subscribe();
+
         passwordEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) passwordEdt.getParent();
             parent.setSelected(hasFocus);
@@ -105,28 +112,38 @@ public class ForgetPasswordActivity extends BaseActivity {
         });
         getVerifyCodeTv.setOnClickListener(v -> {
             ((ViewGroup) getVerifyCodeTv.getParent()).setSelected(true);
-            getVerifyCode(phoneEdt.getText().toString());
+            getVerifyCode(phoneEdt.getPhoneText());
             mainHandler.sendEmptyMessage(RECIPROCAL);
         });
-        sureBtn = findViewById(R.id.sure);
-        sureBtn.setOnClickListener(v -> {
-            commit();
-        });
 
-        findViewById(R.id.root).setOnClickListener(v -> {
-            SystemUtils.hideKeyboard(getBaseContext(), v);
-        });
+        RxTextView.afterTextChangeEvents(verifyCodeEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
+            if (verifyCodeEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
+        }).subscribe();
+
+        sureBtn = findViewById(R.id.sure);
+        sureBtn.setEnabled(false);
+        sureBtn.setOnClickListener(v -> commit());
+
+        findViewById(R.id.root).setOnClickListener(v -> SystemUtils.hideKeyboard(getBaseContext(), v));
+
+        mainHandler.postDelayed(() -> {
+            SystemUtils.showKeyboard(this, phoneEdt);
+        }, 500L);
     }
 
     private boolean handleMessage(Message msg) {
         if (msg.what == CHECK_PHONE_AND_PASSWORD) {
-            sureBtn.setEnabled(LoginUtil.isPhone(phoneEdt.getText().toString()) && LoginUtil.isPassword(passwordEdt.getText().toString()));
+            boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
+            sureBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
+            getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;
             if (isReciprocal) {
                 getVerifyCodeTv.setEnabled(false);
-                getVerifyCodeTv.setText(String.valueOf("等待（" + timeCount + "s）"));
+                getVerifyCodeTv.setText(String.valueOf(getString(R.string.wait) + "（" + timeCount + "s）"));
                 mainHandler.sendEmptyMessageDelayed(RECIPROCAL, 1000L);
             } else {
                 getVerifyCodeTv.setEnabled(true);
@@ -138,35 +155,21 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void getVerifyCode(String phone) {
-        Disposable subscribe = MyRetrofit.get().getCommonApiService().getForgetPwdVerifyCode(phone)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtCenter(getBaseContext(), result.msg);
-                }, new ErrorHandler());
+        loginVm.getForgetPwdCode(phone);
     }
 
 
     private void commit() {
-        sureBtn.startLoading();
-
-        String phone = phoneEdt.getText().toString();
+        String phone = phoneEdt.getPhoneText();
         String password = passwordEdt.getText().toString();
         String verifyCode = verifyCodeEdt.getText().toString();
-
-        Disposable subscribe = MyRetrofit.get()
-                .getCommonApiService()
-                .resetPassword(phone, password, verifyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtCenter(ForgetPasswordActivity.this, result.msg);
-                    sureBtn.endLoading();
-                    if(result.isSuccess()) {
-                        finish();
-                    }
-
-                }, new ErrorHandler());
+        if (TextUtils.isEmpty(verifyCode)) {
+            CLToast.showAtCenter(this, getString(R.string.login_place_input_verify_code));
+            return;
+        }
+        sureBtn.startLoading();
+        loginVm.resetPassword(phone, password, verifyCode);
+        mainHandler.postDelayed(() -> sureBtn.endLoading(), 500L);
     }
 
     @Override

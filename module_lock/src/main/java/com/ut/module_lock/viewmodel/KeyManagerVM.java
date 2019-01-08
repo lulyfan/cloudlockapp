@@ -7,11 +7,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.google.gson.JsonElement;
 import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.commoncomponent.CLToast;
@@ -80,19 +76,12 @@ public class KeyManagerVM extends AndroidViewModel {
                 .pageKeys(BaseApplication.getUser().id, mac, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(jsonObject -> {
-                    String json = jsonObject.toString();
-                    return JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
-                    });
-                })
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
-                            for (Key key : result.data) {
-                                initKey(key);
-                            }
-                            saveKeys(result.data);
+                            initKey(result.data);
                             currentPage++;
+                            saveKeys(result.data);
                         }
                     } else {
                         CLToast.showAtBottom(getApplication(), result.msg);
@@ -111,19 +100,14 @@ public class KeyManagerVM extends AndroidViewModel {
     public void updateKeyItems() {
         MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, 1, DEFAULT_PAGE_SIZE)
-                .subscribeOn(Schedulers.newThread())
-                .map(JsonElement::toString)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(json -> JSON.parseObject(json, new TypeReference<Result<List<Key>>>() {
-                }))
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
-                            for (Key key : result.data) {
-                                initKey(key);
-                            }
-                            saveKeys(result.data);
+                            initKey(result.data);
                             currentPage++;
+                            saveKeys(result.data);
                         }
                     } else {
                         CLToast.showAtBottom(getApplication(), result.msg);
@@ -151,8 +135,17 @@ public class KeyManagerVM extends AndroidViewModel {
     public void deleteKey(long keyId) {
         MyRetrofit.get().getCommonApiService().deleteKey(keyId, 0)
                 .subscribeOn(Schedulers.io())
+                .map(result -> {
+                    keyDao.deleteKeyByKeyId((int) keyId);
+                    return result;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
+                .subscribe(result -> {
+                    if(result.isSuccess()) {
+                        updateKeyItems();
+                    }
+                    getFeedbackMessage().postValue(String.valueOf(result.msg));
+                }, new ErrorHandler());
     }
 
     public int getDefaultPageSize() {
@@ -189,6 +182,10 @@ public class KeyManagerVM extends AndroidViewModel {
     public void clearKeys(String mac) {
         MyRetrofit.get().getCommonApiService().clearAllKey(mac)
                 .subscribeOn(Schedulers.io())
+                .map(result -> {
+                    CloudLockDatabaseHolder.get().getKeyDao().deleteAllByMac(mac);
+                    return result;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
@@ -212,11 +209,13 @@ public class KeyManagerVM extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
-    private void initKey(Key key) {
-        key.setRuleTypeDrawableId(getRuleTypeDrawableId(key));
-        key.setStatusString(getStateString(key));
-        key.setRuleTypeString(getRuleTypeString(key));
-        key.setMac(mac);
+    public void initKey(List<Key> keys) {
+        for (Key key : keys) {
+            key.setRuleTypeDrawableId(getRuleTypeDrawableId(key));
+            key.setStatusString(getStateString(key));
+            key.setRuleTypeString(getRuleTypeString(key));
+            key.setMac(mac);
+        }
     }
 
     private int getRuleTypeDrawableId(Key key) {

@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import com.example.operation.MyRetrofit;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
@@ -74,7 +77,12 @@ public class LockSettingActivity extends BaseActivity {
             mLockSettingVM.changeCanOpen(isChecked);
         });
         mBinding.layoutLockName.setOnClickListener(v -> {
-            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME).withString("edit_name_title", getString(R.string.lock_name)).withBoolean("is_lock", true).withString("mac", lockKey.getMac()).navigation(this, REQUEST_CODE_EDIT_NAME);
+            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME)
+                    .withString("edit_name_title", getString(R.string.lock_name))
+                    .withString("name", lockKey.getName())
+                    .withBoolean("is_lock", true)
+                    .withString("mac", lockKey.getMac())
+                    .navigation(this, REQUEST_CODE_EDIT_NAME);
         });
     }
 
@@ -92,7 +100,7 @@ public class LockSettingActivity extends BaseActivity {
             }
         });
         mLockSettingVM.getShowTip().observe(this, showTip -> {
-            CLToast.showAtCenter(getBaseContext(), showTip);
+            CLToast.showAtBottom(getBaseContext(), showTip);
         });
         mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
@@ -136,32 +144,40 @@ public class LockSettingActivity extends BaseActivity {
 
     private void deleteLock() {
         if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
-            CustomerAlertDialog dialog = new CustomerAlertDialog(LockSettingActivity.this, false);
-            dialog.setMsg(getString(R.string.lock_delete_lock_tips));
-            dialog.setConfirmText(getString(R.string.lock_btn_confirm));
-            dialog.setConfirmListener(v1 -> verifyAdmin());
-            dialog.setCancelText(getString(R.string.lock_cancel));
-            dialog.setCancelLister(null);
-            dialog.show();
+//            CustomerAlertDialog dialog = new CustomerAlertDialog(LockSettingActivity.this, false);
+//            dialog.setMsg(getString(R.string.lock_delete_lock_tips));
+//            dialog.setConfirmText(getString(R.string.lock_btn_confirm));
+//            dialog.setConfirmListener(v1 -> verifyAdmin());
+//            dialog.setCancelText(getString(R.string.lock_cancel));
+//            dialog.setCancelLister(null);
+//            dialog.show();
+            //todo
+            new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.lock_delete_lock_tips))
+                    .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog, which) -> {
+                        verifyAdmin();
+                    }))
+                    .setNegativeButton(getString(R.string.lock_cancel), null)
+                    .show();
         } else if (lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
             View contentView = View.inflate(this, R.layout.layout_anthorize_delete_key, null);
             CheckBox checkBox = contentView.findViewById(R.id.check_box);
             //TODO
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.lock_make_sure_delete_auth_key))
+            new AlertDialog.Builder(this).setTitle(getString(R.string.lock_make_sure_delete_auth_key))
                     .setView(contentView)
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         if (checkBox.isChecked()) {
                             mLockSettingVM.deleteLockKey(lockKey, 1);
-
                         } else {
                             mLockSettingVM.deleteLockKey(lockKey, 0);
                         }
+                        SystemUtils.hideKeyboard(getBaseContext(), contentView);
                     }))
                     .setNegativeButton(getString(R.string.lock_cancel), null)
                     .show();
         } else if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             //TODO
-            AlertDialog dialog = new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this)
                     .setMessage(getString(R.string.lock_make_sure_delete_auth_key_2))
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         mLockSettingVM.deleteLockKey(lockKey, 0);
@@ -175,6 +191,7 @@ public class LockSettingActivity extends BaseActivity {
         //todo
         View contentView = View.inflate(this, R.layout.dialog_edit, null);
         EditText edtPwd = contentView.findViewById(R.id.edt);
+        edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         edtPwd.setHint(getString(R.string.lock_verify_user_password_hint));
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setView(contentView)
@@ -183,6 +200,7 @@ public class LockSettingActivity extends BaseActivity {
                     //todo
                     //verify
                     mLockSettingVM.verifyAdmin(edtPwd.getText().toString().trim());
+                    SystemUtils.hideKeyboard(getBaseContext(), contentView.getRootView());
                     dialog.dismiss();
                 })
                 .setNegativeButton(getText(R.string.lock_cancel), null)
@@ -214,7 +232,49 @@ public class LockSettingActivity extends BaseActivity {
         if (lockKey == null) return;
         lockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
         lockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
-        lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
+
+        int ruleType = lockKey.getRuleType();
+        if (ruleType == EnumCollection.KeyRuleType.FOREVER.ordinal()) {
+            lockKey.setKeyTypeStr(getString(R.string.permanent));
+        } else if (ruleType == EnumCollection.KeyRuleType.ONCE.ordinal()) {
+            lockKey.setKeyTypeStr(getString(R.string.once_time));
+        } else if (ruleType == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
+            lockKey.setKeyTypeStr(lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
+        } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
+            StringBuffer xingqi = new StringBuffer("星期");
+            String weeks = lockKey.getWeeks();
+            String[] split = weeks.split(",");
+
+            for (String s : split) {
+                switch (Integer.valueOf(s)) {
+                    case 1:
+                        xingqi.append("一,");
+                        break;
+                    case 2:
+                        xingqi.append("二,");
+                        break;
+                    case 3:
+                        xingqi.append("三,");
+                        break;
+                    case 4:
+                        xingqi.append("四,");
+                        break;
+                    case 5:
+                        xingqi.append("五,");
+                        break;
+                    case 6:
+                        xingqi.append("六,");
+                        break;
+                    case 7:
+                        xingqi.append("七,");
+                        break;
+                }
+            }
+            xingqi = xingqi.delete(xingqi.lastIndexOf(","), xingqi.length());
+            lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + " " + xingqi + " " + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
+        }
+
+//        lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         lockKey.setElectricityStr();
         mBinding.setLockKey(lockKey);
     }

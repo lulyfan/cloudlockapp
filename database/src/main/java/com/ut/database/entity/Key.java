@@ -195,7 +195,7 @@ public class Key implements Serializable, Cloneable {
     }
 
     public boolean isInvalid() {
-        return status == 11;
+        return status == 11 || status == 12;
     }
 
     public String userNameOrMobile() {

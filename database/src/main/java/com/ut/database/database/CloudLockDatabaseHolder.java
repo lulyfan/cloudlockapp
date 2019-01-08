@@ -13,6 +13,7 @@ import com.ut.database.dao.LockKeyDao;
 import com.ut.database.dao.LockMessageDao;
 import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
+import com.ut.database.dao.ORecordDao;
 import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
@@ -51,7 +52,7 @@ public class CloudLockDatabaseHolder {
         return mDb.uuidDao();
     }
 
-    public LockMessageDao lockMessageDao() {
+    public LockMessageDao getLockMessageDao() {
         return mDb.lockMessageDao();
     }
 
@@ -77,6 +78,11 @@ public class CloudLockDatabaseHolder {
 
     public KeyDao getKeyDao() {
         return mDb.keyDao();
+    }
+
+
+    public ORecordDao recordDao(){
+        return mDb.recordDao();
     }
 
     public void clear() {

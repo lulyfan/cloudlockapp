@@ -10,11 +10,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.database.dao.ORecordDao;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.entity.OperationRecord;
-import com.ut.module_lock.entity.Record;
+import com.ut.database.entity.Record;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +48,30 @@ public class OperationVm extends AndroidViewModel {
 
     private MutableLiveData<List<OperationRecord>> operationRecords;
 
-    public MutableLiveData<List<OperationRecord>> getOperationRecords() {
+    public MutableLiveData<List<OperationRecord>> getOperationRecords(String recordType, long id) {
         if (operationRecords == null) {
             operationRecords = new MutableLiveData<>();
         }
+
+        if (id != currentId) {
+            currentPage = 1;
+            currentId = id;
+        }
+
+        CloudLockDatabaseHolder holder = CloudLockDatabaseHolder.get();
+        ORecordDao recordDao = holder.recordDao();
+        if (Constance.BY_KEY.equals(recordType)) {
+            recordDao.getRecordsByKeyId(id).observe(AppManager.getAppManager().currentActivity(), records -> {
+                operationRecords.postValue(handlerRecords(records));
+            });
+        } else if (Constance.BY_USER.equals(recordType)) {
+        } else if (Constance.BY_LOCK.equals(recordType)) {
+            recordDao.getRecordsByLockId(id).observe(AppManager.getAppManager().currentActivity(), records -> {
+                operationRecords.postValue(handlerRecords(records));
+            });
+        }
+
+
         return operationRecords;
     }
 
@@ -58,6 +81,7 @@ public class OperationVm extends AndroidViewModel {
             currentPage = 1;
             currentId = id;
         }
+
         if (Constance.BY_KEY.equals(recordType)) {
             loadRecordByKey(id);
         } else if (Constance.BY_USER.equals(recordType)) {
@@ -71,16 +95,14 @@ public class OperationVm extends AndroidViewModel {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByLock(lockId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
-                .map(jsonObject -> {
-                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
-                    });
-                    return result;
-                })
+                .map(jsonObject -> JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
+                }))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        List<OperationRecord> operationRecords = handlerRecords(result.data);
-                        getOperationRecords().postValue(operationRecords);
+                        List<OperationRecord> ors = handlerRecords(result.data);
+                        operationRecords.postValue(ors);
+                        saveRecords(result.data);
                     }
                 }, new ErrorHandler());
     }
@@ -97,8 +119,9 @@ public class OperationVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        List<OperationRecord> operationRecords = handlerRecords(result.data);
-                        getOperationRecords().postValue(operationRecords);
+                        List<OperationRecord> ors = handlerRecords(result.data);
+                        operationRecords.postValue(ors);
+                        saveRecords(result.data);
                     }
                 }, new ErrorHandler());
     }
@@ -115,8 +138,9 @@ public class OperationVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        List<OperationRecord> operationRecords = handlerRecords(result.data);
-                        getOperationRecords().postValue(operationRecords);
+                        List<OperationRecord> ors = handlerRecords(result.data);
+                        operationRecords.postValue(ors);
+                        saveRecords(result.data);
                     }
                 }, new ErrorHandler());
     }
@@ -148,5 +172,13 @@ public class OperationVm extends AndroidViewModel {
             oprs.add(opr);
         }
         return oprs;
+    }
+
+    private void saveRecords(List<Record> records) {
+        Schedulers.io().scheduleDirect(() -> {
+            CloudLockDatabaseHolder.get().recordDao().deleteAll();
+            Record[] tmp = new Record[records.size()];
+            CloudLockDatabaseHolder.get().recordDao().insertRecords(records.toArray(tmp));
+        });
     }
 }

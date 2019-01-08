@@ -21,6 +21,9 @@ public interface KeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertKeys(Key... keys);
 
+    @Query("select * from ut_key where keyId = :keyId")
+    Key findKeyByKeyId(int keyId);
+
     @Query("select * from ut_key where mac like :mac")
     LiveData<List<Key>> findKeysByMac(String mac);
 
@@ -29,5 +32,11 @@ public interface KeyDao {
 
     @Query("select * from ut_key where keyId =:id")
     LiveData<Key> getKeyById(long id);
+
+    @Query("delete from ut_key")
+    void deleteAll();
+
+    @Query("delete from ut_key where keyId =:keyId")
+    void deleteKeyByKeyId(int keyId);
 
 }

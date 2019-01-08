@@ -48,7 +48,10 @@ public class GrantPermissionActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
-        viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.tip.observe(this, s -> {
+            toastShort(s);
+            finish();
+        });
         viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
 
         String mobile = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);

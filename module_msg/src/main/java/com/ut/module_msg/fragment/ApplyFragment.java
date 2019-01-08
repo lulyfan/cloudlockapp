@@ -48,8 +48,8 @@ public class ApplyFragment extends BaseFragment {
             initView();
             mApplyMessageVm = ViewModelProviders.of(this).get(ApplyMessageVm.class);
             mApplyMessageVm.getApplyMessages().observe(this, ams -> {
+                mApplyFgBinding.noData.setVisibility(ams == null || ams.isEmpty() ? View.VISIBLE : View.GONE);
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
-                if (ams == null || ams.isEmpty()) return;
                 mAdapter.updateDate(ams);
             });
         }
@@ -70,13 +70,15 @@ public class ApplyFragment extends BaseFragment {
                 }
 
                 ApplyMessage message = applyMessages.get(position);
-                badge.bindTarget(icon)
-                        .setShowShadow(false)
-                        .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
-                        .setBadgeTextColor(Color.WHITE)
-                        .setGravityOffset(0, 0, true)
-                        .setBadgeTextSize(9, true)
-                        .setBadgeText(message.getStatus());
+                if (!"已处理".equals(message.getStatus())) {
+                    badge.bindTarget(icon)
+                            .setShowShadow(false)
+                            .setBadgeBackgroundColor(Color.parseColor("#F55D54"))
+                            .setBadgeTextColor(Color.WHITE)
+                            .setGravityOffset(0, 0, true)
+                            .setBadgeTextSize(9, true)
+                            .setBadgeText(message.getStatus());
+                }
             }
         };
         mApplyFgBinding.applyList.setAdapter(mAdapter);
@@ -96,7 +98,7 @@ public class ApplyFragment extends BaseFragment {
     @Override
     protected void onUserVisible() {
         super.onUserVisible();
-        if(mApplyMessageVm != null) {
+        if (mApplyMessageVm != null) {
             mApplyMessageVm.loadApplyMessages();
         }
     }

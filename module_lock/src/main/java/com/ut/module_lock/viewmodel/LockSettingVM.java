@@ -88,6 +88,7 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        AppManager.getAppManager().currentActivity().startLoad();
                         toDeleteAdminKey();
                     }
                     showTip.postValue(result.msg);
@@ -151,6 +152,7 @@ public class LockSettingVM extends AndroidViewModel {
                 @Override
                 public void onFinish() {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+                    AppManager.getAppManager().currentActivity().endLoad();
                 }
             }, 10);
         }
@@ -172,6 +174,7 @@ public class LockSettingVM extends AndroidViewModel {
             public void onDisconnect(int i, String s) {
                 if (!isConnected) {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
+                    AppManager.getAppManager().currentActivity().endLoad();
                 }
             }
         });
@@ -188,12 +191,15 @@ public class LockSettingVM extends AndroidViewModel {
                     public void onSuccess(CloudLock cloudLock) {
                         deleteAdminLock(lockKey);
                         UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
+                        AppManager.getAppManager().currentActivity().endLoad();
                     }
 
                     @Override
                     public void onFailed(int i, String s) {
                         showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
                         UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
+                        AppManager.getAppManager().currentActivity().endLoad();
+
                     }
                 });
     }

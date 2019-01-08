@@ -1,7 +1,9 @@
 package com.ut.module_login.ui;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -25,22 +28,23 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
+import com.ut.commoncomponent.ZpPhoneEditText;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
+import com.ut.module_login.viewmodel.LoginVm;
 
 import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-@SuppressLint("CheckResult")
 @Route(path = RouterUtil.LoginModulePath.REGISTER)
 public class RegisterActivity extends BaseActivity {
 
     private static final int CHECK_PHONE_AND_PASSWORD = 1000;
     private static final int RECIPROCAL = 1001;
     private static final int REQ_COUNTRY_AREA_CODE = 1002;
-    private EditText phoneEdt = null;
+    private ZpPhoneEditText phoneEdt = null;
     private TextView getVerifyCodeTv = null;
     private EditText passwordEdt = null;
     private EditText verifyCodeEdt = null;
@@ -52,11 +56,14 @@ public class RegisterActivity extends BaseActivity {
     private boolean isReciprocal = false;
     private String countryAreaCode = null;
 
+    private LoginVm loginVm;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initUI();
+        loginVm = ViewModelProviders.of(this).get(LoginVm.class);
     }
 
     private void initUI() {
@@ -66,11 +73,8 @@ public class RegisterActivity extends BaseActivity {
         phoneEdt = findViewById(R.id.edt_phone);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
         getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
+        getVerifyCodeTv.setEnabled(false);
         RxTextView.afterTextChangeEvents(phoneEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
-            String value = Objects.requireNonNull(event.getEditable()).toString();
-            if (!isReciprocal) {
-                getVerifyCodeTv.setEnabled(!TextUtils.isEmpty(value));
-            }
             if (phoneEdt.isFocused()) {
                 mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
             }
@@ -84,6 +88,7 @@ public class RegisterActivity extends BaseActivity {
                 phoneEdt.setText("");
             }
         });
+        phoneEdt.requestFocus();
         passwordEdt = findViewById(R.id.edt_password);
         RxTextView.afterTextChangeEvents(passwordEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
             if (passwordEdt.isFocused()) {
@@ -107,12 +112,19 @@ public class RegisterActivity extends BaseActivity {
         });
         getVerifyCodeTv.setOnClickListener(v -> {
             ((ViewGroup) getVerifyCodeTv.getParent()).setSelected(true);
-            getVerifyCode(phoneEdt.getText().toString());
+            getVerifyCode(phoneEdt.getPhoneText());
             mainHandler.sendEmptyMessage(RECIPROCAL);
         });
+
+        RxTextView.afterTextChangeEvents(verifyCodeEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
+            if (verifyCodeEdt.isFocused()) {
+                mainHandler.sendEmptyMessage(CHECK_PHONE_AND_PASSWORD);
+            }
+        }).subscribe();
+
         registerBtn = findViewById(R.id.register);
         registerBtn.setOnClickListener(v -> {
-            String phone = phoneEdt.getText().toString().trim();
+            String phone = phoneEdt.getPhoneText();
             String password = passwordEdt.getText().toString().trim();
             String verifyCode = verifyCodeEdt.getText().toString().trim();
             register(phone, password, verifyCode);
@@ -133,17 +145,25 @@ public class RegisterActivity extends BaseActivity {
         findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
+
+        TextView registerRuleTv = findViewById(R.id.tv_register_rule);
+        registerRuleTv.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        mainHandler.postDelayed(() -> {
+            SystemUtils.showKeyboard(this, phoneEdt);
+        }, 500L);
     }
 
     private boolean handleMessage(Message msg) {
         if (msg.what == CHECK_PHONE_AND_PASSWORD) {
-            registerBtn.setEnabled(LoginUtil.isPhone(phoneEdt.getText().toString()) && LoginUtil.isPassword(passwordEdt.getText().toString()));
+            boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
+            registerBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
+            getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;
             if (isReciprocal) {
                 getVerifyCodeTv.setEnabled(false);
-                getVerifyCodeTv.setText(String.valueOf("等待（" + timeCount + "s）"));
+                getVerifyCodeTv.setText(String.valueOf(getString(R.string.wait)+"（" + timeCount + "s）"));
                 mainHandler.sendEmptyMessageDelayed(RECIPROCAL, 1000L);
             } else {
                 getVerifyCodeTv.setEnabled(true);
@@ -175,30 +195,19 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void getVerifyCode(String phone) {
-        MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtCenter(getBaseContext(), result.msg);
-                }, new ErrorHandler());
+        if (LoginUtil.isPhone(phone)) {
+            loginVm.getVerifyCode(phone);
+        } else {
+            CLToast.showAtCenter(this, getString(R.string.login_please_input_right_num));
+        }
     }
 
     private void register(String phone, String password, String verifyCode) {
-        MyRetrofit.get()
-                .getCommonApiService()
-                .register(phone, password, verifyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        CLToast.showAtCenter(getBaseContext(), result.msg);
-                        registerBtn.endLoading();
-                        finish();
-                    } else {
-                        Log.d("register", result.msg);
-                        CLToast.showAtCenter(RegisterActivity.this, result.msg);
-                    }
-                }, new ErrorHandler());
+        if (TextUtils.isEmpty(verifyCode)) {
+            CLToast.showAtCenter(this, getString(R.string.login_place_input_verify_code));
+            return;
+        }
+        loginVm.register(phone, password, verifyCode);
         SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 

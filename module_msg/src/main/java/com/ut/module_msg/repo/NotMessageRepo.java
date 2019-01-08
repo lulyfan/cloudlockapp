@@ -32,7 +32,7 @@ public class NotMessageRepo {
             if (instance == null) {
                 instance = new NotMessageRepo();
                 instance.executor = command -> new Thread(command).start();
-                instance.messageDao = CloudLockDatabaseHolder.get().lockMessageDao();
+                instance.messageDao = CloudLockDatabaseHolder.get().getLockMessageDao();
             }
         }
         return instance;
@@ -54,7 +54,6 @@ public class NotMessageRepo {
 //                        messageDao.deleteAll();
                         messageDao.insert(result.data.toArray(tmp));
                     } else {
-
                     }
                 }
             } catch (Exception e) {

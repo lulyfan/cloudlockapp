@@ -31,7 +31,7 @@
                 android:background="@drawable/bg_item_up"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/base_16dp"
-                android:text="@string/invalidTime"
+                android:text="@string/validTime"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
                 app:layout_constraintEnd_toEndOf="parent"

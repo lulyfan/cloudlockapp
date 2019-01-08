@@ -1,23 +1,25 @@
-package com.ut.module_lock.entity;
+package com.ut.database.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class Record {
+
+    @PrimaryKey
+    private long id;//1,
     private String icon;
     private String operator;
-
-    private long id;//1,
     private long userId;//1,
     private long lockId;//0,
     private long keyId;//0,
     private int type;//0,
     private String description;//"开锁啦",
     private long createTime;//1542937352000
-
     private String time;
     private String userName;
-
     private String headPic;
     private String date;
-
 
 
     public String getTime() {

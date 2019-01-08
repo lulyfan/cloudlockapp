@@ -15,15 +15,7 @@
 
     <LinearLayout
         android:id="@+id/phone_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/base_56dp"
-        android:layout_marginStart="@dimen/base_20dp"
-        android:layout_marginTop="@dimen/base_20dp"
-        android:layout_marginEnd="@dimen/base_20dp"
-        android:background="@drawable/selector_highlight_case"
-        android:gravity="center"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp"
+        style="@style/Form"
         app:layout_constraintTop_toBottomOf="@id/title_bar">
 
 
@@ -33,43 +25,36 @@
             android:src="@drawable/selector_phone" />
 
 
-        <EditText
+        <com.ut.commoncomponent.ZpPhoneEditText
             android:id="@+id/edt_phone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingStart="@dimen/base_20dp"
-            android:paddingEnd="@dimen/base_20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:hint="@string/phone_hint"
             android:inputType="phone"
             android:maxLines="1"
-            android:textColorHint="#CCCCCC"
+            android:maxLength="13"
+            android:paddingStart="@dimen/base_20dp"
+            android:paddingEnd="@dimen/base_20dp"
+            android:textColorHint="@color/grayC"
             android:textSize="@dimen/base_14sp" />
 
-        <ImageView
+        <View
             android:id="@+id/img_clear"
             android:layout_width="@dimen/base_20dp"
             android:layout_height="@dimen/base_20dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/selector_clear" />
+            android:background="@drawable/selector_clear" />
 
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/password_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/base_56dp"
-        android:layout_marginStart="@dimen/base_20dp"
-        android:layout_marginTop="@dimen/base_20dp"
-        android:layout_marginEnd="@dimen/base_20dp"
-        android:background="@drawable/selector_highlight_case"
-        android:gravity="center"
-        android:paddingLeft="@dimen/base_20dp"
-        android:paddingRight="@dimen/base_20dp"
+        style="@style/Form"
         app:layout_constraintTop_toBottomOf="@id/phone_layout">
 
 
@@ -89,10 +74,9 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:maxLength="20"
             android:paddingStart="@dimen/base_20dp"
-            android:paddingTop="@dimen/base_20dp"
             android:paddingEnd="@dimen/base_20dp"
-            android:paddingBottom="@dimen/base_20dp"
             android:textColorHint="@color/grayC"
             android:textSize="@dimen/base_14sp" />
 
