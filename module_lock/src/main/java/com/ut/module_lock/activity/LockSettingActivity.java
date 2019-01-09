@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
@@ -241,40 +242,41 @@ public class LockSettingActivity extends BaseActivity {
         } else if (ruleType == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
             lockKey.setKeyTypeStr(lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
         } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
-            StringBuffer xingqi = new StringBuffer("星期");
             String weeks = lockKey.getWeeks();
-            String[] split = weeks.split(",");
-
-            for (String s : split) {
-                switch (Integer.valueOf(s)) {
-                    case 1:
-                        xingqi.append("一,");
-                        break;
-                    case 2:
-                        xingqi.append("二,");
-                        break;
-                    case 3:
-                        xingqi.append("三,");
-                        break;
-                    case 4:
-                        xingqi.append("四,");
-                        break;
-                    case 5:
-                        xingqi.append("五,");
-                        break;
-                    case 6:
-                        xingqi.append("六,");
-                        break;
-                    case 7:
-                        xingqi.append("七,");
-                        break;
+            if(!TextUtils.isEmpty(weeks)) {
+                StringBuffer xingqi = new StringBuffer("星期");
+                String[] split = weeks.split(",");
+                for (String s : split) {
+                    if(TextUtils.isEmpty(s)) continue;
+                    switch (Integer.valueOf(s)) {
+                        case 1:
+                            xingqi.append("一,");
+                            break;
+                        case 2:
+                            xingqi.append("二,");
+                            break;
+                        case 3:
+                            xingqi.append("三,");
+                            break;
+                        case 4:
+                            xingqi.append("四,");
+                            break;
+                        case 5:
+                            xingqi.append("五,");
+                            break;
+                        case 6:
+                            xingqi.append("六,");
+                            break;
+                        case 7:
+                            xingqi.append("七,");
+                            break;
+                    }
                 }
+                xingqi = xingqi.delete(xingqi.lastIndexOf(","), xingqi.length());
+                lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + " " + xingqi + " " + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
+                mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_10sp));
             }
-            xingqi = xingqi.delete(xingqi.lastIndexOf(","), xingqi.length());
-            lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + " " + xingqi + " " + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
         }
-
-//        lockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         lockKey.setElectricityStr();
         mBinding.setLockKey(lockKey);
     }

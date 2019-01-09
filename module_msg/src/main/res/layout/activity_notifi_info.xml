@@ -11,16 +11,25 @@
         android:layout_height="match_parent"
         android:background="@color/color_base_bg">
 
-        <include
-            android:id="@+id/top"
-            layout="@layout/toolbar_white" />
+        <FrameLayout
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/base_2dp">
+
+            <include
+                android:id="@+id/top"
+                layout="@layout/toolbar_white" />
+        </FrameLayout>
 
         <com.ut.commoncomponent.RefreshLayout
             android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingBottom="@dimen/base_10dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top"
+            app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintVertical_weight="1">
 
             <ListView

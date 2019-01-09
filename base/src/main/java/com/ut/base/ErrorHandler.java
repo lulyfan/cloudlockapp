@@ -19,7 +19,7 @@ public class ErrorHandler implements Consumer<Throwable> {
     @Override
     public void accept(Throwable throwable) {
         if (throwable instanceof SocketTimeoutException) {
-            Toast.makeText(BaseApplication.getAppContext(), "网络连接超时", Toast.LENGTH_SHORT).show();
+            CLToast.showAtBottom(BaseApplication.getAppContext(), "网络连接超时");
         } else if (throwable instanceof ConnectException) {
             CLToast.showAtCenter(BaseApplication.getAppContext(), "当前网络不可用");
         }

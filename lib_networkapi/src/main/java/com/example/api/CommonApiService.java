@@ -13,6 +13,7 @@ import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockUser;
 import com.ut.database.entity.LockUserKey;
+import com.ut.database.entity.Record;
 import com.ut.database.entity.User;
 
 
@@ -130,7 +131,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByKey)
-    Observable<JsonObject> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @GET(ApiUrl.getUserInfo)
     Call<Result<User>> getUserInfo();
@@ -141,11 +142,11 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByLock)
-    Observable<JsonObject> queryLogsByLock(@Field("lockId") long lockId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<Result<List<Record>>> queryLogsByLock(@Field("lockId") long lockId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByUser)
-    Observable<JsonObject> queryLogsByUser(@Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<Result<List<Record>>> queryLogsByUser(@Field("userId") long userId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
     @POST(ApiUrl.getForgetPwdVerifyCode)
