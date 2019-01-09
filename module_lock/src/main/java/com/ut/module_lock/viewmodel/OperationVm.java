@@ -95,8 +95,6 @@ public class OperationVm extends AndroidViewModel {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByLock(lockId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
-                .map(jsonObject -> JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
-                }))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
@@ -111,11 +109,6 @@ public class OperationVm extends AndroidViewModel {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByUser(userId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
-                .map(jsonObject -> {
-                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
-                    });
-                    return result;
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
@@ -130,11 +123,6 @@ public class OperationVm extends AndroidViewModel {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
-                .map(jsonObject -> {
-                    Result<List<Record>> result = JSON.parseObject(jsonObject.toString(), new TypeReference<Result<List<Record>>>() {
-                    });
-                    return result;
-                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {

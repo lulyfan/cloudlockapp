@@ -28,6 +28,7 @@ import com.ut.database.entity.Key;
 import com.ut.module_lock.viewmodel.KeyManagerVM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Route(path = RouterUtil.LockModulePath.KEY_MANAGER)
@@ -74,7 +75,11 @@ public class KeysManagerActivity extends BaseActivity {
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.setMac(mMac);
         kmVM.getKeys(mMac).observe(this, (keyItems) -> {
-            endLoad();
+//            mBinding.getRoot().postDelayed(this::endLoad, 200L);
+            if (keyItems == null) {
+                keyItems = new ArrayList<>();
+            }
+            Collections.sort(keyItems, (o1, o2) -> o1.getStatus() < o2.getStatus() ? -1 : 0);
             if (mBinding.refreshLayout.isLoading()) {
                 mAdapter.loadDate(keyItems);
                 mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 200L);
@@ -156,7 +161,7 @@ public class KeysManagerActivity extends BaseActivity {
         kmVM.updateKeyItems();
         mBinding.refreshLayout.postDelayed(() -> {
             mBinding.refreshLayout.setRefreshing(false);
-        }, 500L);
+        }, 1000L);
     }
 
     private void loadData() {
@@ -185,7 +190,6 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startLoad();
-        kmVM.updateKeyItems();
+        updateData();
     }
 }
