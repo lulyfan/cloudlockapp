@@ -21,6 +21,9 @@ public interface KeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertKeys(Key... keys);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertKeys(List<Key> keys);
+
     @Query("select * from ut_key where keyId = :keyId")
     Key findKeyByKeyId(int keyId);
 

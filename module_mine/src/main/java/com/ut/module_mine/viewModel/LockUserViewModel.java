@@ -13,8 +13,8 @@ import com.ut.module_mine.R;
 import java.util.List;
 
 public class LockUserViewModel extends BaseViewModel {
-    private int mCurrentPage = -1;
-    private static final int PAGE_SIZE = 10;
+    private int mCurrentPage = 1;
+    private static final int PAGE_SIZE = -1;
     public MutableLiveData<List<LockUser>> mLockUsers = new MutableLiveData<>();
     public MutableLiveData<Boolean> loadLockUserState = new MutableLiveData<>();
 
