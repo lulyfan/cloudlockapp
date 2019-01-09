@@ -155,7 +155,11 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void getVerifyCode(String phone) {
-        loginVm.getForgetPwdCode(phone);
+        if (LoginUtil.isPhone(phone)) {
+            loginVm.getVerifyCode(phone);
+        } else {
+            CLToast.showAtCenter(this, getString(R.string.login_please_input_right_num));
+        }
     }
 
 

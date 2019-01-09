@@ -27,6 +27,7 @@ import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.common.CommonViewHolder;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
@@ -103,7 +104,6 @@ public class LockListFragment extends BaseFragment {
         mFragmentLocklistBinding.swfLockList.setColorSchemeResources(R.color.color_tv_blue);
         mFragmentLocklistBinding.swfLockList.setOnRefreshListener(() -> {
             mLockListFragVM.toGetLockAllList(true);
-//            mLockListFragVM.toGetAllGroupList(true);
         });
     }
 
@@ -116,8 +116,12 @@ public class LockListFragment extends BaseFragment {
                 if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
                     ARouter.getInstance()
                             .build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                            .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, (Parcelable) datas1.get(position))
+                            .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                             .navigation();
+                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal() ||
+                        lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ||
+                        lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail));
                 }
             });
         } else {

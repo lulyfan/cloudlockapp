@@ -176,6 +176,7 @@ public class KeyManagerVM extends AndroidViewModel {
                         keys.add(keyItem);
                         saveKeys(keys);
                     }
+                    CLToast.showAtBottom(getApplication(), result.msg);
                 }, new ErrorHandler());
     }
 

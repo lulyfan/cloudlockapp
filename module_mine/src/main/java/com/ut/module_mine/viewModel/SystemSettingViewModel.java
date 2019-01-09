@@ -11,9 +11,8 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.VersionUpdateHelper;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_mine.R;
-import com.ut.module_mine.activity.MainActivity;
+import com.ut.module_mine.activity.SystemSettingActivity;
 
-import io.reactivex.functions.Consumer;
 
 public class SystemSettingViewModel extends BaseViewModel {
     public SystemSettingViewModel(@NonNull Application application) {
@@ -38,6 +37,7 @@ public class SystemSettingViewModel extends BaseViewModel {
 //                    CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
                             BaseApplication.deleteJpushAlias();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+                            AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
     }
