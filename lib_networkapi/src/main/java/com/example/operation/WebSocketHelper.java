@@ -28,13 +28,17 @@ public class WebSocketHelper {
     private ScheduledFuture scheduledFuture;
 
     private static final String TAG = "webSocket";
+    private static final int CODE_CLOSE_NORMAL = 1000;  //正常关闭
 
     public WebSocketHelper(OkHttpClient client) {
         this.client = client;
-        initWebSocket(false);
     }
 
-    private void initWebSocket(boolean isSendUserId) {
+    public void initWebSocket(boolean isSendUserId) {
+
+        if (webSocket != null) {
+            return;
+        }
 
         this.isSendUserId = isSendUserId;
 
@@ -45,6 +49,11 @@ public class WebSocketHelper {
         if (client != null) {
             webSocket = client.newWebSocket(request, webSocketListener);
         }
+    }
+
+    public void setUserId(int userId, String appId) {
+        this.userId = userId;
+        this.appId = appId;
     }
 
     public void sendUserId(int userId, String appId) {
@@ -108,6 +117,12 @@ public class WebSocketHelper {
             super.onClosed(webSocket, code, reason);
             Log.i(TAG, "websocket onClosed:" + reason);
 
+            WebSocketHelper.this.webSocket = null;
+
+            if (code == CODE_CLOSE_NORMAL) {
+                return;
+            }
+
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
@@ -120,6 +135,8 @@ public class WebSocketHelper {
         public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
             super.onFailure(webSocket, t, response);
             Log.i(TAG, "websocket onFailure:" + t.getMessage());
+
+            WebSocketHelper.this.webSocket = null;
 
             if (scheduledFuture != null) {
                 scheduledFuture.cancel(true);
@@ -135,7 +152,15 @@ public class WebSocketHelper {
         }
     };
 
+    public void close() {
+        if (webSocket != null) {
+            webSocket.close(CODE_CLOSE_NORMAL, "主动关闭");
+            webSocket = null;
+        }
+    }
+
     private WebSocketDataListener webSocketDataListener;
+
 
     public void setWebSocketDataListener(WebSocketDataListener webSocketDataListener) {
         this.webSocketDataListener = webSocketDataListener;

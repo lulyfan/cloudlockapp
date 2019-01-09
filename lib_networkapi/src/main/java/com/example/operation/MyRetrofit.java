@@ -164,7 +164,12 @@ public class MyRetrofit {
     }
 
     public void sendUserId(int userId, String appId) {
-        mWebSocketHelper.sendUserId(userId, appId);
+        mWebSocketHelper.setUserId(userId, appId);
+        mWebSocketHelper.initWebSocket(true);
+    }
+
+    public void closeWebSocket() {
+        mWebSocketHelper.close();
     }
 
     private static class Holder {

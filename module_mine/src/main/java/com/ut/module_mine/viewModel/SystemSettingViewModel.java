@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
+import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
@@ -38,6 +39,7 @@ public class SystemSettingViewModel extends BaseViewModel {
                             BaseApplication.deleteJpushAlias();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
+                            MyRetrofit.get().closeWebSocket();
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
     }
