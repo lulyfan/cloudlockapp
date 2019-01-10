@@ -66,7 +66,10 @@ public class WebSocketHelper {
 
         this.userId = userId;
         this.appId = appId;
-        webSocket.send("userId:" + userId + ",appid:" + appId);
+
+        if (webSocket != null) {
+            webSocket.send("userId:" + userId + ",appid:" + appId);
+        }
     }
 
     public void sendUserId() {
@@ -91,6 +94,13 @@ public class WebSocketHelper {
                         }
                     }, delay, TimeUnit.MILLISECONDS);
                 }
+
+                executor.scheduleWithFixedDelay(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendUserId();
+                    }
+                }, 1, 1, TimeUnit.MINUTES);
             }
         }
 
