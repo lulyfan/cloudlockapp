@@ -14,6 +14,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_login.R;
+import com.ut.module_login.common.LoginUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -110,5 +111,19 @@ public class LoginVm extends AndroidViewModel {
                 .subscribe(result -> {
                     CLToast.showAtCenter(getApplication(), result.msg);
                 }, new ErrorHandler());
+    }
+
+    public int checkPhoneBg(String phone) {
+        if (LoginUtil.isPhone(phone)) {
+            return R.drawable.selector_highlight_case;
+        }
+        return R.drawable.selector_highlight_red;
+    }
+
+    public int checkPwdBg(String pwd) {
+        if (LoginUtil.isPassword(pwd)) {
+            return R.drawable.selector_highlight_case;
+        }
+        return R.drawable.selector_highlight_red;
     }
 }

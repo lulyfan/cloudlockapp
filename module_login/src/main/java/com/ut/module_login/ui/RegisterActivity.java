@@ -1,6 +1,5 @@
 package com.ut.module_login.ui;
 
-import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -10,20 +9,16 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
@@ -33,10 +28,7 @@ import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.viewmodel.LoginVm;
 
-import java.util.Objects;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 @Route(path = RouterUtil.LoginModulePath.REGISTER)
 public class RegisterActivity extends BaseActivity {
@@ -158,12 +150,19 @@ public class RegisterActivity extends BaseActivity {
             boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
             registerBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
             getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
+            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
+                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
+            }
+
+            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
+                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
+            }
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;
             if (isReciprocal) {
                 getVerifyCodeTv.setEnabled(false);
-                getVerifyCodeTv.setText(String.valueOf(getString(R.string.wait)+"（" + timeCount + "s）"));
+                getVerifyCodeTv.setText(String.valueOf(getString(R.string.wait) + "（" + timeCount + "s）"));
                 mainHandler.sendEmptyMessageDelayed(RECIPROCAL, 1000L);
             } else {
                 getVerifyCodeTv.setEnabled(true);

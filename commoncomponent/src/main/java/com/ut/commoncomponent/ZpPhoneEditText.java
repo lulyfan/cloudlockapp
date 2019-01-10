@@ -3,6 +3,7 @@ package com.ut.commoncomponent;
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 
@@ -37,7 +38,7 @@ public class ZpPhoneEditText extends AppCompatEditText implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         super.onTextChanged(s, start, before, count);
-        if (s == null || s.length() == 0) {
+        if (TextUtils.isEmpty(s)) {
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -51,6 +52,13 @@ public class ZpPhoneEditText extends AppCompatEditText implements TextWatcher {
                 }
             }
         }
+
+        if(sb.length() <= start) {
+            setText("");
+            setSelection(0);
+            return;
+        }
+
         if (!sb.toString().equals(s.toString())) {
             int index = start + 1;
             if (sb.charAt(start) == ' ') {
@@ -64,7 +72,7 @@ public class ZpPhoneEditText extends AppCompatEditText implements TextWatcher {
                     index--;
                 }
             }
- 
+
             setText(sb.toString());
             setSelection(index);
         }

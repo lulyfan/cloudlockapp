@@ -23,6 +23,7 @@ import com.ut.module_msg.databinding.FragmentNotificationBinding;
 import com.ut.module_msg.viewmodel.NotMessageVm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,6 +83,7 @@ public class NotificationFragment extends BaseFragment {
         notificationViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(NotMessageVm.class);
         notificationViewModel.getLockMessages().observe(getActivity(), carriers -> {
             mNotifyFgBinding.noData.setVisibility(carriers == null || carriers.isEmpty() ? View.VISIBLE : View.GONE);
+            Collections.sort(carriers, ((o1, o2) -> o1.getUnReadCount() > o2.getUnReadCount() ? -1 : 0));
             listAdapter.updateDate(carriers);
         });
 

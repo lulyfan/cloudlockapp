@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.ut.base"/>
+          package="com.ut.base">
+
+    <application>
+        <activity android:name=".activity.SafeVerifyActivity" android:launchMode="singleInstance"/>
+    </application>
+</manifest>

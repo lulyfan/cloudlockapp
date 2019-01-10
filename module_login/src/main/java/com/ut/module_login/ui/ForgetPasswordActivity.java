@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.ViewGroup;
@@ -14,10 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
@@ -27,11 +24,7 @@ import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.viewmodel.LoginVm;
 
-import java.util.Objects;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 @Route(path = RouterUtil.LoginModulePath.FORGET_PWD)
 public class ForgetPasswordActivity extends BaseActivity {
@@ -138,6 +131,13 @@ public class ForgetPasswordActivity extends BaseActivity {
             boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
             sureBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
             getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
+            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
+                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
+            }
+
+            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
+                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
+            }
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;
@@ -156,7 +156,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private void getVerifyCode(String phone) {
         if (LoginUtil.isPhone(phone)) {
-            loginVm.getVerifyCode(phone);
+            loginVm.getForgetPwdCode(phone);
         } else {
             CLToast.showAtCenter(this, getString(R.string.login_please_input_right_num));
         }

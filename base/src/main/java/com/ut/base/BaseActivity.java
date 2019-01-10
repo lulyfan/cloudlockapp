@@ -1,5 +1,6 @@
 package com.ut.base;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -77,35 +78,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private synchronized void handlerNotLogin(String url) {
-        //todo
-        try {
-            if (noLoginDialog != null && noLoginDialog.isShowing()) {
-                noLoginDialog.dismiss();
-            }
-            noLoginDialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
-                    .setMessage(R.string.base_auto_login_time_out)
-                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
-                        if (dialog1 != null) {
-                            dialog1.dismiss();
-                        }
-                        ARouter.getInstance().build(url).navigation();
-                        Schedulers.io().scheduleDirect(new Runnable() {
-                            @Override
-                            public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
-                                CloudLockDatabaseHolder.get().clear();
-                            }
-                        });
-                    }).setOnDismissListener(dialog -> {
-                        noLoginDialog = null;
-                    })
-                    .setCancelable(false)
-                    .create();
-            if (!noLoginDialog.isShowing()) {
-                noLoginDialog.show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).navigation();
     }
 
     public void setLightStatusBar() {

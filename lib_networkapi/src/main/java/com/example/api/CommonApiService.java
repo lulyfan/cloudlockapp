@@ -20,6 +20,7 @@ import com.ut.database.entity.User;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -286,6 +287,5 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.verifyPhoneCode)
-    Observable<Result<Void>> verifyPhobeCode(@Field("mobile") String mobile, @Field("code") String code);
-
+    Observable<Result<Void>> verifyPhoneCode(@Field("mobile") String mobile, @Field("code") String code);
 }

@@ -48,6 +48,7 @@ public class RouterUtil {
 
     public static class BaseModulePath {
         public static final String GRANTPERMISSION = "/base/sendKey";
+        public static final String SAFEVERIFY = "/base/safeVerify";
     }
 
     public interface LockModuleExtraKey {

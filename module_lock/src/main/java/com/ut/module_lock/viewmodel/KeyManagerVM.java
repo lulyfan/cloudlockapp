@@ -273,4 +273,8 @@ public class KeyManagerVM extends AndroidViewModel {
     public LiveData<Key> getKeyById(long id) {
         return keyDao.getKeyById(id);
     }
+
+    public int getCurrentPage(){
+        return currentPage;
+    }
 }

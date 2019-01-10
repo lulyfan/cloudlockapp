@@ -12,18 +12,13 @@ import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.operation.MyRetrofit;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
-import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.commoncomponent.ZpPhoneEditText;
-import com.ut.database.database.CloudLockDatabaseHolder;
-import com.ut.database.entity.User;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.viewmodel.LoginVm;
@@ -32,8 +27,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -47,17 +40,24 @@ import io.reactivex.schedulers.Schedulers;
 public class LoginActivity extends BaseActivity {
     private ZpPhoneEditText phoneEdt;
     private EditText passwordEdt;
+    private LoginVm loginVm;
 
     private final int CHECK_PHONE_PASSWORD = 1000;
     private Handler mainHandler = new Handler(msg -> {
         if (msg.what == CHECK_PHONE_PASSWORD) {
             boolean result = verifyPhoneAndPassword(phoneEdt.getPhoneText(), passwordEdt.getText().toString());
             findViewById(R.id.btn_login).setEnabled(result);
+            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
+                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
+            }
+
+            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
+                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
+            }
         }
         return false;
     });
 
-    private LoginVm loginVm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

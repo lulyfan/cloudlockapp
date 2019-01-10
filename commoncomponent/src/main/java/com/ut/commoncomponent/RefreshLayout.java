@@ -127,7 +127,8 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
      * @return
      */
     private boolean canLoad() {
-        return isBottom() && !isLoading && isPullUp();
+        boolean can = isBottom() && !isLoading && isPullUp() && Math.abs(mLastY - mYDown) > 50;
+        return can;
     }
 
     /**
@@ -157,9 +158,9 @@ public class RefreshLayout extends SwipeRefreshLayout implements AbsListView.OnS
         if (mOnLoadListener != null) {
             // 设置状态
             setLoading(true);
-            this.postDelayed(() -> {
-                mListView.setSelection(mListView.getBottom());
-            }, 200L);
+//            this.postDelayed(() -> {
+//                mListView.setSelection(mListView.getBottom());
+//            }, 200L);
             //
             mOnLoadListener.onLoad();
         }

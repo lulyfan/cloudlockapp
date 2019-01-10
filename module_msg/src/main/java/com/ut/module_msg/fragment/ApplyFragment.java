@@ -24,6 +24,7 @@ import com.ut.module_msg.model.ApplyMessage;
 import com.ut.module_msg.viewmodel.ApplyMessageVm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import q.rorbin.badgeview.Badge;
@@ -48,7 +49,8 @@ public class ApplyFragment extends BaseFragment {
             initView();
             mApplyMessageVm = ViewModelProviders.of(this).get(ApplyMessageVm.class);
             mApplyMessageVm.getApplyMessages().observe(this, ams -> {
-                mApplyFgBinding.noData.setVisibility(ams == null || ams.isEmpty() ? View.VISIBLE : View.GONE);
+                Collections.sort(ams, (o1, o2) -> o1.getStatus() != null && o1.getStatus().equals(o2.getStatus()) ? -1 : 0);
+                mApplyFgBinding.noData.setVisibility(ams.isEmpty() ? View.VISIBLE : View.GONE);
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
                 mAdapter.updateDate(ams);
             });

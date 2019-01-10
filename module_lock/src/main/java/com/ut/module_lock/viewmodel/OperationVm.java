@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -70,8 +71,6 @@ public class OperationVm extends AndroidViewModel {
                 operationRecords.postValue(handlerRecords(records));
             });
         }
-
-
         return operationRecords;
     }
 
@@ -91,18 +90,22 @@ public class OperationVm extends AndroidViewModel {
         }
     }
 
+    private Consumer<Result<List<Record>>> subscriber = result -> {
+        if (result.isSuccess()) {
+            saveRecords(result.data);
+            currentPage++;
+            if (result.data.isEmpty()) {
+                currentPage--;
+            }
+        }
+    };
+
     private void loadRecordByLock(long lockId) {
         MyRetrofit.get().getCommonApiService()
                 .queryLogsByLock(lockId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        List<OperationRecord> ors = handlerRecords(result.data);
-                        operationRecords.postValue(ors);
-                        saveRecords(result.data);
-                    }
-                }, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
     }
 
     private void loadRecordByUser(long userId) {
@@ -110,13 +113,7 @@ public class OperationVm extends AndroidViewModel {
                 .queryLogsByUser(userId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        List<OperationRecord> ors = handlerRecords(result.data);
-                        operationRecords.postValue(ors);
-                        saveRecords(result.data);
-                    }
-                }, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
     }
 
     private void loadRecordByKey(long keyId) {
@@ -124,13 +121,7 @@ public class OperationVm extends AndroidViewModel {
                 .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result.isSuccess()) {
-                        List<OperationRecord> ors = handlerRecords(result.data);
-                        operationRecords.postValue(ors);
-                        saveRecords(result.data);
-                    }
-                }, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
     }
 
     private List<OperationRecord> handlerRecords(List<Record> records) {
@@ -168,5 +159,9 @@ public class OperationVm extends AndroidViewModel {
             Record[] tmp = new Record[records.size()];
             CloudLockDatabaseHolder.get().recordDao().insertRecords(records.toArray(tmp));
         });
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 }

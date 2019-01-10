@@ -42,4 +42,8 @@
     <string name="fine">好的</string>
     <string name="base_no_data">暂无数据</string>
     <string name="base_kongkongruye">本页面数据空空如也</string>
+    <string name="base_safe_verify_tips1">为了您的账号安全，请获取验证码进行身份验证</string>
+    <string name="get_verify_code">获取验证码</string>
+    <string name="base_safe_verify">安全验证</string>
+    <string name="waiting">等待</string>
 </resources>

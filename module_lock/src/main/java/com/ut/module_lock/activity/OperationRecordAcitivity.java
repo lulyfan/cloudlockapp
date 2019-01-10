@@ -45,8 +45,14 @@ public class OperationRecordAcitivity extends BaseActivity {
         initView();
         operationVm = ViewModelProviders.of(this).get(OperationVm.class);
         operationVm.getOperationRecords(recordType, currentId).observe(this, operationRecords -> {
-            if (operationRecords == null || operationRecords.isEmpty()) return;
-            oprs.clear();
+            if (operationRecords == null) {
+                operationRecords = new ArrayList<>();
+            }
+
+            if (mBinding.refreshLayout.isRefreshing()) {
+                mBinding.refreshLayout.setRefreshing(false);
+                oprs.clear();
+            }
             oprs.addAll(operationRecords);
             listAdapter.notifyDataSetChanged();
         });
@@ -55,8 +61,16 @@ public class OperationRecordAcitivity extends BaseActivity {
         mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light);
         mBinding.refreshLayout.setOnRefreshListener(() -> {
+            operationVm.setCurrentPage(1);
             operationVm.loadRecord(recordType, currentId);
-            mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setRefreshing(false), 1000L);
+            mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setRefreshing(false), 1200L);
+        });
+
+        mBinding.operationRecordList.setOnLoadMoreListener(() -> {
+            operationVm.loadRecord(recordType, currentId);
+            mBinding.operationRecordList.postDelayed(() -> {
+                mBinding.operationRecordList.setLoadCompleted();
+            }, 1000L);
         });
     }
 

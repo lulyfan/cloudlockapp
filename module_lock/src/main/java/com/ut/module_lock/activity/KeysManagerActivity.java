@@ -50,7 +50,6 @@ public class KeysManagerActivity extends BaseActivity {
         mMac = lockKey.getMac();
         initTitle();
         init();
-        updateData();
     }
 
     private void initTitle() {
@@ -75,33 +74,35 @@ public class KeysManagerActivity extends BaseActivity {
         kmVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         kmVM.setMac(mMac);
         kmVM.getKeys(mMac).observe(this, (keyItems) -> {
-//            mBinding.getRoot().postDelayed(this::endLoad, 200L);
             if (keyItems == null) {
                 keyItems = new ArrayList<>();
             }
             Collections.sort(keyItems, (o1, o2) -> o1.getStatus() < o2.getStatus() ? -1 : 0);
-            if (mBinding.refreshLayout.isLoading()) {
-                mAdapter.loadDate(keyItems);
-                mBinding.refreshLayout.postDelayed(() -> mBinding.refreshLayout.setLoading(false), 200L);
-            } else {
+            if (mBinding.refreshLayout.isRefreshing()) {
+                mBinding.refreshLayout.setRefreshing(false);
                 mAdapter.updateDate(keyItems);
+            } else if (mBinding.list.isLoading()) {
+                mAdapter.loadDate(keyItems);
+                mBinding.list.setLoadCompleted();
             }
+            mBinding.nodata.setVisibility(keyList.isEmpty() ? View.VISIBLE : View.GONE);
         });
         mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light);
-        mBinding.refreshLayout.setListViewFooter(mBinding.refreshLayout.createLoadingFooter());
         mBinding.refreshLayout.setOnRefreshListener(this::updateData);
-        mBinding.refreshLayout.setOnLoadListener(() -> {
-            if (!keyList.isEmpty() && keyList.size() - 1 >= kmVM.getDefaultPageSize()) {
-                loadData();
-            } else {
-                mBinding.refreshLayout.setLoading(false);
-            }
+
+        mBinding.list.setOnLoadMoreListener(() -> {
+            loadData();
+            mBinding.list.postDelayed(() -> {
+                mBinding.list.setLoadCompleted();
+            }, 1200L);
         });
+
         mBinding.list.setOnItemClickListener((parent, view, position, id) -> {
             Key keyItem = keyList.get(position);
             if (keyItem.getStatus() != 4) {
                 keyItem.setMac(mMac);
+
                 ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_INFO)
                         .withInt(Constance.USERTYPE, lockKey.getUserType())
                         .withSerializable(Constance.KEY_INFO, keyItem)
@@ -161,7 +162,7 @@ public class KeysManagerActivity extends BaseActivity {
         kmVM.updateKeyItems();
         mBinding.refreshLayout.postDelayed(() -> {
             mBinding.refreshLayout.setRefreshing(false);
-        }, 1000L);
+        }, 1200L);
     }
 
     private void loadData() {
@@ -182,9 +183,6 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_KEY_INFO) {
-//            updateData();
-//        }
     }
 
     @Override
