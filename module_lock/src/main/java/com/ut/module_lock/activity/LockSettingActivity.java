@@ -240,7 +240,8 @@ public class LockSettingActivity extends BaseActivity {
         } else if (ruleType == EnumCollection.KeyRuleType.ONCE.ordinal()) {
             lockKey.setKeyTypeStr(getString(R.string.once_time));
         } else if (ruleType == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
-            lockKey.setKeyTypeStr(lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
+            lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime());
+            mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_12sp));
         } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
             String weeks = lockKey.getWeeks();
             if(!TextUtils.isEmpty(weeks)) {
@@ -273,7 +274,7 @@ public class LockSettingActivity extends BaseActivity {
                     }
                 }
                 xingqi = xingqi.delete(xingqi.lastIndexOf(","), xingqi.length());
-                lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + " " + xingqi + " " + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
+                lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + "," + xingqi + "," + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
                 mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_10sp));
             }
         }

@@ -3,5 +3,6 @@
 
     <application>
         <activity android:name=".activity.SafeVerifyActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".activity.WebActivity" />
     </application>
 </manifest>

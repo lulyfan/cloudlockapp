@@ -2,6 +2,7 @@ package com.example.api;
 
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.ut.database.entity.ApplyMessage;
 import com.ut.database.entity.Key;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.LockMessage;
@@ -65,7 +66,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.getKeyApplyList)
-    Observable<JsonObject> getKeyApplyList(@Field("userId") long userId);
+    Observable<Result<List<ApplyMessage>>> getKeyApplyList(@Field("userId") long userId);
 
     @FormUrlEncoded
     @POST(ApiUrl.pageKey)

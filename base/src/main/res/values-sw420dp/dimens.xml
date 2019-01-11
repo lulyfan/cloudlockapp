@@ -52,6 +52,9 @@
 <dimen name="base_200dp">202.90dp</dimen>
 <dimen name="base_350dp">355.07dp</dimen>
 <dimen name="base_250dp">253.62dp</dimen>
+<dimen name="base_268dp">271.88dp</dimen>
+<dimen name="base_230dp">233.33dp</dimen>
+<dimen name="base_48dp">48.70dp</dimen>
 <dimen name="xxs">10.14sp</dimen>
 <dimen name="xs">12.17sp</dimen>
 <dimen name="s">14.20sp</dimen>

@@ -4,10 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
@@ -15,14 +14,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.google.gson.JsonElement;
 import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
-import com.ut.module_msg.model.ApplyMessage;
+import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.module_msg.R;
+import com.ut.database.entity.ApplyMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,12 +48,8 @@ public class ApplyMessageVm extends AndroidViewModel {
         super(application);
     }
 
-    public MutableLiveData<List<ApplyMessage>> getApplyMessages() {
-        if (applyMessages == null) {
-            applyMessages = new MutableLiveData<>();
-            loadApplyMessages();
-        }
-        return applyMessages;
+    public LiveData<List<ApplyMessage>> getApplyMessages() {
+        return CloudLockDatabaseHolder.get().getApplyMessageDao().loadApplyMessages();
     }
 
     public void loadApplyMessages() {
@@ -62,15 +58,9 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .getKeyApplyList(BaseApplication.getUser().id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(jsonObject -> {
-                    String json = jsonObject.toString();
-                    Result<List<ApplyMessage>> result = JSON.parseObject(json, new TypeReference<Result<List<ApplyMessage>>>() {
-                    });
-                    return result;
-                })
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        applyMessages.setValue(result.data);
+                        saveApplyMessages(result.data);
                     }
                     UTLog.d(String.valueOf(result.toString()));
                 }, new ErrorHandler());
@@ -82,7 +72,6 @@ public class ApplyMessageVm extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    UTLog.d("ignoreApply", result.msg);
                     CLToast.showAtBottom(getApplication(), result.msg);
                     AppManager.getAppManager().currentActivity().finish();
                 }, new ErrorHandler());
@@ -104,7 +93,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                         String dealer = data.getString("dealUser");
                         long dealTime = data.getLong("dealTime");
                         String phone = data.getString("dealMobile");
-                        if(BaseApplication.getUser().account.equals(phone)) {
+                        if (BaseApplication.getUser().account.equals(phone)) {
                             ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withBoolean("hasDealt", true).withSerializable("applyMessage", message).navigation();
                         } else {
                             String format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(dealTime));
@@ -120,5 +109,41 @@ public class ApplyMessageVm extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), msg);
                     }
                 }, new ErrorHandler());
+    }
+
+    public void saveApplyMessages(List<ApplyMessage> list) {
+        Schedulers.io().scheduleDirect(() -> {
+            CloudLockDatabaseHolder.get().getApplyMessageDao().deleteAll();
+            CloudLockDatabaseHolder.get().getApplyMessageDao().insert(list);
+        });
+    }
+
+    public void initApplyMessageString(ApplyMessage applyMessage) {
+        applyMessage.setApplyTimeStr(applyTimeString(applyMessage));
+        applyMessage.setRuleTypeStr(ruleTypeString(applyMessage));
+        applyMessage.setDecStr(description(applyMessage));
+    }
+
+    public String applyTimeString(ApplyMessage applyMessage) {
+        return new SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault()).format(new Date(applyMessage.getApplyTime()));
+    }
+
+    public String ruleTypeString(ApplyMessage applyMessage) {
+        switch (applyMessage.getRuleType()) {
+            case 3:
+                return getApplication().getString(R.string.once_time);
+            case 2:
+                return getApplication().getString(R.string.limit_time);
+            case 4:
+                return getApplication().getString(R.string.loop);
+            case 1:
+                return getApplication().getString(R.string.permanent);
+        }
+        return "";
+    }
+
+    public String description(ApplyMessage applyMessage) {
+        String string = getApplication().getString(R.string.apply_desc);
+        return String.format(string, applyMessage.getRuleTypeStr(), applyMessage.getLockName());
     }
 }

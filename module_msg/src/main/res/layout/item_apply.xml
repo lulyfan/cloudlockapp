@@ -6,7 +6,7 @@
 
         <variable
             name="apply"
-            type="com.ut.module_msg.model.ApplyMessage" />
+            type="com.ut.database.entity.ApplyMessage" />
 
     </data>
 
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/base_20dp"
-            android:text="@{apply.applyTimeString()}"
+            android:text="@{apply.applyTimeStr}"
             android:textColor="#BBBBBB"
             android:textSize="@dimen/base_10dp"
             app:layout_constraintRight_toRightOf="parent"
@@ -59,7 +59,7 @@
             android:id="@+id/hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{apply.description()}"
+            android:text="@{apply.decStr}"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
             app:layout_constraintBottom_toBottomOf="@id/icon_layout"

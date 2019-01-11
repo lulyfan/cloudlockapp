@@ -44,16 +44,16 @@ public class OperationRecordAcitivity extends BaseActivity {
         handlerIntent();
         initView();
         operationVm = ViewModelProviders.of(this).get(OperationVm.class);
-        operationVm.getOperationRecords(recordType, currentId).observe(this, operationRecords -> {
-            if (operationRecords == null) {
-                operationRecords = new ArrayList<>();
+        operationVm.getRecords(recordType, currentId).observe(this, records -> {
+            oprs.clear();
+            if (mBinding.operationRecordList.isLoading()) {
+                List<OperationRecord> tmps = operationVm.handlerRecords(records);
+                oprs.addAll(tmps);
+            } else {
+                operationVm.clear();
+                List<OperationRecord> tmps = operationVm.handlerRecords(records);
+                oprs.addAll(tmps);
             }
-
-            if (mBinding.refreshLayout.isRefreshing()) {
-                mBinding.refreshLayout.setRefreshing(false);
-                oprs.clear();
-            }
-            oprs.addAll(operationRecords);
             listAdapter.notifyDataSetChanged();
         });
         operationVm.loadRecord(recordType, currentId);

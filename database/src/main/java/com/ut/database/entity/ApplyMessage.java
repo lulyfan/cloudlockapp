@@ -1,16 +1,9 @@
-package com.ut.module_msg.model;
+package com.ut.database.entity;
 
-import android.annotation.SuppressLint;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-
-import com.ut.base.BaseApplication;
-import com.ut.module_msg.R;
-
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * author : chenjiajun
@@ -147,27 +140,36 @@ public class ApplyMessage implements Serializable {
         this.ruleType = ruleType;
     }
 
-    public String applyTimeString() {
-        return new SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault()).format(new Date(getApplyTime()));
+    @Ignore
+    private String applyTimeStr;
+
+    @Ignore
+    private String ruleTypeStr;
+
+    @Ignore
+    private String decStr;
+
+    public String getApplyTimeStr() {
+        return applyTimeStr;
     }
 
-    public String lockTypeString() {
-        switch (ruleType) {
-            case 3:
-                return BaseApplication.getAppContext().getString(R.string.once_time);
-            case 2:
-                return BaseApplication.getAppContext().getString(R.string.limit_time);
-            case 4:
-                return BaseApplication.getAppContext().getString(R.string.loop);
-            case 1:
-                return BaseApplication.getAppContext().getString(R.string.permanent);
-        }
-        return "";
+    public void setApplyTimeStr(String applyTimeStr) {
+        this.applyTimeStr = applyTimeStr;
     }
 
-    @SuppressLint("StringFormatMatches")
-    public String description() {
-        String string = BaseApplication.getAppContext().getString(R.string.apply_desc);
-        return String.format(string, lockTypeString(), lockName);
+    public String getRuleTypeStr() {
+        return ruleTypeStr;
+    }
+
+    public void setRuleTypeStr(String ruleTypeStr) {
+        this.ruleTypeStr = ruleTypeStr;
+    }
+
+    public String getDecStr() {
+        return decStr;
+    }
+
+    public void setDecStr(String decStr) {
+        this.decStr = decStr;
     }
 }

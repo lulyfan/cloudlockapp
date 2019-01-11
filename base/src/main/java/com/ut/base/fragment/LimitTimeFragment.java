@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ut.base.R;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
 import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.base.databinding.FragmentLimitTimeBinding;
@@ -92,6 +93,7 @@ public class LimitTimeFragment extends Fragment {
 
 
     private void chooseTime(View v, String title) {
+        SystemUtils.hideKeyboard(getContext(), v);
         DialogUtil.chooseDateTime(getContext(), title, (year, month, day, hour, minute) -> {
             TextView textView = (TextView) v;
             textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day)

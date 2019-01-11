@@ -3,7 +3,9 @@ package com.ut.module_login.ui;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -27,6 +29,8 @@ import com.ut.commoncomponent.ZpPhoneEditText;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.viewmodel.LoginVm;
+
+import java.io.File;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -147,6 +151,10 @@ public class RegisterActivity extends BaseActivity {
         mainHandler.postDelayed(() -> {
             SystemUtils.showKeyboard(this, phoneEdt);
         }, 500L);
+        registerRuleTv.setOnClickListener(v ->
+                ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
+                .withString("load_url", "file:///android_asset/agreement.html")
+                .navigation());
     }
 
     private boolean handleMessage(Message msg) {

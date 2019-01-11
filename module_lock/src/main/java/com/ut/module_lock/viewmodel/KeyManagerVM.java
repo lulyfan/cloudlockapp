@@ -79,7 +79,6 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
-                            initKey(result.data);
                             currentPage++;
                             saveKeys(result.data);
                         }
@@ -105,7 +104,6 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
-                            initKey(result.data);
                             currentPage++;
                             saveKeys(result.data);
                         }
@@ -141,15 +139,8 @@ public class KeyManagerVM extends AndroidViewModel {
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    if(result.isSuccess()) {
-                        updateKeyItems();
-                    }
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
-    }
-
-    public int getDefaultPageSize() {
-        return DEFAULT_PAGE_SIZE;
     }
 
     public void editKeyName(Key key, String name) {
@@ -210,13 +201,11 @@ public class KeyManagerVM extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
-    public void initKey(List<Key> keys) {
-        for (Key key : keys) {
-            key.setRuleTypeDrawableId(getRuleTypeDrawableId(key));
-            key.setStatusString(getStateString(key));
-            key.setRuleTypeString(getRuleTypeString(key));
-            key.setMac(mac);
-        }
+    public void initKey(Key key) {
+        key.setRuleTypeDrawableId(getRuleTypeDrawableId(key));
+        key.setStatusString(getStateString(key));
+        key.setRuleTypeString(getRuleTypeString(key));
+        key.setMac(mac);
     }
 
     private int getRuleTypeDrawableId(Key key) {

@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/base_23dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/base_8dp"
             android:background="@color/white"
             app:cardCornerRadius="@dimen/base_10dp"
             app:cardShadowColorEnd="@color/lock_carview_shadow"
@@ -114,8 +114,8 @@
 
                 <ImageButton
                     android:id="@+id/imageButton2"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="@dimen/base_230dp"
+                    android:layout_height="@dimen/base_230dp"
                     android:layout_marginTop="@dimen/base_48dp"
                     android:background="@null"
                     android:enabled="@{lockKey.keyStatus == 8}"
@@ -125,8 +125,7 @@
                     app:layout_constraintDimensionRatio="W,1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintWidth_percent="0.72"/>
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
                 <ImageView
                     android:id="@+id/iv_lock_detail_ble"
@@ -171,7 +170,6 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     >
-                    <!--@{(lockKey.userType==1||lockKey.userType==2)?visible:gone}-->
 
                     <TextView
                         android:id="@+id/function_tv_sendkey"

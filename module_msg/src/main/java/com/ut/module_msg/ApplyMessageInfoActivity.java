@@ -1,21 +1,18 @@
 package com.ut.module_msg;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.databinding.ActivityApplyMessageInfoBinding;
-import com.ut.module_msg.model.ApplyMessage;
+import com.ut.database.entity.ApplyMessage;
 import com.ut.module_msg.viewmodel.ApplyMessageVm;
 
 /**
@@ -27,6 +24,7 @@ import com.ut.module_msg.viewmodel.ApplyMessageVm;
 @Route(path = RouterUtil.MsgModulePath.APPLY_INFO)
 public class ApplyMessageInfoActivity extends BaseActivity {
 
+    private static final int REQUEST_CODE_SEND_KEY = 2000;
     private ActivityApplyMessageInfoBinding mBinding = null;
     private ApplyMessage mApplyMessage = null;
     private ApplyMessageVm applyMessageVm;
@@ -38,7 +36,7 @@ public class ApplyMessageInfoActivity extends BaseActivity {
         initLightToolbar();
         mApplyMessage = (ApplyMessage) getIntent().getSerializableExtra("applyMessage");
         boolean hasDealt = getIntent().getBooleanExtra("hasDealt", false);
-        if(hasDealt) {
+        if (hasDealt) {
             mBinding.btnLayout.setVisibility(View.GONE);
         }
         setTitle(mApplyMessage.getLockName());
@@ -50,8 +48,16 @@ public class ApplyMessageInfoActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, mApplyMessage.getRuleType())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mApplyMessage.getMac())
-                    .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile()).navigation();
+                    .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile())
+                    .navigation(ApplyMessageInfoActivity.this, REQUEST_CODE_SEND_KEY);
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SEND_KEY) {
+            finish();
+        }
+    }
 }

@@ -20,12 +20,12 @@ import java.util.List;
 public interface ORecordDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertRecords(Record... records);
+    void insertRecords(List<Record> records);
 
-    @Query("select * from record where lockId = :lockId ORDER BY lockId limit 10")
+    @Query("select * from record where lockId = :lockId ORDER BY createTime desc limit 10 ")
     LiveData<List<Record>> getRecordsByLockId(long lockId);
 
-    @Query("select * from record where keyId = :keyId ORDER BY keyId limit 10")
+    @Query("select * from record where keyId = :keyId ORDER BY createTime desc limit 10")
     LiveData<List<Record>> getRecordsByKeyId(long keyId);
 
     @Query("delete from record")

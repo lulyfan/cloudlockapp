@@ -64,10 +64,10 @@ public class KeysManagerActivity extends BaseActivity {
         mAdapter = new ListAdapter<Key>(this, R.layout.item_keys_manager, keyList, BR.keyItem) {
             @Override
             public void handleItem(ViewDataBinding binding, int position) {
+                kmVM.initKey(keyList.get(position));
                 ImageView ruleTypeIv = binding.getRoot().findViewById(R.id.tip);
                 int rId = keyList.get(position).getRuleTypeDrawableId();
                 ruleTypeIv.setBackgroundResource(rId);
-                kmVM.initKey(keyList);
             }
         };
         mBinding.list.setAdapter(mAdapter);
@@ -78,14 +78,14 @@ public class KeysManagerActivity extends BaseActivity {
                 keyItems = new ArrayList<>();
             }
             Collections.sort(keyItems, (o1, o2) -> o1.getStatus() < o2.getStatus() ? -1 : 0);
-            if (mBinding.refreshLayout.isRefreshing()) {
-                mBinding.refreshLayout.setRefreshing(false);
-                mAdapter.updateDate(keyItems);
-            } else if (mBinding.list.isLoading()) {
+            if (mBinding.list.isLoading()) {
                 mAdapter.loadDate(keyItems);
                 mBinding.list.setLoadCompleted();
+            } else {
+                mBinding.refreshLayout.setRefreshing(false);
+                mAdapter.updateDate(keyItems);
+                mBinding.nodata.setVisibility(keyItems.isEmpty() ? View.VISIBLE : View.GONE);
             }
-            mBinding.nodata.setVisibility(keyList.isEmpty() ? View.VISIBLE : View.GONE);
         });
         mBinding.refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light, android.R.color.holo_orange_light);

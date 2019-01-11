@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.ut.database.dao.DeviceKeyAuthDao;
 import com.ut.database.dao.DeviceKeyDao;
+import com.ut.database.dao.ApplyMessageDao;
 import com.ut.database.dao.KeyDao;
 import com.ut.database.dao.LockMessageInfoDao;
 import com.ut.database.dao.LockGroupDao;
@@ -93,6 +94,10 @@ public class CloudLockDatabaseHolder {
 
     public DeviceKeyAuthDao getDeviceKeyAuthDao() {
         return mDb.deviceKeyAuthDao();
+    }
+
+    public ApplyMessageDao getApplyMessageDao() {
+        return mDb.applyMessageDao();
     }
 
     public void clear() {

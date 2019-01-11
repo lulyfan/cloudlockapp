@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ut.base.R;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
 import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.base.customView.DatePicker;
@@ -118,6 +119,7 @@ public class LoopFragment extends Fragment {
     }
 
     private void chooseDate(View v, String title) {
+        SystemUtils.hideKeyboard(getContext(), v);
         DialogUtil.chooseDate(getContext(), title, (year, month, day) -> {
             TextView textView = (TextView) v;
             textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day));
@@ -135,6 +137,7 @@ public class LoopFragment extends Fragment {
     }
 
     private void chooseTime(View v, String title) {
+        SystemUtils.hideKeyboard(getContext(), v);
         DialogUtil.chooseTime(getContext(), title, (hour, minute) -> {
             TextView textView = (TextView) v;
             textView.setText(String.format("%02d", hour) + ":" + String.format("%02d", minute));

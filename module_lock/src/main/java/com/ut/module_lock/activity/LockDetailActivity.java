@@ -132,9 +132,10 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onOperateRecordClick(View view) {
+            boolean isNormalUser = mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal(); //如果是普通用户，则以钥匙ID来查看日志
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
-                    .withString(Constance.RECORD_TYPE, Constance.BY_LOCK)
-                    .withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId()))
+                    .withString(Constance.RECORD_TYPE, isNormalUser ? Constance.BY_KEY : Constance.BY_LOCK)
+                    .withLong(isNormalUser ? Constance.KEY_ID : Constance.LOCK_ID, isNormalUser ? Long.valueOf(mLockKey.getKeyId()) : Long.valueOf(mLockKey.getId()))
                     .navigation();
         }
 

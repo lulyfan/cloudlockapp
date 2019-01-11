@@ -17,8 +17,10 @@
             android:id="@+id/nodata"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/include9">
+
             <include layout="@layout/layout_no_data" />
         </FrameLayout>
 

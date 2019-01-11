@@ -90,6 +90,7 @@ public class LockListFragVM extends AndroidViewModel {
                 .observeOn(Schedulers.io())
                 .subscribe(lockGroupResult -> {
                     List<LockGroup> list = lockGroupResult.getData();
+                    if (list == null) return;
                     LockGroup[] lockGroups = new LockGroup[list.size()];
                     if (isReset) {//刷新时清除所有组数据
                         LockKeyDaoImpl.get().deleteAll();

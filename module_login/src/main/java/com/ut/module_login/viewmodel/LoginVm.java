@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
+import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.commoncomponent.CLToast;
@@ -45,8 +46,9 @@ public class LoginVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        AppManager.getAppManager().currentActivity().finish();
+                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                        currentActivity.finish();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
@@ -62,6 +64,7 @@ public class LoginVm extends AndroidViewModel {
         holder.getLockUserDao().deleteAll();
         holder.getLockKeyDao().deleteAll();
         holder.getKeyDao().deleteAll();
+        holder.recordDao().deleteAll();
     }
 
     public void getVerifyCode(String phone) {

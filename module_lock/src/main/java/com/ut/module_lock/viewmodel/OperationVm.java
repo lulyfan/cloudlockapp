@@ -3,6 +3,7 @@ package com.ut.module_lock.viewmodel;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
@@ -47,33 +48,20 @@ public class OperationVm extends AndroidViewModel {
         super(application);
     }
 
-    private MutableLiveData<List<OperationRecord>> operationRecords;
-
-    public MutableLiveData<List<OperationRecord>> getOperationRecords(String recordType, long id) {
-        if (operationRecords == null) {
-            operationRecords = new MutableLiveData<>();
-        }
-
+    public LiveData<List<Record>> getRecords(String recordType, long id) {
         if (id != currentId) {
             currentPage = 1;
             currentId = id;
         }
-
-        CloudLockDatabaseHolder holder = CloudLockDatabaseHolder.get();
-        ORecordDao recordDao = holder.recordDao();
         if (Constance.BY_KEY.equals(recordType)) {
-            recordDao.getRecordsByKeyId(id).observe(AppManager.getAppManager().currentActivity(), records -> {
-                operationRecords.postValue(handlerRecords(records));
-            });
-        } else if (Constance.BY_USER.equals(recordType)) {
+            return CloudLockDatabaseHolder.get().recordDao().
+                    getRecordsByKeyId(currentId);
         } else if (Constance.BY_LOCK.equals(recordType)) {
-            recordDao.getRecordsByLockId(id).observe(AppManager.getAppManager().currentActivity(), records -> {
-                operationRecords.postValue(handlerRecords(records));
-            });
+            return CloudLockDatabaseHolder.get().recordDao().
+                    getRecordsByLockId(currentId);
         }
-        return operationRecords;
+        return new MutableLiveData<>();
     }
-
 
     public void loadRecord(String recordType, long id) {
         if (id != currentId) {
@@ -124,27 +112,42 @@ public class OperationVm extends AndroidViewModel {
                 .subscribe(subscriber, new ErrorHandler());
     }
 
-    private List<OperationRecord> handlerRecords(List<Record> records) {
-        LinkedHashMap<String, List<Record>> map = new LinkedHashMap<>();
-        Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? 0 : 1;
+    private void saveRecords(List<Record> records) {
+        Schedulers.io().scheduleDirect(() -> {
+            CloudLockDatabaseHolder.get().recordDao().deleteAll();
+            CloudLockDatabaseHolder.get().recordDao().insertRecords(records);
+        });
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    private LinkedHashMap<String, List<Record>> handlerMap = null;
+
+    public List<OperationRecord> handlerRecords(List<Record> records) {
+        if (handlerMap == null) {
+            handlerMap = new LinkedHashMap<>();
+        }
+        Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? -1 : 0;
+        Collections.sort(records, comparator);
         for (Record li : records) {
             String date = SystemUtils.getTimeDate(li.getCreateTime());
-            if (map.containsKey(date)) {
-                ArrayList<Record> tmps = (ArrayList<Record>) map.get(date);
+            if (handlerMap.containsKey(date)) {
+                ArrayList<Record> tmps = (ArrayList<Record>) handlerMap.get(date);
                 tmps.add(li);
-                Collections.sort(tmps, comparator);
             } else {
                 ArrayList<Record> newtmps = new ArrayList<Record>();
                 newtmps.add(li);
-                map.put(date, newtmps);
+                handlerMap.put(date, newtmps);
             }
         }
         List<OperationRecord> oprs = new ArrayList<>();
-        Set<String> keySet = map.keySet();
+        Set<String> keySet = handlerMap.keySet();
         Iterator<String> iterator = keySet.iterator();
         while (iterator.hasNext()) {
             String key = iterator.next();
-            List<Record> rs = map.get(key);
+            List<Record> rs = handlerMap.get(key);
             OperationRecord opr = new OperationRecord();
             opr.setTime(key);
             opr.setRecords(rs);
@@ -153,15 +156,10 @@ public class OperationVm extends AndroidViewModel {
         return oprs;
     }
 
-    private void saveRecords(List<Record> records) {
-        Schedulers.io().scheduleDirect(() -> {
-            CloudLockDatabaseHolder.get().recordDao().deleteAll();
-            Record[] tmp = new Record[records.size()];
-            CloudLockDatabaseHolder.get().recordDao().insertRecords(records.toArray(tmp));
-        });
-    }
-
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void clear() {
+        if(handlerMap != null) {
+            handlerMap.clear();
+            handlerMap = null;
+        }
     }
 }

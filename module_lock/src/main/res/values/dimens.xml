@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="lock_text_size_10sp">10sp</dimen>
+    <dimen name="lock_text_size_12sp">12sp</dimen>
 </resources>

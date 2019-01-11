@@ -5,22 +5,18 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseFragment;
-import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_msg.BR;
 import com.ut.module_msg.R;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.module_msg.databinding.FragmentApplyBinding;
-import com.ut.module_msg.model.ApplyMessage;
+import com.ut.database.entity.ApplyMessage;
 import com.ut.module_msg.viewmodel.ApplyMessageVm;
 
 import java.util.ArrayList;
@@ -49,7 +45,7 @@ public class ApplyFragment extends BaseFragment {
             initView();
             mApplyMessageVm = ViewModelProviders.of(this).get(ApplyMessageVm.class);
             mApplyMessageVm.getApplyMessages().observe(this, ams -> {
-                Collections.sort(ams, (o1, o2) -> o1.getStatus() != null && o1.getStatus().equals(o2.getStatus()) ? -1 : 0);
+                Collections.sort(ams, (o1, o2) -> o1.getStatus() != null && "未处理".equals(o1.getStatus()) ? -1 : 0);
                 mApplyFgBinding.noData.setVisibility(ams.isEmpty() ? View.VISIBLE : View.GONE);
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
                 mAdapter.updateDate(ams);
@@ -62,6 +58,8 @@ public class ApplyFragment extends BaseFragment {
         mAdapter = new ListAdapter<ApplyMessage>(getContext(), R.layout.item_apply, applyMessages, BR.apply) {
             @Override
             public void handleItem(ViewDataBinding binding, int position) {
+                ApplyMessage message = applyMessages.get(position);
+                mApplyMessageVm.initApplyMessageString(message);
                 Badge badge = null;
                 ViewGroup icon = binding.getRoot().findViewById(R.id.icon_layout);
                 if (icon.getTag() == null) {
@@ -70,8 +68,6 @@ public class ApplyFragment extends BaseFragment {
                 } else {
                     badge = (Badge) icon.getTag();
                 }
-
-                ApplyMessage message = applyMessages.get(position);
                 if (!"已处理".equals(message.getStatus())) {
                     badge.bindTarget(icon)
                             .setShowShadow(false)
@@ -80,6 +76,8 @@ public class ApplyFragment extends BaseFragment {
                             .setGravityOffset(0, 0, true)
                             .setBadgeTextSize(9, true)
                             .setBadgeText(message.getStatus());
+                } else {
+                    badge.hide(false);
                 }
             }
         };

@@ -50,14 +50,19 @@ public class KeyInfoActivity extends BaseActivity {
         keyManagerVM = ViewModelProviders.of(this).get(KeyManagerVM.class);
         keyManagerVM.getFeedbackMessage().observe(this, message -> {
             CLToast.showAtBottom(KeyInfoActivity.this, message);
-//            hasEdited = true;
             finish();
         });
 
         mBinding.setKeyItem(keyInfo);
         keyManagerVM.setKey(keyInfo);
+        keyManagerVM.setMac(keyInfo.getMac());
         keyManagerVM.getKeyById(keyInfo.getKeyId()).observe(this, key -> {
+            if (key == null) {
+                finish();
+                return;
+            }
             keyInfo = key;
+            keyManagerVM.initKey(keyInfo);
             mBinding.setKeyItem(keyInfo);
         });
 
@@ -120,7 +125,9 @@ public class KeyInfoActivity extends BaseActivity {
             @Override
             protected void initView() {
                 TextView item1 = getView(R.id.item1);
-                if (managerUserType == EnumCollection.UserType.ADMIN.ordinal() && keyInfo.getUserType() != EnumCollection.UserType.ADMIN.ordinal()) {
+                if (managerUserType == EnumCollection.UserType.ADMIN.ordinal()
+                        && keyInfo.getUserType() != EnumCollection.UserType.ADMIN.ordinal()
+                        && keyInfo.getRuleType() == EnumCollection.KeyRuleType.FOREVER.ordinal()) {
                     item1.setText(keyInfo.getUserType() == EnumCollection.UserType.AUTH.ordinal() ? getString(R.string.lock_cancel_auth) : getString(R.string.lock_to_auth));
                     item1.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
@@ -149,10 +156,16 @@ public class KeyInfoActivity extends BaseActivity {
                 }
 
                 TextView item2 = getView(R.id.item2);
-                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal()
+                        ||
+                        keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()
+                        ||
+                        keyInfo.getStatus() == EnumCollection.KeyStatus.UPDATING.ordinal()) {
                     item2.setVisibility(View.GONE);
                 } else {
-                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ? getString(R.string.lock_unfrozen) : getString(R.string.lock_frozen));
+                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()
+                            || keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal()
+                            ? getString(R.string.lock_unfrozen) : getString(R.string.lock_frozen));
                     item2.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
                         if (keyInfo.isFrozened()) {
@@ -226,13 +239,4 @@ public class KeyInfoActivity extends BaseActivity {
         keyManagerVM.editKey(k);
     }
 
-
-    @Override
-    public void finish() {
-        if (hasEdited) {
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-        }
-        super.finish();
-    }
 }

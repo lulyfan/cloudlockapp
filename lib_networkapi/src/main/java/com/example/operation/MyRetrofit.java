@@ -75,21 +75,26 @@ public class MyRetrofit {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
-                        com.ut.database.entity.UUID uuid = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
-                        if (uuid == null) {
-                            uuid = new UUID();
-                            uuid.setUuid(MyRetrofit.UUID);
-                            CloudLockDatabaseHolder.get().getUUIDDao().insertUUID(uuid);
+                        try {
+                            com.ut.database.entity.UUID uuid = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
+                            if (uuid == null) {
+                                uuid = new UUID();
+                                uuid.setUuid(MyRetrofit.UUID);
+                                CloudLockDatabaseHolder.get().getUUIDDao().insertUUID(uuid);
+                            }
+                            Request request = chain.request();
+                            Request builder = request.newBuilder()
+                                    .addHeader("mobile_session_flag", "true")
+                                    .addHeader("session_token", uuid.getUuid())
+                                    .addHeader("appid", "2")
+                                    .build();
+                            Response response = chain.proceed(builder);
+                            handlerResponse(response);
+                            return response;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        Request request = chain.request();
-                        Request builder = request.newBuilder()
-                                .addHeader("mobile_session_flag", "true")
-                                .addHeader("session_token", uuid.getUuid())
-                                .addHeader("appid", "2")
-                                .build();
-                        Response response = chain.proceed(builder);
-                        handlerResponse(response);
-                        return response;
+                        return chain.proceed(chain.request());
                     }
                 })
                 .connectTimeout(2, TimeUnit.SECONDS)

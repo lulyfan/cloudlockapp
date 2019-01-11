@@ -5,7 +5,7 @@
 
         <variable
             name="applyMessage"
-            type="com.ut.module_msg.model.ApplyMessage" />
+            type="com.ut.database.entity.ApplyMessage" />
 
     </data>
 
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.applyTimeString()}"
+                    android:text="@{applyMessage.applyTimeStr}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{applyMessage.lockTypeString()}"
+                    android:text="@{applyMessage.ruleTypeStr}"
                     android:textColor="@color/color_base_text"
                     android:textSize="@dimen/base_17sp" />
             </LinearLayout>
