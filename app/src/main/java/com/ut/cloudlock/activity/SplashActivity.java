@@ -30,27 +30,28 @@ import io.reactivex.schedulers.Schedulers;
  */
 @SuppressLint("Registered")
 public class SplashActivity extends BaseActivity {
-    Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 100:
-                    ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                    break;
-                case 200:
-                    ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
-                    break;
-            }
-            finish();
-        }
-    };
+    Handler mHandler = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setLightStatusBar();
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 100:
+                        ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                        break;
+                    case 200:
+                        ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
+                        break;
+                }
+                finish();
+            }
+        };
         mHandler.sendEmptyMessageDelayed(100, 2000L);
         UserRepository.getInstance().getAllUser().observe(this, users -> {
             if (users == null || users.size() < 1) {

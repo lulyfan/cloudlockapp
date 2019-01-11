@@ -10,6 +10,7 @@ import com.baidu.mobstat.StatService;
 import com.example.operation.MyRetrofit;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+//import com.squareup.leakcanary.LeakCanary;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 import com.ut.unilink.UnilinkManager;
@@ -61,6 +62,17 @@ public class BaseApplication extends MultiDexApplication {
             UnilinkManager.getInstance(this).enableLog(true);
 
         initBaidu();
+
+        initLeakCanary();
+    }
+
+    private void initLeakCanary() {
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(this);
     }
 
     private void initBaidu() {

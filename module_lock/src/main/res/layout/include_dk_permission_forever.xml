@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ut.commoncomponent.cardview.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card2"
+    style="@style/CVDeviceKeyDetail.MarginTop"
+    android:layout_marginTop="@dimen/base_10dp"
+    app:cardCornerRadius="@dimen/base_10dp"
+    app:cardElevation="@dimen/base_3dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardShadowColorEnd="@color/lock_carview_shadow"
+    app:cardShadowColorStart="@color/lock_carview_shadow"
+    app:cardUseCompatPadding="false"
+    app:layout_constraintTop_toBottomOf="@+id/card1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            style="@style/LlyDeviceKeyDetail">
+
+            <TextView
+                style="@style/TvDeviceKeyDetailLeft"
+                android:text="@string/lock_valid_date"
+                />
+
+            <TextView
+                android:id="@+id/tv_lock_key_permission"
+                style="@style/TvDeviceKeyDetailRight.NoDrawable"
+                android:text="永久"/>
+        </RelativeLayout>
+
+        <include
+            layout="@layout/line"
+            />
+
+        <RelativeLayout
+            style="@style/LlyDeviceKeyDetail">
+
+            <TextView
+                style="@style/TvDeviceKeyDetailLeft"
+                android:text="@string/lock_key_open_times"
+                />
+
+            <TextView
+                android:id="@+id/tv_lock_key_time"
+                style="@style/TvDeviceKeyDetailRight.NoDrawable"
+                android:text="1"/>
+        </RelativeLayout>
+    </LinearLayout>
+</com.ut.commoncomponent.cardview.CardView>

@@ -31,6 +31,7 @@
     <string name="invalid_time">失效时间</string>
     <string name="lock_key_type">钥匙类型</string>
     <string name="lock_key_name">钥匙名称</string>
+    <string name="lock_key_permission">钥匙权限</string>
     <string name="lock_accept_time">接受时间</string>
     <string name="lock_operation_record">操作记录</string>
     <string name="operation_record">操作记录</string>
@@ -132,6 +133,28 @@
         <item>已失效</item>
         <item>已过期</item>
     </string-array>
+
+    <string-array name="deviceTypeName">
+        <item>指纹</item>
+        <item>密码</item>
+        <item>电子钥匙</item>
+        <item>手机蓝牙</item>
+        <item>卡片</item>
+    </string-array>
+
+    <string-array name="device_key_status">
+        <item>正常</item>
+        <item>已过期</item>
+        <item>已失效</item>
+        <item>已冻结</item>
+    </string-array>
+
+    <string-array name="device_key_auth_type">
+        <item>永久</item>
+        <item>限时</item>
+        <item>循环</item>
+    </string-array>
+
     <string name="lock_key_manager">钥匙管理</string>
     <string name="choose_group">选择分组</string>
     <string name="lock_key_status_sending">发送中</string>
@@ -181,4 +204,11 @@
     <string name="tip_no_empty">暂无数据</string>
     <string name="tip_no_empty1">本页面数据空空如也</string>
     <string name="lock_go_lock_detail_fail">本设备已冻结、失效或过期</string>
+    <string name="lock_key_remain">剩余开锁次数</string>
+    <string name="lock_key_open_times">开锁次数</string>
+    <string name="lock_open_record">开锁记录</string>
+
+
+    <string name="lock_key_vaild_time">有效时间</string>
+    <string name="lock_key_invaild_time">失效时间</string>
 </resources>

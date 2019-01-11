@@ -66,7 +66,7 @@ public class BaseActivity extends AppCompatActivity {
         StatService.onPageStart(this, this.getClass().getSimpleName());
     }
 
-    private void initNoLoginListener() {
+    protected void initNoLoginListener() {
         MyRetrofit.get().setNoLoginListener(() -> {
             Observable.just(RouterUtil.LoginModulePath.Login)
                     .subscribeOn(Schedulers.io())

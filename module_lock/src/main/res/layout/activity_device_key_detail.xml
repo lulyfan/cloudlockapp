@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="deviceKey"
+            type="com.ut.database.entity.DeviceKey"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroud"
+        tools:context=".activity.DeviceKeyDetailActivity">
+
+        <include
+            android:id="@+id/titleBar"
+            layout="@layout/toolbar_green"/>
+
+        <com.ut.commoncomponent.cardview.CardView
+            android:id="@+id/card1"
+            style="@style/CVDeviceKeyDetail"
+            app:cardCornerRadius="@dimen/base_10dp"
+            app:cardElevation="@dimen/base_3dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardShadowColorEnd="@color/lock_carview_shadow"
+            app:cardShadowColorStart="@color/lock_carview_shadow"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    style="@style/LlyDeviceKeyDetail">
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailLeft"
+                        android:text="@string/lock_key_name"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_lock_key_name"
+                        style="@style/TvDeviceKeyDetailRight.Drawable"
+                        android:text="@{deviceKey.name}"/>
+                </RelativeLayout>
+
+                <include
+                    layout="@layout/line"
+                    />
+
+                <RelativeLayout
+                    style="@style/LlyDeviceKeyDetail">
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailLeft"
+                        android:text="@string/lock_key_type"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_lock_key_type"
+                        style="@style/TvDeviceKeyDetailRight.NoDrawable"
+                        android:text="电子钥匙"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </com.ut.commoncomponent.cardview.CardView>
+
+        <com.ut.commoncomponent.cardview.CardView
+            android:id="@+id/card2"
+            style="@style/CVDeviceKeyDetail.MarginTop"
+            app:cardCornerRadius="@dimen/base_10dp"
+            app:cardElevation="@dimen/base_3dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardShadowColorEnd="@color/lock_carview_shadow"
+            app:cardShadowColorStart="@color/lock_carview_shadow"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/card1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    style="@style/LlyDeviceKeyDetail">
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailLeft"
+                        android:text="@string/lock_key_permission"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_lock_key_permission"
+                        style="@style/TvDeviceKeyDetailRight.Drawable"
+                        android:text="永久"/>
+                </RelativeLayout>
+
+                <include
+                    layout="@layout/line"
+                    />
+
+                <RelativeLayout
+                    style="@style/LlyDeviceKeyDetail">
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailLeft"
+                        android:text="@string/lock_key_remain"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_lock_key_time"
+                        style="@style/TvDeviceKeyDetailRight.NoDrawable"
+                        android:text="1"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </com.ut.commoncomponent.cardview.CardView>
+
+        <com.ut.commoncomponent.cardview.CardView
+            style="@style/CVDeviceKeyDetail.MarginTop"
+            app:cardCornerRadius="@dimen/base_10dp"
+            app:cardElevation="@dimen/base_3dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardShadowColorEnd="@color/lock_carview_shadow"
+            app:cardShadowColorStart="@color/lock_carview_shadow"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/card2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    style="@style/LlyDeviceKeyDetail">
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailLeft"
+                        android:text="@string/lock_open_record"
+                        />
+
+                    <TextView
+                        style="@style/TvDeviceKeyDetailRight.Drawable"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+        </com.ut.commoncomponent.cardview.CardView>
+
+        <Button
+            android:id="@+id/btn_next"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_20dp"
+            android:background="@drawable/bg_btn_red"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="@string/lock_delete_key"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>

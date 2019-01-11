@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/base_10dp"
+    app:layout_constraintTop_toBottomOf="@+id/card1">
+
+    <com.ut.commoncomponent.cardview.CardView
+        android:id="@+id/card2"
+        style="@style/CVDeviceKeyDetail"
+        app:cardCornerRadius="@dimen/base_10dp"
+        app:cardElevation="@dimen/base_3dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardShadowColorEnd="@color/lock_carview_shadow"
+        app:cardShadowColorStart="@color/lock_carview_shadow"
+        app:cardUseCompatPadding="false"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                style="@style/LlyDeviceKeyDetail">
+
+                <TextView
+                    style="@style/TvDeviceKeyDetailLeft"
+                    android:text="@string/lock_key_vaild_time"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_lock_key_vaild_time"
+                    style="@style/TvDeviceKeyDetailRight.Drawable"
+                    android:text="2018/11/23 09:44"/>
+            </RelativeLayout>
+
+            <include
+                layout="@layout/line"
+                />
+
+            <RelativeLayout
+                style="@style/LlyDeviceKeyDetail">
+
+                <TextView
+                    style="@style/TvDeviceKeyDetailLeft"
+                    android:text="@string/lock_key_invaild_time"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_lock_key_invaild_time"
+                    style="@style/TvDeviceKeyDetailRight.Drawable"
+                    android:text="2018/11/23 09:44"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </com.ut.commoncomponent.cardview.CardView>
+
+    <com.ut.commoncomponent.cardview.CardView
+        style="@style/CVDeviceKeyDetail.MarginTop"
+        app:cardCornerRadius="@dimen/base_10dp"
+        app:cardElevation="@dimen/base_3dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardShadowColorEnd="@color/lock_carview_shadow"
+        app:cardShadowColorStart="@color/lock_carview_shadow"
+        app:cardUseCompatPadding="false"
+        app:layout_constraintTop_toBottomOf="@+id/card2"
+        >
+
+        <RelativeLayout
+            style="@style/LlyDeviceKeyDetail">
+
+            <TextView
+                style="@style/TvDeviceKeyDetailLeft"
+                android:text="@string/lock_key_open_times"
+                />
+
+            <TextView
+                android:id="@+id/tv_lock_key_time"
+                style="@style/TvDeviceKeyDetailRight.Drawable"
+                android:text="1"/>
+        </RelativeLayout>
+    </com.ut.commoncomponent.cardview.CardView>
+
+</android.support.constraint.ConstraintLayout>

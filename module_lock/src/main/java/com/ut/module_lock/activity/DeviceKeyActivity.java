@@ -16,6 +16,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
+import com.ut.database.entity.EnumCollection;
 import com.ut.module_lock.R;
 import com.ut.module_lock.fragment.DeviceKeyFragment;
 
@@ -33,7 +34,6 @@ public class DeviceKeyActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_key);
-
         enableImmersive();
         initToolbar();
         initView();
@@ -78,10 +78,10 @@ public class DeviceKeyActivity extends BaseActivity {
 
         private void initFragment() {
             mFragments = new ArrayList<>();
-            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_FINGER));
-            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_PWD));
-            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_IC));
-            mFragments.add(DeviceKeyFragment.newInstance(DeviceKeyFragment.KEY_TYPE_ELEC_KEY));
+            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.FINGERPRINT.ordinal()));
+            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.PASSWORD.ordinal()));
+            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.ICCARD.ordinal()));
+            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.ELECTRONICKEY.ordinal()));
         }
 
         @Override

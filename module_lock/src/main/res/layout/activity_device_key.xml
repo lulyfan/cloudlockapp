@@ -85,7 +85,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_62dp"
-            android:background="@color/gray3"
+            android:background="@mipmap/bg_device_key_tip"
             android:gravity="center_vertical">
 
             <TextView
@@ -109,11 +109,11 @@
                     android:background="@drawable/bg_lock_connect_1"
                     android:clickable="true"
                     android:drawableLeft="@mipmap/icon_lock_mini_white"
-                    android:drawablePadding="@dimen/base_2dp"
+                    android:drawablePadding="@dimen/base_3dp"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:padding="@dimen/base_2dp"
+                    android:padding="@dimen/base_5dp"
                     android:text="@string/connect_lock"
                     android:textColor="@color/white"
                     android:textSize="@dimen/base_14sp"/>

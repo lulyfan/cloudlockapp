@@ -43,7 +43,8 @@ public class RouterUtil {
 
         public static final String LOCK_DEVICE_KEY = "/lock/lockKey";
 
-
+        //设备钥匙详情
+        public static final String LOCK_DEVICE_KEY_DETAIL = "/lock/devicekeyDetail";
     }
 
     public static class BaseModulePath {
@@ -57,6 +58,7 @@ public class RouterUtil {
         String EXTRA_LOCK_KEY_USERTYPE = "extra_lock_sendkey_usertype";
         String EXTRA_LOCK_SENDKEY_MOBILE = "extra_lock_sendKey_mobile";
         String EXTRA_LOCK_SENDKEY_RULER_TYPE = "extra_lock_sendKey_rulerType";
+        String EXTRA_LOCK_DEVICE_KEY = "extra_lock_device_key";
     }
 
     public interface LoginModuleAction {

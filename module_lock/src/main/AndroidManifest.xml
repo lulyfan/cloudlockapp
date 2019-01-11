@@ -36,8 +36,11 @@
         <activity android:name=".activity.EditLoopKeyActivity"/>
         <activity android:name=".activity.SearchLockActivity">
         </activity>
-        <activity
-            android:name=".activity.DeviceKeyActivity">
+        <activity android:name=".activity.DeviceKeyActivity">
+        </activity>
+        <activity android:name=".activity.DeviceKeyDetailActivity">
+        </activity>
+        <activity android:name=".activity.ModifyDKPermissionActivity">
         </activity>
     </application>
 

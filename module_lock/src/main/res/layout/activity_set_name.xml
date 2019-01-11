@@ -47,7 +47,7 @@
             android:layout_marginStart="@dimen/base_20dp"
             android:layout_marginTop="@dimen/base_30dp"
             android:layout_marginEnd="@dimen/base_20dp"
-            android:background="@drawable/bg_btn"
+            android:background="@drawable/bg_btn_green"
             android:enabled="false"
             android:maxLength="20"
             android:onClick="onXmlClick"

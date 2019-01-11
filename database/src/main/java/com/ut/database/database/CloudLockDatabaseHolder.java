@@ -6,6 +6,8 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.ut.database.dao.DeviceKeyAuthDao;
+import com.ut.database.dao.DeviceKeyDao;
 import com.ut.database.dao.KeyDao;
 import com.ut.database.dao.LockMessageInfoDao;
 import com.ut.database.dao.LockGroupDao;
@@ -81,8 +83,16 @@ public class CloudLockDatabaseHolder {
     }
 
 
-    public ORecordDao recordDao(){
+    public ORecordDao recordDao() {
         return mDb.recordDao();
+    }
+
+    public DeviceKeyDao getDeviceKeyDao() {
+        return mDb.deviceDeyDao();
+    }
+
+    public DeviceKeyAuthDao getDeviceKeyAuthDao() {
+        return mDb.deviceKeyAuthDao();
     }
 
     public void clear() {

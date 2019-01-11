@@ -54,7 +54,7 @@ public class EnumCollection {
         CYCLE//循环
     }
 
-    public enum LockType{
+    public enum LockType {
         SMARTLOCK(0xA010);
         int type;
 
@@ -65,5 +65,30 @@ public class EnumCollection {
         public int getType() {
             return type;
         }
+    }
+
+    public enum DeviceKeyType {
+        FINGERPRINT,// 0：指纹
+        PASSWORD,//1：密码
+        ELECTRONICKEY,//2：电子钥匙
+        BLUETOOTH,//3：手机蓝牙
+        ICCARD//4：卡片；
+    }
+
+    public enum DeviceKeyStatus {
+        NORMAL,// 0：正常
+        EXPIRED,//1：已过期
+        INVALID,//2：已失效
+        FROZEN;//3：已冻结
+
+        public static boolean isNormal(int status) {
+            return status == NORMAL.ordinal();
+        }
+    }
+
+    public enum DeviceKeyAuthType {
+        FOREVER,//永久
+        TIMELIMIT,//限时
+        CYCLE//循环
     }
 }

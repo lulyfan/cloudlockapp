@@ -58,6 +58,10 @@ public class LoginActivity extends BaseActivity {
         return false;
     });
 
+    @Override
+    protected void initNoLoginListener() {
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

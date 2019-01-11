@@ -105,7 +105,6 @@ public class LockDetailVM extends AndroidViewModel {
                     toGetElect(cloudLock);
                 }, 100, TimeUnit.MILLISECONDS);
 
-                toCheckPermissionOrOpenLock(cloudLock);
                 isConnectSuccessed = true;
                 connectStatus.postValue(true);
             }
@@ -145,6 +144,7 @@ public class LockDetailVM extends AndroidViewModel {
             @Override
             public void onSuccess(CloudLock cloudLock) {
                 mLockKey.setElectric(cloudLock.getElect());
+                toCheckPermissionOrOpenLock(cloudLock);
                 rx.Observable.just(mLockKey)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
@@ -155,7 +155,7 @@ public class LockDetailVM extends AndroidViewModel {
 
             @Override
             public void onFailed(int i, String s) {
-
+                toCheckPermissionOrOpenLock(cloudLock);
             }
         });
     }

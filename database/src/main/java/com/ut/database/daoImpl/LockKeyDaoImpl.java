@@ -80,7 +80,7 @@ public class LockKeyDaoImpl {
      * @return
      */
     public LiveData<List<LockKey>> getLockByName(String name) {
-        return mLockKeyDao.getLockByName(name + "%");
+        return mLockKeyDao.getLockByName("%" + name + "%");
     }
 
     public LiveData<LockKey> getLockByMac(String mac) {

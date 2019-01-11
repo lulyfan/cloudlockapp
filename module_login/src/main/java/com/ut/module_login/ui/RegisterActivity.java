@@ -58,6 +58,10 @@ public class RegisterActivity extends BaseActivity {
         loginVm = ViewModelProviders.of(this).get(LoginVm.class);
     }
 
+    @Override
+    protected void initNoLoginListener() {
+    }
+
     private void initUI() {
         initLightToolbar();
         setTitle(R.string.register);
