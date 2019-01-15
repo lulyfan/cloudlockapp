@@ -9,11 +9,19 @@
         </shape>
     </item>
 
+    <item android:state_enabled="false">
+        <shape>
+            <corners android:radius="3dp" />
+            <solid android:color="@color/color_base_grayC7C7CC" />
+        </shape>
+    </item>
+
     <item>
         <shape>
             <corners android:radius="3dp" />
             <solid android:color="#F55D54" />
         </shape>
     </item>
+
 
 </selector>

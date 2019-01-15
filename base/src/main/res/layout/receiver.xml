@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -24,10 +23,11 @@
     <EditText
         android:id="@+id/et_phoneNum"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/base_60dp"
         android:layout_marginEnd="@dimen/base_16dp"
         android:background="@null"
         android:ems="11"
+        android:minWidth="@dimen/base_160dp"
         android:gravity="right|center_vertical"
         android:hint="请输入接收者手机号"
         android:inputType="phone"
@@ -56,9 +56,10 @@
     <EditText
         android:id="@+id/et_receiverName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/base_60dp"
         android:background="@null"
         android:maxLength="20"
+        android:minWidth="@dimen/base_160dp"
         android:maxLines="1"
         android:inputType="text"
         android:gravity="right|center_vertical"
@@ -70,8 +71,8 @@
 
     <ImageView
         android:id="@+id/contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/base_27dp"
+        android:layout_height="@dimen/base_27dp"
         android:layout_marginEnd="@dimen/base_16dp"
         app:layout_constraintBottom_toBottomOf="@+id/et_phoneNum"
         app:layout_constraintEnd_toEndOf="parent"

@@ -21,9 +21,9 @@ import java.util.List;
 public interface LockMessageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(LockMessage... lockMessages);
+    void insert(List<LockMessage> lockMessages);
 
-    @Query("select * from LockMessage")
+    @Query("select * from LockMessage order by id desc")
     LiveData<List<LockMessage>> lockMessages();
 
     @Query("select * from LockMessage where id = :id ")

@@ -118,10 +118,12 @@ public class LockListFragment extends BaseFragment {
                             .build(RouterUtil.LockModulePath.LOCK_DETAIL)
                             .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                             .navigation();
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal() ||
-                        lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() ||
-                        lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail));
+                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()){
+                    CLToast.showAtCenter(getContext(), getString(R.string.lock_key_status_has_invailed));
+                } else if( lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
+                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
+                } else if( lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
                 }
             });
         } else {

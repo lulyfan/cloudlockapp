@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">base</string>
     <string name="grantPermission">分配权限</string>
+    <string name="send_key">发送钥匙</string>
     <string name="mine_limitTime">限时</string>
     <string name="mine_forever">永久</string>
     <string name="mine_once">单次</string>
@@ -46,4 +47,6 @@
     <string name="get_verify_code">获取验证码</string>
     <string name="base_safe_verify">安全验证</string>
     <string name="waiting">等待</string>
+    <string name="send_key_phone_hint">请输入接收者手机号</string>
+    <string name="lock_send_key_failed_tips_one">钥匙只能发送给已注册手机号</string>
 </resources>

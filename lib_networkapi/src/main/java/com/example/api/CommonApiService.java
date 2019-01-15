@@ -54,7 +54,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.loginUrl)
-    Observable<Result<User>> login(@Field("account") String mobile, @Field("password") String pwd);
+    Observable<Result<User>> login(@Field("account") String mobile, @Field("password") String pwd, @Field("deviceCode") String deviceCode);
 
     @FormUrlEncoded
     @POST(ApiUrl.registerUrl)
@@ -136,7 +136,7 @@ public interface CommonApiService {
     Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
 
     @GET(ApiUrl.getUserInfo)
-    Call<Result<User>> getUserInfo();
+    Observable<Result<User>> getUserInfo();
 
     @FormUrlEncoded
     @POST(ApiUrl.resetPassword)
@@ -187,7 +187,7 @@ public interface CommonApiService {
 
 
     @POST(ApiUrl.getMessage)
-    Call<Result<List<LockMessage>>> getMessage();
+    Observable<Result<List<LockMessage>>> getMessage();
 
     @FormUrlEncoded
     @POST(ApiUrl.checkKeyStatus)

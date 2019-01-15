@@ -5,38 +5,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.ut.base.BaseFragment;
 import com.ut.base.fragment.ForeverFragment;
 import com.ut.base.fragment.LimitTimeFragment;
 import com.ut.base.fragment.LoopFragment;
 import com.ut.base.fragment.OnceFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GrantPermissionAdapter extends FragmentPagerAdapter {
+    private List<BaseFragment> fragments = null;
 
     public GrantPermissionAdapter(FragmentManager fm) {
         super(fm);
+        fragments = new ArrayList<>();
+        fragments.add(new ForeverFragment());
+        fragments.add(new LimitTimeFragment());
+        fragments.add(new OnceFragment());
+        fragments.add(new LoopFragment());
     }
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = null;
-        switch (i) {
-            case 0:
-                fragment = new ForeverFragment();
-                break;
-
-            case 1:
-                fragment = new LimitTimeFragment();
-                break;
-
-            case 2:
-                fragment = new OnceFragment();
-                break;
-
-            case 3:
-                fragment = new LoopFragment();
-                break;
-        }
-        return fragment;
+        return fragments.get(i);
     }
 
     @Override
@@ -60,8 +52,8 @@ public class GrantPermissionAdapter extends FragmentPagerAdapter {
             case 3:
                 return "循环";
 
-                default:
-                    return "";
+            default:
+                return "";
         }
     }
 }

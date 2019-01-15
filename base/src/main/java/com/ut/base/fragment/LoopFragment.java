@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ut.base.BaseFragment;
 import com.ut.base.R;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
@@ -28,7 +29,7 @@ import com.ut.base.viewModel.GrantPermisssionViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoopFragment extends Fragment {
+public class LoopFragment extends BaseFragment {
     private FragmentLoopBinding binding;
     private GrantPermisssionViewModel viewModel;
 
@@ -41,11 +42,12 @@ public class LoopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_loop, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
-        init();
-        initData();
-
+        if (binding == null) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_loop, container, false);
+            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            init();
+            initData();
+        }
         return binding.getRoot();
     }
 
@@ -76,13 +78,13 @@ public class LoopFragment extends Fragment {
     }
 
     private void init() {
+        if (binding == null) return;
         binding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.validTime)));
         binding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalidTime)));
         binding.startDate.setOnClickListener(v -> chooseDate(v, getString(R.string.startDate)));
         binding.endDate.setOnClickListener(v -> chooseDate(v, getString(R.string.endDate)));
 
-        ImageView iv_contact = binding.getRoot().findViewById(R.id.contact);
-        iv_contact.setOnClickListener(v -> ((GrantPermissionActivity)getActivity()).selectContact());
+        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = binding.getRoot().findViewById(R.id.et_phoneNum);
         EditText et_name = binding.getRoot().findViewById(R.id.et_receiverName);
@@ -90,24 +92,26 @@ public class LoopFragment extends Fragment {
         et_name.addTextChangedListener(viewModel.keyNameWatcher);
 
         viewModel.receiverPhoneNum.observe(this, s -> {
-            if (!et_phoneNum.getText().toString().equals(s)) {
+            if (!et_phoneNum.getText().toString().equals(s) && s != null) {
                 et_phoneNum.setText(s);
+                et_phoneNum.setSelection(s.length());
             }
         });
         viewModel.keyName.observe(this, s -> {
-            if (!et_name.getText().toString().equals(s)) {
+            if (!et_name.getText().toString().equals(s) && s != null) {
                 et_name.setText(s);
+                et_name.setSelection(s.length());
             }
         });
 
         View root = binding.getRoot();
-        CheckBox checkBox1 =  root.findViewById(R.id.monday);
-        CheckBox checkBox2 =  root.findViewById(R.id.tuesday);
-        CheckBox checkBox3 =  root.findViewById(R.id.wednessday);
-        CheckBox checkBox4 =  root.findViewById(R.id.thursday);
-        CheckBox checkBox5 =  root.findViewById(R.id.friday);
-        CheckBox checkBox6 =  root.findViewById(R.id.saturday);
-        CheckBox checkBox7 =  root.findViewById(R.id.sunday);
+        CheckBox checkBox1 = root.findViewById(R.id.monday);
+        CheckBox checkBox2 = root.findViewById(R.id.tuesday);
+        CheckBox checkBox3 = root.findViewById(R.id.wednessday);
+        CheckBox checkBox4 = root.findViewById(R.id.thursday);
+        CheckBox checkBox5 = root.findViewById(R.id.friday);
+        CheckBox checkBox6 = root.findViewById(R.id.saturday);
+        CheckBox checkBox7 = root.findViewById(R.id.sunday);
 
         checkBox1.setOnCheckedChangeListener(weekListener);
         checkBox2.setOnCheckedChangeListener(weekListener);
@@ -159,13 +163,13 @@ public class LoopFragment extends Fragment {
             View root = binding.getRoot();
             String weeks = "";
 
-            CheckBox checkBox1 =  root.findViewById(R.id.monday);
-            CheckBox checkBox2 =  root.findViewById(R.id.tuesday);
-            CheckBox checkBox3 =  root.findViewById(R.id.wednessday);
-            CheckBox checkBox4 =  root.findViewById(R.id.thursday);
-            CheckBox checkBox5 =  root.findViewById(R.id.friday);
-            CheckBox checkBox6 =  root.findViewById(R.id.saturday);
-            CheckBox checkBox7 =  root.findViewById(R.id.sunday);
+            CheckBox checkBox1 = root.findViewById(R.id.monday);
+            CheckBox checkBox2 = root.findViewById(R.id.tuesday);
+            CheckBox checkBox3 = root.findViewById(R.id.wednessday);
+            CheckBox checkBox4 = root.findViewById(R.id.thursday);
+            CheckBox checkBox5 = root.findViewById(R.id.friday);
+            CheckBox checkBox6 = root.findViewById(R.id.saturday);
+            CheckBox checkBox7 = root.findViewById(R.id.sunday);
 
             weeks += checkBox1.isChecked() ? "1," : "";
             weeks += checkBox2.isChecked() ? "2," : "";
@@ -178,4 +182,8 @@ public class LoopFragment extends Fragment {
         }
     };
 
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+    }
 }

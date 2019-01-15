@@ -30,10 +30,12 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
+                android:hint="@string/lock_edit_name_hint"
                 android:imeActionLabel="@string/lock_save"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:lines="1"
+                android:maxLength="20"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/base_17sp" />
 

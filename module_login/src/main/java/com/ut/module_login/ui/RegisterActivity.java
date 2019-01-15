@@ -110,6 +110,11 @@ public class RegisterActivity extends BaseActivity {
                 passwordEdt.setSelection(passwordEdt.getText().length());
             }
         });
+
+        findViewById(R.id.see_password_layout).setOnClickListener(v -> {
+            findViewById(R.id.see_password).performClick();
+        });
+
         getVerifyCodeTv.setOnClickListener(v -> {
             ((ViewGroup) getVerifyCodeTv.getParent()).setSelected(true);
             getVerifyCode(phoneEdt.getPhoneText());

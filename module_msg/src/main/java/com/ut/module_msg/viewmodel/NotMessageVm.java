@@ -30,8 +30,6 @@ import io.reactivex.schedulers.Schedulers;
 @SuppressLint("CheckResult")
 public class NotMessageVm extends AndroidViewModel {
 
-    private MutableLiveData<List<LockMessage>> lockMessages;
-
     private LockMessageInfoDao lockMessageInfoDao;
 
     public NotMessageVm(@NonNull Application application) {
@@ -39,22 +37,8 @@ public class NotMessageVm extends AndroidViewModel {
         lockMessageInfoDao = CloudLockDatabaseHolder.get().getLockMessageInfoDao();
     }
 
-    public MutableLiveData<List<LockMessage>> getLockMessages() {
-        if (lockMessages == null) {
-            lockMessages = new MutableLiveData<>();
-            loadNotifications();
-        }
-        return lockMessages;
-    }
-
-    public void loadNotifications() {
-        NotMessageRepo.getInstance()
-                .getNotificationMessages()
-                .observe(AppManager.getAppManager().currentActivity(), msgs -> {
-                    if (msgs != null) {
-                        getLockMessages().postValue(msgs);
-                    }
-                });
+    public LiveData<List<LockMessage>> getLockMessages() {
+        return CloudLockDatabaseHolder.get().getLockMessageDao().lockMessages();
     }
 
     public void loadMessageInfos(String mac) {
@@ -83,6 +67,23 @@ public class NotMessageVm extends AndroidViewModel {
 
 
     public LiveData<List<LockMessageInfo>> getLockMessageInfos(String mac) {
-        return CloudLockDatabaseHolder.get().getLockMessageInfoDao().findLMessageDetailsByMac(mac);
+        return lockMessageInfoDao.findLMessageDetailsByMac(mac);
+    }
+
+    public void loadNotificationMessages() {
+        MyRetrofit.get().getCommonApiService().getMessage()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        saveNotificationMessages(result.data);
+                    }
+                }, new ErrorHandler());
+    }
+
+    private void saveNotificationMessages(List<LockMessage> messages) {
+        Schedulers.io().scheduleDirect(() -> {
+            CloudLockDatabaseHolder.get().getLockMessageDao().insert(messages);
+        });
     }
 }

@@ -34,21 +34,24 @@
             android:gravity="center_vertical"
             android:hint="@string/phone_hint"
             android:inputType="phone"
-            android:maxLines="1"
             android:maxLength="13"
+            android:maxLines="1"
             android:paddingStart="@dimen/base_20dp"
             android:paddingEnd="@dimen/base_20dp"
             android:textColorHint="@color/grayC"
             android:textSize="@dimen/base_14sp" />
 
-        <View
+        <FrameLayout
             android:id="@+id/img_clear"
-            android:layout_width="@dimen/base_20dp"
-            android:layout_height="@dimen/base_20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/selector_clear" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/base_8dp">
 
+            <View
+                android:layout_width="@dimen/base_20dp"
+                android:layout_height="@dimen/base_20dp"
+                android:background="@drawable/selector_clear" />
+        </FrameLayout>
     </LinearLayout>
 
 
@@ -73,19 +76,25 @@
             android:gravity="center_vertical"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:maxLines="1"
             android:maxLength="20"
+            android:maxLines="1"
             android:paddingStart="@dimen/base_20dp"
             android:paddingEnd="@dimen/base_20dp"
             android:textColorHint="@color/grayC"
             android:textSize="@dimen/base_14sp" />
 
-        <CheckBox
-            android:id="@+id/see_password"
-            android:layout_width="@dimen/base_20dp"
-            android:layout_height="@dimen/base_20dp"
-            android:background="@drawable/selector_eye"
-            android:button="@null" />
+       <FrameLayout
+           android:id="@+id/see_password_layout"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:padding="@dimen/base_8dp">
+           <CheckBox
+               android:id="@+id/see_password"
+               android:layout_width="@dimen/base_20dp"
+               android:layout_height="@dimen/base_20dp"
+               android:background="@drawable/selector_eye"
+               android:button="@null" />
+       </FrameLayout>
     </LinearLayout>
 
     <com.ut.commoncomponent.LoadingButton

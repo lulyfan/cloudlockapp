@@ -47,6 +47,8 @@ public class LockDetailVM extends AndroidViewModel {
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private boolean isConnectSuccessed = false;
 
+    private String mMac = null;
+
     public LockDetailVM(@NonNull Application application) {
         super(application);
         connectStatus.setValue(false);
@@ -66,6 +68,9 @@ public class LockDetailVM extends AndroidViewModel {
 
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
+        if(mLockKey != null) {
+            mMac = mLockKey.getMac();
+        }
     }
 
     public LiveData<LockKey> getLockKey() {
@@ -74,8 +79,16 @@ public class LockDetailVM extends AndroidViewModel {
 
 
     public int openLock() {
+        if(mLockKey == null) {
+            return -100;
+        }
+
         isConnectSuccessed = false;
-        if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {
+        if (mLockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()
+                || mLockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()
+                || mLockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+            return -3;
+        } else if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {
             toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
             return 0;
         } else {
@@ -223,10 +236,9 @@ public class LockDetailVM extends AndroidViewModel {
     }
 
     @Override
-
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
-        UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+        UnilinkManager.getInstance(getApplication()).disconnect(mMac);
     }
 }

@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -24,6 +25,7 @@ import com.ut.base.Utils.Util;
 import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 
 @Route(path = RouterUtil.BaseModulePath.GRANTPERMISSION)
@@ -49,7 +51,7 @@ public class GrantPermissionActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
         viewModel.tip.observe(this, s -> {
-            toastShort(s);
+            CLToast.showAtBottom(getApplicationContext(), s);
             finish();
         });
         viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
@@ -92,6 +94,7 @@ public class GrantPermissionActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int i) {
+                viewModel.setPhoneAndName();
                 checkInputInfo();
             }
 
@@ -105,7 +108,7 @@ public class GrantPermissionActivity extends BaseActivity {
 
             String phoneNum = viewModel.receiverPhoneNum.getValue();
             String keyName = viewModel.keyName.getValue();
-            if (keyName == null || "".equals(keyName.trim())) {
+            if (TextUtils.isEmpty(keyName)) {
                 keyName = phoneNum;
             }
             boolean isAdmin = viewModel.isAdmin;
@@ -146,12 +149,6 @@ public class GrantPermissionActivity extends BaseActivity {
     };
 
     private void checkInputInfo() {
-
-//        String keyName = viewModel.keyName.getValue();
-//        if (keyName != null && keyName.length() > 20) {
-//            toastShort("钥匙名称不能超过20个字符");
-//        }
-
         String receiverPhoneNum = viewModel.receiverPhoneNum.getValue();
         String limitStartTime = viewModel.limitStartTime.getValue();
         String limitEndTime = viewModel.limitEndTime.getValue();

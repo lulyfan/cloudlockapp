@@ -1,5 +1,6 @@
 package com.ut.module_msg.repo;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 
 import com.example.entity.base.Result;
@@ -11,6 +12,8 @@ import com.ut.database.entity.LockMessage;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 /**
@@ -21,7 +24,6 @@ import retrofit2.Response;
 public class NotMessageRepo {
 
     private static NotMessageRepo instance;
-    private Executor executor;
     private LockMessageDao messageDao;
 
     private NotMessageRepo() {
@@ -31,7 +33,6 @@ public class NotMessageRepo {
         synchronized (NotMessageRepo.class) {
             if (instance == null) {
                 instance = new NotMessageRepo();
-                instance.executor = command -> new Thread(command).start();
                 instance.messageDao = CloudLockDatabaseHolder.get().getLockMessageDao();
             }
         }
@@ -39,26 +40,7 @@ public class NotMessageRepo {
     }
 
     public LiveData<List<LockMessage>> getNotificationMessages() {
-        loadNotificationMessages();
         return messageDao.lockMessages();
     }
 
-    void loadNotificationMessages() {
-        executor.execute(() -> {
-            try {
-                Response<Result<List<LockMessage>>> response = MyRetrofit.get().getCommonApiService().getMessage().execute();
-                Result<List<LockMessage>> result = response.body();
-                if(result != null) {
-                    if (result.isSuccess()) {
-                        LockMessage[] tmp = new LockMessage[result.data.size()];
-//                        messageDao.deleteAll();
-                        messageDao.insert(result.data.toArray(tmp));
-                    } else {
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
 }

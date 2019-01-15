@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/grantPermission"
+                    android:text="@string/send_key"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/m"/>
             </android.support.v7.widget.Toolbar>

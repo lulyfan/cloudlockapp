@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_15dp"
                 android:text="@{lockKey.statusStr}"
-                android:textColor="@{lockKey.status == 0 ? @color/lock_color_tv_normal: @color/lock_color_tv_red}"
+                android:textColor="@{lockKey.keyValid ? @color/lock_color_tv_normal: @color/lock_color_tv_red}"
                 android:textSize="@dimen/base_14sp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_lock_name"/>
 

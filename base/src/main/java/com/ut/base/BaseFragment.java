@@ -2,6 +2,7 @@ package com.ut.base;
 
 
 import android.content.Context;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -169,5 +170,11 @@ public class BaseFragment extends Fragment {
 
     protected void onUserInvisible() {
 
+    }
+
+    private ViewDataBinding binding = null;
+
+    public ViewDataBinding getBinding() {
+        return binding;
     }
 }

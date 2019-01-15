@@ -17,6 +17,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -42,6 +43,7 @@ public class LockDetailActivity extends BaseActivity {
         enableImmersive();
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
+        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
         initLockData();
         addPaddingTop();
         initView();
@@ -67,18 +69,17 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private void initLockData() {
+        if (mLockKey == null) return;
         mLockKey.setStatusStr(this.getResources().getStringArray(R.array.key_status));
         mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         mLockKey.setElectricityStr();
-        //TODO 设置假数据
-//        mLockKey.setType(0xA010);
         mDetailBinding.setLockKey(mLockKey);
-        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
         mLockDetailVM.setLockKey(mLockKey);
     }
 
     private void initViewModel() {
+        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
         mLockDetailVM.getConnectStatus().observe(this, isConnected -> {
             if (isConnected) {
                 mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_green);
@@ -96,8 +97,8 @@ public class LockDetailActivity extends BaseActivity {
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
-            if (lockKey == null) return;
             mLockKey = lockKey;
+            mLockDetailVM.setLockKey(mLockKey);
             initLockData();
         });
     }
@@ -118,7 +119,10 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onSendKeyClick(View view) {
-//            startActivity(new Intent(LockDetailActivity.this, GrantPermissionActivity.class));
+            if (mLockKey == null) {
+                keyHasDeletedTips();
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mLockKey.getMac())
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, mLockKey.getUserType())
@@ -126,26 +130,41 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onMangeKeyClick(View view) {
+            if (mLockKey == null) {
+                keyHasDeletedTips();
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER)
                     .withParcelable(Constance.LOCK_KEY, mLockKey)
                     .navigation();
         }
 
         public void onOperateRecordClick(View view) {
-            boolean isNormalUser = mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal(); //如果是普通用户，则以钥匙ID来查看日志
+            if (mLockKey == null) {
+                keyHasDeletedTips();
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
-                    .withString(Constance.RECORD_TYPE, isNormalUser ? Constance.BY_KEY : Constance.BY_LOCK)
-                    .withLong(isNormalUser ? Constance.KEY_ID : Constance.LOCK_ID, isNormalUser ? Long.valueOf(mLockKey.getKeyId()) : Long.valueOf(mLockKey.getId()))
+                    .withString(Constance.RECORD_TYPE, Constance.BY_LOCK)
+                    .withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId()))
                     .navigation();
         }
 
         public void onLockManageClick(View view) {
+            if (mLockKey == null) {
+                keyHasDeletedTips();
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING)
                     .withParcelable(Constance.LOCK_KEY, mLockKey)
                     .navigation();
         }
 
         public void onDeviceKeyClick(View view) {
+            if (mLockKey == null) {
+                keyHasDeletedTips();
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mLockKey)
                     .navigation();
@@ -216,6 +235,12 @@ public class LockDetailActivity extends BaseActivity {
             case UnilinkManager.SCAN_SUCCESS:
                 startLoad();
                 break;
+            case -3:
+                CLToast.showAtCenter(this, getString(R.string.lock_open_lock_invaild_tips));
+                break;
+            case -100:
+                keyHasDeletedTips();
+                break;
         }
     }
 
@@ -226,5 +251,9 @@ public class LockDetailActivity extends BaseActivity {
             if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
                 toOpenLock();
         }
+    }
+
+    private void keyHasDeletedTips() {
+        CLToast.showAtCenter(this, "钥匙已被删除，无法开锁，请联系钥匙发送者");
     }
 }

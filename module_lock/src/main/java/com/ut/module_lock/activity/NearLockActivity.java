@@ -28,6 +28,7 @@ public class NearLockActivity extends BaseActivity {
     private ActivityNearLockBinding mNearLockBinding;
     private CommonAdapter<NearScanLock> mAdapter;
     private NearLockVM mNearLockVM = null;
+    private NearScanLock mSelectedLock = null;
     private static final int BLEREAUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
 
@@ -82,6 +83,15 @@ public class NearLockActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             bundle.putString(SetNameActivity.BUNDLE_EXTRA_BLE, cloudLock.getAddress());
             SetNameActivity.start(NearLockActivity.this, bundle);
+
+            //绑定成功后，更新绑定锁的状态，刷新界面
+            if (mSelectedLock != null) {
+                List<NearScanLock> data = mAdapter.getData();
+                if (data.indexOf(mSelectedLock) > -1) {
+                    data.get(data.indexOf(mSelectedLock)).setBindStatus(EnumCollection.BindStatus.HASBIND.ordinal());
+                    mAdapter.notifyData(data);
+                }
+            }
         });
     }
 
@@ -108,7 +118,6 @@ public class NearLockActivity extends BaseActivity {
             toScan();
         });
     }
-
 
     private void showApplyDialog(NearScanLock data) {
         new CustomerAlertDialog(this, false)
@@ -147,6 +156,7 @@ public class NearLockActivity extends BaseActivity {
                     imageButton.setOnClickListener(v -> {
                         startLoad();
                         mNearLockVM.bindLock(item);
+                        mSelectedLock = item;
                     });
                 }
             };

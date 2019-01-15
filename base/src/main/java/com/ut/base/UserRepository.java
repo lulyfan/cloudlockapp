@@ -1,5 +1,6 @@
 package com.ut.base;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
@@ -25,7 +27,6 @@ import retrofit2.Response;
 public class UserRepository {
 
     private static UserRepository instance;
-    private Executor executor = null;
     private UserDao userDao = null;
 
     private UserRepository() {
@@ -37,33 +38,29 @@ public class UserRepository {
             synchronized (UserRepository.class) {
                 instance = new UserRepository();
                 instance.userDao = CloudLockDatabaseHolder.get().getUserDao();
-                instance.executor = (command) -> Schedulers.io().scheduleDirect(command);
             }
         }
         return instance;
     }
 
     public LiveData<User> getUser() {
-        refreshUser();
         return userDao.findLastOne();
     }
-
 
     public LiveData<List<User>> getAllUser() {
         return userDao.findAllUsers();
     }
 
+    @SuppressLint("CheckResult")
     public void refreshUser() {
-        executor.execute(() -> {
-            try {
-                Response<Result<User>> response = MyRetrofit.get().getCommonApiService().getUserInfo().execute();
-                if (response.body() != null && response.body().isSuccess()) {
-                    userDao.updateUser(response.body().data);
-                }
-                Log.d("refreshUser", "refresher" + response.body().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        MyRetrofit.get().getCommonApiService().getUserInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        userDao.updateUser(result.data);
+                    }
+                    Log.d("refreshUser", "refresher" + result.data.toString());
+                }, new ErrorHandler());
     }
 }

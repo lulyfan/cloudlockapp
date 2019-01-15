@@ -20,10 +20,6 @@ import com.ut.cloudlock.R;
 import com.ut.cloudlock.adapter.MainPageAdapter;
 import com.ut.cloudlock.databinding.ActivityMainBinding;
 import com.ut.commoncomponent.CLToast;
-import com.ut.database.database.CloudLockDatabaseHolder;
-
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
 
 
 @SuppressLint("CheckResult")
@@ -42,13 +38,6 @@ public class MainActivity extends BaseActivity {
         mBinding.bottomNavigation.setItemIconTintList(null);
         resetBottomIcon();
         mBinding.bottomNavigation.getMenu().findItem(R.id.action_home).setIcon(R.mipmap.icon_home_pressed);
-
-        mBinding.fab.setOnClickListener(v -> {
-            Flowable.just(this).subscribeOn(Schedulers.io()).subscribe(context -> {
-                CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
-                CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-            });
-        });
 
         UserRepository.getInstance().getUser().observe(this, user -> {
             BaseApplication.setUser(user);

@@ -93,7 +93,7 @@
     <string name="touch_unlock">Touch开锁</string>
     <string name="lock_tip_setting_failed">设置失败</string>
 
-    <string name="lock_tip_open_ble">请打开蓝牙锁</string>
+    <string name="lock_tip_open_ble">请打开蓝牙</string>
     <string name="lock_tip_ble_permission_not_allow">请授予蓝牙权限</string>
 
     <string name="lock_tip_open_ble_lock">请唤醒并连接锁设备获取最新钥匙信息</string>
@@ -203,7 +203,9 @@
     <string name="tab_text_key">电子钥匙</string>
     <string name="tip_no_empty">暂无数据</string>
     <string name="tip_no_empty1">本页面数据空空如也</string>
-    <string name="lock_go_lock_detail_fail">本设备已冻结、失效或过期</string>
+    <string name="lock_go_lock_detail_fail_has_freeze">本设备已冻结</string>
+    <string name="lock_go_lock_detail_fail_has_invalid">本设备已失效</string>
+    <string name="lock_go_lock_detail_fail_has_overdue">本设备已过期</string>
     <string name="lock_key_remain">剩余开锁次数</string>
     <string name="lock_key_open_times">开锁次数</string>
     <string name="lock_open_record">开锁记录</string>
@@ -211,4 +213,6 @@
 
     <string name="lock_key_vaild_time">有效时间</string>
     <string name="lock_key_invaild_time">失效时间</string>
+    <string name="lock_open_lock_invaild_tips">钥匙不在有效期内</string>
+    <string name="lock_edit_name_hint">请输入1-20位中文、字母或数字</string>
 </resources>

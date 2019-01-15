@@ -103,7 +103,6 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM.getShowTip().observe(this, showTip -> {
             CLToast.showAtBottom(getBaseContext(), showTip);
         });
-        mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
             if (lk == null) return;
             lockKey = lk;
@@ -145,14 +144,6 @@ public class LockSettingActivity extends BaseActivity {
 
     private void deleteLock() {
         if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
-//            CustomerAlertDialog dialog = new CustomerAlertDialog(LockSettingActivity.this, false);
-//            dialog.setMsg(getString(R.string.lock_delete_lock_tips));
-//            dialog.setConfirmText(getString(R.string.lock_btn_confirm));
-//            dialog.setConfirmListener(v1 -> verifyAdmin());
-//            dialog.setCancelText(getString(R.string.lock_cancel));
-//            dialog.setCancelLister(null);
-//            dialog.show();
-            //todo
             new AlertDialog.Builder(this)
                     .setMessage(getString(R.string.lock_delete_lock_tips))
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog, which) -> {
@@ -244,11 +235,11 @@ public class LockSettingActivity extends BaseActivity {
             mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_12sp));
         } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
             String weeks = lockKey.getWeeks();
-            if(!TextUtils.isEmpty(weeks)) {
+            if (!TextUtils.isEmpty(weeks)) {
                 StringBuffer xingqi = new StringBuffer("星期");
                 String[] split = weeks.split(",");
                 for (String s : split) {
-                    if(TextUtils.isEmpty(s)) continue;
+                    if (TextUtils.isEmpty(s)) continue;
                     switch (Integer.valueOf(s)) {
                         case 1:
                             xingqi.append("一,");
@@ -295,5 +286,9 @@ public class LockSettingActivity extends BaseActivity {
                 .subscribe(lockKey1 -> {
                     LockKeyDaoImpl.get().insert(lockKey1);
                 });
+    }
+
+    public void deleteBtnEnable(boolean isEnable) {
+        mBinding.btnDeleteKey.setEnabled(isEnable);
     }
 }

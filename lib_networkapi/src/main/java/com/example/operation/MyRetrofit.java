@@ -94,12 +94,12 @@ public class MyRetrofit {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        return chain.proceed(chain.request());
+                        return chain.proceed(chain.request().newBuilder().build());
                     }
                 })
-                .connectTimeout(2, TimeUnit.SECONDS)
+                .connectTimeout(6, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(3, TimeUnit.SECONDS);
+                .writeTimeout(5, TimeUnit.SECONDS);
         builder.addInterceptor(httpLoggingInterceptor);
         mOkHttpClient = builder.build();
         mWebSocketHelper = new WebSocketHelper(mOkHttpClient);

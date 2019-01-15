@@ -99,7 +99,7 @@ public class NotificationFragment extends BaseFragment {
         mNotifyFgBinding.swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light);
         mNotifyFgBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            notificationViewModel.loadNotifications();
+            notificationViewModel.loadNotificationMessages();
             mNotifyFgBinding.swipeRefreshLayout.postDelayed(() -> {
                 mNotifyFgBinding.swipeRefreshLayout.setRefreshing(false);
             }, 2000L);
@@ -115,7 +115,7 @@ public class NotificationFragment extends BaseFragment {
     protected void onUserVisible() {
         super.onUserVisible();
         if (notificationViewModel != null) {
-            notificationViewModel.loadNotifications();
+            notificationViewModel.loadNotificationMessages();
         }
     }
 }

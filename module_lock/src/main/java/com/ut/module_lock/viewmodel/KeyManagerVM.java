@@ -135,6 +135,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .map(result -> {
                     keyDao.deleteKeyByKeyId((int) keyId);
+                    CloudLockDatabaseHolder.get().recordDao().deleteAll();
                     return result;
                 })
                 .observeOn(AndroidSchedulers.mainThread())

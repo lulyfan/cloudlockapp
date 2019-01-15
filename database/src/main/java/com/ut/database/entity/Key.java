@@ -211,7 +211,7 @@ public class Key implements Serializable, Cloneable {
 
 
     public int statusColor() {
-        return Color.parseColor(status >= 9 ? "#999999" : "#F55D54");
+        return Color.parseColor(status > 9 ? "#999999" : "#F55D54");
     }
 
 

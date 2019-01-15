@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ut.base.BaseFragment;
 import com.ut.base.R;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
@@ -23,10 +24,11 @@ import com.ut.base.viewModel.GrantPermisssionViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LimitTimeFragment extends Fragment {
+public class LimitTimeFragment extends BaseFragment {
 
     private FragmentLimitTimeBinding binding;
     private GrantPermisssionViewModel viewModel;
+
     public LimitTimeFragment() {
         // Required empty public constructor
     }
@@ -36,11 +38,12 @@ public class LimitTimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_limit_time, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
-        initUI();
-        initData();
-
+        if (binding == null) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_limit_time, container, false);
+            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            initUI();
+            initData();
+        }
         return binding.getRoot();
     }
 
@@ -71,8 +74,7 @@ public class LimitTimeFragment extends Fragment {
 
         binding.tvInvalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalidTime)));
 
-        ImageView iv_contact = binding.getRoot().findViewById(R.id.contact);
-        iv_contact.setOnClickListener(v -> ((GrantPermissionActivity)getActivity()).selectContact());
+        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = binding.getRoot().findViewById(R.id.et_phoneNum);
         EditText et_name = binding.getRoot().findViewById(R.id.et_receiverName);
@@ -80,13 +82,15 @@ public class LimitTimeFragment extends Fragment {
         et_name.addTextChangedListener(viewModel.keyNameWatcher);
 
         viewModel.receiverPhoneNum.observe(this, s -> {
-            if (!et_phoneNum.getText().toString().equals(s)) {
+            if (!et_phoneNum.getText().toString().equals(s) && s != null) {
                 et_phoneNum.setText(s);
+                et_phoneNum.setSelection(s.length());
             }
         });
         viewModel.keyName.observe(this, s -> {
-            if (!et_name.getText().toString().equals(s)) {
+            if (!et_name.getText().toString().equals(s) && s != null) {
                 et_name.setText(s);
+                et_name.setSelection(s.length());
             }
         });
     }
@@ -109,7 +113,10 @@ public class LimitTimeFragment extends Fragment {
                 viewModel.limitEndTime.setValue(endTime);
             }
         });
-
     }
 
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+    }
 }

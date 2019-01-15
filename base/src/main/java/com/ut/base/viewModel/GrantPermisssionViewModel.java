@@ -1,21 +1,27 @@
 package com.ut.base.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.base.ErrorHandler;
 import com.ut.base.R;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class GrantPermisssionViewModel extends AndroidViewModel {
 
@@ -66,26 +72,36 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
         sendKey(phoneNum, mac, keyName, KEY_TYPE_LOOP, null, startTime, endTime, weeks, startTimeRange, endTimeRange);
     }
 
+    @SuppressLint("CheckResult")
     public void sendKey(String phoneNum, String mac, String keyName, int keyType, String isAdmin, String startTime, String endTime,
                         String weeks, String startTimeRange, String endTimeRange) {
         service.sendKey(phoneNum, mac, keyType, keyName, isAdmin, startTime, endTime, weeks, startTimeRange, endTimeRange)
-                .doOnNext(stringResult -> {
-                    if (stringResult == null) {
-                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(voidResult -> {
+                    if (voidResult.code == 400) {
+                        CLToast.showAtCenter(getApplication(), getApplication().getString(R.string.lock_send_key_failed_tips_one));
+                    } else {
+                        tip.postValue(voidResult.msg);
                     }
-
-                    if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        tip.postValue(throwable.getMessage());
                     }
-                })
-                .subscribe(voidResult -> tip.postValue(voidResult.msg),
-                        throwable -> tip.postValue(throwable.getMessage()));
+                });
     }
 
+    private String afterChangedPhone = "";
+    private String afterChangedName = "";
+
     public TextWatcher receiverPhoneWatcher = new TextWatcher() {
+        CharSequence beforeChange = "";
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            beforeChange = s;
         }
 
         @Override
@@ -95,9 +111,8 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!"".equals(s.toString())) {
-                receiverPhoneNum.setValue(s.toString());
-            }
+            afterChangedPhone = s.toString();
+            receiverPhoneNum.postValue(afterChangedPhone);
         }
     };
 
@@ -114,11 +129,16 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!"".equals(s.toString())) {
-                keyName.setValue(s.toString());
-            }
+            afterChangedName = s.toString();
+            keyName.postValue(afterChangedName);
         }
     };
+
+
+    public void setPhoneAndName() {
+        receiverPhoneNum.postValue(afterChangedPhone);
+        keyName.postValue(afterChangedName);
+    }
 
 
 }

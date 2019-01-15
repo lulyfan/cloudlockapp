@@ -94,7 +94,6 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mineViewModel.getUserInfo();
     }
 
     private void initUI() {
@@ -124,4 +123,11 @@ public class MineFragment extends BaseFragment {
         });
     }
 
+    @Override
+    protected void onUserVisible() {
+        super.onUserVisible();
+        if(mineViewModel != null) {
+            mineViewModel.getUserInfo();
+        }
+    }
 }

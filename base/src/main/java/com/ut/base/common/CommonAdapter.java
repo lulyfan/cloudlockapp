@@ -53,4 +53,8 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     public abstract void convert(CommonViewHolder commonViewHolder, int position, T item);
+
+    public List<T> getData(){
+        return mDatas;
+    }
 }

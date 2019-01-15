@@ -10,14 +10,17 @@ import android.support.annotation.NonNull;
 import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
+import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
+import com.ut.module_lock.activity.LockSettingActivity;
 import com.ut.module_lock.entity.SwitchResult;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
@@ -90,6 +93,7 @@ public class LockSettingVM extends AndroidViewModel {
                     if (result.isSuccess()) {
                         AppManager.getAppManager().currentActivity().startLoad();
                         toDeleteAdminKey();
+                        setDeleteBtnEnable(false);
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -152,7 +156,7 @@ public class LockSettingVM extends AndroidViewModel {
                 @Override
                 public void onFinish() {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
-                    AppManager.getAppManager().currentActivity().endLoad();
+                    endLoad();
                 }
             }, 10);
         }
@@ -174,7 +178,7 @@ public class LockSettingVM extends AndroidViewModel {
             public void onDisconnect(int i, String s) {
                 if (!isConnected) {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
-                    AppManager.getAppManager().currentActivity().endLoad();
+                    endLoad();
                 }
             }
         });
@@ -191,14 +195,14 @@ public class LockSettingVM extends AndroidViewModel {
                     public void onSuccess(CloudLock cloudLock) {
                         deleteAdminLock(lockKey);
                         UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
-                        AppManager.getAppManager().currentActivity().endLoad();
+                        endLoad();
                     }
 
                     @Override
                     public void onFailed(int i, String s) {
                         showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
                         UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
-                        AppManager.getAppManager().currentActivity().endLoad();
+                        endLoad();
 
                     }
                 });
@@ -234,6 +238,7 @@ public class LockSettingVM extends AndroidViewModel {
                         deleteLockKey(lockKey);
                         isDeleteSuccess.postValue(true);
                         //删除数据库相应的锁数据
+                        Schedulers.io().scheduleDirect(() -> CloudLockDatabaseHolder.get().recordDao().deleteAll());
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -378,5 +383,17 @@ public class LockSettingVM extends AndroidViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.clear();
+    }
+
+    private void setDeleteBtnEnable(boolean b) {
+        if (AppManager.getAppManager().currentActivity() instanceof LockSettingActivity) {
+            LockSettingActivity currentActivity = (LockSettingActivity) AppManager.getAppManager().currentActivity();
+            currentActivity.deleteBtnEnable(b);
+        }
+    }
+
+    private void endLoad() {
+        AppManager.getAppManager().currentActivity().endLoad();
+        setDeleteBtnEnable(true);
     }
 }

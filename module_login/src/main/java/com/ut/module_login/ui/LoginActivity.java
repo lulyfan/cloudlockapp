@@ -108,6 +108,10 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.see_password_layout).setOnClickListener(v -> {
+            findViewById(R.id.see_password).performClick();
+        });
+
         findViewById(R.id.register).setOnClickListener(v -> {
                     ARouter.getInstance().build(RouterUtil.LoginModulePath.REGISTER).navigation();
                 }

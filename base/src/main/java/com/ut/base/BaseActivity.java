@@ -25,6 +25,7 @@ import com.baidu.mobstat.StatService;
 import com.example.operation.MyRetrofit;
 import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
@@ -51,6 +52,8 @@ public class BaseActivity extends AppCompatActivity {
     private LoadDialogFragment loadDialogFragment = new LoadDialogFragment();
     private DialogPlus loadDialog;
 
+    private boolean isResumed = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isResumed = true;
         StatService.onPageStart(this, this.getClass().getSimpleName());
     }
 
@@ -262,9 +266,11 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
+        isResumed = false;
         if (noLoginDialog != null && noLoginDialog.isShowing()) {
             noLoginDialog.dismiss();
         }
@@ -333,6 +339,4 @@ public class BaseActivity extends AppCompatActivity {
                 .setGravity(Gravity.CENTER)
                 .create();
     }
-
-
 }

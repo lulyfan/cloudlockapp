@@ -12,6 +12,7 @@ import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_login.R;
@@ -34,7 +35,7 @@ public class LoginVm extends AndroidViewModel {
     public void login(String phone, String password) {
         MyRetrofit.get()
                 .getCommonApiService()
-                .login(phone, password)
+                .login(phone, password, SystemUtils.getMacAddress())
                 .subscribeOn(Schedulers.io())
                 .map(result -> {
                     if (result.isSuccess()) {

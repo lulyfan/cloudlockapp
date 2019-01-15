@@ -355,6 +355,10 @@ public class LockKey implements Parcelable {
         this.weeks = weeks;
     }
 
+    public boolean isKeyValid() {
+        return EnumCollection.KeyStatus.isKeyValue(keyStatus);
+    }
+
     @Override
     public int describeContents() {
         return 0;
