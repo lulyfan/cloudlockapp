@@ -81,8 +81,16 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="RlyDeviceKeyDetail.click">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
     <style name="RlyDeviceKeyDetail.bottom">
         <item name="android:layout_marginBottom">@dimen/base_10dp</item>
+    </style>
+    <style name="RlyDeviceKeyDetail.bottomClick">
+        <item name="android:layout_marginBottom">@dimen/base_10dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="TvDeviceKeyDetailLeft">

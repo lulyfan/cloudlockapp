@@ -2,76 +2,76 @@
 
 <layout>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
-
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_item_9"
         android:orientation="vertical"
-        android:padding="0dp">
+        >
 
-        <RelativeLayout
-            style="@style/RlyDeviceKeyDetail"
-            android:layout_marginTop="@dimen/base_10dp">
 
-            <TextView
-                style="@style/TvDeviceKeyDetailLeft"
-                android:text="@string/lock_key_vaild_time"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_item_9"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+            <RelativeLayout
+                style="@style/RlyDeviceKeyDetail.click"
+                android:layout_marginTop="@dimen/base_10dp">
+
+                <TextView
+                    style="@style/TvDeviceKeyDetailLeft"
+                    android:text="@string/lock_key_vaild_time"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_lock_key_vaild_time"
+                    style="@style/TvDeviceKeyDetailRight.Drawable"
+                    android:text="2018/11/23 09:44"/>
+            </RelativeLayout>
+
+            <include
+                layout="@layout/line"
                 />
 
-            <TextView
-                android:id="@+id/tv_lock_key_vaild_time"
-                style="@style/TvDeviceKeyDetailRight.Drawable"
-                android:text="2018/11/23 09:44"/>
-        </RelativeLayout>
+            <RelativeLayout
+                style="@style/RlyDeviceKeyDetail.bottomClick"
+                android:layout_marginBottom="@dimen/base_15dp"
+                >
 
-        <include
-            layout="@layout/line"
-            />
+                <TextView
+                    style="@style/TvDeviceKeyDetailLeft"
+                    android:layout_alignBaseline="@+id/tv_lock_key_invaild_time"
+                    android:text="@string/lock_key_invaild_time"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_lock_key_invaild_time"
+                    style="@style/TvDeviceKeyDetailRight.Drawable"
+                    android:text="2018/11/23 09:44"/>
+            </RelativeLayout>
+        </LinearLayout>
+
 
         <RelativeLayout
-            style="@style/RlyDeviceKeyDetail.bottom"
-            android:layout_marginBottom="@dimen/base_15dp"
+            style="@style/RlyDeviceKeyDetail.click"
+            android:layout_height="@dimen/base_70dp"
+            android:background="@drawable/bg_item_9"
             >
 
             <TextView
                 style="@style/TvDeviceKeyDetailLeft"
-                android:layout_alignBaseline="@+id/tv_lock_key_invaild_time"
-                android:text="@string/lock_key_invaild_time"
+                android:text="@string/lock_key_open_times"
                 />
 
             <TextView
-                android:id="@+id/tv_lock_key_invaild_time"
+                android:id="@+id/tv_lock_key_time"
                 style="@style/TvDeviceKeyDetailRight.Drawable"
-                android:text="2018/11/23 09:44"/>
+                android:text="1"/>
         </RelativeLayout>
+
     </LinearLayout>
-
-
-    <RelativeLayout
-        style="@style/RlyDeviceKeyDetail"
-        android:layout_height="@dimen/base_70dp"
-        android:background="@drawable/bg_item_9"
-        >
-
-        <TextView
-            style="@style/TvDeviceKeyDetailLeft"
-            android:text="@string/lock_key_open_times"
-            />
-
-        <TextView
-            android:id="@+id/tv_lock_key_time"
-            style="@style/TvDeviceKeyDetailRight.Drawable"
-            android:text="1"/>
-    </RelativeLayout>
-
-</LinearLayout>
 </layout>

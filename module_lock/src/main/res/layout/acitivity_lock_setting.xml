@@ -253,6 +253,40 @@
                             android:textColor="@color/color_base_title"
                             android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="@dimen/base_20dp"
+                        android:background="@color/color_base_divider"/>
+
+                    <FrameLayout
+                        android:id="@+id/adjust_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/base_70dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:paddingLeft="@dimen/base_20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/lock_setting_adjust_time"
+                            android:textColor="@color/color_base_text"
+                            android:textSize="@dimen/base_14sp"/>
+
+                        <TextView
+                            android:id="@+id/tv_lock_adjustTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginRight="@dimen/base_27dp"
+                            android:drawableRight="@mipmap/more_black"
+                            android:drawablePadding="@dimen/base_10dp"
+                            android:textColor="@color/color_base_title"
+                            android:textSize="@dimen/base_17sp"/>
+                    </FrameLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

@@ -31,7 +31,7 @@
             app:layout_constraintTop_toBottomOf="@+id/titleBar">
 
             <RelativeLayout
-                style="@style/RlyDeviceKeyDetail"
+                style="@style/RlyDeviceKeyDetail.click"
                 android:onClick="@{present::onNameClick}"
                 >
 
@@ -82,7 +82,7 @@
             app:layout_constraintTop_toBottomOf="@+id/lly1">
 
             <RelativeLayout
-                style="@style/RlyDeviceKeyDetail"
+                style="@style/RlyDeviceKeyDetail.click"
                 android:layout_marginTop="@dimen/base_10dp"
                 android:onClick="@{present::onPermissionClick}"
                 >
