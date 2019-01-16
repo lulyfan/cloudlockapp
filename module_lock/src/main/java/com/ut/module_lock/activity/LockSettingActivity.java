@@ -103,13 +103,13 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM.getShowTip().observe(this, showTip -> {
             CLToast.showAtBottom(getBaseContext(), showTip);
         });
+        mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
             if (lk == null) return;
             lockKey = lk;
             setBindingLockKey();
             loadGroupName();
         });
-        mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.getSetCanOpenSwitchResult().observe(this, operateSuccess -> {
             if (!operateSuccess.result) {
                 isResetChecked = true;
