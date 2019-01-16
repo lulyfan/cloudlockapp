@@ -109,6 +109,7 @@ public class LockSettingActivity extends BaseActivity {
             setBindingLockKey();
             loadGroupName();
         });
+        mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.getSetCanOpenSwitchResult().observe(this, operateSuccess -> {
             if (!operateSuccess.result) {
                 isResetChecked = true;
