@@ -31,6 +31,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.dialog.LoadDialogFragment;
 import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.unilink.UnilinkManager;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -61,6 +62,9 @@ public class BaseActivity extends AppCompatActivity {
         AppManager.getAppManager().addActivity(this);
         initNoLoginListener();
         initLoadDialog();
+
+        if (BuildConfig.DEBUG)
+            UnilinkManager.getInstance(this).enableLog(true);
     }
 
     @Override

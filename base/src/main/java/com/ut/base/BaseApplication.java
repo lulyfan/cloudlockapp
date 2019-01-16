@@ -59,9 +59,6 @@ public class BaseApplication extends MultiDexApplication {
         //TODO 临时只添加极光推送，后面改为多种推送
         initJpush();
 
-        if (BuildConfig.DEBUG)
-            UnilinkManager.getInstance(this).enableLog(true);
-
         initBaidu();
 
         initLeakCanary();
