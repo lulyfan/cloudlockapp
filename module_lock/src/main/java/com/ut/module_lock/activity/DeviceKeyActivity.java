@@ -1,7 +1,10 @@
 package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +54,9 @@ public class DeviceKeyActivity extends BaseActivity {
         mDeviceKeyVM = ViewModelProviders.of(this).get(DeviceKeyVM.class);
         mDeviceKeyVM.setLockKey(mLockKey);
         mDeviceKeyVM.getDevieKey();
+        mDeviceKeyVM.getShowTip().observe(this, tip -> {
+
+        });
     }
 
     private void initData() {
@@ -88,8 +94,20 @@ public class DeviceKeyActivity extends BaseActivity {
     public void onXmlClick(View view) {
         int i = view.getId();
         if (i == R.id.tv_connectLock) {
-
+            mDeviceKeyVM.connectAndGetData(mLockKey.getType(), this);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mDeviceKeyVM.mBleOperateManager.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mDeviceKeyVM.mBleOperateManager.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
     }
 
     public class DevicePagerAdapter extends FragmentPagerAdapter {

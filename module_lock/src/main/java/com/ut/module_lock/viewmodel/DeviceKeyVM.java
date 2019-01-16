@@ -1,5 +1,6 @@
 package com.ut.module_lock.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -13,6 +14,11 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.entity.AuthCountInfo;
+import com.ut.module_lock.utils.BleOperateManager;
+import com.ut.unilink.cloudLock.ScanDevice;
+import com.ut.unilink.cloudLock.protocol.data.AuthInfo;
+import com.ut.unilink.cloudLock.protocol.data.GateLockKey;
+import com.ut.unilink.cloudLock.protocol.data.GateLockOperateRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +32,25 @@ import java.util.concurrent.ScheduledExecutorService;
  * desc   :
  * version: 1.0
  */
-public class DeviceKeyVM extends BaseViewModel {
+public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.OperateCallback, BleOperateManager.OperateDeviceKeyCallback {
     private ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
     private List<DeviceKey> mAllDeviceKey = new ArrayList<>();
     private List<DeviceKeyAuth> mAllDeviceKeyAuth = new ArrayList<>();
     private Observer<List<DeviceKey>> observer1 = null;
     private LockKey mLockKey = null;
+    public BleOperateManager mBleOperateManager = null;
+
+    public MutableLiveData<String> showTip = new MutableLiveData<>();
+
+    public MutableLiveData<String> getShowTip() {
+        return showTip;
+    }
 
     public DeviceKeyVM(@NonNull Application application) {
         super(application);
+        mBleOperateManager = new BleOperateManager(application);
+        mBleOperateManager.setOperateCallback(this);
+        mBleOperateManager.setOperateDeviceKeyCallback(this);
     }
 
     public void setLockKey(LockKey lockKey) {
@@ -45,9 +61,8 @@ public class DeviceKeyVM extends BaseViewModel {
         return DeviceKeyDaoImpl.get().findDeviceKeysByType(deviceKeyType);
     }
 
-    public int connectLock() {
-        
-        return 0;
+    public void connectAndGetData(int type, Activity activity) {
+        mBleOperateManager.scanDevice(type, activity);
     }
 
     public void getDevieKey() {
@@ -150,5 +165,85 @@ public class DeviceKeyVM extends BaseViewModel {
         super.onCleared();
         mExecutorService.shutdown();
         DeviceKeyDaoImpl.get().getAll().removeObserver(observer1);
+    }
+
+    @Override
+    public boolean checkScanResult(ScanDevice scanDevice) {
+        return false;
+    }
+
+    @Override
+    public void onScanSuccess() {
+
+    }
+
+    @Override
+    public void onScanFaile(int errorCode) {
+
+    }
+
+    @Override
+    public void onConnectSuccess() {
+
+    }
+
+    @Override
+    public void onConnectFailed(int errorcode, String errorMsg) {
+
+    }
+
+    @Override
+    public void onElectric(int elect) {
+
+    }
+
+    @Override
+    public void onWriteTimeSuccess() {
+
+    }
+
+    @Override
+    public void onWriteTimeFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onReadKeyInfoSuccess(List<GateLockKey> data) {
+
+    }
+
+    @Override
+    public void onReadKeyInfoFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onQueryAllAuthSuccess(List<AuthInfo> data) {
+
+    }
+
+    @Override
+    public void onQueryAllAuthFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onReadAuthCountSuccess(List<com.ut.unilink.cloudLock.protocol.data.AuthCountInfo> data) {
+
+    }
+
+    @Override
+    public void onReadAuthCountFailed(int code, String msg) {
+
+    }
+
+    @Override
+    public void onReadRecordSuccess(List<GateLockOperateRecord> data) {
+
+    }
+
+    @Override
+    public void onReadRecordFailed(int errorcode, String errorMsg) {
+
     }
 }
