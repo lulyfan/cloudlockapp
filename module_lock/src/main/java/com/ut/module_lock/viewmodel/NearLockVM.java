@@ -112,10 +112,11 @@ public class NearLockVM extends AndroidViewModel {
 
     //绑定锁
     public void bindLock(NearScanLock lock) {
+
         operating.postValue(false);
         hasConnected = false;
         UnilinkManager.getInstance(getApplication()).stopScan();
-        UnilinkManager.getInstance(getApplication()).connect(lock.getMac(), new ConnectListener() {
+        UnilinkManager.getInstance(getApplication()).connect(mStringScanDeviceMap.get(lock.getMac()), new ConnectListener() {
             @Override
             public void onConnect() {
                 hasConnected = true;

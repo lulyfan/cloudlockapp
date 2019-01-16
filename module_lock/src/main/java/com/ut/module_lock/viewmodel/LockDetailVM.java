@@ -68,7 +68,7 @@ public class LockDetailVM extends AndroidViewModel {
 
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
-        if(mLockKey != null) {
+        if (mLockKey != null) {
             mMac = mLockKey.getMac();
         }
     }
@@ -79,7 +79,7 @@ public class LockDetailVM extends AndroidViewModel {
 
 
     public int openLock() {
-        if(mLockKey == null) {
+        if (mLockKey == null) {
             return -100;
         }
 
@@ -96,7 +96,7 @@ public class LockDetailVM extends AndroidViewModel {
                 @Override
                 public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
                     if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
-                        toConnect(scanDevice);
+                        toConnect(scanDevice, mLockKey);
                     }
                 }
 
@@ -108,29 +108,30 @@ public class LockDetailVM extends AndroidViewModel {
         }
     }
 
-    private void toConnect(ScanDevice scanDevice) {
+    private void toConnect(ScanDevice scanDevice, LockKey lockKey) {
         UnilinkManager.getInstance(getApplication()).stopScan();
-        UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
-            @Override
-            public void onConnect() {
-                CloudLock cloudLock = getCloucLockFromLockKey();
-                io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
-                    toGetElect(cloudLock);
-                }, 100, TimeUnit.MILLISECONDS);
+        UnilinkManager.getInstance(getApplication()).connect(scanDevice, lockKey.getEncryptType(), lockKey.getEncryptKey(),
+                new ConnectListener() {
+                    @Override
+                    public void onConnect() {
+                        CloudLock cloudLock = getCloucLockFromLockKey();
+                        io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
+                            toGetElect(cloudLock);
+                        }, 100, TimeUnit.MILLISECONDS);
 
-                isConnectSuccessed = true;
-                connectStatus.postValue(true);
-            }
+                        isConnectSuccessed = true;
+                        connectStatus.postValue(true);
+                    }
 
-            @Override
-            public void onDisconnect(int i, String s) {
-                UTLog.i("onDisconnect:" + i + " s:" + s);
-                connectStatus.postValue(false);
-                if (!isConnectSuccessed) {
-                    showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
-                }
-            }
-        }, mLockStateListener);
+                    @Override
+                    public void onDisconnect(int i, String s) {
+                        UTLog.i("onDisconnect:" + i + " s:" + s);
+                        connectStatus.postValue(false);
+                        if (!isConnectSuccessed) {
+                            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                        }
+                    }
+                }, mLockStateListener);
     }
 
     private void toCheckPermissionOrOpenLock(CloudLock cloudLock) {
@@ -176,15 +177,13 @@ public class LockDetailVM extends AndroidViewModel {
     private LockStateListener mLockStateListener = new LockStateListener() {
         @Override
         public void onState(LockState lockState) {
-            if (TextUtils.isDigitsOnly(lockState.getElect())) {
-                mLockKey.setElectric(Integer.parseInt(lockState.getElect()));
-                rx.Observable.just(mLockKey)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe(lockKey -> {
-                            LockKeyDaoImpl.get().insert(lockKey);
-                        });
-            }
+            mLockKey.setElectric(lockState.getElect());
+            rx.Observable.just(mLockKey)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(lockKey -> {
+                        LockKeyDaoImpl.get().insert(lockKey);
+                    });
         }
     };
 

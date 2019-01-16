@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/commoncomponent" />
             <option value="$PROJECT_DIR$/database" />
+            <option value="$PROJECT_DIR$/iot-ble-plugin" />
             <option value="$PROJECT_DIR$/lib2_smallest" />
             <option value="$PROJECT_DIR$/lib_networkapi" />
             <option value="$PROJECT_DIR$/lib_push" />
@@ -20,7 +21,7 @@
             <option value="$PROJECT_DIR$/module_mall" />
             <option value="$PROJECT_DIR$/module_mine" />
             <option value="$PROJECT_DIR$/module_msg" />
-            <option value="$PROJECT_DIR$/unilink-release" />
+            <option value="$PROJECT_DIR$/unilink" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
