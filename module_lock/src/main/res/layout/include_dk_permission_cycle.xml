@@ -5,8 +5,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.ut.base.fragment.LoopFragment">
+        android:layout_height="wrap_content"
+        >
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -28,20 +28,20 @@
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
                 app:layout_constraintBottom_toTopOf="@+id/divider11"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <include
                 android:id="@+id/include5"
                 layout="@layout/week"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/base_16dp"
+                android:layout_marginEnd="@dimen/base_28dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView21"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView21"
-                app:layout_constraintWidth_percent="0.7296" />
+                app:layout_constraintWidth_percent="0.7296"/>
 
             <View
                 android:id="@+id/divider11"
@@ -52,22 +52,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/textView21"
-                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                app:layout_constraintTop_toBottomOf="@+id/textView21"/>
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/base_52dp"
-                android:text="@string/validTime"
+                android:background="@android:color/white"
                 android:gravity="center_vertical"
+                android:paddingLeft="@dimen/base_16dp"
+                android:text="@string/lock_cycle_validTime"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                android:paddingLeft="@dimen/base_16dp"
-                android:background="@android:color/white"
                 app:layout_constraintBottom_toTopOf="@+id/divider12"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider11" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider11"/>
 
             <TextView
                 android:id="@+id/validTime"
@@ -75,37 +75,37 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
-                android:text="@string/chooseTime"
-                android:textColor="@color/grayC"
-                android:textSize="@dimen/s"
                 android:gravity="center_vertical"
+                android:text="@string/chooseTime"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/base_17sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView22"
                 app:layout_constraintEnd_toEndOf="@+id/include5"
-                app:layout_constraintTop_toTopOf="@+id/textView22" />
+                app:layout_constraintTop_toTopOf="@+id/textView22"/>
 
             <View
                 android:id="@+id/divider12"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:background="?android:attr/listDivider"
                 android:layout_marginStart="@dimen/base_16dp"
+                android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView22" />
+                app:layout_constraintTop_toBottomOf="@+id/textView22"/>
 
             <TextView
                 android:id="@+id/textView24"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_item_bottom"
-                android:paddingLeft="@dimen/base_16dp"
                 android:gravity="center_vertical"
-                android:text="@string/invalidTime"
+                android:paddingLeft="@dimen/base_16dp"
+                android:text="@string/lock_key_invaild_time"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
                 app:layout_constraintStart_toStartOf="@+id/textView22"
-                app:layout_constraintTop_toBottomOf="@+id/divider12" />
+                app:layout_constraintTop_toBottomOf="@+id/divider12"/>
 
             <TextView
                 android:id="@+id/invalidTime"
@@ -115,10 +115,10 @@
                 android:drawablePadding="@dimen/base_16dp"
                 android:gravity="center_vertical"
                 android:text="@string/chooseTime"
-                android:textColor="@color/grayC"
-                android:textSize="@dimen/s"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/base_17sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView24"
-                app:layout_constraintEnd_toEndOf="@+id/validTime" />
+                app:layout_constraintEnd_toEndOf="@+id/validTime"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -138,12 +138,12 @@
                 android:background="@drawable/bg_item_up"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/base_16dp"
-                android:text="@string/startDate"
+                android:text="@string/lock_cycle_startDate"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/startDate"
@@ -153,38 +153,38 @@
                 android:layout_marginRight="@dimen/base_16dp"
                 android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
-                android:text="@string/chooseTime"
-                android:textColor="@color/grayC"
-                android:textSize="@dimen/s"
                 android:gravity="center_vertical"
+                android:text="@string/chooseTime"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/base_17sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView26"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView26" />
+                app:layout_constraintTop_toTopOf="@+id/textView26"/>
 
             <View
                 android:id="@+id/divider13"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:background="?android:attr/listDivider"
                 android:layout_marginStart="@dimen/base_16dp"
+                android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView26" />
+                app:layout_constraintTop_toBottomOf="@+id/textView26"/>
 
             <TextView
                 android:id="@+id/textView28"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_item_bottom"
-                android:paddingLeft="@dimen/base_16dp"
                 android:gravity="center_vertical"
-                android:text="@string/endDate"
+                android:paddingLeft="@dimen/base_16dp"
+                android:text="@string/lock_cycle_endDate"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider13" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider13"/>
 
             <TextView
                 android:id="@+id/endDate"
@@ -194,46 +194,44 @@
                 android:drawablePadding="@dimen/base_16dp"
                 android:gravity="center_vertical"
                 android:text="@string/chooseTime"
-                android:textColor="@color/grayC"
-                android:textSize="@dimen/s"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/base_17sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView28"
-                app:layout_constraintEnd_toEndOf="@+id/startDate" />
+                app:layout_constraintEnd_toEndOf="@+id/startDate"/>
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            android:paddingRight="@dimen/base_40dp"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout1">
 
 
             <TextView
                 android:id="@+id/tv_times_left"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_item_bottom"
-                android:paddingLeft="@dimen/base_16dp"
                 android:gravity="center_vertical"
-                android:text="@string/endDate"
+                android:paddingLeft="@dimen/base_16dp"
+                android:text="@string/lock_key_open_times"
                 android:textColor="@color/gray6"
                 android:textSize="@dimen/s"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/tv_times_right"
+                android:id="@+id/tv_times"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/base_53dp"
                 android:gravity="center_vertical"
-                android:text="@string/chooseTime"
-                android:textColor="@color/grayC"
-                android:textSize="@dimen/s"
+                android:text="@string/device_key_time_unlimit"
+                android:textColor="@color/gray3"
+                android:textSize="@dimen/base_17sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_times_left"
-                app:layout_constraintEnd_toEndOf="@+id/tv_times_left" />
+                app:layout_constraintEnd_toEndOf="@+id/tv_times_left"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

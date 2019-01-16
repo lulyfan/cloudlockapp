@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseApplication;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
@@ -179,7 +179,7 @@ public class LockListFragment extends BaseFragment {
     }
 
     private void initPopupWindow() {
-        popupWindow = new CommonPopupWindow(getContext(), R.layout.activity_lock_group_list,
+        popupWindow = new CommonPopupWindow(getContext(), R.layout.popupwindow_lock_group_list,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
             protected void initView() {
@@ -191,7 +191,7 @@ public class LockListFragment extends BaseFragment {
                 getPopupWindow().setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
-                        setWindowAlpha(1.0f);
+                        SystemUtils.setWindowAlpha(getActivity(), 1.0f);
                         setDarkStatusBarFont();
                     }
                 });
@@ -204,7 +204,7 @@ public class LockListFragment extends BaseFragment {
             UTLog.i("onGroupClick");
             setLightStatusBarFont();
             popupWindow.showAtLocationWithAnim(getView().getRootView(), Gravity.TOP, 0, 0, R.style.animTranslate);
-            setWindowAlpha(0.5f);
+            SystemUtils.setWindowAlpha(getActivity(), 0.5f);
         }
 
         public void onSearchClick(View view) {
@@ -222,12 +222,6 @@ public class LockListFragment extends BaseFragment {
         }
     }
 
-    private void setWindowAlpha(float alpha) {
-        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-        lp.alpha = alpha;
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getActivity().getWindow().setAttributes(lp);
-    }
 
     @Override
     public void onDestroyView() {

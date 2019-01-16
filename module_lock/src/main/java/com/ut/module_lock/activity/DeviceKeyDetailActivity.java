@@ -1,18 +1,154 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.common.CommonPopupWindow;
+import com.ut.database.entity.DeviceKey;
+import com.ut.database.entity.EnumCollection;
 import com.ut.module_lock.R;
+import com.ut.module_lock.databinding.ActivityDeviceKeyDetailBinding;
+import com.ut.module_lock.viewmodel.DeviceKeyDetailVM;
 
 @Route(path = RouterUtil.LockModulePath.LOCK_DEVICE_KEY_DETAIL)
-public class DeviceKeyDetailActivity extends AppCompatActivity {
+public class DeviceKeyDetailActivity extends BaseActivity {
+    private ActivityDeviceKeyDetailBinding mBinding;
+    private DeviceKey mDeviceKey = null;
+
+    public static final int REQUEST_CODE_EDIT_NAME = 101;
+    public static final int REQUEST_CODE_EDIT_PERMISSION = 102;
+
+    private CommonPopupWindow mCommonPopupWindow = null;
+    private DeviceKeyDetailVM mDeviceKeyDetailVM = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_key_detail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_key_detail);
+        initTitle();
+        initData();
+        initView();
+        mBinding.setPresent(new Present());
+        initVM();
+    }
+
+    private void initVM() {
+        mDeviceKeyDetailVM = ViewModelProviders.of(this).get(DeviceKeyDetailVM.class);
+        mDeviceKeyDetailVM.getFreezeResult().observe(this, isSuccess -> {
+            boolean isFreezen = mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal();
+            if (isSuccess) {
+                if (isFreezen) {
+                    mDeviceKey.setUnfreezeStatus();
+                } else {
+                    mDeviceKey.setKeyStatus(EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
+                }
+            }
+        });
+    }
+
+    private void initTitle() {
+        setTitle(R.string.lock_detail_key_detail);
+        initDarkToolbar();
+        initMore(() -> {
+            setLightStatusBar();
+            mCommonPopupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
+            SystemUtils.setWindowAlpha(this, 0.5f);
+        });
+    }
+
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mDeviceKey = bundle.getParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+        }
+    }
+
+    private void initView() {
+        mBinding.tvLockKeyName.setText(mDeviceKey.getName());
+        mBinding.tvLockKeyType.setText(getResources().getStringArray(R.array.deviceTypeName)[mDeviceKey.getKeyType()]);
+        mBinding.tvLockKeyPermission.setText(getResources().getStringArray(R.array.device_key_auth_type)[mDeviceKey.getKeyAuthType()]);
+        if (mDeviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
+            mBinding.tvLockKeyTime.setText(R.string.device_key_time_unlimit);
+        } else {
+            if (mDeviceKey.getOpenLockCnt() == 255) {
+                mBinding.tvLockKeyTime.setText(R.string.device_key_time_unlimit);
+            } else {
+                int remainTime = mDeviceKey.getOpenLockCnt() - mDeviceKey.getOpenLockCntUsed();
+                mBinding.tvLockKeyTime.setText(String.valueOf(remainTime));
+            }
+        }
+        initPopupwindow();
+    }
+
+    private void initPopupwindow() {
+        mCommonPopupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
+            @Override
+            protected void initView() {
+                getView(R.id.item2).setVisibility(View.GONE);
+                getView(R.id.line1).setVisibility(View.GONE);
+                TextView textView = getView(R.id.item1);
+                boolean isFreezen = mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal();
+                if (isFreezen) {
+                    textView.setText(R.string.lock_unFreeze_key);
+                } else {
+                    textView.setText(R.string.lock_freeze_key);
+                }
+                textView.setOnClickListener(v -> {
+                    mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen);
+                    getPopupWindow().dismiss();
+                });
+            }
+
+            @Override
+            protected void initWindow() {
+                super.initWindow();
+                getPopupWindow().setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        SystemUtils.setWindowAlpha(DeviceKeyDetailActivity.this, 1.0f);
+                        DeviceKeyDetailActivity.this.setDarkStatusBar();
+                    }
+                });
+            }
+        };
+    }
+
+
+    public class Present {
+        public void onNameClick(View view) {
+            ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME)
+                    .withString(RouterUtil.LockModuleExtraKey.EDIT_NAME_TITLE, getString(R.string.key_name))
+                    .withString(RouterUtil.LockModuleExtraKey.NAME, mDeviceKey.getName())
+                    .withInt(RouterUtil.LockModuleExtraKey.NAME_TYPE, RouterUtil.LockModuleConstParams.NAMETYPE_DEVICE_KEY)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, mDeviceKey)
+                    .navigation(DeviceKeyDetailActivity.this, REQUEST_CODE_EDIT_NAME);
+        }
+
+        public void onPermissionClick(View view) {
+            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY_PERMISSION)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, mDeviceKey)
+                    .navigation(DeviceKeyDetailActivity.this, REQUEST_CODE_EDIT_PERMISSION);
+        }
+
+        public void onRecordClick(View view) {
+            
+        }
+
+
     }
 }

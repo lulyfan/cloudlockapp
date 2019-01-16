@@ -55,6 +55,7 @@
 <dimen name="base_268dp">317.20dp</dimen>
 <dimen name="base_230dp">272.22dp</dimen>
 <dimen name="base_48dp">56.81dp</dimen>
+<dimen name="base_28dp">33.14dp</dimen>
 <dimen name="xxs">11.84sp</dimen>
 <dimen name="xs">14.20sp</dimen>
 <dimen name="s">16.57sp</dimen>
@@ -64,4 +65,6 @@
 <dimen name="xxl">28.41sp</dimen>
 <dimen name="xxxl">35.51sp</dimen>
 <dimen name="base_38dp">44.98dp</dimen>
+<dimen name="base_65dp">76.93dp</dimen>
+<dimen name="base_42dp">49.71dp</dimen>
 </resources>

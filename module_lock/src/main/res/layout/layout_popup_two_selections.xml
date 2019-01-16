@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_bg_left_right_bottom_corner"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/base_20dp"
-    android:paddingRight="@dimen/base_20dp"
-    android:paddingBottom="@dimen/base_10dp">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/shape_bg_left_right_bottom_corner"
+              android:orientation="vertical"
+              android:paddingLeft="@dimen/base_20dp"
+              android:paddingRight="@dimen/base_20dp"
+              android:paddingBottom="@dimen/base_10dp">
 
 
     <FrameLayout
@@ -18,36 +18,37 @@
             android:id="@+id/close_window"
             android:layout_width="@dimen/base_32dp"
             android:layout_height="@dimen/base_32dp"
-            android:padding="@dimen/base_6dp"
             android:layout_gravity="center_vertical|right"
             android:background="@drawable/selector_btn_back"
-            android:src="@mipmap/close_black" />
+            android:padding="@dimen/base_6dp"
+            android:src="@mipmap/close_black"/>
     </FrameLayout>
 
     <TextView
         android:id="@+id/item1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
-        android:gravity="center"
         android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center"
         android:text="@string/lock_clear_key"
         android:textColor="@color/color_base_title"
-        android:textSize="@dimen/base_14sp" />
+        android:textSize="@dimen/base_14sp"/>
 
 
     <View
+        android:id="@+id/line1"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_base_divider" />
+        android:background="@color/color_base_divider"/>
 
     <TextView
         android:id="@+id/item2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_50dp"
-        android:gravity="center"
         android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center"
         android:text="@string/lock_send_key"
         android:textColor="@color/color_base_title"
-        android:textSize="@dimen/base_14sp" />
+        android:textSize="@dimen/base_14sp"/>
 
 </LinearLayout>

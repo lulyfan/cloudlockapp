@@ -356,7 +356,7 @@ public class LockKey implements Parcelable {
     }
 
     public boolean isKeyValid() {
-        return EnumCollection.KeyStatus.isKeyValue(keyStatus);
+        return EnumCollection.KeyStatus.isKeyValid(keyStatus);
     }
 
     @Override

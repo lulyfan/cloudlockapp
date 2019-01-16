@@ -1,6 +1,8 @@
 package com.ut.module_lock.activity;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,8 +22,10 @@ import com.ut.base.UIUtils.SimpleTextWatcher;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
+import com.ut.database.entity.DeviceKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
+import com.ut.module_lock.viewmodel.EditNameVM;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -35,22 +39,34 @@ import io.reactivex.schedulers.Schedulers;
 @Route(path = RouterUtil.LockModulePath.EDIT_NAME)
 public class EditNameActivity extends BaseActivity {
 
+
+    private int nameType = RouterUtil.LockModuleConstParams.NAMETYPE_LOCK;
+
     private EditText nameEdt = null;
-    private boolean isLock = false;
     private String mac = null;
     private long keyId = 0;
 
     private LoadingButton loadingButton = null;
+
+    private EditNameVM mEditNameVM = null;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_name);
-        String title = getIntent().getStringExtra("edit_name_title");
-        isLock = getIntent().getBooleanExtra("is_lock", false);
-        mac = getIntent().getStringExtra("mac");
-        keyId = getIntent().getLongExtra("key_id", 0L);
+        String title = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EDIT_NAME_TITLE);
+        nameType = getIntent().getIntExtra(RouterUtil.LockModuleExtraKey.NAME_TYPE, RouterUtil.LockModuleConstParams.NAMETYPE_LOCK);
+        mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.MAC);
+        keyId = getIntent().getLongExtra(RouterUtil.LockModuleExtraKey.KEY_ID, 0L);
         initView();
         setTitle(title);
+        initVM();
+    }
+
+    private void initVM() {
+        mEditNameVM = ViewModelProviders.of(this).get(EditNameVM.class);
+        mEditNameVM.getSetDeviceNameResult().observe(this, result -> {
+        });
     }
 
     private void initView() {
@@ -72,8 +88,8 @@ public class EditNameActivity extends BaseActivity {
                 SystemUtils.hideKeyboard(getBaseContext(), nameEdt.getRootView());
             }
         });
-        if(getIntent().hasExtra("name")) {
-            nameEdt.setText(getIntent().getStringExtra("name"));
+        if (getIntent().hasExtra(RouterUtil.LockModuleExtraKey.NAME)) {
+            nameEdt.setText(getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.NAME));
         }
         findViewById(R.id.clear).setOnClickListener(v -> nameEdt.setText(""));
         loadingButton = findViewById(R.id.btn_save);
@@ -85,17 +101,18 @@ public class EditNameActivity extends BaseActivity {
         String name = nameEdt.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
+            //TODO 中文
             CLToast.showAtBottom(this, "名称不能为空");
             return;
         }
 
-        if (isLock) {
+        if (nameType == RouterUtil.LockModuleConstParams.NAMETYPE_LOCK) {
             if (TextUtils.isEmpty(mac)) return;
             Intent intent = new Intent();
             intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
             setResult(RESULT_OK, intent);
             finish();
-        } else if (keyId != 0) {
+        } else if (nameType == RouterUtil.LockModuleConstParams.NAMETYPE_KEY && keyId != 0) {
             loadingButton.startLoading();
             MyRetrofit.get().getCommonApiService().editKeyName(keyId, name)
                     .subscribeOn(Schedulers.io())
@@ -109,13 +126,17 @@ public class EditNameActivity extends BaseActivity {
                             finish();
                         }
                         CLToast.showAtBottom(getBaseContext(), result.msg);
-                    }, new ErrorHandler(){
+                    }, new ErrorHandler() {
                         @Override
                         public void accept(Throwable throwable) {
                             super.accept(throwable);
                             loadingButton.endLoading();
                         }
                     });
+        } else if (nameType == RouterUtil.LockModuleConstParams.NAMETYPE_DEVICE_KEY) {
+            DeviceKey deviceKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+            deviceKey.setName(name);
+            mEditNameVM.setDeviceName(deviceKey);
         }
     }
 

@@ -104,6 +104,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/tv_connectLock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_lock_connect_1"
@@ -111,8 +112,8 @@
                     android:drawableLeft="@mipmap/icon_lock_mini_white"
                     android:drawablePadding="@dimen/base_3dp"
                     android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
+                    android:onClick="onXmlClick"
                     android:padding="@dimen/base_5dp"
                     android:text="@string/connect_lock"
                     android:textColor="@color/white"

@@ -104,7 +104,7 @@ public class NearLockActivity extends BaseActivity {
                     } else if (data.getBindStatus() == EnumCollection.BindStatus.OTHERBIND_NOKEY.ordinal()) {
                         showApplyDialog(data);
                     } else if (data.getBindStatus() == EnumCollection.BindStatus.OTHERBIND_HASKE.ordinal()) {
-                        if (EnumCollection.KeyStatus.isKeyValue(data.getKeyStatus())) {
+                        if (EnumCollection.KeyStatus.isKeyValid(data.getKeyStatus())) {
                             String tip = getString(R.string.lock_tip_have_key);
                             showTipDialog(tip);
                         } else {

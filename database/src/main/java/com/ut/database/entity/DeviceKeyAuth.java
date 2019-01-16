@@ -13,61 +13,59 @@ import com.ut.database.utils.DeviceKeyUtil;
  * desc   :
  * version: 1.0
  */
-@Entity(tableName = "device_key_auth")
 public class DeviceKeyAuth implements Parcelable {
-    @PrimaryKey
-    private int AuthId;     //授权编号
-    private int KeyID;         //钥匙ID
-    private int OpenLockCnt;  //开锁次数   预留
-    private String TimeICtl;         //时间控制,控制星期几有效
-    private long TimeStart;     //开始时间
-    private long TimeEnd;         //结束时间
+    private int authId;     //授权编号
+    private int keyID;         //钥匙ID
+    private int openLockCnt;  //开锁次数   预留
+    private String timeICtl;         //时间控制,控制星期几有效
+    private long timeStart;     //开始时间
+    private long timeEnd;         //结束时间
 
-    private int OpenLockCntUsed;//已开锁次数
+    private int openLockCntUsed;//已开锁次数
 
     public DeviceKeyAuth() {
     }
 
     public DeviceKeyAuth(int authId, int keyID, int openLockCnt, String timeICtl, long timeStart, long timeEnd, int openLockCntUsed) {
-        AuthId = authId;
-        KeyID = keyID;
-        OpenLockCnt = openLockCnt;
-        TimeICtl = timeICtl;
-        TimeStart = timeStart;
-        TimeEnd = timeEnd;
-        OpenLockCntUsed = openLockCntUsed;
+        this.authId = authId;
+        this.keyID = keyID;
+        this.openLockCnt = openLockCnt;
+        this.timeICtl = timeICtl;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.openLockCntUsed = openLockCntUsed;
     }
 
     public int getAuthId() {
-        return AuthId;
+        return authId;
     }
 
     public void setAuthId(int authId) {
-        AuthId = authId;
+        this.authId = authId;
     }
 
     public int getKeyID() {
-        return KeyID;
+        return keyID;
     }
 
     public void setKeyID(int keyID) {
-        KeyID = keyID;
+        this.keyID = keyID;
     }
 
     public int getOpenLockCnt() {
-        return OpenLockCnt;
+        return openLockCnt;
     }
 
     public void setOpenLockCnt(int openLockCnt) {
-        OpenLockCnt = openLockCnt;
+        this.openLockCnt = openLockCnt;
     }
 
     public String getTimeICtl() {
-        return TimeICtl;
+        return timeICtl;
     }
 
     public void setTimeICtl(String timeICtl) {
-        this.TimeICtl = timeICtl;
+        this.timeICtl = timeICtl;
     }
 
     public void setTimeICtl(int[] timeICtl) {
@@ -79,38 +77,38 @@ public class DeviceKeyAuth implements Parcelable {
                 }
                 stringBuilder.append(timeICtl[i]);
             }
-            this.TimeICtl = stringBuilder.toString();
+            this.timeICtl = stringBuilder.toString();
         } else {
-            this.TimeICtl = "";
+            this.timeICtl = "";
         }
     }
 
     public long getTimeStart() {
-        return TimeStart;
+        return timeStart;
     }
 
     public void setTimeStart(long timeStart) {
-        TimeStart = timeStart;
+        this.timeStart = timeStart;
     }
 
     public long getTimeEnd() {
-        return TimeEnd;
+        return timeEnd;
     }
 
     public void setTimeEnd(long timeEnd) {
-        TimeEnd = timeEnd;
+        this.timeEnd = timeEnd;
     }
 
     public Boolean[] getWeekAuthData() {
-        return DeviceKeyUtil.getWeekAuthData(this.TimeICtl);
+        return DeviceKeyUtil.getWeekAuthData(this.timeICtl);
     }
 
     public int getOpenLockCntUsed() {
-        return OpenLockCntUsed;
+        return openLockCntUsed;
     }
 
     public void setOpenLockCntUsed(int openLockCntUsed) {
-        OpenLockCntUsed = openLockCntUsed;
+        this.openLockCntUsed = openLockCntUsed;
     }
 
 
@@ -121,23 +119,23 @@ public class DeviceKeyAuth implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.AuthId);
-        dest.writeInt(this.KeyID);
-        dest.writeInt(this.OpenLockCnt);
-        dest.writeString(this.TimeICtl);
-        dest.writeLong(this.TimeStart);
-        dest.writeLong(this.TimeEnd);
-        dest.writeInt(this.OpenLockCntUsed);
+        dest.writeInt(this.authId);
+        dest.writeInt(this.keyID);
+        dest.writeInt(this.openLockCnt);
+        dest.writeString(this.timeICtl);
+        dest.writeLong(this.timeStart);
+        dest.writeLong(this.timeEnd);
+        dest.writeInt(this.openLockCntUsed);
     }
 
     protected DeviceKeyAuth(Parcel in) {
-        this.AuthId = in.readInt();
-        this.KeyID = in.readInt();
-        this.OpenLockCnt = in.readInt();
-        this.TimeICtl = in.readString();
-        this.TimeStart = in.readLong();
-        this.TimeEnd = in.readLong();
-        this.OpenLockCntUsed = in.readInt();
+        this.authId = in.readInt();
+        this.keyID = in.readInt();
+        this.openLockCnt = in.readInt();
+        this.timeICtl = in.readString();
+        this.timeStart = in.readLong();
+        this.timeEnd = in.readLong();
+        this.openLockCntUsed = in.readInt();
     }
 
     public static final Parcelable.Creator<DeviceKeyAuth> CREATOR = new Parcelable.Creator<DeviceKeyAuth>() {

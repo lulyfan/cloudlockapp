@@ -11,6 +11,7 @@ import com.example.operation.MyRetrofit;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 //import com.squareup.leakcanary.LeakCanary;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 import com.ut.unilink.UnilinkManager;
@@ -138,5 +139,11 @@ public class BaseApplication extends MultiDexApplication {
     public static Scheduler getUiScheduler() {
         BaseApplication application = (BaseApplication) getAppContext();
         return application.uiScheduler;
+    }
+
+    public static void clearDataWhenLogout() {//退出登录时做清除数据操作
+        CloudLockDatabaseHolder.get().clear();
+        BaseApplication.deleteJpushAlias();
+        MyRetrofit.get().closeWebSocket();
     }
 }

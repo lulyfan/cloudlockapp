@@ -19,6 +19,8 @@ import com.ut.database.utils.DeviceKeyUtil;
 @Entity(tableName = "device_key")
 public class DeviceKey implements Parcelable {
     @PrimaryKey
+    private int id;//主键
+
     private int keyID;//钥匙编号；
     private String name = "";//名字
     /**
@@ -27,6 +29,8 @@ public class DeviceKey implements Parcelable {
     private int keyType;//钥匙类型：指纹 卡片 密码 电子钥匙 手机蓝牙；
     private int keyCfg;//钥匙配置属性；
     private int keyInId;//钥匙内部编号
+
+    private boolean isAuthKey;//是授权钥匙还是正常钥匙 0：正常钥匙;1:授权钥匙
 
     /**
      * {@link com.ut.database.entity.EnumCollection.DeviceKeyStatus}
@@ -38,13 +42,33 @@ public class DeviceKey implements Parcelable {
     @Ignore
     private DeviceKeyAuth mDeviceKeyAuthData;
 
-    public DeviceKey(int keyID, String name, int keyType, int keyCfg, int keyInId) {
+    private int authId;     //授权编号
+    private int openLockCnt;  //开锁次数   预留
+    private String timeICtl;         //时间控制,控制星期几有效
+    private long timeStart;     //开始时间
+    private long timeEnd;         //结束时间
+    private int openLockCntUsed;//已开锁次数
+
+    private int lockId;//锁对应的id
+
+
+    public DeviceKey(int id, int keyID, String name, int keyType, int keyCfg, int keyInId) {
+        this.id = id;
         this.keyID = keyID;
         this.name = name;
         this.keyType = keyType;
         this.keyCfg = keyCfg;
         this.keyInId = keyInId;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public void initName(String[] names) {
         try {
@@ -103,6 +127,14 @@ public class DeviceKey implements Parcelable {
         this.keyStatus = keyStatus;
     }
 
+    public boolean getIsAuthKey() {
+        return isAuthKey;
+    }
+
+    public void setIsAuthKey(boolean isAuthKey) {
+        this.isAuthKey = isAuthKey;
+    }
+
     public DeviceKeyAuth getDeviceKeyAuthData() {
         return mDeviceKeyAuthData;
     }
@@ -117,10 +149,91 @@ public class DeviceKey implements Parcelable {
 
     public void setDeviceKeyAuthData(DeviceKeyAuth deviceKeyAuthData) {
         mDeviceKeyAuthData = deviceKeyAuthData;
-        this.keyAuthType = DeviceKeyUtil.getKeyAuthType(mDeviceKeyAuthData);
-        this.keyStatus = DeviceKeyUtil.getKeyStatus(mDeviceKeyAuthData);
+        if (deviceKeyAuthData == null) return;
+
+        this.authId = deviceKeyAuthData.getAuthId();
+        this.openLockCnt = deviceKeyAuthData.getOpenLockCnt();
+        this.timeICtl = deviceKeyAuthData.getTimeICtl();
+        this.timeStart = deviceKeyAuthData.getTimeStart();
+        this.timeEnd = deviceKeyAuthData.getTimeEnd();
+        this.openLockCntUsed = deviceKeyAuthData.getOpenLockCntUsed();
+
+        this.keyAuthType = DeviceKeyUtil.getKeyAuthType(this.isAuthKey, this.timeICtl);
+        if (this.keyStatus != EnumCollection.DeviceKeyStatus.FROZEN.ordinal()) {
+            this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey, this.timeICtl, this.timeEnd
+                    , this.openLockCnt, this.openLockCntUsed);
+        }
     }
 
+    public void setUnfreezeStatus() {
+        this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey, this.timeICtl, this.timeEnd
+                , this.openLockCnt, this.openLockCntUsed);
+    }
+
+
+    public int getAuthId() {
+        return authId;
+    }
+
+    public void setAuthId(int authId) {
+        this.authId = authId;
+    }
+
+    public int getOpenLockCnt() {
+        return openLockCnt;
+    }
+
+    public void setOpenLockCnt(int openLockCnt) {
+        this.openLockCnt = openLockCnt;
+    }
+
+    public String getTimeICtl() {
+        return timeICtl;
+    }
+
+    public void setTimeICtl(String timeICtl) {
+        this.timeICtl = timeICtl;
+    }
+
+    public long getTimeStart() {
+        return timeStart;
+    }
+
+    public void setTimeStart(long timeStart) {
+        this.timeStart = timeStart;
+    }
+
+    public long getTimeEnd() {
+        return timeEnd;
+    }
+
+    public void setTimeEnd(long timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+    public int getOpenLockCntUsed() {
+        return openLockCntUsed;
+    }
+
+    public void setOpenLockCntUsed(int openLockCntUsed) {
+        this.openLockCntUsed = openLockCntUsed;
+    }
+
+    public int getLockId() {
+        return lockId;
+    }
+
+    public void setLockId(int lockId) {
+        this.lockId = lockId;
+    }
+
+    public Boolean[] getWeekAuthData() {
+        return DeviceKeyUtil.getWeekAuthData(this.timeICtl);
+    }
+
+    public void setWeekAuthData(Boolean[] weekAuthData){
+        this.timeICtl = DeviceKeyUtil.getTimeCtrlByWeekAuthData(weekAuthData);
+    }
 
     @Override
     public int describeContents() {
@@ -129,6 +242,7 @@ public class DeviceKey implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeInt(this.keyID);
         dest.writeString(this.name);
         dest.writeInt(this.keyType);
@@ -137,9 +251,17 @@ public class DeviceKey implements Parcelable {
         dest.writeInt(this.keyStatus);
         dest.writeInt(this.keyAuthType);
         dest.writeParcelable(this.mDeviceKeyAuthData, flags);
+        dest.writeInt(this.authId);
+        dest.writeInt(this.openLockCnt);
+        dest.writeString(this.timeICtl);
+        dest.writeLong(this.timeStart);
+        dest.writeLong(this.timeEnd);
+        dest.writeInt(this.openLockCntUsed);
+        dest.writeInt(this.lockId);
     }
 
     protected DeviceKey(Parcel in) {
+        this.id = in.readInt();
         this.keyID = in.readInt();
         this.name = in.readString();
         this.keyType = in.readInt();
@@ -148,6 +270,13 @@ public class DeviceKey implements Parcelable {
         this.keyStatus = in.readInt();
         this.keyAuthType = in.readInt();
         this.mDeviceKeyAuthData = in.readParcelable(DeviceKeyAuth.class.getClassLoader());
+        this.authId = in.readInt();
+        this.openLockCnt = in.readInt();
+        this.timeICtl = in.readString();
+        this.timeStart = in.readLong();
+        this.timeEnd = in.readLong();
+        this.openLockCntUsed = in.readInt();
+        this.lockId = in.readInt();
     }
 
     public static final Parcelable.Creator<DeviceKey> CREATOR = new Parcelable.Creator<DeviceKey>() {

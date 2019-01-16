@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 10,
-    "identityHash": "aefa243d1edafd85a875631b61792844",
+    "identityHash": "0534b5b54ee94be53f9a6b4b3fe974c4",
     "entities": [
       {
         "tableName": "lock_key",
@@ -877,8 +877,14 @@
       },
       {
         "tableName": "device_key",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`keyID` INTEGER NOT NULL, `name` TEXT, `keyType` INTEGER NOT NULL, `keyCfg` INTEGER NOT NULL, `keyInId` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `keyAuthType` INTEGER NOT NULL, PRIMARY KEY(`keyID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `keyID` INTEGER NOT NULL, `name` TEXT, `keyType` INTEGER NOT NULL, `keyCfg` INTEGER NOT NULL, `keyInId` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `keyAuthType` INTEGER NOT NULL, `authId` INTEGER NOT NULL, `openLockCnt` INTEGER NOT NULL, `timeICtl` TEXT, `timeStart` INTEGER NOT NULL, `timeEnd` INTEGER NOT NULL, `openLockCntUsed` INTEGER NOT NULL, `lockId` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "keyID",
             "columnName": "keyID",
@@ -920,11 +926,53 @@
             "columnName": "keyAuthType",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "authId",
+            "columnName": "authId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openLockCnt",
+            "columnName": "openLockCnt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeICtl",
+            "columnName": "timeICtl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeStart",
+            "columnName": "timeStart",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeEnd",
+            "columnName": "timeEnd",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openLockCntUsed",
+            "columnName": "openLockCntUsed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lockId",
+            "columnName": "lockId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "keyID"
+            "id"
           ],
           "autoGenerate": false
         },
@@ -933,54 +981,54 @@
       },
       {
         "tableName": "device_key_auth",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`AuthId` INTEGER NOT NULL, `KeyID` INTEGER NOT NULL, `OpenLockCnt` INTEGER NOT NULL, `TimeICtl` TEXT, `TimeStart` INTEGER NOT NULL, `TimeEnd` INTEGER NOT NULL, `OpenLockCntUsed` INTEGER NOT NULL, PRIMARY KEY(`AuthId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`authId` INTEGER NOT NULL, `keyID` INTEGER NOT NULL, `openLockCnt` INTEGER NOT NULL, `timeICtl` TEXT, `timeStart` INTEGER NOT NULL, `timeEnd` INTEGER NOT NULL, `openLockCntUsed` INTEGER NOT NULL, PRIMARY KEY(`authId`))",
         "fields": [
           {
-            "fieldPath": "AuthId",
-            "columnName": "AuthId",
+            "fieldPath": "authId",
+            "columnName": "authId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "KeyID",
-            "columnName": "KeyID",
+            "fieldPath": "keyID",
+            "columnName": "keyID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "OpenLockCnt",
-            "columnName": "OpenLockCnt",
+            "fieldPath": "openLockCnt",
+            "columnName": "openLockCnt",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "TimeICtl",
-            "columnName": "TimeICtl",
+            "fieldPath": "timeICtl",
+            "columnName": "timeICtl",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "TimeStart",
-            "columnName": "TimeStart",
+            "fieldPath": "timeStart",
+            "columnName": "timeStart",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "TimeEnd",
-            "columnName": "TimeEnd",
+            "fieldPath": "timeEnd",
+            "columnName": "timeEnd",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "OpenLockCntUsed",
-            "columnName": "OpenLockCntUsed",
+            "fieldPath": "openLockCntUsed",
+            "columnName": "openLockCntUsed",
             "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "AuthId"
+            "authId"
           ],
           "autoGenerate": false
         },
@@ -1088,7 +1136,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"aefa243d1edafd85a875631b61792844\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0534b5b54ee94be53f9a6b4b3fe974c4\")"
     ]
   }
 }

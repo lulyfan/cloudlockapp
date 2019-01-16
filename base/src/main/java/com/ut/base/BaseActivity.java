@@ -97,7 +97,8 @@ public class BaseActivity extends AppCompatActivity {
                         Schedulers.io().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
-                                CloudLockDatabaseHolder.get().clear();
+//                                CloudLockDatabaseHolder.get().clear();
+                                BaseApplication.clearDataWhenLogout();
                             }
                         });
                     }).setOnDismissListener(dialog -> {
@@ -308,6 +309,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void startLoad() {
+        //TODO 中文
         startLoad("请稍候...");
     }
 

@@ -1,4 +1,4 @@
 include ':app', ':base', ':module_login', ':commoncomponent', ':module_lock',
         ':module_msg', ':module_mall', ':module_mine', ':database', ':lib2_smallest',
-        ':lib_networkapi', 'lib_push', ':iot-ble-plugin', ':unilink'
+        ':lib_networkapi', ':unilink-release', 'lib_push', ':unilink'
 

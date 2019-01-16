@@ -45,6 +45,8 @@ public class RouterUtil {
 
         //设备钥匙详情
         public static final String LOCK_DEVICE_KEY_DETAIL = "/lock/devicekeyDetail";
+
+        public static final String LOCK_DEVICE_KEY_PERMISSION = "/lock/devicekeyPermission";
     }
 
     public static class BaseModulePath {
@@ -60,6 +62,19 @@ public class RouterUtil {
         String EXTRA_LOCK_SENDKEY_MOBILE = "extra_lock_sendKey_mobile";
         String EXTRA_LOCK_SENDKEY_RULER_TYPE = "extra_lock_sendKey_rulerType";
         String EXTRA_LOCK_DEVICE_KEY = "extra_lock_device_key";
+
+        String EDIT_NAME_TITLE = "edit_name_title";
+        String IS_LOCK = "is_lock";
+        String NAME_TYPE = "name_type";//编辑名称页的名称类型
+        String MAC = "mac";
+        String KEY_ID = "key_id";
+        String NAME = "name";
+    }
+
+    public interface LockModuleConstParams {
+        int NAMETYPE_KEY = 0;
+        int NAMETYPE_LOCK = 1;
+        int NAMETYPE_DEVICE_KEY = 3;
     }
 
     public interface LoginModuleAction {

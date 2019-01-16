@@ -87,9 +87,10 @@ public class KeyInfoActivity extends BaseActivity {
     private void initListener() {
         mBinding.keyNameSelection.setOnClickListener(v -> ARouter.getInstance()
                 .build(RouterUtil.LockModulePath.EDIT_NAME)
-                .withString("edit_name_title", getString(R.string.key_name))
-                .withLong("key_id", keyInfo.getKeyId())
-                .withString("name", keyInfo.getKeyName())
+                .withString(RouterUtil.LockModuleExtraKey.EDIT_NAME_TITLE, getString(R.string.key_name))
+                .withInt(RouterUtil.LockModuleExtraKey.NAME_TYPE, RouterUtil.LockModuleConstParams.NAMETYPE_KEY)
+                .withLong(RouterUtil.LockModuleExtraKey.KEY_ID, keyInfo.getKeyId())
+                .withString(RouterUtil.LockModuleExtraKey.NAME, keyInfo.getKeyName())
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
             String url;

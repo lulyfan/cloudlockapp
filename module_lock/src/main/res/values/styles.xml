@@ -70,20 +70,26 @@
         <item name="android:layout_marginTop">@dimen/base_10dp</item>
     </style>
 
+
+    <style name="RlyDeviceKeyDetail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/base_60dp</item>
+        <item name="android:paddingLeft">@dimen/base_20dp</item>
+        <item name="android:paddingRight">@dimen/base_28dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="RlyDeviceKeyDetail.bottom">
+        <item name="android:layout_marginBottom">@dimen/base_10dp</item>
+    </style>
+
     <style name="TvDeviceKeyDetailLeft">
         <item name="android:textSize">@dimen/base_14sp</item>
         <item name="android:textColor">@color/gray3</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="LlyDeviceKeyDetail">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/base_60dp</item>
-        <item name="android:paddingLeft">@dimen/base_20dp</item>
-        <item name="android:paddingRight">@dimen/base_20dp</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:orientation">horizontal</item>
     </style>
 
     <style name="TvDeviceKeyDetailRight">
@@ -96,10 +102,10 @@
 
     <style name="TvDeviceKeyDetailRight.Drawable">
         <item name="android:drawableRight">@drawable/right_triangle</item>
-        <item name="android:drawablePadding">@dimen/base_20dp</item>
+        <item name="android:drawablePadding">@dimen/base_16dp</item>
     </style>
 
     <style name="TvDeviceKeyDetailRight.NoDrawable">
-        <item name="android:layout_marginRight">@dimen/base_40dp</item>
+        <item name="android:layout_marginRight">@dimen/base_44dp</item>
     </style>
 </resources>

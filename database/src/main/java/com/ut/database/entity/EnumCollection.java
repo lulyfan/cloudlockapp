@@ -23,7 +23,7 @@ public class EnumCollection {
         HAS_INVALID,//"已失效"),
         HAS_OVERDUE;//"已过期");
 
-        public static boolean isKeyValue(int keyStatus) {
+        public static boolean isKeyValid(int keyStatus) {
             return keyStatus == SENDING.ordinal() || keyStatus == AUTHORITYING.ordinal()
                     || keyStatus == NORMAL.ordinal();
         }

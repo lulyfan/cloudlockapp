@@ -215,4 +215,22 @@
     <string name="lock_key_invaild_time">失效时间</string>
     <string name="lock_open_lock_invaild_tips">钥匙不在有效期内</string>
     <string name="lock_edit_name_hint">请输入1-20位中文、字母或数字</string>
+
+    <string name="lock_detail_key_detail">钥匙详情</string>
+
+    <string name="device_key_time_unlimit">无限制</string>
+
+    <string name="lock_detail_edit_permission">修改权限</string>
+    <string name="lock_freeze_key">冻结钥匙</string>
+    <string name="lock_unFreeze_key">解除冻结</string>
+    <string name="lock_select_permission">选择权限类型</string>
+
+    <string name="lock_cycle_validTime">生效时间</string>
+    <string name="lock_cycle_startDate">启用日期</string>
+    <string name="lock_cycle_endDate">停止日期</string>
+
+    <string name="dateTime_format">"%4d/%02d/%02d %02d:%02d"</string>
+
+    <string name="operate_success">操作成功</string>
+    <string name="lock_device_key_operate_failed">操作失败，请检查蓝牙设置</string>
 </resources>

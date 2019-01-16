@@ -79,10 +79,10 @@ public class LockSettingActivity extends BaseActivity {
         });
         mBinding.layoutLockName.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME)
-                    .withString("edit_name_title", getString(R.string.lock_name))
-                    .withString("name", lockKey.getName())
-                    .withBoolean("is_lock", true)
-                    .withString("mac", lockKey.getMac())
+                    .withString(RouterUtil.LockModuleExtraKey.EDIT_NAME_TITLE, getString(R.string.lock_name))
+                    .withString(RouterUtil.LockModuleExtraKey.NAME, lockKey.getName())
+                    .withInt(RouterUtil.LockModuleExtraKey.NAME_TYPE, RouterUtil.LockModuleConstParams.NAMETYPE_LOCK)
+                    .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
                     .navigation(this, REQUEST_CODE_EDIT_NAME);
         });
     }
@@ -233,14 +233,15 @@ public class LockSettingActivity extends BaseActivity {
             lockKey.setKeyTypeStr(getString(R.string.once_time));
         } else if (ruleType == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
             lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime());
-            mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_12sp));
+            mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_12sp));
         } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
             String weeks = lockKey.getWeeks();
             if (!TextUtils.isEmpty(weeks)) {
+                //TODO 中文
                 StringBuffer xingqi = new StringBuffer("星期");
                 String[] split = weeks.split(",");
                 for (String s : split) {
-                    if (TextUtils.isEmpty(s)) continue;
+                    if(TextUtils.isEmpty(s)) continue;
                     switch (Integer.valueOf(s)) {
                         case 1:
                             xingqi.append("一,");

@@ -33,13 +33,9 @@ public class SystemSettingViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
-                            CloudLockDatabaseHolder.get().clear();
-//                    CloudLockDatabaseHolder.get().getUserDao().deleteAllUsers();
-//                    CloudLockDatabaseHolder.get().getUUIDDao().deleteUUID();
-                            BaseApplication.deleteJpushAlias();
+                            BaseApplication.clearDataWhenLogout();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
-                            MyRetrofit.get().closeWebSocket();
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
     }

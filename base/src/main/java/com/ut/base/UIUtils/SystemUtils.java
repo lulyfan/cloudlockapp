@@ -2,8 +2,6 @@ package com.ut.base.UIUtils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -110,5 +108,12 @@ public class SystemUtils {
         } catch (Exception ex) {
         }
         return "02:00:00:00:00:00";
+    }
+
+    public static void setWindowAlpha(Activity activity, float alpha) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = alpha;
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        activity.getWindow().setAttributes(lp);
     }
 }

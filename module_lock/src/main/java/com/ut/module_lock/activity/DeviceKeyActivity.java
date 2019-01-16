@@ -1,5 +1,6 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,10 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
-import com.ut.module_lock.fragment.DeviceKeyFragment;
+import com.ut.module_lock.fragment.DeviceKeyListFragment;
+import com.ut.module_lock.viewmodel.DeviceKeyVM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +33,28 @@ public class DeviceKeyActivity extends BaseActivity {
 
     private ViewPager mViewPager;
 
+    private LockKey mLockKey = null;
+    private DeviceKeyVM mDeviceKeyVM = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_key);
         enableImmersive();
         initToolbar();
+        initData();
+        initVM();
         initView();
+    }
+
+    private void initVM() {
+        mDeviceKeyVM = ViewModelProviders.of(this).get(DeviceKeyVM.class);
+        mDeviceKeyVM.setLockKey(mLockKey);
+        mDeviceKeyVM.getDevieKey();
+    }
+
+    private void initData() {
+        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
     }
 
     private void initView() {
@@ -66,6 +84,13 @@ public class DeviceKeyActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onXmlClick(View view) {
+        int i = view.getId();
+        if (i == R.id.tv_connectLock) {
+
+        }
+    }
 
     public class DevicePagerAdapter extends FragmentPagerAdapter {
 
@@ -78,10 +103,10 @@ public class DeviceKeyActivity extends BaseActivity {
 
         private void initFragment() {
             mFragments = new ArrayList<>();
-            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.FINGERPRINT.ordinal()));
-            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.PASSWORD.ordinal()));
-            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.ICCARD.ordinal()));
-            mFragments.add(DeviceKeyFragment.newInstance(EnumCollection.DeviceKeyType.ELECTRONICKEY.ordinal()));
+            mFragments.add(DeviceKeyListFragment.newInstance(EnumCollection.DeviceKeyType.FINGERPRINT.ordinal()));
+            mFragments.add(DeviceKeyListFragment.newInstance(EnumCollection.DeviceKeyType.PASSWORD.ordinal()));
+            mFragments.add(DeviceKeyListFragment.newInstance(EnumCollection.DeviceKeyType.ICCARD.ordinal()));
+            mFragments.add(DeviceKeyListFragment.newInstance(EnumCollection.DeviceKeyType.ELECTRONICKEY.ordinal()));
         }
 
         @Override
@@ -93,7 +118,5 @@ public class DeviceKeyActivity extends BaseActivity {
         public int getCount() {
             return mFragments.size();
         }
-
-
     }
 }

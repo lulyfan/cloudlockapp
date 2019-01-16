@@ -1,6 +1,9 @@
 package com.example;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MyClass {
@@ -8,7 +11,46 @@ public class MyClass {
     private static String token;
 //    private static Firmware firmware = null;
 
+    static class Temp {
+        int i = 1;
+    }
+
+    public static String getDateString(long timeStamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(calendar.get(Calendar.YEAR));
+        stringBuilder.append("/");
+        stringBuilder.append(calendar.get(Calendar.MONTH) + 1);
+        stringBuilder.append("/");
+        stringBuilder.append(calendar.get(Calendar.DATE));
+        return stringBuilder.toString();
+    }
+
+    public static String getDateString1(long timeStamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        return simpleDateFormat.format(new Date(timeStamp));
+    }
+
     public static void main(String[] args) {
+        System.out.println(getDateString1(System.currentTimeMillis()));
+
+        String format = "%4d/%2d/%2d %2d:%2d";
+        System.out.println(String.format(format, 2018, 02, 04, 01, 02));
+
+        List<Temp> list = new ArrayList<>();
+        list.add(new Temp());
+        list.add(new Temp());
+        for (Temp temp : list) {
+            System.out.println(temp.i);
+            temp.i = 2;
+        }
+        for (Temp temp : list) {
+            System.out.println(temp.i);
+        }
+
+        System.out.println(System.currentTimeMillis());
+
 //        SecureRandom secureRandom = new SecureRandom();
 //        System.out.println("random integer:"+secureRandom.nextInt(10));
 //        System.out.println("integer:" + Integer.valueOf("1234567890"));
@@ -25,10 +67,10 @@ public class MyClass {
 //            System.out.println("true" + (byte)0xff);
 //        } else {
 //            System.out.println("false");
-        List<String> list = null;
-        if (list == null || list.size()<1){
-            System.out.println("list");
-        }
+//        List<String> list = null;
+//        if (list == null || list.size() < 1) {
+//            System.out.println("list");
+//        }
 //        try {
 //            String result = DES.encryptDES("123456", DES.mypassword());
 //            System.out.println(result);

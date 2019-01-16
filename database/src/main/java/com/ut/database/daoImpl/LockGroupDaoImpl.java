@@ -49,7 +49,7 @@ public class LockGroupDaoImpl {
     /**
      * 通过id获取分组
      */
-    public LockGroup getLockGroupById(long id){
+    public LockGroup getLockGroupById(long id) {
         return mLockGroupDao.getById(id);
     }
 

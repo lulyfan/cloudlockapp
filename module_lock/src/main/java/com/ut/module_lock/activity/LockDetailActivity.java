@@ -74,6 +74,8 @@ public class LockDetailActivity extends BaseActivity {
         mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         mLockKey.setElectricityStr();
+        //TODO 设置假数据
+        mLockKey.setType(0xA010);
         mDetailBinding.setLockKey(mLockKey);
         mLockDetailVM.setLockKey(mLockKey);
     }
@@ -248,12 +250,21 @@ public class LockDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
+            if (requestCode == BLEENABLECODE)
                 toOpenLock();
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] paramArrayOfInt) {
+        if (requestCode == BLEREAUESTCODE) {
+            toOpenLock();
+        }
+    }
+
     private void keyHasDeletedTips() {
+        //TODO 中文
         CLToast.showAtCenter(this, "钥匙已被删除，无法开锁，请联系钥匙发送者");
     }
 }
