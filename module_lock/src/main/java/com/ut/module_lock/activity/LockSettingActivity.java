@@ -86,6 +86,9 @@ public class LockSettingActivity extends BaseActivity {
                     .navigation(this, REQUEST_CODE_EDIT_NAME);
         });
 
+        if (lockKey.getType() != EnumCollection.LockType.SMARTLOCK.getType()) {
+            mBinding.adjustTime.setVisibility(View.GONE);
+        }
         mBinding.adjustTime.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.TIME_ADJUST)
                 .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
                 .navigation());
