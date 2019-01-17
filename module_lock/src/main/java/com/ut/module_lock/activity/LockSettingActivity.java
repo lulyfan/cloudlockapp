@@ -85,6 +85,10 @@ public class LockSettingActivity extends BaseActivity {
                     .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
                     .navigation(this, REQUEST_CODE_EDIT_NAME);
         });
+
+        mBinding.adjustTime.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.TIME_ADJUST)
+                .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
+                .navigation());
     }
 
     private volatile boolean isResetChecked = false;

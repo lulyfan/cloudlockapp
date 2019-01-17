@@ -242,4 +242,22 @@
     <string name="lock_device_key_load_success">加载完成</string>
 
     <string name="lock_device_key_record_description">使用%s开锁</string>
+    <string name="timeAdjustTip">校准时间有助于获得更准确的服务</string>
+    <string name="timeAdjust">校准时间</string>
+    <string name="err_readLockTime">读取锁时间失败:</string>
+    <string name="err_connect">连接锁失败</string>
+    <string name="operateSuccess">操作成功</string>
+    <string name="err_writeLockTime">校准锁时间失败:</string>
+    <string name="BLE_NOT_SUPPORT">蓝牙不支持</string>
+    <string name="BLE_NOT_OPEN">蓝牙未打开</string>
+    <string name="NO_LOCATION_PERMISSION">请开启定位权限</string>
+    <string name="wakeupDevice">请唤醒锁设备</string>
+    <string name="scaning">正在搜索设备</string>
+    <string name="connecting">正在连接设备</string>
+    <string name="readingTime">正在读取时间</string>
+    <string name="writingTime">正在校准时间</string>
+    <string name="getLockTimeFailed">无法获取锁设备时间</string>
+    <string name="checkConnect">请检查是否已连接锁设备并重试</string>
+    <string name="retry">重试</string>
+    <string name="lockTime">锁时间</string>
 </resources>

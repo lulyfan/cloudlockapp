@@ -26,9 +26,12 @@ public class WebSocketHelper {
     private boolean isSendUserId;
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture scheduledFuture;
+    private ScheduledFuture heartTimeoutScheduledFuture;   //用于心跳超时
+    private ScheduledFuture sendHeartScheduledFuture;   //用于发送心跳
 
     private static final String TAG = "webSocket";
     private static final int CODE_CLOSE_NORMAL = 1000;  //正常关闭
+    private static final int CODE_CONNECT_INTERRUPT = 1001; //与服务器的连接断开
 
     public WebSocketHelper(OkHttpClient client) {
         this.client = client;
@@ -95,18 +98,30 @@ public class WebSocketHelper {
                     }, delay, TimeUnit.MILLISECONDS);
                 }
 
-                executor.scheduleWithFixedDelay(new Runnable() {
+                sendHeartScheduledFuture = executor.scheduleWithFixedDelay(new Runnable() {
                     @Override
                     public void run() {
                         sendUserId();
+                        heartTimeoutScheduledFuture = executor.schedule(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("websocket","与服务器的连接断开");
+                                webSocket.close(1001, "与服务器连接断开");
+                            }
+                        }, 5, TimeUnit.SECONDS);
                     }
-                }, 1, 1, TimeUnit.MINUTES);
+                }, 30, 30, TimeUnit.SECONDS);
             }
         }
 
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             super.onMessage(webSocket, text);
+            if ("ok".equals(text)) {
+                handleHeartData();
+                return;
+            }
+
             if (webSocketDataListener != null) {
                 webSocketDataListener.onReceive(text);
             }
@@ -128,6 +143,10 @@ public class WebSocketHelper {
             Log.i(TAG, "websocket onClosed:" + reason);
 
             WebSocketHelper.this.webSocket = null;
+            if (sendHeartScheduledFuture != null) {
+                sendHeartScheduledFuture.cancel(true);
+                sendHeartScheduledFuture = null;
+            }
 
             if (code == CODE_CLOSE_NORMAL) {
                 return;
@@ -147,6 +166,10 @@ public class WebSocketHelper {
             Log.i(TAG, "websocket onFailure:" + t.getMessage());
 
             WebSocketHelper.this.webSocket = null;
+            if (sendHeartScheduledFuture != null) {
+                sendHeartScheduledFuture.cancel(true);
+                sendHeartScheduledFuture = null;
+            }
 
             if (scheduledFuture != null) {
                 scheduledFuture.cancel(true);
@@ -161,6 +184,15 @@ public class WebSocketHelper {
 
         }
     };
+
+    //处理心跳数据
+    private void handleHeartData() {
+        Log.i("websocket", "收到websocket心跳包");
+        if (heartTimeoutScheduledFuture != null) {
+            heartTimeoutScheduledFuture.cancel(true);
+            heartTimeoutScheduledFuture = null;
+        }
+    }
 
     public void close() {
         if (webSocket != null) {

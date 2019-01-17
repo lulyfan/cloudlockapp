@@ -321,6 +321,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void setLoadText(String text) {
+        TextView textView = (TextView) loadDialog.findViewById(R.id.tip);
+        textView.setText(text);
+    }
+
     public void startLoad() {
         //TODO 中文
         startLoad("请稍候...");

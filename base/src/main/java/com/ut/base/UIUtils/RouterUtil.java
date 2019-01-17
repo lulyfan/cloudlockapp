@@ -47,6 +47,7 @@ public class RouterUtil {
         public static final String LOCK_DEVICE_KEY_DETAIL = "/lock/devicekeyDetail";
 
         public static final String LOCK_DEVICE_KEY_PERMISSION = "/lock/devicekeyPermission";
+        public static final String TIME_ADJUST = "/lock/timeAdjust";
     }
 
     public static class BaseModulePath {
