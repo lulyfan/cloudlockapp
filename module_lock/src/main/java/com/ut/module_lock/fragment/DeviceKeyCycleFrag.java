@@ -84,12 +84,13 @@ public class DeviceKeyCycleFrag extends BaseFragment {
 
     private void initView() {
         initWeekView();
-        long startTime = mDeviceKey.getTimeStart() == 0L ? System.currentTimeMillis() : mDeviceKey.getTimeStart();
-        long endTime = mDeviceKey.getTimeEnd() == 0L ? (System.currentTimeMillis() + 3600000L) : mDeviceKey.getTimeEnd();
-        mBinding.validTime.setText(StringUtils.getTimeString(startTime));
-        mBinding.invalidTime.setText(StringUtils.getTimeString(endTime));
-        mBinding.startDate.setText(StringUtils.getDateString(startTime));
-        mBinding.endDate.setText(StringUtils.getDateString(endTime));
+        if (mDeviceKey.getTimeStart() == 0L) mDeviceKey.setTimeStart(System.currentTimeMillis());
+        if (mDeviceKey.getTimeEnd() == 0L)
+            mDeviceKey.setTimeEnd(System.currentTimeMillis() + 3600000L);
+        mBinding.validTime.setText(StringUtils.getTimeString(mDeviceKey.getTimeStart()));
+        mBinding.invalidTime.setText(StringUtils.getTimeString(mDeviceKey.getTimeEnd()));
+        mBinding.startDate.setText(StringUtils.getDateString(mDeviceKey.getTimeStart()));
+        mBinding.endDate.setText(StringUtils.getDateString(mDeviceKey.getTimeEnd()));
     }
 
     private void initWeekView() {

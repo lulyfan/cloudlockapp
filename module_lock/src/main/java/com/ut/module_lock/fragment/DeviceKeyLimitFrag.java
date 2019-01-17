@@ -73,10 +73,14 @@ public class DeviceKeyLimitFrag extends BaseFragment {
     }
 
     private void initView() {
-        long startTime = mDeviceKey.getTimeStart() == 0L ? System.currentTimeMillis() : mDeviceKey.getTimeStart();
-        long endTime = mDeviceKey.getTimeEnd() == 0L ? System.currentTimeMillis() + 3600000 : mDeviceKey.getTimeEnd();
+        if (mDeviceKey.getTimeStart() == 0L) mDeviceKey.setTimeStart(System.currentTimeMillis());
+        if (mDeviceKey.getTimeEnd() == 0L)
+            mDeviceKey.setTimeEnd(System.currentTimeMillis() + 3600000L);
+        long startTime = mDeviceKey.getTimeStart();
+        long endTime = mDeviceKey.getTimeEnd();
         mBinding.tvLockKeyVaildTime.setText(StringUtils.getTimeByStamp(startTime));
         mBinding.tvLockKeyInvaildTime.setText(StringUtils.getTimeByStamp(endTime));
+        if (mDeviceKey.getOpenLockCnt() <= 0) mDeviceKey.setOpenLockCnt(1);
         mBinding.tvLockKeyTime.setText(mDeviceKeyRuleVM.openCntTimeStringByDeviceKey(mDeviceKey.getOpenLockCnt()));
     }
 
@@ -117,12 +121,12 @@ public class DeviceKeyLimitFrag extends BaseFragment {
     }
 
     private void chooseCount() {
-        int defaultTime = mDeviceKey.getOpenLockCnt() == 255 ? 0 : mDeviceKey.getOpenLockCnt();
-        if (defaultTime < 0 || defaultTime > 99) {
-            defaultTime = 0;
+        int defaultIndex = mDeviceKey.getOpenLockCnt() == 255 ? 0 : mDeviceKey.getOpenLockCnt();
+        if (defaultIndex < 0 || defaultIndex > 99) {
+            defaultIndex = 0;
         }
         PickerDialogUtils.chooseSingle(getContext(), getString(R.string.lock_key_open_times), mTimes,
-                defaultTime, new PickerDialogUtils.SinglePickListener() {
+                defaultIndex, new PickerDialogUtils.SinglePickListener() {
                     @Override
                     public void onSelected(int selectIndex, String selectData) {
                         mBinding.tvLockKeyTime.setText(selectData);

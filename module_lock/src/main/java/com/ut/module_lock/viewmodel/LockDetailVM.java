@@ -96,19 +96,25 @@ public class LockDetailVM extends AndroidViewModel {
         } else {
             return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
-                public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+                public void onScan(ScanDevice scanDevice) {
                     if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
                         toConnect(scanDevice, mLockKey);
                     }
                 }
 
                 @Override
-                public void onFinish() {
+                public void onFinish(List<ScanDevice> scanDevices) {
+
+                }
+
+                @Override
+                public void onScanTimeout() {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                 }
             }, 10);
         }
     }
+
 
     private void toConnect(ScanDevice scanDevice, LockKey lockKey) {
         UnilinkManager.getInstance(getApplication()).stopScan();

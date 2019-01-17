@@ -189,4 +189,7 @@ public interface ApiUrl {
 
     //获取后台时间
     String checkTime = "api/innerLock/checkTime?json";
+
+    //更新钥匙数据
+    String updateKeyInfo = PREFIX + "innerLock/updateKeyInfo" + SUFFIX;
 }

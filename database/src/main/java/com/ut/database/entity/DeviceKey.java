@@ -37,6 +37,9 @@ public class DeviceKey implements Parcelable {
      */
     private int keyStatus;//0:正常;1:已过期;2:已失效;3:已冻结
 
+    /**
+     * {@link com.ut.database.entity.EnumCollection.DeviceKeyAuthType}
+     */
     private int keyAuthType;//0:永久;1：限时;2:循环
 
     @Ignore
@@ -145,6 +148,11 @@ public class DeviceKey implements Parcelable {
 
     public void setKeyAuthType(int keyAuthType) {
         this.keyAuthType = keyAuthType;
+        if (keyAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
+            this.isAuthKey = false;
+        } else {
+            this.isAuthKey = true;
+        }
     }
 
     public void setDeviceKeyAuthData(DeviceKeyAuth deviceKeyAuthData) {
@@ -189,6 +197,18 @@ public class DeviceKey implements Parcelable {
 
     public String getTimeICtl() {
         return timeICtl;
+    }
+
+    public int[] getTimeICtlIntArr() {
+        if (!TextUtils.isEmpty(this.timeICtl)) {
+            String[] strings = this.timeICtl.split(",");
+            int[] temp = new int[strings.length];
+            for (int i = 0; i < temp.length; i++) {
+                temp[i] = Integer.parseInt(strings[i]);
+            }
+            return temp;
+        }
+        return null;
     }
 
     public void setTimeICtl(String timeICtl) {
@@ -290,4 +310,27 @@ public class DeviceKey implements Parcelable {
             return new DeviceKey[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "DeviceKey{" +
+                "id=" + id +
+                ", keyID=" + keyID +
+                ", name='" + name + '\'' +
+                ", keyType=" + keyType +
+                ", keyCfg=" + keyCfg +
+                ", keyInId=" + keyInId +
+                ", isAuthKey=" + isAuthKey +
+                ", keyStatus=" + keyStatus +
+                ", keyAuthType=" + keyAuthType +
+                ", mDeviceKeyAuthData=" + mDeviceKeyAuthData +
+                ", authId=" + authId +
+                ", openLockCnt=" + openLockCnt +
+                ", timeICtl='" + timeICtl + '\'' +
+                ", timeStart=" + timeStart +
+                ", timeEnd=" + timeEnd +
+                ", openLockCntUsed=" + openLockCntUsed +
+                ", lockId=" + lockId +
+                '}';
+    }
 }

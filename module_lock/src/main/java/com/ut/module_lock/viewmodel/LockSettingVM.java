@@ -146,7 +146,7 @@ public class LockSettingVM extends AndroidViewModel {
         } else {
             return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
-                public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+                public void onScan(ScanDevice scanDevice) {
                     UTLog.i("scanDevice：" + scanDevice.getAddress());
                     if (lockKey.getMac().equals(scanDevice.getAddress())) {
                         toConnect(lockKey, scanDevice);
@@ -154,7 +154,12 @@ public class LockSettingVM extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFinish() {
+                public void onFinish(List<ScanDevice> scanDevices) {
+
+                }
+
+                @Override
+                public void onScanTimeout() {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                     endLoad();
                 }

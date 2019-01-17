@@ -39,11 +39,19 @@ public class BleOperateManager {
     private boolean canScan = true;
 
     private OperateDeviceKeyCallback mOperateDeviceKeyCallback = null;
+
+    private OperateDeviceRuleCallback mOperateDeviceRuleCallback = null;
+
     private int lockType = -1;
 
     public void setOperateDeviceKeyDetailCallback(OperateDeviceKeyDetailCallback operateDeviceKeyDetailCallback) {
         mOperateDeviceKeyDetailCallback = operateDeviceKeyDetailCallback;
     }
+
+    public void setOperateDeviceRuleCallback(OperateDeviceRuleCallback operateDeviceRuleCallback) {
+        mOperateDeviceRuleCallback = operateDeviceRuleCallback;
+    }
+
 
     private OperateDeviceKeyDetailCallback mOperateDeviceKeyDetailCallback = null;
 
@@ -101,7 +109,7 @@ public class BleOperateManager {
         canScan = true;
         return UnilinkManager.getInstance(mContext).scan(new ScanListener() {
             @Override
-            public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+            public void onScan(ScanDevice scanDevice) {
                 if (!canScan) return;
                 if (mOperateCallback != null
                         && mOperateCallback.checkScanResult(scanDevice)) {
@@ -114,14 +122,18 @@ public class BleOperateManager {
             }
 
             @Override
-            public void onFinish() {
+            public void onFinish(List<ScanDevice> scanDevices) {
+
+            }
+
+            @Override
+            public void onScanTimeout() {
                 if (mOperateCallback != null) {
                     mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
                 }
             }
         }, 10);
     }
-
 
     public void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {
         isConnectSuccessed = false;
@@ -274,6 +286,42 @@ public class BleOperateManager {
         });
     }
 
+    public void addDeviceKeyAuth(String mac, int encryptType, String encryptKey, AuthInfo authInfo) {
+        UnilinkManager.getInstance(mContext).addAuth(mac, encryptType, encryptKey, authInfo, new CallBack2<Integer>() {
+            @Override
+            public void onSuccess(Integer data) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onAddDevicekeyAuthSuccess(data);
+                }
+            }
+
+            @Override
+            public void onFailed(int errCode, String errMsg) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onAddDeviceKeyAuthFailed(errCode, errMsg);
+                }
+            }
+        });
+    }
+
+    public void updateDeviceKeyAuth(String mac, int encryptType, String encryptKey, AuthInfo authInfo) {
+        UnilinkManager.getInstance(mContext).updateAuth(mac, encryptType, encryptKey, authInfo, new CallBack2<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onUpdateDeviceKeyAuthSuccess();
+                }
+            }
+
+            @Override
+            public void onFailed(int errCode, String errMsg) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onUpdateDeviceKeyAuthFailed(errCode, errMsg);
+                }
+            }
+        });
+    }
+
     private LockStateListener mLockStateListener = new LockStateListener() {
         @Override
         public void onState(LockState lockState) {
@@ -350,5 +398,15 @@ public class BleOperateManager {
         void onWriteDeviceKeySuccess();
 
         void onWriteDeviceKeyFailed(int errCode, String errMsg);
+    }
+
+    public interface OperateDeviceRuleCallback {
+        void onAddDevicekeyAuthSuccess(int authId);
+
+        void onAddDeviceKeyAuthFailed(int errCode, String errMsg);
+
+        void onUpdateDeviceKeyAuthSuccess();
+
+        void onUpdateDeviceKeyAuthFailed(int errCode, String errMsg);
     }
 }

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.ut.database.utils.DeviceKeyUtil;
 
@@ -80,6 +81,7 @@ public class DeviceKeyAuth implements Parcelable {
             this.timeICtl = "";
         }
     }
+
 
     public long getTimeStart() {
         return timeStart;

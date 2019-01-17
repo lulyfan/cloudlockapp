@@ -18,7 +18,7 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public class BaseViewModel extends AndroidViewModel {
     protected ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    protected CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<String> showTip = new MutableLiveData<>();
     private MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
 

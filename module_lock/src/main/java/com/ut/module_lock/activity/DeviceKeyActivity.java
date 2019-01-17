@@ -78,7 +78,7 @@ public class DeviceKeyActivity extends BaseActivity {
     private void initData() {
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
         //Todo 测试数据
-        mLockKey.setMac("00:1B:35:13:95:63");
+//        mLockKey.setMac("00:1B:35:13:95:63");
     }
 
     private void initView() {

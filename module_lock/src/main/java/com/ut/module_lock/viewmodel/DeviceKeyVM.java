@@ -162,6 +162,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         mAllDeviceKey.clear();
         for (int i = 0; i < data.size(); i++) {
             GateLockKey key = data.get(i);
+            UTLog.i("====mm:" + key);
             DeviceKey deviceKey = new DeviceKey(i, key.getKeyId(),
                     "", key.getKeyType(), key.getAttribute(), key.getInnerNum());
             deviceKey.initName(getApplication().getResources().getStringArray(R.array.deviceTypeName));
@@ -194,6 +195,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         mAllDeviceKeyAuth.clear();
         for (int i = 0; i < data.size(); i++) {
             AuthInfo authInfo = data.get(i);
+            UTLog.i("====mm:" + authInfo);
             DeviceKeyAuth deviceKeyAuth = new DeviceKeyAuth(authInfo.getAuthId(), authInfo.getKeyId(),
                     authInfo.getOpenLockCount(), authInfo.getStartTime(), authInfo.getEndTime());
             deviceKeyAuth.setTimeICtl(authInfo.getAuthDay());
@@ -218,9 +220,10 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         //再从蓝牙获取授权次数信息
         for (DeviceKeyAuth auth : mAllDeviceKeyAuth) {
             for (AuthCountInfo info : data) {
+                UTLog.i("====mm:" + info);
                 if (auth.getAuthId() == info.getAuthId()) {
                     auth.setOpenLockCnt(info.getAuthCount());
-                    auth.setOpenLockCnt(info.getOpenLockCount());
+                    auth.setOpenLockCntUsed(info.getOpenLockCount());
                 }
             }
             DeviceKey key = getKeyByKeyId(auth.getKeyID());
@@ -255,13 +258,13 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             Record record1 = new Record();
             record1.setCreateTime(record.getOperateTime());
             record1.setUserId(BaseApplication.getUser().getId());
-            record1.setUserName(deviceKey.getName());
-            String description = String.format(getApplication().getString(R.string.lock_device_key_record_description),
+//            record1.setUserName(deviceKey.getName());
+            String description = String.format(getApplication().getString(R.string.lock_device_key_record_description), deviceKey.getName(),
                     getApplication().getResources().getStringArray(R.array.deviceTypeName)[deviceKey.getKeyType()]);
             record1.setDescription(description);
             record1.setLockId(Integer.parseInt(mLockKey.getId()));
             record1.setKeyId(0 - mLockKey.getKeyId());
-            record1.setType(mLockKey.getType() + 2);
+            record1.setType(mLockKey.getType() + 2);//设备钥匙的类型从2开始
             mRecordList.add(record1);
         }
         if (mRecordIndex < 6) {//加载25条

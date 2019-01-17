@@ -2,10 +2,14 @@ package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -15,6 +19,8 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.DeviceKey;
+import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.fragment.DeviceKeyCycleFrag;
 import com.ut.module_lock.fragment.DeviceKeyForeverFrag;
@@ -36,6 +42,8 @@ public class DeviceKeyRuleActivity extends BaseActivity {
     private List<BaseFragment> mFragmentList = null;
     private BaseFragment mCurrentFragment = null;
 
+    private LockKey mLockKey = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +60,43 @@ public class DeviceKeyRuleActivity extends BaseActivity {
     private void initVM() {
         mDeviceKeyRuleVM = ViewModelProviders.of(this).get(DeviceKeyRuleVM.class);
         mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
+        mDeviceKeyRuleVM.setFirstDeviceAuthType(mDeviceKey.getKeyAuthType());
+        mDeviceKeyRuleVM.setLockKey(mLockKey);
         mDeviceKeyRuleVM.getSaveResult().observe(this, saveResult -> {
             if (saveResult) {
-                CLToast.showAtBottom(DeviceKeyRuleActivity.this, getString(R.string.operate_success));
+                DeviceKey deviceKey = mDeviceKeyRuleVM.getDeviceKey();
+                Intent intent = new Intent();
+                intent.putExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, deviceKey);
+                DeviceKeyRuleActivity.this.setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        mDeviceKeyRuleVM.getDeviceKeyLiveData().observe(this, mDeviceKey -> {
+            if (mDeviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal()) {
+                if (TextUtils.isEmpty(mDeviceKey.getTimeICtl())) {
+                    if (mBinding.btnSave.isEnabled())
+                        mBinding.btnSave.setEnabled(false);
+                    return;
+                }
+            }
+            if (!mBinding.btnSave.isEnabled())
+                mBinding.btnSave.setEnabled(true);
+        });
+        mDeviceKeyRuleVM.getShowTip().observe(this, msg -> {
+            CLToast.showAtBottom(DeviceKeyRuleActivity.this, msg);
+        });
+        mDeviceKeyRuleVM.getShowDialog().observe(this, isShow -> {
+            if (isShow) {
+                startLoad();
             } else {
-                CLToast.showAtBottom(DeviceKeyRuleActivity.this, getString(R.string.lock_device_key_operate_failed));
+                endLoad();
             }
         });
     }
 
     private void initData() {
         mDeviceKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+        mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
     }
 
     private void initTitle() {
@@ -79,7 +113,7 @@ public class DeviceKeyRuleActivity extends BaseActivity {
             choosePermission(v);
         });
         mBinding.btnSave.setOnClickListener(v -> {
-            mDeviceKeyRuleVM.saveDeviceKey();
+            mDeviceKeyRuleVM.saveDeviceKey(DeviceKeyRuleActivity.this);
         });
     }
 
@@ -111,7 +145,7 @@ public class DeviceKeyRuleActivity extends BaseActivity {
 
 
     private void choosePermission(View v) {
-        SystemUtils.hideKeyboard(this, v);
+//        SystemUtils.hideKeyboard(this, v);
         PickerDialogUtils.chooseSingle(this, getString(R.string.lock_select_permission), Arrays.asList(permissionArray),
                 mDeviceKey.getKeyAuthType(), new PickerDialogUtils.SinglePickListener() {
                     @Override
@@ -123,5 +157,18 @@ public class DeviceKeyRuleActivity extends BaseActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mDeviceKeyRuleVM.mBleOperateManager.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mDeviceKeyRuleVM.mBleOperateManager.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+
     }
 }

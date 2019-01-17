@@ -355,7 +355,7 @@ public class BaseActivity extends AppCompatActivity {
 
         View view = LayoutInflater.from(this).inflate(R.layout.load, null);
         loadDialog = DialogPlus.newDialog(this)
-                .setCancelable(true)
+                .setCancelable(false)
                 .setContentHolder(new ViewHolder(view))
                 .setPadding(padding, padding_24, 0, padding_24)
                 .setMargin(padding, 0, padding, 0)

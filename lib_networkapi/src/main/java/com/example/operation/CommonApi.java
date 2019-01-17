@@ -3,11 +3,15 @@ package com.example.operation;
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.ut.database.entity.DeviceKey;
+import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.NearScanLock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -20,6 +24,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class CommonApi {
+    private static Gson mGson = new Gson();
 
     //绑定锁
     public static Observable<Result<Void>> bindLock(String mac, String lockName, String adminPwd,
@@ -85,6 +90,14 @@ public class CommonApi {
      */
     public static Observable<Result<Void>> setCanOpen(long keyId, int canOpen) {
         Observable<Result<Void>> resultObservable = getCommonApiService().setCanOpen(keyId, canOpen);
+        return ObjectLoader.observe(resultObservable);
+    }
+
+    public static Observable<Result<Void>> updateKeyInfo(DeviceKey deviceKey) {
+        List<DeviceKey> list = new ArrayList<>();
+        list.add(deviceKey);
+        String volist = mGson.toJson(list);
+        Observable<Result<Void>> resultObservable = getCommonApiService().updateKeyInfo(volist);
         return ObjectLoader.observe(resultObservable);
     }
 

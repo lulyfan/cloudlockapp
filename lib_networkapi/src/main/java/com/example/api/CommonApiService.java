@@ -292,4 +292,8 @@ public interface CommonApiService {
 
     @GET(ApiUrl.checkTime)
     Observable<Result<Long>> checkTime();
+
+    @FormUrlEncoded
+    @POST(ApiUrl.updateKeyInfo)
+    Observable<Result<Void>> updateKeyInfo(@Field("volist") String volist);
 }

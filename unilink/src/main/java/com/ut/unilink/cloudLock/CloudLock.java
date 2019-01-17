@@ -2,6 +2,7 @@ package com.ut.unilink.cloudLock;
 
 import com.ut.unilink.cloudLock.protocol.data.ProductInfo;
 import com.ut.unilink.util.Base64;
+import com.ut.unilink.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -344,6 +345,7 @@ public class CloudLock {
 
     public void setOpenLockPassword(String openLockPassword) {
         this.openLockPassword = Base64.decode(openLockPassword);
+        Log.i(CloudLock.class.getSimpleName(),"====mm openLockPassword:"+Log.toUnsignedHex(this.openLockPassword));
     }
 
     public String getEntryptKeyString() {
@@ -352,5 +354,6 @@ public class CloudLock {
 
     public void setEntryptKey(String entryptKey) {
         this.entryptKey = Base64.decode(entryptKey);
+        Log.i(CloudLock.class.getSimpleName(),"====mm entryptKey:"+Log.toUnsignedHex(this.entryptKey));
     }
 }

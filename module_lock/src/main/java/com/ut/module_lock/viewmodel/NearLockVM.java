@@ -74,19 +74,24 @@ public class NearLockVM extends AndroidViewModel {
         mStringScanDeviceMap.clear();
         nearScanLocks.setValue(nearLockList);
         return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
-
             @Override
-            public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+            public void onScan(ScanDevice scanDevice) {
                 checkLock(scanDevice);
             }
 
             @Override
-            public void onFinish() {
+            public void onFinish(List<ScanDevice> scanDevices) {
+
+            }
+
+            @Override
+            public void onScanTimeout() {
                 operating.postValue(false);
                 UTLog.i("scan finish");
             }
         }, 10);
     }
+
 
     //获取锁信息
     public void checkLock(ScanDevice scanDevice) {

@@ -35,7 +35,7 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
     }
 
     private MutableLiveData<Boolean> deleteResult = new MutableLiveData();
-    private BleOperateManager mBleOperateManager = null;
+    public BleOperateManager mBleOperateManager = null;
     private List<GateLockKey> mGateLockKeys = new ArrayList<>();
 
 

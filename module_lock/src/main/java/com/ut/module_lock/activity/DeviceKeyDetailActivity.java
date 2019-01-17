@@ -2,7 +2,10 @@ package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -147,6 +150,25 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         };
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mDeviceKeyDetailVM.mBleOperateManager.onActivityResult(this, requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_EDIT_PERMISSION && resultCode == RESULT_OK) {
+            DeviceKey deviceKey = data.getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+            this.mDeviceKey = deviceKey;
+            initView();
+            mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
+        } else {
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mDeviceKeyDetailVM.mBleOperateManager.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
 
     public class Present {
         public void onNameClick(View view) {
@@ -159,8 +181,13 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
 
         public void onPermissionClick(View view) {
+            if (mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal()) {
+                CLToast.showAtBottom(DeviceKeyDetailActivity.this, getString(R.string.lock_device_key_tip_auth_type));
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY_PERMISSION)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, mDeviceKey)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mLockKey)
                     .navigation(DeviceKeyDetailActivity.this, REQUEST_CODE_EDIT_PERMISSION);
         }
 

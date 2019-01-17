@@ -241,7 +241,7 @@
     <string name="lock_device_key_load_failed">加载失败</string>
     <string name="lock_device_key_load_success">加载完成</string>
 
-    <string name="lock_device_key_record_description">使用%s开锁</string>
+
     <string name="timeAdjustTip">校准时间有助于获得更准确的服务</string>
     <string name="timeAdjust">校准时间</string>
     <string name="err_readLockTime">读取锁时间失败:</string>
@@ -261,4 +261,9 @@
     <string name="retry">重试</string>
     <string name="lockTime">锁时间</string>
     <string name="serviceErr">服务器开小差</string>
+    <string name="lock_device_key_record_description">%s,使用%s开锁</string>
+    <string name="lock_device_key_tip_auth_type">请先解除冻结状态后再修改权限</string>
+    <string name="lock_device_key_tip_auth_error1">开始时间不能大于或等于结束时间</string>
+    <string name="lock_device_key_tip_auth_error2">启用日期不能大于或等于停止日期</string>
+    <string name="lock_device_key_tip_auth_error3">生效时间不能大于或等于失效时间</string>
 </resources>
