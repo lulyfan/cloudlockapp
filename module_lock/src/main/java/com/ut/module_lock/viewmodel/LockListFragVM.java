@@ -11,6 +11,10 @@ import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
+import com.ut.module_lock.R;
+import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.cloudLock.ScanDevice;
+import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
 
@@ -32,6 +36,14 @@ public class LockListFragVM extends AndroidViewModel {
     private LiveData<List<LockKey>> lock1 = null;//全部分组的锁
     private LiveData<List<LockKey>> lock2 = null;//当前分组的锁
     private long currentGroupId = -1;
+
+    public static final int STATE_DEFAULT = -1;
+    public static final int STATE_FAILED = -2;
+    public static final int STATE_SCAN = 0;
+    public static final int STATE_CONNECT = 1;
+
+    public MutableLiveData<Integer> state = new MutableLiveData<>();
+    public MutableLiveData<String> tip = new MutableLiveData<>();
 
     public LockListFragVM(@NonNull Application application) {
         super(application);
@@ -134,6 +146,66 @@ public class LockListFragVM extends AndroidViewModel {
         mCompositeDisposable.dispose();
 //        lock1.removeObservers(getApplication());
 //        lock2.removeObserver(getApplication());
+    }
+
+    //自动查询锁设备并开锁
+    public void autoOpenLock() {
+
+    }
+
+    private void scan() {
+
+        int scanResult = UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
+            @Override
+            public void onScan(ScanDevice scanDevice) {
+                List<LockKey> lockKeys = mLockKeys.getValue();
+                if (lockKeys == null || lockKeys.size() <= 0) {
+                    return;
+                }
+
+                for (LockKey lockKey : lockKeys) {
+                    if (scanDevice.getAddress().equals(lockKey.getMac()) && lockKey.getCanOpen() == 1) {
+                        UnilinkManager.getInstance(getApplication()).stopScan();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onScanTimeout() {
+                tip.postValue(getApplication().getString(R.string.wakeupDevice));
+                state.postValue(STATE_FAILED);
+            }
+
+            @Override
+            public void onFinish(List<ScanDevice> scanDevices) {
+
+            }
+        }, 10);
+
+        switch (scanResult) {
+            case UnilinkManager.BLE_NOT_SUPPORT:
+                tip.postValue(getApplication().getString(R.string.BLE_NOT_SUPPORT));
+                break;
+
+            case UnilinkManager.BLE_NOT_OPEN:
+                tip.postValue(getApplication().getString(R.string.BLE_NOT_OPEN));
+                break;
+
+            case UnilinkManager.NO_LOCATION_PERMISSION:
+                tip.postValue(getApplication().getString(R.string.NO_LOCATION_PERMISSION));
+                break;
+
+            case UnilinkManager.SCAN_SUCCESS:
+                state.postValue(STATE_SCAN);
+                break;
+
+            default:
+        }
+
+        if (scanResult != UnilinkManager.SCAN_SUCCESS) {
+            state.postValue(STATE_FAILED);
+        }
     }
 
 

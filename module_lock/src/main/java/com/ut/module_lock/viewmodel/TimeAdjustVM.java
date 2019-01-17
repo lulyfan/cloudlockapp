@@ -69,7 +69,7 @@ public class TimeAdjustVM extends BaseViewModel {
 
         int scanResult = UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
             @Override
-            public void onScan(ScanDevice scanDevice, List<ScanDevice> scanDevices) {
+            public void onScan(ScanDevice scanDevice) {
                 if (scanDevice.getAddress().equals(mac)) {
                     isFindDevice = true;
                     connect(scanDevice);
@@ -77,11 +77,13 @@ public class TimeAdjustVM extends BaseViewModel {
             }
 
             @Override
-            public void onFinish() {
-                if (!isFindDevice) {
-                    tip.postValue(getApplication().getString(R.string.wakeupDevice));
-                    state.postValue(STATE_FAILED);
-                }
+            public void onScanTimeout() {
+                handleScanEnd();
+            }
+
+            @Override
+            public void onFinish(List<ScanDevice> scanDevices) {
+                handleScanEnd();
             }
         }, 10);
 
@@ -106,6 +108,13 @@ public class TimeAdjustVM extends BaseViewModel {
         }
 
         if (scanResult != UnilinkManager.SCAN_SUCCESS) {
+            state.postValue(STATE_FAILED);
+        }
+    }
+
+    private void handleScanEnd() {
+        if (!isFindDevice) {
+            tip.postValue(getApplication().getString(R.string.wakeupDevice));
             state.postValue(STATE_FAILED);
         }
     }
