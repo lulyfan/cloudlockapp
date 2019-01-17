@@ -289,4 +289,7 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.verifyPhoneCode)
     Observable<Result<Void>> verifyPhoneCode(@Field("mobile") String mobile, @Field("code") String code);
+
+    @GET(ApiUrl.checkTime)
+    Observable<Result<Long>> checkTime();
 }

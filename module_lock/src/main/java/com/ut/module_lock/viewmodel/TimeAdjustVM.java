@@ -5,6 +5,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.entity.base.Result;
+import com.example.operation.MyRetrofit;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -16,6 +18,8 @@ import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
+
 public class TimeAdjustVM extends BaseViewModel {
 
     public MutableLiveData<Long> lockTime = new MutableLiveData<>();
@@ -24,7 +28,7 @@ public class TimeAdjustVM extends BaseViewModel {
     public String mac;
     private int operate;
     private boolean isFindDevice;
-    private ConnectListener connectListener;
+    private long time;  //用于写入锁时间
 
     private static final int READ_TIME = 0;
     private static final int WRITE_TIME = 1;
@@ -42,11 +46,21 @@ public class TimeAdjustVM extends BaseViewModel {
     }
 
     public void readLockTime() {
-        scan(READ_TIME);
+        boolean isConnect = UnilinkManager.getInstance(getApplication()).isConnect(mac);
+        if (!isConnect) {
+            scan(READ_TIME);
+        } else {
+            sendReadTimeCmd();
+        }
     }
 
-    public void wirteLockTime(long time) {
-        scan(WRITE_TIME);
+    public void wirteLockTime() {
+        boolean isConnect = UnilinkManager.getInstance(getApplication()).isConnect(mac);
+        if (!isConnect) {
+            scan(WRITE_TIME);
+        } else {
+            sendWriteTimeCmd();
+        }
     }
 
     private void scan(int operate) {
@@ -65,44 +79,44 @@ public class TimeAdjustVM extends BaseViewModel {
             @Override
             public void onFinish() {
                 if (!isFindDevice) {
-                    tip.setValue(getApplication().getString(R.string.wakeupDevice));
-                    state.setValue(STATE_FAILED);
+                    tip.postValue(getApplication().getString(R.string.wakeupDevice));
+                    state.postValue(STATE_FAILED);
                 }
             }
         }, 10);
 
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
-                tip.setValue(getApplication().getString(R.string.BLE_NOT_SUPPORT));
+                tip.postValue(getApplication().getString(R.string.BLE_NOT_SUPPORT));
                 break;
 
             case UnilinkManager.BLE_NOT_OPEN:
-                tip.setValue(getApplication().getString(R.string.BLE_NOT_OPEN));
+                tip.postValue(getApplication().getString(R.string.BLE_NOT_OPEN));
                 break;
 
             case UnilinkManager.NO_LOCATION_PERMISSION:
-                tip.setValue(getApplication().getString(R.string.NO_LOCATION_PERMISSION));
+                tip.postValue(getApplication().getString(R.string.NO_LOCATION_PERMISSION));
                 break;
 
             case UnilinkManager.SCAN_SUCCESS:
-                state.setValue(STATE_SCAN);
+                state.postValue(STATE_SCAN);
                 break;
 
             default:
         }
 
         if (scanResult != UnilinkManager.SCAN_SUCCESS) {
-            state.setValue(STATE_FAILED);
+            state.postValue(STATE_FAILED);
         }
     }
 
     private void connect(ScanDevice scanDevice) {
-        state.setValue(STATE_CONNECT);
+        state.postValue(STATE_CONNECT);
 
-        connectListener = new ConnectListener() {
+        UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
-                connectListener = null;
+                UnilinkManager.getInstance(getApplication()).setConnectListener(null);
                 if (operate == READ_TIME) {
                     sendReadTimeCmd();
                 } else if (operate == WRITE_TIME) {
@@ -112,15 +126,14 @@ public class TimeAdjustVM extends BaseViewModel {
 
             @Override
             public void onDisconnect(int code, String message) {
-                tip.setValue(getApplication().getString(R.string.err_connect));
-                state.setValue(STATE_FAILED);
+                tip.postValue(getApplication().getString(R.string.err_connect));
+                state.postValue(STATE_FAILED);
             }
-        };
-        UnilinkManager.getInstance(getApplication()).connect(scanDevice, connectListener);
+        });
     }
 
     private void sendReadTimeCmd() {
-        state.setValue(STATE_READ_TIME);
+        state.postValue(STATE_READ_TIME);
         LiveData<LockKey> lockKeyLiveData = CloudLockDatabaseHolder.get().getLockKeyDao().getByMac(mac);
         lockKeyLiveData.observeForever(lockKey ->
                 UnilinkManager.getInstance(getApplication()).readTime(mac, lockKey.getEncryptType(), lockKey.getEncryptKey(),
@@ -141,15 +154,16 @@ public class TimeAdjustVM extends BaseViewModel {
     }
 
     private void sendWriteTimeCmd() {
-        state.setValue(STATE_WRITE_TIME);
+        state.postValue(STATE_WRITE_TIME);
         LiveData<LockKey> lockKeyLiveData = CloudLockDatabaseHolder.get().getLockKeyDao().getByMac(mac);
         lockKeyLiveData.observeForever(lockKey ->
-                UnilinkManager.getInstance(getApplication()).writeTime(mac, lockKey.getEncryptType(), lockKey.getEncryptKey(),
+                UnilinkManager.getInstance(getApplication()).writeTime(mac, lockKey.getEncryptType(), lockKey.getEncryptKey(), time,
                         new CallBack2<Void>() {
                             @Override
                             public void onSuccess(Void data) {
                                 tip.postValue(getApplication().getString(R.string.operateSuccess));
                                 state.postValue(STATE_DEFAULT);
+                                readLockTime();
                             }
 
                             @Override
@@ -158,6 +172,24 @@ public class TimeAdjustVM extends BaseViewModel {
                                 state.postValue(STATE_FAILED);
                             }
                         }));
+
+    }
+
+    public void adjustTime() {
+        MyRetrofit.get().getCommonApiService().checkTime()
+                .doOnNext(stringResult -> {
+                    if (stringResult == null) {
+                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
+                    }
+
+                    if (!stringResult.isSuccess()) {
+                        throw new Exception(stringResult.msg);
+                    }
+                })
+                .subscribe(longResult -> {
+                    time = longResult.data;
+                    wirteLockTime();
+                }, throwable -> tip.postValue(throwable.getMessage()));
 
     }
 }

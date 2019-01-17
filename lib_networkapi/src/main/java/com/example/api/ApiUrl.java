@@ -186,4 +186,7 @@ public interface ApiUrl {
 
     //验证短信验证码（除注册和忘记密码的发送验证码）
     String verifyPhoneCode = "api/user/veriMobileCode?json";
+
+    //获取后台时间
+    String checkTime = "api/innerLock/checkTime?json";
 }

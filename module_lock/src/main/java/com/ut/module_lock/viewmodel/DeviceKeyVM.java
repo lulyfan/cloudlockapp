@@ -126,7 +126,8 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     public void onConnectSuccess() {
         processTick.postValue(processTickInt++);
         //todo 后台获取时间后进行对时
-        mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getType(), mLockKey.getEncryptKey());
+        long time = 0;
+        mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getType(), mLockKey.getEncryptKey(), time);
     }
 
     @Override

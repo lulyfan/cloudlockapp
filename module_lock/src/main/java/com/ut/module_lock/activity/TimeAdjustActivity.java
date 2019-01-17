@@ -38,7 +38,7 @@ public class TimeAdjustActivity extends BaseActivity {
         binding.date.setVisibility(View.GONE);
         binding.tip.setVisibility(View.GONE);
         binding.button.setOnClickListener(v -> {
-                viewModel.wirteLockTime(new Date().getTime());
+                viewModel.adjustTime();
         });
     }
 

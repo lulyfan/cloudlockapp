@@ -147,8 +147,8 @@ public class BleOperateManager {
                 }, mLockStateListener);
     }
 
-    public void updateTime(String mac, int enctyptType, String enctyptKey) {
-        UnilinkManager.getInstance(mContext).writeTime(mac, enctyptType, enctyptKey, new CallBack2<Void>() {
+    public void updateTime(String mac, int enctyptType, String enctyptKey, long time) {
+        UnilinkManager.getInstance(mContext).writeTime(mac, enctyptType, enctyptKey, time, new CallBack2<Void>() {
             @Override
             public void onSuccess(Void data) {
                 if (mOperateDeviceKeyCallback != null) {

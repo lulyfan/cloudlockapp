@@ -106,7 +106,7 @@ public class WebSocketHelper {
                             @Override
                             public void run() {
                                 Log.i("websocket","与服务器的连接断开");
-                                webSocket.close(1001, "与服务器连接断开");
+                                webSocket.close(CODE_CONNECT_INTERRUPT, "与服务器连接断开");
                             }
                         }, 5, TimeUnit.SECONDS);
                     }

@@ -117,6 +117,14 @@ public class UnilinkManager {
     }
 
     /**
+     * 设置连接监听器
+     * @param connectListener
+     */
+    public void setConnectListener(ConnectListener connectListener) {
+        mUnilink.setConnectListener(connectListener);
+    }
+
+    /**
      * 搜索云锁设备
      *
      * @param scanListener 搜索结果监听器
@@ -639,8 +647,8 @@ public class UnilinkManager {
      * @param encryptKey 加密密钥
      * @param callback 操作回调接口
      */
-    public void writeTime(String mac, int encryptType, String encryptKey, final CallBack2<Void> callback) {
-        mUnilink.writeTime(mac, encryptType, encryptKey, callback);
+    public void writeTime(String mac, int encryptType, String encryptKey, long time, final CallBack2<Void> callback) {
+        mUnilink.writeTime(mac, encryptType, encryptKey, time, callback);
     }
 
     /**

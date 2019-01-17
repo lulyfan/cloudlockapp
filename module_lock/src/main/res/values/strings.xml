@@ -260,4 +260,5 @@
     <string name="checkConnect">请检查是否已连接锁设备并重试</string>
     <string name="retry">重试</string>
     <string name="lockTime">锁时间</string>
+    <string name="serviceErr">服务器开小差</string>
 </resources>
