@@ -312,9 +312,22 @@ public class BaseActivity extends AppCompatActivity {
         loadDialog.show();
     }
 
+    public void changeLoadText(String text) {
+        TextView textView = (TextView) loadDialog.findViewById(R.id.tip);
+        textView.setText("正在加载.. " + text + "%");
+
+        if (text == null || "".equals(text)) {
+            textView.setVisibility(View.GONE);
+        }
+    }
+
     public void startLoad() {
         //TODO 中文
         startLoad("请稍候...");
+    }
+
+    public void startProcess() {
+        startLoad("正在加载.. 5%");
     }
 
     public void endLoad() {

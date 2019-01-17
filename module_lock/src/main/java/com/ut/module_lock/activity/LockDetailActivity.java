@@ -74,8 +74,6 @@ public class LockDetailActivity extends BaseActivity {
         mLockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
         mLockKey.setKeyTypeStr(this.getResources().getStringArray(R.array.key_type));
         mLockKey.setElectricityStr();
-        //TODO 设置假数据
-        mLockKey.setType(0xA010);
         mDetailBinding.setLockKey(mLockKey);
         mLockDetailVM.setLockKey(mLockKey);
     }

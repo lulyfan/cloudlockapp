@@ -18,8 +18,10 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityDeviceKeyDetailBinding;
 import com.ut.module_lock.viewmodel.DeviceKeyDetailVM;
@@ -28,6 +30,7 @@ import com.ut.module_lock.viewmodel.DeviceKeyDetailVM;
 public class DeviceKeyDetailActivity extends BaseActivity {
     private ActivityDeviceKeyDetailBinding mBinding;
     private DeviceKey mDeviceKey = null;
+    private LockKey mLockKey = null;
 
     public static final int REQUEST_CODE_EDIT_NAME = 101;
     public static final int REQUEST_CODE_EDIT_PERMISSION = 102;
@@ -48,14 +51,26 @@ public class DeviceKeyDetailActivity extends BaseActivity {
 
     private void initVM() {
         mDeviceKeyDetailVM = ViewModelProviders.of(this).get(DeviceKeyDetailVM.class);
+        mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
+        mDeviceKeyDetailVM.setLockKey(mLockKey);
         mDeviceKeyDetailVM.getFreezeResult().observe(this, isSuccess -> {
-            boolean isFreezen = mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal();
             if (isSuccess) {
-                if (isFreezen) {
-                    mDeviceKey.setUnfreezeStatus();
-                } else {
-                    mDeviceKey.setKeyStatus(EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
-                }
+                initView();
+            }
+        });
+        mDeviceKeyDetailVM.getShowDialog().observe(this, isShow -> {
+            if (isShow) {
+                startLoad();
+            } else {
+                endLoad();
+            }
+        });
+        mDeviceKeyDetailVM.getShowTip().observe(this, msg -> {
+            CLToast.showAtBottom(DeviceKeyDetailActivity.this, msg);
+        });
+        mDeviceKeyDetailVM.getDeleteResult().observe(this, isSuccess -> {
+            if (isSuccess) {
+                finish();
             }
         });
     }
@@ -74,6 +89,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mDeviceKey = bundle.getParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+            mLockKey = bundle.getParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
         }
     }
 
@@ -91,6 +107,9 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                 mBinding.tvLockKeyTime.setText(String.valueOf(remainTime));
             }
         }
+        mBinding.btnDelete.setOnClickListener(v -> {
+            mDeviceKeyDetailVM.deleteKey(DeviceKeyDetailActivity.this);
+        });
         initPopupwindow();
     }
 
@@ -109,7 +128,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                     textView.setText(R.string.lock_freeze_key);
                 }
                 textView.setOnClickListener(v -> {
-                    mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen);
+                    mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen, DeviceKeyDetailActivity.this);
                     getPopupWindow().dismiss();
                 });
             }
@@ -146,7 +165,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
 
         public void onRecordClick(View view) {
-            
+
         }
 
 

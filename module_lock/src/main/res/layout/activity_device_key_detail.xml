@@ -158,7 +158,7 @@
         <!--</LinearLayout>-->
 
         <Button
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_delete"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

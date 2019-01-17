@@ -82,7 +82,7 @@
     <string name="lock_tip_setname_failed">修改锁名称失败</string>
     <string name="lock_tip_ble_not_support">蓝牙不支持</string>
 
-    <string name="lock_tip_ble_not_finded">未找到锁，请确认锁设备是否已激活</string>
+    <string name="lock_tip_ble_not_finded">请唤醒锁设备</string>
     <string name="lock_tip_ble_unlock_failed">开锁失败</string>
     <string name="lock_tip_ble_unlock_success">开锁成功</string>
 
@@ -235,4 +235,11 @@
 
     <string name="operate_success">操作成功</string>
     <string name="lock_device_key_operate_failed">操作失败，请检查蓝牙设置</string>
+
+    <string name="lock_device_key_connect_failed">连接失败</string>
+
+    <string name="lock_device_key_load_failed">加载失败</string>
+    <string name="lock_device_key_load_success">加载完成</string>
+
+    <string name="lock_device_key_record_description">使用%s开锁</string>
 </resources>

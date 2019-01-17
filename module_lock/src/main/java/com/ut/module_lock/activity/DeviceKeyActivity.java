@@ -19,7 +19,11 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
+import com.ut.commoncomponent.CLToast;
+import com.ut.database.entity.DeviceKey;
+import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -53,14 +57,28 @@ public class DeviceKeyActivity extends BaseActivity {
     private void initVM() {
         mDeviceKeyVM = ViewModelProviders.of(this).get(DeviceKeyVM.class);
         mDeviceKeyVM.setLockKey(mLockKey);
-        mDeviceKeyVM.getDevieKey();
         mDeviceKeyVM.getShowTip().observe(this, tip -> {
-
+            CLToast.showAtBottom(DeviceKeyActivity.this, tip);
+        });
+        mDeviceKeyVM.getProcessTick().observe(this, process -> {
+            UTLog.i("process:" + process);
+            if (process == -1) {
+                endLoad();
+            } else if (process == 0) {
+                startProcess();
+            } else if (process == 100) {
+                changeLoadText(String.valueOf(process));
+                endLoad();
+            } else {
+                changeLoadText(String.valueOf((process+1) * 5));
+            }
         });
     }
 
     private void initData() {
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
+        //Todo 测试数据
+        mLockKey.setMac("00:1B:35:13:95:63");
     }
 
     private void initView() {

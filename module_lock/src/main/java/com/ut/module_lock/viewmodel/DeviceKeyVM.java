@@ -7,15 +7,20 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
+import com.ut.base.BaseApplication;
+import com.ut.base.Utils.UTLog;
+import com.ut.database.dao.ORecordDao;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.Record;
 import com.ut.module_lock.R;
-import com.ut.module_lock.entity.AuthCountInfo;
 import com.ut.module_lock.utils.BleOperateManager;
 import com.ut.unilink.cloudLock.ScanDevice;
+import com.ut.unilink.cloudLock.protocol.data.AuthCountInfo;
 import com.ut.unilink.cloudLock.protocol.data.AuthInfo;
 import com.ut.unilink.cloudLock.protocol.data.GateLockKey;
 import com.ut.unilink.cloudLock.protocol.data.GateLockOperateRecord;
@@ -33,17 +38,31 @@ import java.util.concurrent.ScheduledExecutorService;
  * version: 1.0
  */
 public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.OperateCallback, BleOperateManager.OperateDeviceKeyCallback {
-    private ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
+
     private List<DeviceKey> mAllDeviceKey = new ArrayList<>();
     private List<DeviceKeyAuth> mAllDeviceKeyAuth = new ArrayList<>();
     private Observer<List<DeviceKey>> observer1 = null;
+
+    public LockKey getLockKey() {
+        return mLockKey;
+    }
+
     private LockKey mLockKey = null;
     public BleOperateManager mBleOperateManager = null;
+    private int processTickInt = 0;
 
-    public MutableLiveData<String> showTip = new MutableLiveData<>();
+    private List<Record> mRecordList = new ArrayList<>();
+
+    private MutableLiveData<String> showTip = new MutableLiveData<>();
+
+    private MutableLiveData<Integer> processTick = new MutableLiveData<>();
 
     public MutableLiveData<String> getShowTip() {
         return showTip;
+    }
+
+    public MutableLiveData<Integer> getProcessTick() {
+        return processTick;
     }
 
     public DeviceKeyVM(@NonNull Application application) {
@@ -62,83 +81,147 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     }
 
     public void connectAndGetData(int type, Activity activity) {
-        mBleOperateManager.scanDevice(type, activity);
+        if (mBleOperateManager.isConnected(mLockKey.getMac())) {
+            onConnectSuccess();
+        } else {
+            mBleOperateManager.scanDevice(type, activity);
+            UTLog.i("to scan");
+        }
     }
 
-    public void getDevieKey() {
-        //TODO 初始化假数据
-        DeviceKey deviceKey1 = new DeviceKey(0, 0, "", 0, 0, 0);
-        DeviceKey deviceKey2 = new DeviceKey(1, 1, "", 0, 1, 1);
-        DeviceKey deviceKey3 = new DeviceKey(2, 2, "", 1, 1, 0);
-        DeviceKey deviceKey4 = new DeviceKey(3, 3, "", 2, 0, 0);
-        DeviceKey deviceKey5 = new DeviceKey(4, 4, "", 2, 1, 1);
-        DeviceKey deviceKey6 = new DeviceKey(5, 5, "", 4, 0, 0);
-        DeviceKey deviceKey7 = new DeviceKey(6, 6, "", 4, 1, 1);
-        List<DeviceKey> deviceKeys = new ArrayList<>();
-        deviceKey1.setKeyStatus(EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
-        deviceKey2.setIsAuthKey(true);
-        deviceKey3.setIsAuthKey(true);
-        deviceKey5.setIsAuthKey(true);
-        deviceKey7.setIsAuthKey(true);
-        deviceKeys.add(deviceKey1);
-        deviceKeys.add(deviceKey2);
-        deviceKeys.add(deviceKey3);
-        deviceKeys.add(deviceKey4);
-        deviceKeys.add(deviceKey5);
-        deviceKeys.add(deviceKey6);
-        deviceKeys.add(deviceKey7);
-        mAllDeviceKey = deviceKeys;
-        for (DeviceKey key : mAllDeviceKey) {
-            key.initName(getApplication().getResources().getStringArray(R.array.deviceTypeName));
-            key.setLockId(Integer.valueOf(mLockKey.getId()));
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        DeviceKeyDaoImpl.get().getAll().removeObserver(observer1);
+        mBleOperateManager.disconnect(mLockKey.getMac());
+    }
+
+    @Override
+    public void onStartScan() {
+        UTLog.i("onStartScan");
+        processTickInt = 0;
+        processTick.postValue(processTickInt++);
+    }
+
+    @Override
+    public boolean checkScanResult(ScanDevice scanDevice) {
+        if (scanDevice.getAddress().equals(mLockKey.getMac())) return true;
+        return false;
+    }
+
+    @Override
+    public void onScanSuccess(ScanDevice scanDevice) {
+        processTick.postValue(processTickInt++);
+        mBleOperateManager.connect(scanDevice, mLockKey.getType(), mLockKey.getEncryptKey());
+    }
+
+    @Override
+    public void onScanFaile(int errorCode) {
+        processTick.postValue(-1);
+        showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+    }
+
+    @Override
+    public void onConnectSuccess() {
+        processTick.postValue(processTickInt++);
+        //todo 后台获取时间后进行对时
+        mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getType(), mLockKey.getEncryptKey());
+    }
+
+    @Override
+    public void onConnectFailed(int errorcode, String errorMsg) {
+        UTLog.i("i:" + errorcode + " msg:" + errorMsg);
+        processTick.postValue(-1);
+        showTip.postValue(getApplication().getString(R.string.lock_device_key_connect_failed));
+    }
+
+    @Override
+    public void onElectric(int elect) {
+
+    }
+
+    @Override
+    public void onWriteTimeSuccess() {
+        processTick.postValue(processTickInt++);
+        mBleOperateManager.readKeyInfo(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey());
+    }
+
+    @Override
+    public void onWriteTimeFailed(int code, String msg) {
+        UTLog.i("i:" + code + " msg:" + msg);
+        processTick.postValue(processTickInt++);
+        mBleOperateManager.readKeyInfo(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey());
+    }
+
+    @Override
+    public void onReadKeyInfoSuccess(List<GateLockKey> data) {
+        processTick.postValue(processTickInt++);
+
+        mAllDeviceKey.clear();
+        for (int i = 0; i < data.size(); i++) {
+            GateLockKey key = data.get(i);
+            DeviceKey deviceKey = new DeviceKey(i, key.getKeyId(),
+                    "", key.getKeyType(), key.getAttribute(), key.getInnerNum());
+            deviceKey.initName(getApplication().getResources().getStringArray(R.array.deviceTypeName));
+            deviceKey.setIsAuthKey(key.isAuthKey());
+            deviceKey.setLockId(Integer.valueOf(mLockKey.getId()));
+            if (key.isFreeze()) {
+                deviceKey.setKeyStatus(EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
+            }
+            mAllDeviceKey.add(deviceKey);
         }
         //从蓝牙获取信息后存入数据库
-        mExecutorService.execute(() -> DeviceKeyDaoImpl.get().insertDeviceKeys(deviceKeys));
-        //再从蓝牙获取授权信息
-        getDeviceKeyAuth();
+        mExecutorService.execute(() -> DeviceKeyDaoImpl.get().insertDeviceKeys(mAllDeviceKey));
+        //再获取授权信息
+        mBleOperateManager.queryAllAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey());
     }
 
-    private void getDeviceKeyAuth() {
-        //TODO 初始化假数据
-        DeviceKeyAuth deviceKeyAuth = new DeviceKeyAuth(0, 1, 10, "1,2,6", 1547111512289L, 1548111512289L, 5);
-        DeviceKeyAuth deviceKeyAuth1 = new DeviceKeyAuth(1, 2, 10, "1,2,6", 1547111512289L, 1548111512289L, 10);
-        DeviceKeyAuth deviceKeyAuth2 = new DeviceKeyAuth(2, 4, 10, "1,2,6", 1547111512289L, 1548111512289L, 5);
-        DeviceKeyAuth deviceKeyAuth4 = new DeviceKeyAuth(4, 6, 10, "1,2,6", 1547111512289L, 1547111512299L, 10);
-        List<DeviceKeyAuth> deviceKeyAuths = new ArrayList<>();
-        deviceKeyAuths.add(deviceKeyAuth);
-        deviceKeyAuths.add(deviceKeyAuth1);
-        deviceKeyAuths.add(deviceKeyAuth2);
-        deviceKeyAuths.add(deviceKeyAuth4);
+    @Override
+    public void onReadKeyInfoFailed(int code, String msg) {
+        UTLog.i("i:" + code + " msg:" + msg);
+        processTick.postValue(-1);
+        showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
+        mBleOperateManager.disconnect(mLockKey.getMac());
+    }
+
+    @Override
+    public void onQueryAllAuthSuccess(List<AuthInfo> data) {
+        processTick.postValue(processTickInt++);
+
         //从蓝牙获取信息后处理
-        mAllDeviceKeyAuth = deviceKeyAuths;
-//        mExecutorService.execute(() -> DeviceKeyAuthDaoImpl.get().insertDeviceKeyAuths(deviceKeyAuths));
+        mAllDeviceKeyAuth.clear();
+        for (int i = 0; i < data.size(); i++) {
+            AuthInfo authInfo = data.get(i);
+            DeviceKeyAuth deviceKeyAuth = new DeviceKeyAuth(authInfo.getAuthId(), authInfo.getKeyId(),
+                    authInfo.getOpenLockCount(), authInfo.getStartTime(), authInfo.getEndTime());
+            deviceKeyAuth.setTimeICtl(authInfo.getAuthDay());
+            mAllDeviceKeyAuth.add(deviceKeyAuth);
+        }
         //再从蓝牙获取授权次数信息
-        getDeviceKeyAuthCounts();
+        mBleOperateManager.readAuthCountInfo(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey());
     }
 
-    private void getDeviceKeyAuthCounts() {
-        //TODO 初始化假数据
-        AuthCountInfo authCountInfo = new AuthCountInfo(0, 10, 5);
-        AuthCountInfo authCountInfo1 = new AuthCountInfo(0, 10, 2);
-        AuthCountInfo authCountInfo2 = new AuthCountInfo(0, 10, 4);
-        AuthCountInfo authCountInfo3 = new AuthCountInfo(0, 10, 7);
-        List<AuthCountInfo> list = new ArrayList<>();
-        list.add(authCountInfo);
-        list.add(authCountInfo1);
-        list.add(authCountInfo2);
-        list.add(authCountInfo3);
+    @Override
+    public void onQueryAllAuthFailed(int code, String msg) {
+        UTLog.i("i:" + code + " msg:" + msg);
+        processTick.postValue(-1);
+        showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
+        mBleOperateManager.disconnect(mLockKey.getMac());
+    }
+
+    @Override
+    public void onReadAuthCountSuccess(List<AuthCountInfo> data) {
+        processTick.postValue(processTickInt++);
 
         //再从蓝牙获取授权次数信息
         for (DeviceKeyAuth auth : mAllDeviceKeyAuth) {
-            for (AuthCountInfo info : list) {
+            for (AuthCountInfo info : data) {
                 if (auth.getAuthId() == info.getAuthId()) {
                     auth.setOpenLockCnt(info.getAuthCount());
                     auth.setOpenLockCnt(info.getOpenLockCount());
                 }
             }
-        }
-
-        for (DeviceKeyAuth auth : mAllDeviceKeyAuth) {
             DeviceKey key = getKeyByKeyId(auth.getKeyID());
             if (key != null) {
                 key.setDeviceKeyAuthData(auth);
@@ -147,7 +230,58 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         //从蓝牙获取信息后存入数据库
         mExecutorService.execute(() -> {
             DeviceKeyDaoImpl.get().insertDeviceKeys(mAllDeviceKey);
+            //todo 提交数据到后台
         });
+        mRecordIndex = 0;
+        mRecordList.clear();
+        toGetLockRecord();
+    }
+
+    @Override
+    public void onReadAuthCountFailed(int code, String msg) {
+        processTick.postValue(-1);
+        showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
+        mBleOperateManager.disconnect(mLockKey.getMac());
+        UTLog.i("i:" + code + " msg:" + msg);
+    }
+
+    @Override
+    public void onReadRecordSuccess(List<GateLockOperateRecord> data) {
+        processTick.postValue(processTickInt++);
+        for (GateLockOperateRecord record : data) {
+            DeviceKey deviceKey = getKeyByKeyId(record.getKeyId());
+            if (deviceKey == null) return;
+            Record record1 = new Record();
+            record1.setCreateTime(record.getOperateTime());
+            record1.setUserId(BaseApplication.getUser().getId());
+            record1.setUserName(deviceKey.getName());
+            String description = String.format(getApplication().getString(R.string.lock_device_key_record_description),
+                    getApplication().getResources().getStringArray(R.array.deviceTypeName)[deviceKey.getKeyType()]);
+            record1.setDescription(description);
+            record1.setLockId(Integer.parseInt(mLockKey.getId()));
+            record1.setKeyId(0 - mLockKey.getKeyId());
+            record1.setType(mLockKey.getType() + 2);
+            mRecordList.add(record1);
+        }
+        if (mRecordIndex < 6) {//加载25条
+            toGetLockRecord();
+        } else {
+            endReadRecord();
+        }
+
+
+    }
+
+    private void endReadRecord() {
+        processTick.postValue(100);//加载结束
+        showTip.postValue(getApplication().getString(R.string.lock_device_key_load_success));
+        //TODO 发送到后台
+    }
+
+    private int mRecordIndex = 1;
+
+    private void toGetLockRecord() {
+        mBleOperateManager.readOpenRecord(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mRecordIndex);
     }
 
     private DeviceKey getKeyByKeyId(int id) {
@@ -159,91 +293,16 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         return null;
     }
 
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mExecutorService.shutdown();
-        DeviceKeyDaoImpl.get().getAll().removeObserver(observer1);
-    }
-
-    @Override
-    public boolean checkScanResult(ScanDevice scanDevice) {
-        return false;
-    }
-
-    @Override
-    public void onScanSuccess() {
-
-    }
-
-    @Override
-    public void onScanFaile(int errorCode) {
-
-    }
-
-    @Override
-    public void onConnectSuccess() {
-
-    }
-
-    @Override
-    public void onConnectFailed(int errorcode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onElectric(int elect) {
-
-    }
-
-    @Override
-    public void onWriteTimeSuccess() {
-
-    }
-
-    @Override
-    public void onWriteTimeFailed(int code, String msg) {
-
-    }
-
-    @Override
-    public void onReadKeyInfoSuccess(List<GateLockKey> data) {
-
-    }
-
-    @Override
-    public void onReadKeyInfoFailed(int code, String msg) {
-
-    }
-
-    @Override
-    public void onQueryAllAuthSuccess(List<AuthInfo> data) {
-
-    }
-
-    @Override
-    public void onQueryAllAuthFailed(int code, String msg) {
-
-    }
-
-    @Override
-    public void onReadAuthCountSuccess(List<com.ut.unilink.cloudLock.protocol.data.AuthCountInfo> data) {
-
-    }
-
-    @Override
-    public void onReadAuthCountFailed(int code, String msg) {
-
-    }
-
-    @Override
-    public void onReadRecordSuccess(List<GateLockOperateRecord> data) {
-
-    }
-
     @Override
     public void onReadRecordFailed(int errorcode, String errorMsg) {
+        UTLog.i("i:" + errorcode + " msg:" + errorMsg);
+        if (errorcode == -4) {
+            endReadRecord();
+        } else {
+            processTick.postValue(-1);
+            showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
+        }
 
+        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "52c7f238bc1d268d71bed9450efe76d6",
+    "identityHash": "f85e1d86f1795dbae96c36b61570478b",
     "entities": [
       {
         "tableName": "lock_key",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `status` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `modelNum` INTEGER NOT NULL, `groupId` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `ruleType` INTEGER NOT NULL, `electric` INTEGER NOT NULL, `type` INTEGER NOT NULL, `mac` TEXT, `blueKey` TEXT, `latitude` TEXT, `adminPwd` TEXT, `createTime` INTEGER NOT NULL, `lockVersion` TEXT, `initTime` INTEGER NOT NULL, `longitude` TEXT, `encryptType` INTEGER NOT NULL, `encryptKey` TEXT, `keyId` INTEGER NOT NULL, `canOpen` INTEGER NOT NULL, `startTime` TEXT, `endTime` TEXT, `startTimeRange` TEXT, `endTimeRange` TEXT, `weeks` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `status` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `modelNum` TEXT, `groupId` INTEGER NOT NULL, `userType` INTEGER NOT NULL, `ruleType` INTEGER NOT NULL, `electric` INTEGER NOT NULL, `type` INTEGER NOT NULL, `mac` TEXT, `blueKey` TEXT, `latitude` TEXT, `adminPwd` TEXT, `createTime` INTEGER NOT NULL, `lockVersion` TEXT, `initTime` INTEGER NOT NULL, `longitude` TEXT, `encryptType` INTEGER NOT NULL, `encryptKey` TEXT, `keyId` INTEGER NOT NULL, `canOpen` INTEGER NOT NULL, `startTime` TEXT, `endTime` TEXT, `startTimeRange` TEXT, `endTimeRange` TEXT, `weeks` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -35,8 +35,8 @@
           {
             "fieldPath": "modelNum",
             "columnName": "modelNum",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "groupId",
@@ -1086,7 +1086,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"52c7f238bc1d268d71bed9450efe76d6\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f85e1d86f1795dbae96c36b61570478b\")"
     ]
   }
 }

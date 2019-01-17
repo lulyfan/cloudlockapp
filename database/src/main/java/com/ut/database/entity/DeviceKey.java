@@ -231,7 +231,7 @@ public class DeviceKey implements Parcelable {
         return DeviceKeyUtil.getWeekAuthData(this.timeICtl);
     }
 
-    public void setWeekAuthData(Boolean[] weekAuthData){
+    public void setWeekAuthData(Boolean[] weekAuthData) {
         this.timeICtl = DeviceKeyUtil.getTimeCtrlByWeekAuthData(weekAuthData);
     }
 

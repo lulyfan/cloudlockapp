@@ -26,14 +26,12 @@ public class DeviceKeyAuth implements Parcelable {
     public DeviceKeyAuth() {
     }
 
-    public DeviceKeyAuth(int authId, int keyID, int openLockCnt, String timeICtl, long timeStart, long timeEnd, int openLockCntUsed) {
+    public DeviceKeyAuth(int authId, int keyID, int openLockCnt, long timeStart, long timeEnd) {
         this.authId = authId;
         this.keyID = keyID;
         this.openLockCnt = openLockCnt;
-        this.timeICtl = timeICtl;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
-        this.openLockCntUsed = openLockCntUsed;
     }
 
     public int getAuthId() {

@@ -91,4 +91,6 @@ public class EnumCollection {
         TIMELIMIT,//限时
         CYCLE//循环
     }
+
+
 }

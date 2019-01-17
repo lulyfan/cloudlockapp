@@ -5,6 +5,9 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -14,8 +17,18 @@ import io.reactivex.disposables.CompositeDisposable;
  * version: 1.0
  */
 public class BaseViewModel extends AndroidViewModel {
+    protected ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<String> showTip = new MutableLiveData<>();
+    private MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
+
+    public MutableLiveData<String> getShowTip() {
+        return showTip;
+    }
+
+    public MutableLiveData<Boolean> getShowDialog() {
+        return showDialog;
+    }
 
     public BaseViewModel(@NonNull Application application) {
         super(application);
@@ -25,5 +38,6 @@ public class BaseViewModel extends AndroidViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
+        mExecutorService.shutdown();
     }
 }

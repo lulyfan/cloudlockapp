@@ -67,6 +67,7 @@ public class DeviceKeyListFragment extends BaseFragment {
             DeviceKey deviceKey = (DeviceKey) parent.getAdapter().getItem(position);
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, deviceKey)
+                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mDeviceKeyVM.getLockKey())
                     .navigation();
         });
     }
@@ -106,9 +107,12 @@ public class DeviceKeyListFragment extends BaseFragment {
                     keyStatus.setText(getResources().getStringArray(R.array.device_key_status)[item.getKeyStatus()]);
                 }
             };
+            View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty_data, null);
+            emptyView.findViewById(R.id.tv_connectLock).setOnClickListener(v -> {
+                mDeviceKeyVM.connectAndGetData(mDeviceKeyVM.getLockKey().getType(), getActivity());
+            });
+            mFragmentDeviceKeyBinding.lvDeviceKey.setEmptyView(emptyView);
             mFragmentDeviceKeyBinding.lvDeviceKey.setAdapter(mDeviceKeyCommonAdapter);
-            View EmptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty_data, null);
-            mFragmentDeviceKeyBinding.lvDeviceKey.setEmptyView(EmptyView);
         } else {
             mDeviceKeyCommonAdapter.notifyData(deviceKeys);
         }

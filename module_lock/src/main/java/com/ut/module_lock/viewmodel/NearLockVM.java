@@ -115,23 +115,23 @@ public class NearLockVM extends AndroidViewModel {
         operating.postValue(false);
         hasConnected = false;
         UnilinkManager.getInstance(getApplication()).stopScan();
-//        UnilinkManager.getInstance(getApplication()).connect(lock.getMac(), new ConnectListener() {
-//            @Override
-//            public void onConnect() {
-//                hasConnected = true;
-//                Schedulers.io().scheduleDirect(() -> {
-//                    actBind(lock);
-//                }, 100, TimeUnit.MILLISECONDS);
-//            }
-//
-//            @Override
-//            public void onDisconnect(int i, String s) {
-//                if (!hasConnected) {
-//                    errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
-//                }
-//                UTLog.i("ble has been disconnected");
-//            }
-//        });
+        UnilinkManager.getInstance(getApplication()).connect(mStringScanDeviceMap.get(lock.getMac()), new ConnectListener() {
+            @Override
+            public void onConnect() {
+                hasConnected = true;
+                Schedulers.io().scheduleDirect(() -> {
+                    actBind(lock);
+                }, 100, TimeUnit.MILLISECONDS);
+            }
+
+            @Override
+            public void onDisconnect(int i, String s) {
+                if (!hasConnected) {
+                    errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                }
+                UTLog.i("ble has been disconnected");
+            }
+        });
 
     }
 

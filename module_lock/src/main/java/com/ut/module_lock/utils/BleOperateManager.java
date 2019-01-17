@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import com.ut.base.Utils.UTLog;
-import com.ut.commoncomponent.CLToast;
-import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack2;
-import com.ut.unilink.cloudLock.CloudLock;
 import com.ut.unilink.cloudLock.ConnectListener;
 import com.ut.unilink.cloudLock.LockStateListener;
 import com.ut.unilink.cloudLock.ScanDevice;
@@ -22,7 +19,6 @@ import com.ut.unilink.cloudLock.protocol.data.GateLockOperateRecord;
 import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * author : zhouyubin
@@ -40,8 +36,16 @@ public class BleOperateManager {
     public static final int ERROR_SCANNOTSUPPORT = -102;
     private OperateCallback mOperateCallback = null;
 
+    private boolean canScan = true;
+
     private OperateDeviceKeyCallback mOperateDeviceKeyCallback = null;
     private int lockType = -1;
+
+    public void setOperateDeviceKeyDetailCallback(OperateDeviceKeyDetailCallback operateDeviceKeyDetailCallback) {
+        mOperateDeviceKeyDetailCallback = operateDeviceKeyDetailCallback;
+    }
+
+    private OperateDeviceKeyDetailCallback mOperateDeviceKeyDetailCallback = null;
 
 
     public void setOperateCallback(OperateCallback operateCallback) {
@@ -62,7 +66,12 @@ public class BleOperateManager {
         return UnilinkManager.getInstance(mContext).isConnect(mac);
     }
 
+    public void disconnect(String mac) {
+        UnilinkManager.getInstance(mContext).disconnect(mac);
+    }
+
     public void scanDevice(int type, Activity activity) {
+        UTLog.i("to scan 0");
         this.lockType = type;
         int scanResult = toScanDevice(type);
         switch (scanResult) {
@@ -78,23 +87,28 @@ public class BleOperateManager {
                 UnilinkManager.getInstance(mContext).enableBluetooth(activity, BLEENABLECODE);
                 break;
             case UnilinkManager.SCAN_SUCCESS:
+                UTLog.i("to scan 2");
                 if (mOperateCallback != null) {
-                    mOperateCallback.onScanFaile(ERROR_SCANNOTSUPPORT);
+                    mOperateCallback.onStartScan();
                 }
                 break;
         }
     }
 
     private int toScanDevice(int type) {
+        UTLog.i("to scan 1");
         if (type == -1) return ERROR_SCANTIMEOUT;
+        canScan = true;
         return UnilinkManager.getInstance(mContext).scan(new ScanListener() {
             @Override
             public void onScan(ScanDevice scanDevice, List<ScanDevice> list) {
+                if (!canScan) return;
                 if (mOperateCallback != null
                         && mOperateCallback.checkScanResult(scanDevice)) {
+                    canScan = false;
                     UnilinkManager.getInstance(mContext).stopScan();
                     if (mOperateCallback != null) {
-                        mOperateCallback.onScanSuccess();
+                        mOperateCallback.onScanSuccess(scanDevice);
                     }
                 }
             }
@@ -109,7 +123,7 @@ public class BleOperateManager {
     }
 
 
-    private void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {
+    public void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {
         isConnectSuccessed = false;
         UnilinkManager.getInstance(mContext).connect(scanDevice, enctyptType, enctyptKey,
                 new ConnectListener() {
@@ -224,6 +238,41 @@ public class BleOperateManager {
         });
     }
 
+    public void deleteDeviceKey(String mac, int encryptType, String encryptKey, int keyId) {
+        UnilinkManager.getInstance(mContext).deleteKey(mac, encryptType, encryptKey, keyId, new CallBack2<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                if (mOperateDeviceKeyDetailCallback != null) {
+                    mOperateDeviceKeyDetailCallback.onDeleteSuccess();
+                }
+            }
+
+            @Override
+            public void onFailed(int errCode, String errMsg) {
+                if (mOperateDeviceKeyDetailCallback != null) {
+                    mOperateDeviceKeyDetailCallback.onDeleteFailed(errCode, errMsg);
+                }
+            }
+        });
+    }
+
+    public void writeDeviceKey(String mac, int encryptType, String encryptKey, List<GateLockKey> gateLockKeys) {
+        UnilinkManager.getInstance(mContext).writeKeyInfos(mac, encryptType, encryptKey, gateLockKeys, new CallBack2<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                if (mOperateDeviceKeyDetailCallback != null) {
+                    mOperateDeviceKeyDetailCallback.onWriteDeviceKeySuccess();
+                }
+            }
+
+            @Override
+            public void onFailed(int errCode, String errMsg) {
+                if (mOperateDeviceKeyDetailCallback != null) {
+                    mOperateDeviceKeyDetailCallback.onWriteDeviceKeyFailed(errCode, errMsg);
+                }
+            }
+        });
+    }
 
     private LockStateListener mLockStateListener = new LockStateListener() {
         @Override
@@ -239,6 +288,7 @@ public class BleOperateManager {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE) {
                 scanDevice(lockType, activity);
+                UTLog.i("to scan");
             }
         }
     }
@@ -247,15 +297,18 @@ public class BleOperateManager {
                                            String[] permissions, int[] paramArrayOfInt) {
         if (requestCode == BLEREAUESTCODE) {
             scanDevice(lockType, activity);
+            UTLog.i("to scan");
         }
     }
 
 
     public interface OperateCallback {
+        void onStartScan();
+
         //检查是否是需要的结果
         boolean checkScanResult(ScanDevice scanDevice);
 
-        void onScanSuccess();
+        void onScanSuccess(ScanDevice scanDevice);
 
         void onScanFaile(int errorCode);
 
@@ -287,5 +340,15 @@ public class BleOperateManager {
         void onReadRecordSuccess(List<GateLockOperateRecord> data);
 
         void onReadRecordFailed(int errorcode, String errorMsg);
+    }
+
+    public interface OperateDeviceKeyDetailCallback {
+        void onDeleteSuccess();
+
+        void onDeleteFailed(int errorcode, String errorMsg);
+
+        void onWriteDeviceKeySuccess();
+
+        void onWriteDeviceKeyFailed(int errCode, String errMsg);
     }
 }

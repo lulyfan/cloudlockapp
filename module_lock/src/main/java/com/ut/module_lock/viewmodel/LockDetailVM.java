@@ -16,11 +16,13 @@ import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
+import com.ut.unilink.cloudLock.CallBack2;
 import com.ut.unilink.cloudLock.CloudLock;
 import com.ut.unilink.cloudLock.ConnectListener;
 import com.ut.unilink.cloudLock.LockStateListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
+import com.ut.unilink.cloudLock.Unilink;
 import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import java.util.List;
@@ -206,21 +208,54 @@ public class LockDetailVM extends AndroidViewModel {
     }
 
     private void toActOpenLock(CloudLock cloudLock) {
+        if (mLockKey.getType() == EnumCollection.LockType.SMARTLOCK.getType()) {
+            UnilinkManager.getInstance(getApplication()).openGateLock(mLockKey.getMac(),
+                    mLockKey.getEncryptType(), mLockKey.getEncryptKey(), cloudLock.getOpenLockPassword(), new CallBack2<Void>() {
+                        @Override
+                        public void onSuccess(Void data) {
+                            unlockSuccess.postValue(true);
+                            toAddLog(1);
+                        }
 
-        UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
-            @Override
-            public void onSuccess(CloudLock cloudLock) {
-                unlockSuccess.postValue(true);
-                toAddLog(1);
-            }
+                        @Override
+                        public void onFailed(int errCode, String errMsg) {
+                            UTLog.i("onOpen Fail:" + errCode + " s:" + errMsg);
+                            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                            toAddLog(2);
+                        }
+                    });
+        } else {
+            UnilinkManager.getInstance(getApplication()).openCloudLock(mLockKey.getMac(),
+                    mLockKey.getEncryptType(), mLockKey.getEncryptKey(), cloudLock.getOpenLockPassword(), new CallBack2<Void>() {
+                        @Override
+                        public void onSuccess(Void data) {
+                            unlockSuccess.postValue(true);
+                            toAddLog(1);
+                        }
 
-            @Override
-            public void onFailed(int i, String s) {
-                UTLog.i("onOpen Fail:" + i + " s:" + s);
-                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
-                toAddLog(2);
-            }
-        });
+                        @Override
+                        public void onFailed(int errCode, String errMsg) {
+                            UTLog.i("onOpen Fail:" + errCode + " s:" + errMsg);
+                            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+                            toAddLog(2);
+                        }
+                    });
+        }
+
+//        UnilinkManager.getInstance(getApplication()).openLock(cloudLock, new CallBack() {
+//            @Override
+//            public void onSuccess(CloudLock cloudLock) {
+//                unlockSuccess.postValue(true);
+//                toAddLog(1);
+//            }
+//
+//            @Override
+//            public void onFailed(int i, String s) {
+//                UTLog.i("onOpen Fail:" + i + " s:" + s);
+//                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
+//                toAddLog(2);
+//            }
+//        });
     }
 
     private void toAddLog(int type) {

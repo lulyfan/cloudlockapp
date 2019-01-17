@@ -44,7 +44,7 @@ public class LockKey implements Parcelable {
      */
     private int keyStatus;
     //产品型号
-    private int modelNum;
+    private String modelNum;
     //锁组id
     private int groupId;
     /**
@@ -134,11 +134,11 @@ public class LockKey implements Parcelable {
         this.status = status;
     }
 
-    public int getModelNum() {
+    public String getModelNum() {
         return modelNum;
     }
 
-    public void setModelNum(int modelNum) {
+    public void setModelNum(String modelNum) {
         this.modelNum = modelNum;
     }
 
@@ -370,7 +370,7 @@ public class LockKey implements Parcelable {
         dest.writeString(this.name);
         dest.writeInt(this.status);
         dest.writeInt(this.keyStatus);
-        dest.writeInt(this.modelNum);
+        dest.writeString(this.modelNum);
         dest.writeInt(this.groupId);
         dest.writeInt(this.userType);
         dest.writeInt(this.ruleType);
@@ -406,7 +406,7 @@ public class LockKey implements Parcelable {
         this.name = in.readString();
         this.status = in.readInt();
         this.keyStatus = in.readInt();
-        this.modelNum = in.readInt();
+        this.modelNum = in.readString();
         this.groupId = in.readInt();
         this.userType = in.readInt();
         this.ruleType = in.readInt();

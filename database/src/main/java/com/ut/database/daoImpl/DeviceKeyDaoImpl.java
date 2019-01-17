@@ -52,6 +52,11 @@ public class DeviceKeyDaoImpl implements DeviceKeyDao {
         mDeviceKeyDao.deleteAll();
     }
 
+    @Override
+    public void delete(DeviceKey... deviceKeys) {
+        mDeviceKeyDao.delete(deviceKeys);
+    }
+
     private static final class Holder {
         static final DeviceKeyDaoImpl instance = new DeviceKeyDaoImpl();
     }
