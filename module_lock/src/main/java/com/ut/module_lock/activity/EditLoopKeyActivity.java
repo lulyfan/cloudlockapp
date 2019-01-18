@@ -33,6 +33,8 @@ public class EditLoopKeyActivity extends BaseActivity {
     private ActivityEditLoopBinding mBinding;
     private Key mKey;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7;
+    private int mY, mM, mD;
+    private int sY, sM, sD, eY, eM, eD;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,10 +60,14 @@ public class EditLoopKeyActivity extends BaseActivity {
         mBinding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalid_time)));
 
         mBinding.startDate.setOnClickListener(v -> {
+            mY = sY;
+            mM = sM;
+            mD = sD;
             chooseDate(v, getString(R.string.lock_start_date));
         });
 
         mBinding.endDate.setOnClickListener(v -> {
+            handleEnDate();
             chooseDate(v, getString(R.string.lock_end_state));
         });
 
@@ -92,10 +98,25 @@ public class EditLoopKeyActivity extends BaseActivity {
         }
     }
 
+    private void handleEnDate() {
+        if (sY > 0) {
+            mY = sY;
+            mM = sM;
+            mD = sD;
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(mY, mM, mD);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            mY = calendar.get(Calendar.YEAR);
+            mM = calendar.get(Calendar.MONTH);
+            mD = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+    }
+
     private void chooseTime(View v, String title) {
         DialogUtil.chooseTime(v.getContext(), title, (hour, minute) -> {
             String dateTime = String.format(Locale.getDefault(), "%02d", hour) + ":"
-                    + String.format(Locale.getDefault(), "%02d", minute);
+                    + String.format(Locale.getDefault(), "%02d", minute) + ":"
+                    + String.format(Locale.getDefault(), "%02d", 0);
             if (getString(R.string.valid_time).equals(title)) {
                 mKey.setStartTimeRange(dateTime);
             } else {
@@ -138,7 +159,7 @@ public class EditLoopKeyActivity extends BaseActivity {
 
     private void chooseDate(View v, String title) {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
-            String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month - 1, day);
@@ -146,15 +167,23 @@ public class EditLoopKeyActivity extends BaseActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
+
+                sY = year;
+                sM = month - 1;
+                sD = day;
                 mKey.setStartTime(sdf.format(new Date(calendar.getTimeInMillis())));
             } else {
                 calendar.set(Calendar.HOUR_OF_DAY, 23);
                 calendar.set(Calendar.MINUTE, 59);
                 calendar.set(Calendar.SECOND, 59);
                 mKey.setEndTime(sdf.format(new Date(calendar.getTimeInMillis())));
+
+                eY = year;
+                eM = month - 1;
+                eD = day;
             }
             mBinding.setKeyItem(mKey);
-        });
+        }, mY != mM, mY, mM, mD);
     }
 
 

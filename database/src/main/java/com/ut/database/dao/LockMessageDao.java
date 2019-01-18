@@ -23,7 +23,7 @@ public interface LockMessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<LockMessage> lockMessages);
 
-    @Query("select * from LockMessage order by id desc")
+    @Query("select * from LockMessage order by createTime desc")
     LiveData<List<LockMessage>> lockMessages();
 
     @Query("select * from LockMessage where id = :id ")

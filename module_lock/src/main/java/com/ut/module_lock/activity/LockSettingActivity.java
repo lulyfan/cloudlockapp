@@ -141,7 +141,7 @@ public class LockSettingActivity extends BaseActivity {
                 .map(id -> {
                     LockGroup lockGroup = LockGroupDaoImpl.get().getLockGroupById(id);
                     if (lockGroup == null) {
-                        return "";
+                        return getString(R.string.lock_all_groups);
                     } else {
                         return lockGroup.getName();
                     }

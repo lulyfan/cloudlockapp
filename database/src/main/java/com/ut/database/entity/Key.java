@@ -206,7 +206,7 @@ public class Key implements Serializable, Cloneable {
     }
 
     public boolean isFrozened() {
-        return status == 9;
+        return status == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || status == EnumCollection.KeyStatus.FREEZING.ordinal() ;
     }
 
 

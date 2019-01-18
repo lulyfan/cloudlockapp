@@ -12,11 +12,13 @@ import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.utils.NetWorkUtil;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.commoncomponent.CLToast;
 import com.ut.commoncomponent.LoadingButton;
 import com.ut.commoncomponent.ZpPhoneEditText;
 import com.ut.module_login.R;
@@ -71,6 +73,14 @@ public class LoginActivity extends BaseActivity {
         initLoginUI();
         subscribeEvent();
         loginVm = ViewModelProviders.of(this).get(LoginVm.class);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!NetWorkUtil.isNetworkAvailable(getBaseContext())) {
+            CLToast.showAtCenter(getBaseContext(), "当前网络不可用， 请连接网络");
+        }
     }
 
     private void initLoginUI() {

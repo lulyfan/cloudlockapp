@@ -14,28 +14,35 @@ import android.widget.Toast;
  * desc   : 云锁使用的Toast
  */
 public class CLToast {
+    private static Toast sToast;
     public static void showAtCenter(Context context, String message) {
         if (TextUtils.isEmpty(message)) {
             return;
         }
-        Toast toast = new Toast(context);
+        if(sToast != null) {
+            sToast.cancel();
+        }
+        sToast = new Toast(context);
         ViewGroup contentView = (ViewGroup) View.inflate(context, R.layout.toast_view, null);
         TextView messageTv = contentView.findViewById(R.id.message);
         messageTv.setText(message);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.setView(contentView);
-        toast.show();
+        sToast.setGravity(Gravity.CENTER, 0, 0);
+        sToast.setView(contentView);
+        sToast.show();
     }
 
     public static void showAtBottom(Context context, String message) {
         if (TextUtils.isEmpty(message)) {
             return;
         }
-        Toast toast = new Toast(context);
+        if(sToast != null) {
+            sToast.cancel();
+        }
+        sToast = new Toast(context);
         ViewGroup contentView = (ViewGroup) View.inflate(context, R.layout.toast_view, null);
         TextView messageTv = contentView.findViewById(R.id.message);
         messageTv.setText(message);
-        toast.setView(contentView);
-        toast.show();
+        sToast.setView(contentView);
+        sToast.show();
     }
 }

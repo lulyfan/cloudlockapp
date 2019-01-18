@@ -17,6 +17,7 @@ import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
+import com.ut.module_login.ui.RegisterActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -83,6 +84,10 @@ public class LoginVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
+                        if(currentActivity instanceof RegisterActivity) {
+                            currentActivity.finish();
+                        }
                         login(phone, password);
                     }
                     CLToast.showAtCenter(getApplication(), result.msg);

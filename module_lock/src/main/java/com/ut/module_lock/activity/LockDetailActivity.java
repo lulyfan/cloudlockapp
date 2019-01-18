@@ -90,7 +90,7 @@ public class LockDetailActivity extends BaseActivity {
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
             endLoad();
-            toastShort(tip);
+            CLToast.showAtBottom(LockDetailActivity.this, tip);
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
             endLoad();

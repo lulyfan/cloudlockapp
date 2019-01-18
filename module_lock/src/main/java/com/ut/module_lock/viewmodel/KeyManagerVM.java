@@ -61,6 +61,7 @@ public class KeyManagerVM extends AndroidViewModel {
     }
 
     public LiveData<List<Key>> getKeys(String mac) {
+        this.mac = mac;
         return keyDao.findKeysByMac(mac);
     }
 
@@ -105,12 +106,19 @@ public class KeyManagerVM extends AndroidViewModel {
                     if (result.isSuccess()) {
                         if (!result.data.isEmpty()) {
                             currentPage++;
-                            saveKeys(result.data);
                         }
+                        clearAndSaveKey(result.data);
                     } else {
                         CLToast.showAtBottom(getApplication(), result.msg);
                     }
                 }, new ErrorHandler());
+    }
+
+    private void clearAndSaveKey(List<Key> keys) {
+        Schedulers.io().scheduleDirect(() -> {
+            keyDao.deleteAllByMac(getMac());
+            keyDao.insertKeys(keys);
+        });
     }
 
 
@@ -264,7 +272,7 @@ public class KeyManagerVM extends AndroidViewModel {
         return keyDao.getKeyById(id);
     }
 
-    public int getCurrentPage(){
+    public int getCurrentPage() {
         return currentPage;
     }
 }

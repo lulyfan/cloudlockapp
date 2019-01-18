@@ -101,8 +101,7 @@ public class EditNameActivity extends BaseActivity {
         String name = nameEdt.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            //TODO 中文
-            CLToast.showAtBottom(this, "名称不能为空");
+            CLToast.showAtBottom(this, getString(R.string.lock_name_not_allow_null));
             return;
         }
 

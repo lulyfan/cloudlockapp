@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.operation.MyRetrofit;
@@ -56,6 +58,7 @@ public class ApplyKeyActivity extends BaseActivity {
 
     private void initData() {
         NearScanLock nearScanLock = getIntent().getParcelableExtra(EXTRA_KEY_DATA);
+        name = nearScanLock.getName();
         mac = nearScanLock.getMac();
     }
 
@@ -72,7 +75,12 @@ public class ApplyKeyActivity extends BaseActivity {
             }
         });
 
-        mBinding.tvKeyName.setText(mac);
+        mBinding.tvKeyName.setText(TextUtils.isEmpty(name) ? mac : name);
+        if (TextUtils.isEmpty(name)) {
+            mBinding.tvKeyName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_14sp));
+        }
+
+        mBinding.rbtnOnce.setChecked(true);
 
         mBinding.btnApplyKey.setOnClickListener(v -> {
             if (BaseApplication.getUser() == null) return;
@@ -85,7 +93,6 @@ public class ApplyKeyActivity extends BaseActivity {
                             finish();
                         }
                         CLToast.showAtCenter(getBaseContext(), result.msg);
-                        Log.d("applyKey", result.msg);
                     }, new ErrorHandler());
         });
     }

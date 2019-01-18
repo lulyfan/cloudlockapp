@@ -88,7 +88,7 @@ public class WebSocketHelper {
 
             if (isSendUserId) {
                 //每隔一秒发送一次userId,发送5次, 防止过早发送而没有收到推送，太晚发送又丢失某些推送
-                for (int delay=0, i=0; i<5; i++, delay+=1000) {
+                for (int delay = 0, i = 0; i < 5; i++, delay += 1000) {
                     executor.schedule(new Runnable() {
                         @Override
                         public void run() {
