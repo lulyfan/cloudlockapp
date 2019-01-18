@@ -16,6 +16,7 @@ import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLoopBinding;
 import com.ut.database.entity.Key;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +36,8 @@ public class EditLoopKeyActivity extends BaseActivity {
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7;
     private int mY, mM, mD;
     private int sY, sM, sD, eY, eM, eD;
+    private int mHour, mMin;
+    private int sHour, sMin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +59,29 @@ public class EditLoopKeyActivity extends BaseActivity {
         checkBox5 = mBinding.include5.findViewById(R.id.friday);
         checkBox6 = mBinding.include5.findViewById(R.id.saturday);
         checkBox7 = mBinding.include5.findViewById(R.id.sunday);
-        mBinding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.valid_time)));
-        mBinding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalid_time)));
+        mBinding.validTime.setOnClickListener(v -> {
+//
+//            Calendar calendar = Calendar.getInstance();
+//            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+//            mMin = calendar.get(Calendar.MINUTE);
+            mHour = sHour;
+            mMin = sMin;
+            chooseTime(v, getString(R.string.valid_time));
+
+        });
+        mBinding.invalidTime.setOnClickListener(v -> {
+            mHour = sHour;
+            mMin = sMin;
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, mHour);
+            calendar.set(Calendar.MINUTE, mMin);
+            calendar.add(Calendar.MINUTE, 15);
+
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMin = calendar.get(Calendar.MINUTE);
+            chooseTime(v, getString(R.string.invalid_time));
+        });
 
         mBinding.startDate.setOnClickListener(v -> {
             mY = sY;
@@ -96,6 +120,24 @@ public class EditLoopKeyActivity extends BaseActivity {
         if (weeks.contains("7")) {
             checkBox7.setChecked(true);
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+        try {
+            long validTime = sdf.parse(mKey.getStartTimeRange()).getTime();
+            long inValidTime = sdf.parse(mKey.getEndTimeRange()).getTime();
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTimeInMillis(validTime);
+            sHour = calendar.get(Calendar.HOUR_OF_DAY);
+            sMin  = calendar.get(Calendar.MINUTE);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void handleEnDate() {
@@ -119,11 +161,15 @@ public class EditLoopKeyActivity extends BaseActivity {
                     + String.format(Locale.getDefault(), "%02d", 0);
             if (getString(R.string.valid_time).equals(title)) {
                 mKey.setStartTimeRange(dateTime);
+
+                mHour = sHour = hour;
+                mMin = sMin = minute;
+
             } else {
                 mKey.setEndTimeRange(dateTime);
             }
             mBinding.setKeyItem(mKey);
-        });
+        }, true, mHour, mMin);
     }
 
     private void save() {
