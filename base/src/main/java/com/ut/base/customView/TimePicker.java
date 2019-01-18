@@ -73,6 +73,45 @@ public class TimePicker extends FrameLayout {
         });
     }
 
+    public void reset(int hour, int minute) {
+        List<String> hours = new ArrayList<>();
+        for (int i=0; i<24; i++) {
+            hours.add(String.format("%02d", i));
+        }
+        hourPicker.setData(hours);
+
+        List<String> minutes = new ArrayList<>();
+        for (int i=0; i<60; i++) {
+            minutes.add(String.format("%02d", i));
+        }
+        minutePicker.setData(minutes);
+
+        setTime(hour, minute);
+
+        hourPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelPicker picker, Object data, int position) {
+                selectedHour = Integer.parseInt((String) data);
+
+                if (timeSelectListener != null) {
+                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
+                }
+            }
+        });
+
+        minutePicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelPicker picker, Object data, int position) {
+                selectedMinute =  Integer.parseInt((String) data);
+
+                if (timeSelectListener != null) {
+                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
+
+                }
+            }
+        });
+    }
+
     public void setTime(int hour, int minute) {
 
         if (hour < 0 || hour > 23) {

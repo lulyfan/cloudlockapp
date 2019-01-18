@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.base.ErrorHandler;
 import com.ut.commoncomponent.CLToast;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,13 +34,13 @@ public class SafeVerifyVm extends AndroidViewModel {
                     if (result.isSuccess()) {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
-                });
+                }, new ErrorHandler());
     }
 
     public void verifyCode(String phone, String code, Consumer<Result<Void>> subscriber) {
         MyRetrofit.get().getCommonApiService().verifyPhoneCode(phone, code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(subscriber, new ErrorHandler());
     }
 }

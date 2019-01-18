@@ -1,7 +1,8 @@
 package com.ut.base;
 
+import android.annotation.SuppressLint;
+
 import com.example.entity.base.Result;
-import com.example.entity.base.Results;
 import com.example.operation.MyRetrofit;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
@@ -9,8 +10,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
-import com.ut.database.dao.KeyDao_Impl;
-import com.ut.database.dao.LockKeyDao;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.EnumCollection;
@@ -19,9 +18,7 @@ import com.ut.database.entity.LockKey;
 
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-
+@SuppressLint("CheckResult")
 public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListener {
 
     public static final int CODE_SEND_KEY_RECEIVER = 1010; //发送钥匙的接收端
@@ -41,6 +38,10 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     @Override
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
+
+        if("ok".equals(data.toLowerCase())) {
+            return;
+        }
 
         TypeToken<Result<JsonElement>> typeToken = new TypeToken<Result<JsonElement>>() {
         };
@@ -120,11 +121,12 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
 
             case CODE_UPDATE_LOCK:
                 updateLock();
+                updateMessage();
                 break;
 
             case CODE_UPDATE_KEY:
                 String mac = result.data.getAsString();
-                updateKey(BaseApplication.getUser().getId(), mac);
+                updateLockAndKey(BaseApplication.getUser().getId(),mac);
                 break;
 
             case CODE_UPDATE_LOCK_KEY:
@@ -176,11 +178,21 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
 
     private static void updateMessage() {
         MyRetrofit.get().getCommonApiService().getMessage()
-                .subscribeOn(Schedulers.io())
+                .doOnNext(stringResult -> {
+                    if (stringResult == null) {
+                        throw new NullPointerException();
+                    }
+
+                    if (!stringResult.isSuccess()) {
+                        throw new Exception(stringResult.msg);
+                    }
+                })
                 .subscribe(listResult -> {
                     if(listResult.isSuccess()) {
                         CloudLockDatabaseHolder.get().getLockMessageDao().insert(listResult.data);
                     }
+                },throwable -> {
+
                 });
     }
 

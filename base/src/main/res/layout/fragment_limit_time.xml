@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_60dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/bg_item_up"
                 android:gravity="center_vertical"
@@ -57,7 +57,7 @@
             <TextView
                 android:id="@+id/tv_validTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_60dp"
                 android:layout_marginEnd="@dimen/base_16dp"
                 android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
@@ -71,7 +71,7 @@
             <TextView
                 android:id="@+id/tv_invalidTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/base_60dp"
                 android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
                 android:gravity="center_vertical"

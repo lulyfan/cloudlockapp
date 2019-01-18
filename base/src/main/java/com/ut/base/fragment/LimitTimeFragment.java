@@ -21,6 +21,8 @@ import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.base.databinding.FragmentLimitTimeBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
 
+import java.util.Calendar;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -28,6 +30,10 @@ public class LimitTimeFragment extends BaseFragment {
 
     private FragmentLimitTimeBinding binding;
     private GrantPermisssionViewModel viewModel;
+
+    private int sYear, sMonth, sDay, sHour, sMinute;
+    private int eYear, eMonth, eDay, eHour, eMinute;
+    private int mYear, mMonth, mDay, mHour, mMinute;
 
     public LimitTimeFragment() {
         // Required empty public constructor
@@ -67,12 +73,23 @@ public class LimitTimeFragment extends BaseFragment {
             binding.tvInvalidTime.setText(limitEndTime);
             binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
         }
+
     }
 
     private void initUI() {
-        binding.tvValidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.validTime)));
+        binding.tvValidTime.setOnClickListener(v -> {
+            mYear = sYear;
+            mMonth = sMonth;
+            mDay = sDay;
+            mHour = sHour;
+            mMinute = sMinute;
+            chooseTime(v, getString(R.string.validTime));
+        });
 
-        binding.tvInvalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalidTime)));
+        binding.tvInvalidTime.setOnClickListener(v -> {
+            handleInvalidTime();
+            chooseTime(v, getString(R.string.invalidTime));
+        });
 
         binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
 
@@ -95,6 +112,23 @@ public class LimitTimeFragment extends BaseFragment {
         });
     }
 
+    private void handleInvalidTime() {
+         if (sYear > 0) {
+            mYear = sYear;
+            mMonth = sMonth;
+            mDay = sDay;
+            mHour = sHour;
+            mMinute = sMinute;
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(mYear, mMonth, mDay, mHour, mMinute);
+            calendar.add(Calendar.MINUTE, 15);
+            mYear = calendar.get(Calendar.YEAR);
+            mMonth = calendar.get(Calendar.MONTH);
+            mDay = calendar.get(Calendar.DAY_OF_MONTH);
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMinute = calendar.get(Calendar.MINUTE);
+        }
+    }
 
     private void chooseTime(View v, String title) {
         SystemUtils.hideKeyboard(getContext(), v);
@@ -108,15 +142,22 @@ public class LimitTimeFragment extends BaseFragment {
                 String startTime = textView.getText().toString().replace("/", "-").concat(":00");
                 viewModel.limitStartTime.setValue(startTime);
 
+                sYear = year;
+                sMonth = month - 1;
+                sDay = day;
+                sHour = hour;
+                sMinute = minute;
+
             } else if (getString(R.string.invalidTime).equals(title)) {
                 String endTime = textView.getText().toString().replace("/", "-").concat(":00");
                 viewModel.limitEndTime.setValue(endTime);
-            }
-        });
-    }
 
-    @Override
-    protected void onUserVisible() {
-        super.onUserVisible();
+                eYear = year;
+                eMonth = month - 1;
+                eDay = day;
+                eHour = hour;
+                eMinute = minute;
+            }
+        }, mYear != mMonth, mYear, mMonth, mDay, mHour, mMinute);
     }
 }
