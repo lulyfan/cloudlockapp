@@ -33,7 +33,9 @@ public class MyClass {
     }
 
     public static void main(String[] args) {
-        System.out.println(getDateString1(System.currentTimeMillis()));
+//        System.out.println(false == false);
+        int i = 2;
+        System.out.println(0 - i);
 
         String format = "%4d/%2d/%2d %2d:%2d";
         System.out.println(String.format(format, 2018, 02, 04, 01, 02));

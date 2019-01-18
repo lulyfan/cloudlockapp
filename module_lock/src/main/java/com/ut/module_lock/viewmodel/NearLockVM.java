@@ -167,7 +167,7 @@ public class NearLockVM extends AndroidViewModel {
             public void onFailed(int i, String s) {
                 UnilinkManager.getInstance(getApplication()).disconnect(lock.getMac());
                 errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
-                UTLog.i("ble init failed:" + s);
+                UTLog.i("ble initLockKey failed:" + s);
             }
         });
     }
@@ -183,7 +183,7 @@ public class NearLockVM extends AndroidViewModel {
 
             @Override
             public void onFailed(int i, String s) {
-                UTLog.i("ble confirm init failed");
+                UTLog.i("ble confirm initLockKey failed");
                 errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                 Disposable disposable = CommonApi.delAdminKey(cloudLock.getAddress())
                         .subscribe(voidResult -> {

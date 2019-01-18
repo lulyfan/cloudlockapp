@@ -34,6 +34,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     public BleOperateManager mBleOperateManager = null;
 
     private int mFirstDeviceAuthType = 0;
+    private boolean mFirstDeviceIsAuth = false;
     private LockKey mLockKey = null;
 
     public LiveData<Boolean> getSaveResult() {
@@ -56,6 +57,8 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
 
     public void setFirstDeviceAuthType(int firstDeviceAuthType) {
         mFirstDeviceAuthType = firstDeviceAuthType;
+        mFirstDeviceIsAuth = firstDeviceAuthType == EnumCollection.DeviceKeyAuthType.TIMELIMIT.ordinal() ||
+                firstDeviceAuthType == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal();
     }
 
 
@@ -81,21 +84,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     public void saveDeviceKey(Activity activity) {
         mGateLockKeys.clear();
         DeviceKey deviceKey = mDeviceKey.getValue();
-        if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.TIMELIMIT.ordinal()) {
-            if (deviceKey.getTimeStart() >= deviceKey.getTimeEnd()) {
-                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error1));
-                return;
-            }
-        } else if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal()) {
-            if (deviceKey.getTimeStart() >= deviceKey.getTimeEnd()) {
-                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error2));
-                return;
-            }
-            if (deviceKey.getTimeStart() % 86400000 >= deviceKey.getTimeEnd() % 86400000) {
-                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error3));
-                return;
-            }
-        }
+        if (checkData(deviceKey)) return;
         //TODO 调用蓝牙写入成功后上传后台
         GateLockKey gateLockKey = new GateLockKey();
         gateLockKey.setFreezeState(deviceKey.getKeyType() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
@@ -110,6 +99,25 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         } else {
             mBleOperateManager.scanDevice(mLockKey.getType(), activity);
         }
+    }
+
+    private boolean checkData(DeviceKey deviceKey) {
+        if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.TIMELIMIT.ordinal()) {
+            if (deviceKey.getTimeStart() >= deviceKey.getTimeEnd()) {
+                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error1));
+                return true;
+            }
+        } else if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal()) {
+            if (deviceKey.getTimeStart() >= deviceKey.getTimeEnd()) {
+                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error2));
+                return true;
+            }
+            if (deviceKey.getTimeStart() % 86400000 >= deviceKey.getTimeEnd() % 86400000) {
+                getShowTip().postValue(getApplication().getString(R.string.lock_device_key_tip_auth_error3));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -135,7 +143,22 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
 
     @Override
     public void onConnectSuccess() {
-        mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
+//        mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
+        if (mFirstDeviceAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()
+                && mDeviceKey.getValue().getKeyAuthType() == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
+            operateSuccess();
+        } else if (checkNeedWriteKey()) {
+            mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
+        } else {
+            onWriteDeviceKeySuccess();
+        }
+    }
+
+    private boolean checkNeedWriteKey() {
+        if (mFirstDeviceIsAuth == mDeviceKey.getValue().getIsAuthKey()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -191,7 +214,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
             authInfo.setKeyId(mDeviceKey.getValue().getKeyID());
             authInfo.setOpenLockCount(mDeviceKey.getValue().getOpenLockCnt());
             UTLog.i("====mm" + authInfo.toString());
-            if (mFirstDeviceAuthType != EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
+            if (mFirstDeviceAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
                 mBleOperateManager.addDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
             } else {
                 mBleOperateManager.updateDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
@@ -213,6 +236,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     }
 
     private void operateSuccess() {
+        mDeviceKey.getValue().setOpenLockCntUsed(0);
         UTLog.i("====mm" + mDeviceKey.getValue().toString());
         getShowDialog().postValue(false);
         getShowTip().postValue(getApplication().getString(R.string.operate_success));

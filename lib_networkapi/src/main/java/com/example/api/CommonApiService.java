@@ -3,6 +3,7 @@ package com.example.api;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
 import com.ut.database.entity.ApplyMessage;
+import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.Key;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.LockMessage;
@@ -21,7 +22,6 @@ import com.ut.database.entity.User;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -296,4 +296,16 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.updateKeyInfo)
     Observable<Result<Void>> updateKeyInfo(@Field("volist") String volist);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.getDeviceKeyListByType)
+    Observable<Results<DeviceKey>> getDeviceKeyListByType(@Field("type") int type, @Field("lockId") int lockId);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.initLockKey)
+    Observable<Result<Void>> initLockKey(@Field("lockId") int lockId, @Field("volist") String volist);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.insertInnerLockLog)
+    Observable<Result<Void>> insertInnerLockLog(@Field("volist") String volist);
 }
