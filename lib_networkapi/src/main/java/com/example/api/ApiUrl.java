@@ -191,5 +191,14 @@ public interface ApiUrl {
     String checkTime = "api/innerLock/checkTime?json";
 
     //更新钥匙数据
-    String updateKeyInfo = PREFIX + "innerLock/updateKeyInfo" + SUFFIX;
+    String updateKeyInfo = PREFIX + "/innerLock/updateKeyInfo" + SUFFIX;
+
+    //获取门锁钥匙信息
+    String getDeviceKeyListByType = PREFIX + "/innerLock/getListByType" + SUFFIX;
+
+    //初始化门锁钥匙信息
+    String initLockKey = PREFIX + "/innerLock/init" + SUFFIX;
+
+    //新增门锁日志
+    String insertInnerLockLog = PREFIX + "/innerLock/insertInnerLockLog" + SUFFIX;
 }

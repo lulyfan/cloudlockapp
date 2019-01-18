@@ -5,6 +5,7 @@ import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+import com.ut.unilink.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -74,7 +75,8 @@ public class UTLog {
 
     public static void i(String msg) {
         if (isDebug)
-            Logger.i(msg);
+//            Logger.i(msg);
+            Log.i(msg);
     }
 
     public static void i(String tag, String msg) {

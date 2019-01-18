@@ -28,10 +28,11 @@ public class ReadAuthCountInfo extends BleCmdBase<ReadAuthCountInfo.Data> {
         int count = buffer.get();
         Data data = new Data();
 
-        for (int i=0; i<count; i++) {
+        for (int i = 0; i < count; i++) {
             AuthCountInfo authCountInfo = new AuthCountInfo();
             authCountInfo.setAuthId(buffer.get());
-            authCountInfo.setAuthCount(buffer.get());
+            byte c = buffer.get();
+            authCountInfo.setAuthCount(c >= 0 ? c : c + 256);
             authCountInfo.setOpenLockCount(buffer.get());
             data.authCountInfos.add(authCountInfo);
         }

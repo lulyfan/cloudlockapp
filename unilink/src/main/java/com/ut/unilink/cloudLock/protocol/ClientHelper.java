@@ -150,6 +150,8 @@ public class ClientHelper implements ClientBase.ReceiveListener {
         while (iterator.hasNext()) {
             Map.Entry<Integer, SendedTask> entry = (Map.Entry<Integer, SendedTask>) iterator.next();
             SendedTask sendedTask = entry.getValue();
+            //todo 临时判断空
+            if (sendedTask.scheduledFuture == null) continue;
             sendedTask.scheduledFuture.cancel(true);
             sendedTask.scheduledFuture = null;
             sendedTask.responseListener.onNAk(sendedTask.sendmsg, ErrCode.ERR_CONNECT_INTERRUPT);

@@ -132,7 +132,7 @@ public class BleOperateManager {
                     mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
                 }
             }
-        }, 10);
+        }, 5);
     }
 
     public void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {

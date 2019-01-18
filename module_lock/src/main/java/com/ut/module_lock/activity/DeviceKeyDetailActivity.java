@@ -26,6 +26,7 @@ import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityDeviceKeyDetailBinding;
 import com.ut.module_lock.viewmodel.DeviceKeyDetailVM;
 
@@ -154,7 +155,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mDeviceKeyDetailVM.mBleOperateManager.onActivityResult(this, requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_EDIT_PERMISSION && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_CODE_EDIT_PERMISSION || requestCode == REQUEST_CODE_EDIT_NAME) && resultCode == RESULT_OK) {
             DeviceKey deviceKey = data.getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
             this.mDeviceKey = deviceKey;
             initView();
@@ -192,7 +193,10 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
 
         public void onRecordClick(View view) {
-
+            ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
+                    .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
+                    .withLong(Constance.KEY_ID, 0 - mDeviceKey.getKeyID())
+                    .navigation(DeviceKeyDetailActivity.this, REQUEST_CODE_EDIT_NAME);
         }
 
 

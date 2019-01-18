@@ -125,7 +125,7 @@ public class MyRetrofit {
             }
             rBody = buffer.clone().readString(charset);
             String json = rBody;
-            Log.d("response", json);
+            Log.i("response", json);
             if (TextUtils.isEmpty(json)) return;
             try {
                 JSONObject jsonObject = new JSONObject(json);
