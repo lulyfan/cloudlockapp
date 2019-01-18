@@ -60,6 +60,12 @@ public class SystemSettingActivity extends BaseActivity {
             }
         });
 
+        binding.userRule.setOnClickListener((v)->{
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
+                    .withString("load_url", "file:///android_asset/agreement.html")
+                    .navigation();
+        });
+
         binding.aboutUs.setOnClickListener(v -> {
             Intent intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
             startActivity(intent);
