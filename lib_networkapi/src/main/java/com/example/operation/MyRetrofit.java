@@ -150,10 +150,9 @@ public class MyRetrofit {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request();
-                        Log.d("WebSocket Request", "url " + request.url().url().toString());
                         com.ut.database.entity.UUID uuid1 = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
-                        if(uuid1 == null) {
-                            return chain.proceed(request).newBuilder().header("Cache-Control","public,max-age=120").build();
+                        if (uuid1 == null) {
+                            return chain.proceed(request).newBuilder().header("Cache-Control", "public,max-age=120").build();
                         }
                         Request builder = request.newBuilder()
                                 .addHeader("mobile_session_flag", "true")
