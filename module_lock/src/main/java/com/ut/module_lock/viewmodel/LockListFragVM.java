@@ -4,17 +4,26 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
+import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
+import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.cloudLock.CallBack2;
+import com.ut.unilink.cloudLock.ConnectListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
+import com.ut.unilink.util.Base64;
+import com.ut.unilink.util.Log;
 
 import java.util.List;
 
@@ -37,13 +46,10 @@ public class LockListFragVM extends AndroidViewModel {
     private LiveData<List<LockKey>> lock2 = null;//当前分组的锁
     private long currentGroupId = -1;
 
-    public static final int STATE_DEFAULT = -1;
-    public static final int STATE_FAILED = -2;
-    public static final int STATE_SCAN = 0;
-    public static final int STATE_CONNECT = 1;
-
-    public MutableLiveData<Integer> state = new MutableLiveData<>();
-    public MutableLiveData<String> tip = new MutableLiveData<>();
+    private boolean isFindDevice;
+    private LockKey mLockKey;   //本次要开的锁
+    public boolean isStopScan;
+    public boolean isScaning;
 
     public LockListFragVM(@NonNull Application application) {
         super(application);
@@ -150,10 +156,22 @@ public class LockListFragVM extends AndroidViewModel {
 
     //自动查询锁设备并开锁
     public void autoOpenLock() {
-
+        isStopScan = false;
+        scan();
     }
 
     private void scan() {
+
+        if (isStopScan) {
+            return;
+        }
+
+        if (isScaning) {
+            return;
+        }
+
+        isFindDevice = false;
+        mLockKey = null;
 
         int scanResult = UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
             @Override
@@ -165,47 +183,104 @@ public class LockListFragVM extends AndroidViewModel {
 
                 for (LockKey lockKey : lockKeys) {
                     if (scanDevice.getAddress().equals(lockKey.getMac()) && lockKey.getCanOpen() == 1) {
+                        isFindDevice = true;
+                        mLockKey = lockKey;
                         UnilinkManager.getInstance(getApplication()).stopScan();
-
+                        isScaning = false;
+                        connect(scanDevice);
                     }
                 }
             }
 
             @Override
             public void onScanTimeout() {
-                tip.postValue(getApplication().getString(R.string.wakeupDevice));
-                state.postValue(STATE_FAILED);
+                handleScanEnd();
             }
 
             @Override
             public void onFinish(List<ScanDevice> scanDevices) {
-
+                handleScanEnd();
             }
         }, 10);
 
-        switch (scanResult) {
-            case UnilinkManager.BLE_NOT_SUPPORT:
-                tip.postValue(getApplication().getString(R.string.BLE_NOT_SUPPORT));
-                break;
+        if (scanResult == UnilinkManager.SCAN_SUCCESS) {
+            isScaning = true;
+            Log.i("autoOpenLock","开始扫描");
+        }
+    }
 
-            case UnilinkManager.BLE_NOT_OPEN:
-                tip.postValue(getApplication().getString(R.string.BLE_NOT_OPEN));
-                break;
-
-            case UnilinkManager.NO_LOCATION_PERMISSION:
-                tip.postValue(getApplication().getString(R.string.NO_LOCATION_PERMISSION));
-                break;
-
-            case UnilinkManager.SCAN_SUCCESS:
-                state.postValue(STATE_SCAN);
-                break;
-
-            default:
+    private void handleScanEnd() {
+        isScaning = false;
+        Log.i("autoOpenLock","结束扫描");
+        if (!isFindDevice) {
+            scan();
         }
 
-        if (scanResult != UnilinkManager.SCAN_SUCCESS) {
-            state.postValue(STATE_FAILED);
+    }
+
+    private void connect(ScanDevice scanDevice) {
+        Log.i("autoOpenLock", "连接设备");
+        UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
+            @Override
+            public void onConnect() {
+                Log.i("autoOpenLock", "连接成功------");
+                openLock();
+            }
+
+            @Override
+            public void onDisconnect(int code, String message) {
+                Log.i("autoOpenLock", "连接失败------" + message);
+                scan();
+            }
+        });
+    }
+
+    private void openLock() {
+        if (mLockKey == null) {
+            return;
         }
+
+        UnilinkManager.getInstance(getApplication()).setConnectListener(null);
+        int lockType = mLockKey.getType();
+        if (lockType == EnumCollection.LockType.SMARTLOCK.getType()) {
+            UnilinkManager.getInstance(getApplication()).openGateLock(mLockKey.getMac(), mLockKey.getEncryptType(),
+                    mLockKey.getEncryptKey(), Base64.decode(mLockKey.getBlueKey()), new CallBack2<Void>() {
+                        @Override
+                        public void onSuccess(Void data) {
+                            Log.i("autoOpenLock","开锁成功");
+                            UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
+                            scan();
+                        }
+
+                        @Override
+                        public void onFailed(int errCode, String errMsg) {
+                            Log.i("autoOpenLock", "开锁失败:" + errMsg);
+                            scan();
+                        }
+                    });
+        } else {
+            UnilinkManager.getInstance(getApplication()).openCloudLock(mLockKey.getMac(), mLockKey.getEncryptType(),
+                    mLockKey.getEncryptKey(), Base64.decode(mLockKey.getBlueKey()), new CallBack2<Void>() {
+                        @Override
+                        public void onSuccess(Void data) {
+                            Log.i("autoOpenLock","开锁成功");
+                            UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
+                            scan();
+                        }
+
+                        @Override
+                        public void onFailed(int errCode, String errMsg) {
+                            Log.i("autoOpenLock", "开锁失败:" + errMsg);
+                            scan();
+                        }
+                    });
+
+        }
+    }
+
+    public void stopAutoOpenLock() {
+        isStopScan = true;
+        UnilinkManager.getInstance(getApplication()).stopScan();
     }
 
 

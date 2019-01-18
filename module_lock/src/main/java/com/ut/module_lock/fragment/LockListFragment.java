@@ -1,5 +1,6 @@
 package com.ut.module_lock.fragment;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -37,6 +38,8 @@ import com.ut.module_lock.activity.SearchLockActivity;
 import com.ut.module_lock.adapter.LockListAdapter;
 import com.ut.module_lock.databinding.FragmentLocklistBinding;
 import com.ut.module_lock.viewmodel.LockListFragVM;
+import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.util.Log;
 
 import java.util.List;
 
@@ -236,6 +239,33 @@ public class LockListFragment extends BaseFragment {
         if (mLockListFragVM != null) {
             mLockListFragVM.toGetLockAllList(false);
             mLockListFragVM.toGetAllGroupList(false);
+        }
+
+        autuOpenLock();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            mLockListFragVM.autoOpenLock();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("停止无感开锁");
+        mLockListFragVM.stopAutoOpenLock();
+    }
+
+    private void autuOpenLock() {
+        if (UnilinkManager.getInstance(getContext()).checkState()) {
+            mLockListFragVM.autoOpenLock();
+        } else {
+            UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
+            UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
         }
     }
 }

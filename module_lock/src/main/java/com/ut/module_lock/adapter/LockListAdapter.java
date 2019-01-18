@@ -119,6 +119,8 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
     public static void loadTouchSrc(ImageView imageView, int canOpen) {
         if (canOpen == 1) {
             imageView.setImageResource(R.mipmap.icon_touch_enable);
+        } else {
+            imageView.setImageResource(R.mipmap.icon_touch_unable);
         }
     }
 
