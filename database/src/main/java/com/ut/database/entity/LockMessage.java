@@ -94,6 +94,6 @@ public class LockMessage implements Serializable {
     }
 
     public String createTimeformat() {
-        return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.CHINA).format(new Date(createTime));
+        return new SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault()).format(new Date(createTime));
     }
 }

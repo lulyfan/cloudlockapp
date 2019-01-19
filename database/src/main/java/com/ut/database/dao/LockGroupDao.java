@@ -14,10 +14,10 @@ import java.util.List;
 
 @Dao
 public interface LockGroupDao {
-    @Query("select * from lock_group ORDER By name ASC")
+    @Query("select * from lock_group ORDER By createTime DESC")
     LiveData<List<LockGroup>> getAll();
 
-    @Query("select * from lock_group ORDER By name ASC")
+    @Query("select * from lock_group ORDER By createTime DESC")
     List<LockGroup> syncGetAll();
 
     @Query("select * from lock_group where id = :groupId limit 1")

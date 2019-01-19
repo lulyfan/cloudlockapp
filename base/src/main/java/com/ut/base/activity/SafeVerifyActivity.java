@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -13,7 +12,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
-import com.ut.base.BaseApplication;
 import com.ut.base.R;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -54,7 +52,7 @@ public class SafeVerifyActivity extends BaseActivity {
     @SuppressLint("CheckResult")
     private void initUI() {
         initLightToolbar();
-        mBinding.edtPhone.setText(BaseApplication.getUser().getAccount());
+        mBinding.edtPhone.setText(getIntent().getStringExtra("phone"));
         mBinding.edtPhone.setEnabled(false);
         mBinding.verifyCodeLayout.setSelected(true);
         mBinding.tvGetVerifyCode.setEnabled(true);
@@ -67,7 +65,7 @@ public class SafeVerifyActivity extends BaseActivity {
             mBinding.verifyBtn.setEnabled(!TextUtils.isEmpty(code));
         });
 
-        mBinding.verifyBtn.setOnClickListener(v -> safeVerifyVm.verifyCode(mBinding.edtPhone.getPhoneText(), mBinding.edtVerifyCode.getText().toString(), result -> {
+        mBinding.verifyBtn.setOnClickListener(v -> safeVerifyVm.verifyCodeAndLogin(mBinding.edtPhone.getPhoneText(), mBinding.edtVerifyCode.getText().toString(), result -> {
             if (result.isSuccess()) {
                 finish();
                 ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();

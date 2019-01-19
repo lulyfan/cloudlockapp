@@ -58,16 +58,20 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private void initUI() {
         initLightToolbar();
-        String action = getIntent().getAction();
-        if (RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
-            setTitle(getString(R.string.reset_password));
-        } else {
-            setTitle(R.string.login_forget_password);
-        }
         phoneEdt = findViewById(R.id.edt_phone);
         getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
         getVerifyCodeTv.setEnabled(false);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
+        String action = getIntent().getAction();
+        if (RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
+            setTitle(getString(R.string.reset_password));
+            phoneEdt.setText(getIntent().getStringExtra("phone"));
+            phoneEdt.setSelected(false);
+            phoneEdt.setEnabled(false);
+        } else {
+            setTitle(R.string.login_forget_password);
+        }
+
         phoneEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) phoneEdt.getParent();
             parent.setSelected(hasFocus);

@@ -16,9 +16,6 @@
     <LinearLayout
         android:id="@+id/location_layout"
         style="@style/Form"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         app:layout_constraintTop_toBottomOf="@id/title_bar">
 
         <ImageView
@@ -36,6 +33,7 @@
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:text="@string/default_country_code"
+            android:enabled="false"
             android:textSize="@dimen/base_14sp" />
 
         <ImageView

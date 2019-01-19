@@ -76,7 +76,7 @@ public class KeyInfoActivity extends BaseActivity {
         initDarkToolbar();
         setTitle(R.string.lock_key_info);
         if (managerUserType < EnumCollection.UserType.NORMAL.ordinal() && managerUserType > 0) {
-            if (keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
+            if (keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
                 return;
             }
             initMore(this::popupMoreWindow);

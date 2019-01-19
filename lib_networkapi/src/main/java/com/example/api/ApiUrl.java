@@ -201,4 +201,7 @@ public interface ApiUrl {
 
     //新增门锁日志
     String insertInnerLockLog = PREFIX + "/innerLock/insertInnerLockLog" + SUFFIX;
+
+    //验证码登录
+    String loginByVerifyCode = "api/user/loginByVerifyCode?json";
 }

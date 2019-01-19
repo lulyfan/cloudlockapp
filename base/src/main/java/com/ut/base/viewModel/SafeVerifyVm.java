@@ -5,10 +5,15 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.commoncomponent.CLToast;
+import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.database.entity.User;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -37,10 +42,39 @@ public class SafeVerifyVm extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
-    public void verifyCode(String phone, String code, Consumer<Result<Void>> subscriber) {
-        MyRetrofit.get().getCommonApiService().verifyPhoneCode(phone, code)
+    public void verifyCodeAndLogin(String phone, String code, Consumer<Result<Void>> subscriber) {
+        MyRetrofit.get().getCommonApiService().loginByCode(phone, code)
                 .subscribeOn(Schedulers.io())
+                .map(result -> {
+                            if (result.isSuccess()) {
+                                User user = result.data;
+                                deleteAllOldData();
+                                CloudLockDatabaseHolder.get().getUserDao().insertUser(user);
+                            }
+                            return result;
+                        }
+                )
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber, new ErrorHandler());
+                .subscribe(result -> {
+                    if (result.isSuccess()) {
+                        AppManager.getAppManager().finishAllActivity();
+                        ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                    } else {
+                        CLToast.showAtCenter(getApplication(), result.msg);
+                    }
+                });
     }
+
+    private void deleteAllOldData() {
+        CloudLockDatabaseHolder holder = CloudLockDatabaseHolder.get();
+        holder.getUserDao().deleteAllUsers();
+        holder.getLockGroupDao().deleteAll();
+        holder.getLockMessageInfoDao().deleteAll();
+        holder.getLockMessageDao().deleteAll();
+        holder.getLockUserDao().deleteAll();
+        holder.getLockKeyDao().deleteAll();
+        holder.getKeyDao().deleteAll();
+        holder.recordDao().deleteAll();
+    }
+
 }

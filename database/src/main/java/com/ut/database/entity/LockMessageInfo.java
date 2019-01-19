@@ -82,10 +82,10 @@ public class LockMessageInfo {
 
     public String createTimeFormat() {
         if (isToday(createTime)) {
-            return new SimpleDateFormat("hh:mm", Locale.getDefault()).format(new Date(createTime));
+            return new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date(createTime));
         }
 
-        return new SimpleDateFormat("yyyy/MM/dd  hh:mm", Locale.getDefault()).format(new Date(createTime));
+        return new SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.getDefault()).format(new Date(createTime));
     }
 
     private boolean isToday(long time) {

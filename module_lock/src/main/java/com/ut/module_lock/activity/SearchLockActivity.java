@@ -77,7 +77,6 @@ public class SearchLockActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                     .navigation();
-            this.finish();
         });
     }
 

@@ -3,10 +3,8 @@ package com.ut.module_mine.activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +14,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
+import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.VersionUpdateHelper;
@@ -74,6 +73,7 @@ public class SystemSettingActivity extends BaseActivity {
         binding.resetPW.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.LoginModulePath.FORGET_PWD)
                     .withAction(RouterUtil.LoginModuleAction.action_login_resetPW)
+                    .withString("phone", BaseApplication.getUser().getAccount())
                     .navigation();
         });
 

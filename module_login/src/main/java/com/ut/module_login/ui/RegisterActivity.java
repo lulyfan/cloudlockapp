@@ -135,17 +135,17 @@ public class RegisterActivity extends BaseActivity {
             register(phone, password, verifyCode);
         });
 
-        findViewById(R.id.tel_belong_of_place).setOnClickListener(v -> {
-                    ViewGroup parent = (ViewGroup) v.getParent();
-                    parent.requestFocus();
-                    ARouter.getInstance()
-                            .build(RouterUtil
-                                    .LoginModulePath.SELECT_COUNTRY_AREA_CODE)
-                            .navigation(RegisterActivity.this, REQ_COUNTRY_AREA_CODE);
-                }
-        );
+//        findViewById(R.id.tel_belong_of_place).setOnClickListener(v -> {
+//                    ViewGroup parent = (ViewGroup) v.getParent();
+//                    parent.requestFocus();
+//                    ARouter.getInstance()
+//                            .build(RouterUtil
+//                                    .LoginModulePath.SELECT_COUNTRY_AREA_CODE)
+//                            .navigation(RegisterActivity.this, REQ_COUNTRY_AREA_CODE);
+//                }
+//        );
 
-        findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
+//        findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
 
         findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);

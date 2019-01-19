@@ -51,6 +51,10 @@ public class LoginVm extends AndroidViewModel {
                         BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
                         currentActivity.finish();
+                    } else if (result.code == 411) {
+                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
+                        ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
+                        currentActivity.finish();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
@@ -85,7 +89,7 @@ public class LoginVm extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
-                        if(currentActivity instanceof RegisterActivity) {
+                        if (currentActivity instanceof RegisterActivity) {
                             currentActivity.finish();
                         }
                         login(phone, password);
