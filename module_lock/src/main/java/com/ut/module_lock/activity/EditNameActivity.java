@@ -66,6 +66,15 @@ public class EditNameActivity extends BaseActivity {
     private void initVM() {
         mEditNameVM = ViewModelProviders.of(this).get(EditNameVM.class);
         mEditNameVM.getSetDeviceNameResult().observe(this, result -> {
+            if (result) {
+                Intent intent = new Intent();
+                intent.putExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, deviceKey);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        mEditNameVM.getShowTip().observe(this, tip -> {
+            CLToast.showAtBottom(EditNameActivity.this, tip);
         });
     }
 
@@ -101,8 +110,7 @@ public class EditNameActivity extends BaseActivity {
         String name = nameEdt.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            //TODO 中文
-            CLToast.showAtBottom(this, "名称不能为空");
+            CLToast.showAtBottom(this, getString(R.string.lock_name_not_allow_null));
             return;
         }
 
@@ -134,11 +142,13 @@ public class EditNameActivity extends BaseActivity {
                         }
                     });
         } else if (nameType == RouterUtil.LockModuleConstParams.NAMETYPE_DEVICE_KEY) {
-            DeviceKey deviceKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
+            deviceKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
             deviceKey.setName(name);
             mEditNameVM.setDeviceName(deviceKey);
         }
     }
+
+    DeviceKey deviceKey;
 
     @Override
     public void finish() {

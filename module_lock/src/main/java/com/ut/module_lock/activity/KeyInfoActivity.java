@@ -93,6 +93,12 @@ public class KeyInfoActivity extends BaseActivity {
                 .withString(RouterUtil.LockModuleExtraKey.NAME, keyInfo.getKeyName())
                 .navigation(this, REQUEST_EDIT_KEY));
         mBinding.keyTypeSelection.setOnClickListener(v -> {
+
+            if (keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal()) {
+                CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_freezen_key_not_allow_to_fix));
+                return;
+            }
+
             String url;
             if (keyInfo.getRuleType() == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
                 url = RouterUtil.LockModulePath.EDIT_LIMITED_TIME;
@@ -225,7 +231,7 @@ public class KeyInfoActivity extends BaseActivity {
                     } else if (data.hasExtra(Constance.EDIT_NAME)) {
                         String keyName = data.getStringExtra(Constance.EDIT_NAME);
                         if (!TextUtils.isEmpty(keyName)) {
-                            editkeyName(keyInfo, keyName);
+                            editKeyName(keyInfo, keyName);
                         }
                     }
                     break;
@@ -233,7 +239,7 @@ public class KeyInfoActivity extends BaseActivity {
         }
     }
 
-    private void editkeyName(Key k, String name) {
+    private void editKeyName(Key k, String name) {
         keyManagerVM.editKeyName(k, name);
     }
 

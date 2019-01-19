@@ -65,6 +65,42 @@ public class DateTimePicker extends FrameLayout {
         });
     }
 
+    public void reset(int year, int month, int day, int hour, int minute) {
+        selectedYear = year;
+        selectedMonth = month;
+        selectedDay = day;
+        selectedHour = hour;
+        selectedMinute = minute;
+
+        datePicker.reset(year, month, day);
+        timePicker.reset(hour, minute);
+
+        datePicker.setDateSelectListener(new DatePicker.DateSelectListener() {
+            @Override
+            public void onDateSelected(int year, int month, int day) {
+                selectedYear = year;
+                selectedMonth = month - 1;
+                selectedDay = day;
+
+                if (dateTimeSelectListener != null) {
+                    dateTimeSelectListener.onDateTimeSelected(selectedYear, month, selectedDay, selectedHour, selectedMinute);
+                }
+            }
+        });
+
+        timePicker.setTimeSelectListener(new TimePicker.TimeSelectListener() {
+            @Override
+            public void onTimeSelected(int hour, int minute) {
+                selectedHour = hour;
+                selectedMinute = minute;
+
+                if (dateTimeSelectListener != null) {
+                    dateTimeSelectListener.onDateTimeSelected(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute);
+                }
+            }
+        });
+    }
+
     public Calendar getDateTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, selectedYear);

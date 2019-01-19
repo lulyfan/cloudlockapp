@@ -32,7 +32,7 @@
     <string name="lock_key_type">钥匙类型</string>
     <string name="lock_key_name">钥匙名称</string>
     <string name="lock_key_permission">钥匙权限</string>
-    <string name="lock_accept_time">接受时间</string>
+    <string name="lock_accept_time">接收时间</string>
     <string name="lock_operation_record">操作记录</string>
     <string name="operation_record">操作记录</string>
     <string name="lock_save">保存</string>
@@ -217,6 +217,7 @@
     <string name="lock_key_invaild_time">失效时间</string>
     <string name="lock_open_lock_invaild_tips">钥匙不在有效期内</string>
     <string name="lock_edit_name_hint">请输入1-20位中文、字母或数字</string>
+    <string name="lock_all_groups">全部分组</string>
 
     <string name="lock_detail_key_detail">钥匙详情</string>
 
@@ -266,4 +267,6 @@
     <string name="lock_device_key_tip_auth_error1">开始时间不能大于或等于结束时间</string>
     <string name="lock_device_key_tip_auth_error2">启用日期不能大于或等于停止日期</string>
     <string name="lock_device_key_tip_auth_error3">生效时间不能大于或等于失效时间</string>
+    <string name="lock_name_not_allow_null">名称不能为空</string>
+    <string name="lock_freezen_key_not_allow_to_fix">解除冻结才能修改有效期</string>
 </resources>

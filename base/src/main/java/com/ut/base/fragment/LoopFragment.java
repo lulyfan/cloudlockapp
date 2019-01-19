@@ -4,8 +4,6 @@ package com.ut.base.fragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ut.base.BaseFragment;
@@ -21,10 +18,10 @@ import com.ut.base.R;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
 import com.ut.base.activity.GrantPermissionActivity;
-import com.ut.base.customView.DatePicker;
-import com.ut.base.customView.TimePicker;
 import com.ut.base.databinding.FragmentLoopBinding;
 import com.ut.base.viewModel.GrantPermisssionViewModel;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +29,10 @@ import com.ut.base.viewModel.GrantPermisssionViewModel;
 public class LoopFragment extends BaseFragment {
     private FragmentLoopBinding binding;
     private GrantPermisssionViewModel viewModel;
+    private int mY, mM, mD;
+    private int sY, sM, sD, eY, eM, eD;
+    private int mHour, mMin;
+    private int sHour, sMin;
 
     public LoopFragment() {
         // Required empty public constructor
@@ -79,10 +80,37 @@ public class LoopFragment extends BaseFragment {
 
     private void init() {
         if (binding == null) return;
-        binding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.validTime)));
-        binding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalidTime)));
-        binding.startDate.setOnClickListener(v -> chooseDate(v, getString(R.string.startDate)));
-        binding.endDate.setOnClickListener(v -> chooseDate(v, getString(R.string.endDate)));
+        binding.validTime.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMin = calendar.get(Calendar.MINUTE);
+            chooseTime(v, getString(R.string.validTime));
+        });
+        binding.invalidTime.setOnClickListener(v -> {
+
+            mHour = sHour;
+            mMin = sMin;
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, mHour);
+            calendar.set(Calendar.MINUTE, mMin);
+            calendar.add(Calendar.MINUTE, 15);
+
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMin = calendar.get(Calendar.MINUTE);
+
+            chooseTime(v, getString(R.string.invalidTime));
+        });
+        binding.startDate.setOnClickListener(v -> {
+            mY = sY;
+            mM = sM;
+            mD = sD;
+            chooseDate(v, getString(R.string.startDate));
+        });
+        binding.endDate.setOnClickListener(v -> {
+            handleEnDate();
+            chooseDate(v, getString(R.string.endDate));
+        });
 
         binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
 
@@ -122,6 +150,20 @@ public class LoopFragment extends BaseFragment {
         checkBox7.setOnCheckedChangeListener(weekListener);
     }
 
+    private void handleEnDate() {
+        if (sY > 0) {
+            mY = sY;
+            mM = sM;
+            mD = sD;
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(mY, mM, mD);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            mY = calendar.get(Calendar.YEAR);
+            mM = calendar.get(Calendar.MONTH);
+            mD = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+    }
+
     private void chooseDate(View v, String title) {
         SystemUtils.hideKeyboard(getContext(), v);
         DialogUtil.chooseDate(getContext(), title, (year, month, day) -> {
@@ -132,12 +174,17 @@ public class LoopFragment extends BaseFragment {
             if (getString(R.string.startDate).equals(title)) {
                 String startTime = textView.getText().toString().replace("/", "-");
                 viewModel.loopStartTime.setValue(startTime);
-
+                sY = year;
+                sM = month - 1;
+                sD = day;
             } else if (getString(R.string.endDate).equals(title)) {
+                eY = year;
+                eM = month - 1;
+                eD = day;
                 String endTime = textView.getText().toString().replace("/", "-");
                 viewModel.loopEndTime.setValue(endTime);
             }
-        });
+        }, mY != mM, mY, mM, mD);
     }
 
     private void chooseTime(View v, String title) {
@@ -150,11 +197,15 @@ public class LoopFragment extends BaseFragment {
             if (getString(R.string.validTime).equals(title)) {
                 String startTimeRange = textView.getText().toString().concat(":00");
                 viewModel.startTimeRange.setValue(startTimeRange);
+
+                mHour = sHour = hour;
+                mMin = sMin = minute;
+
             } else if (getString(R.string.invalidTime).equals(title)) {
                 String endTimeRange = textView.getText().toString().concat(":00");
                 viewModel.endTimeRange.setValue(endTimeRange);
             }
-        });
+        }, true, mHour, mMin);
     }
 
     private CompoundButton.OnCheckedChangeListener weekListener = new CompoundButton.OnCheckedChangeListener() {

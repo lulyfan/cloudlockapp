@@ -123,6 +123,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:inputType="number"
+            android:maxLength="6"
             android:textSize="@dimen/base_14sp"
             android:lines="1" />
 

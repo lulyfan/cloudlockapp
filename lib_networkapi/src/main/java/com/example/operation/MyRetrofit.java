@@ -8,6 +8,7 @@ import com.example.api.DownloadApi;
 import com.example.download.HttpClientHelper;
 import com.example.download.ProgressListener;
 import com.example.i.INoLoginListener;
+import com.example.utils.NetWorkUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.UUID;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -47,10 +49,8 @@ public class MyRetrofit {
         return baseUrl;
     }
 
-    private static String UUID = java.util.UUID.randomUUID().toString();
-
     public static String getUUID() {
-        return UUID;
+        return java.util.UUID.randomUUID().toString();
     }
 
     public static MyRetrofit get() {
@@ -59,6 +59,7 @@ public class MyRetrofit {
 
     private MyRetrofit() {
         initClient();
+        initWebSocketClient();
         initApiCommonServicet();
     }
 
@@ -75,14 +76,16 @@ public class MyRetrofit {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        Log.d("Request", "url " + request.url().url().toString());
                         try {
                             com.ut.database.entity.UUID uuid = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
                             if (uuid == null) {
                                 uuid = new UUID();
-                                uuid.setUuid(MyRetrofit.UUID);
+                                uuid.setUuid(getUUID());
                                 CloudLockDatabaseHolder.get().getUUIDDao().insertUUID(uuid);
                             }
-                            Request request = chain.request();
+                            Log.e("session_token", "----> " + uuid.getUuid());
                             Request builder = request.newBuilder()
                                     .addHeader("mobile_session_flag", "true")
                                     .addHeader("session_token", uuid.getUuid())
@@ -94,7 +97,7 @@ public class MyRetrofit {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        return chain.proceed(chain.request().newBuilder().build());
+                        return chain.proceed(request.newBuilder().build());
                     }
                 })
                 .connectTimeout(6, TimeUnit.SECONDS)
@@ -102,7 +105,6 @@ public class MyRetrofit {
                 .writeTimeout(5, TimeUnit.SECONDS);
         builder.addInterceptor(httpLoggingInterceptor);
         mOkHttpClient = builder.build();
-        mWebSocketHelper = new WebSocketHelper(mOkHttpClient);
     }
 
     private void handlerResponse(Response response) throws IOException {
@@ -123,7 +125,7 @@ public class MyRetrofit {
             }
             rBody = buffer.clone().readString(charset);
             String json = rBody;
-            Log.d("response", json);
+            Log.i("response", json);
             if (TextUtils.isEmpty(json)) return;
             try {
                 JSONObject jsonObject = new JSONObject(json);
@@ -138,6 +140,33 @@ public class MyRetrofit {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void initWebSocketClient() {
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        com.ut.database.entity.UUID uuid1 = CloudLockDatabaseHolder.get().getUUIDDao().findUUID();
+                        if (uuid1 == null) {
+                            return chain.proceed(request).newBuilder().header("Cache-Control", "public,max-age=120").build();
+                        }
+                        Request builder = request.newBuilder()
+                                .addHeader("mobile_session_flag", "true")
+                                .addHeader("session_token", uuid1.getUuid())
+                                .addHeader("appid", "2")
+                                .build();
+                        return chain.proceed(builder);
+                    }
+                })
+                .connectTimeout(6, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS);
+        builder.addInterceptor(httpLoggingInterceptor);
+        mWebSocketHelper = new WebSocketHelper(builder.build());
     }
 
 

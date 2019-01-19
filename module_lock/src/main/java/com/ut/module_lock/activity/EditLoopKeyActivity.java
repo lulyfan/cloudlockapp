@@ -16,6 +16,7 @@ import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLoopBinding;
 import com.ut.database.entity.Key;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,10 @@ public class EditLoopKeyActivity extends BaseActivity {
     private ActivityEditLoopBinding mBinding;
     private Key mKey;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7;
+    private int mY, mM, mD;
+    private int sY, sM, sD, eY, eM, eD;
+    private int mHour, mMin;
+    private int sHour, sMin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,14 +59,39 @@ public class EditLoopKeyActivity extends BaseActivity {
         checkBox5 = mBinding.include5.findViewById(R.id.friday);
         checkBox6 = mBinding.include5.findViewById(R.id.saturday);
         checkBox7 = mBinding.include5.findViewById(R.id.sunday);
-        mBinding.validTime.setOnClickListener(v -> chooseTime(v, getString(R.string.valid_time)));
-        mBinding.invalidTime.setOnClickListener(v -> chooseTime(v, getString(R.string.invalid_time)));
+        mBinding.validTime.setOnClickListener(v -> {
+//
+//            Calendar calendar = Calendar.getInstance();
+//            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+//            mMin = calendar.get(Calendar.MINUTE);
+            mHour = sHour;
+            mMin = sMin;
+            chooseTime(v, getString(R.string.valid_time));
+
+        });
+        mBinding.invalidTime.setOnClickListener(v -> {
+            mHour = sHour;
+            mMin = sMin;
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, mHour);
+            calendar.set(Calendar.MINUTE, mMin);
+            calendar.add(Calendar.MINUTE, 15);
+
+            mHour = calendar.get(Calendar.HOUR_OF_DAY);
+            mMin = calendar.get(Calendar.MINUTE);
+            chooseTime(v, getString(R.string.invalid_time));
+        });
 
         mBinding.startDate.setOnClickListener(v -> {
+            mY = sY;
+            mM = sM;
+            mD = sD;
             chooseDate(v, getString(R.string.lock_start_date));
         });
 
         mBinding.endDate.setOnClickListener(v -> {
+            handleEnDate();
             chooseDate(v, getString(R.string.lock_end_state));
         });
 
@@ -90,19 +120,56 @@ public class EditLoopKeyActivity extends BaseActivity {
         if (weeks.contains("7")) {
             checkBox7.setChecked(true);
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+        try {
+            long validTime = sdf.parse(mKey.getStartTimeRange()).getTime();
+            long inValidTime = sdf.parse(mKey.getEndTimeRange()).getTime();
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.setTimeInMillis(validTime);
+            sHour = calendar.get(Calendar.HOUR_OF_DAY);
+            sMin  = calendar.get(Calendar.MINUTE);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void handleEnDate() {
+        if (sY > 0) {
+            mY = sY;
+            mM = sM;
+            mD = sD;
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(mY, mM, mD);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            mY = calendar.get(Calendar.YEAR);
+            mM = calendar.get(Calendar.MONTH);
+            mD = calendar.get(Calendar.DAY_OF_MONTH);
+        }
     }
 
     private void chooseTime(View v, String title) {
         DialogUtil.chooseTime(v.getContext(), title, (hour, minute) -> {
             String dateTime = String.format(Locale.getDefault(), "%02d", hour) + ":"
-                    + String.format(Locale.getDefault(), "%02d", minute);
+                    + String.format(Locale.getDefault(), "%02d", minute) + ":"
+                    + String.format(Locale.getDefault(), "%02d", 0);
             if (getString(R.string.valid_time).equals(title)) {
                 mKey.setStartTimeRange(dateTime);
+
+                mHour = sHour = hour;
+                mMin = sMin = minute;
+
             } else {
                 mKey.setEndTimeRange(dateTime);
             }
             mBinding.setKeyItem(mKey);
-        });
+        }, true, mHour, mMin);
     }
 
     private void save() {
@@ -138,7 +205,7 @@ public class EditLoopKeyActivity extends BaseActivity {
 
     private void chooseDate(View v, String title) {
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
-            String date = year + "/" + String.format(Locale.getDefault(), "%02d", month) + "/" + String.format(Locale.getDefault(), "%02d", day);
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month - 1, day);
@@ -146,15 +213,23 @@ public class EditLoopKeyActivity extends BaseActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
+
+                sY = year;
+                sM = month - 1;
+                sD = day;
                 mKey.setStartTime(sdf.format(new Date(calendar.getTimeInMillis())));
             } else {
                 calendar.set(Calendar.HOUR_OF_DAY, 23);
                 calendar.set(Calendar.MINUTE, 59);
                 calendar.set(Calendar.SECOND, 59);
                 mKey.setEndTime(sdf.format(new Date(calendar.getTimeInMillis())));
+
+                eY = year;
+                eM = month - 1;
+                eD = day;
             }
             mBinding.setKeyItem(mKey);
-        });
+        }, mY != mM, mY, mM, mD);
     }
 
 

@@ -80,7 +80,7 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(voidResult -> {
                     if (voidResult.code == 400) {
-                        CLToast.showAtCenter(getApplication(), getApplication().getString(R.string.lock_send_key_failed_tips_one));
+                        CLToast.showAtCenter(getApplication(), voidResult.msg);
                     } else {
                         tip.postValue(voidResult.msg);
                     }

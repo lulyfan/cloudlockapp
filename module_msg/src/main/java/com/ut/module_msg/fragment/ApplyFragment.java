@@ -45,7 +45,22 @@ public class ApplyFragment extends BaseFragment {
             initView();
             mApplyMessageVm = ViewModelProviders.of(this).get(ApplyMessageVm.class);
             mApplyMessageVm.getApplyMessages().observe(this, ams -> {
-                Collections.sort(ams, (o1, o2) -> o1.getStatus() != null && "未处理".equals(o1.getStatus()) ? -1 : 0);
+                Collections.sort(ams, (o1, o2) -> {
+                    boolean r1 = o1.getStatus() != null && "未处理".equals(o1.getStatus());
+                    boolean r2 = o2.getStatus() != null && "未处理".equals(o2.getStatus());
+
+                    if (r1 && r2) {
+                        return o1.getApplyTime() > o2.getApplyTime() ? -1 : 0;
+                    } else {
+                        if (r1) {
+                            return -1;
+                        } else if(r2) {
+                            return 0;
+                        }
+                    }
+
+                    return 0;
+                });
                 mApplyFgBinding.noData.setVisibility(ams.isEmpty() ? View.VISIBLE : View.GONE);
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
                 mAdapter.updateDate(ams);

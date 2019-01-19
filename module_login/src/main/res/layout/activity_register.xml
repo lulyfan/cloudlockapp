@@ -160,6 +160,7 @@
             android:background="@android:color/transparent"
             android:inputType="number"
             android:lines="1"
+            android:maxLength="6"
             android:textColor="@color/gray3"
             android:textSize="@dimen/base_14sp" />
 

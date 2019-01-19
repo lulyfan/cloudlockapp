@@ -7,7 +7,11 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
+import com.example.entity.base.Result;
+import com.example.entity.base.Results;
+import com.example.operation.CommonApi;
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.dao.ORecordDao;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
@@ -30,6 +34,12 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import rx.schedulers.Schedulers;
+
 
 /**
  * author : zhouyubin
@@ -38,7 +48,6 @@ import java.util.concurrent.ScheduledExecutorService;
  * version: 1.0
  */
 public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.OperateCallback, BleOperateManager.OperateDeviceKeyCallback {
-
     private List<DeviceKey> mAllDeviceKey = new ArrayList<>();
     private List<DeviceKeyAuth> mAllDeviceKeyAuth = new ArrayList<>();
     private Observer<List<DeviceKey>> observer1 = null;
@@ -65,6 +74,8 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         return processTick;
     }
 
+    public List<DeviceKey> mWebDeviceKeyList = null;
+
     public DeviceKeyVM(@NonNull Application application) {
         super(application);
         mBleOperateManager = new BleOperateManager(application);
@@ -74,6 +85,23 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
 
     public void setLockKey(LockKey lockKey) {
         this.mLockKey = lockKey;
+//        initDataFromWeb();
+    }
+
+    private void initDataFromWeb() {
+        Disposable disposable = CommonApi.getDeviceKeyListByType(0, mLockKey.getId())
+                .observeOn(io.reactivex.schedulers.Schedulers.io())
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .subscribe(deviceKeyResults -> {
+                    if (deviceKeyResults.isSuccess()) {
+                        this.mWebDeviceKeyList = deviceKeyResults.getData();
+                        if (mWebDeviceKeyList.size() > 0) {
+                            DeviceKeyDaoImpl.get().deleteAll();
+                            DeviceKeyDaoImpl.get().insertDeviceKeys(mWebDeviceKeyList);
+                        }
+                    }
+                }, new ErrorHandler());
+        mCompositeDisposable.add(disposable);
     }
 
     public LiveData<List<DeviceKey>> getDeviceKeys(int deviceKeyType) {
@@ -88,7 +116,6 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             UTLog.i("to scan");
         }
     }
-
 
     @Override
     protected void onCleared() {
@@ -126,7 +153,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     public void onConnectSuccess() {
         processTick.postValue(processTickInt++);
         //todo 后台获取时间后进行对时
-        long time = 0;
+        long time = System.currentTimeMillis();
         mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getType(), mLockKey.getEncryptKey(), time);
     }
 
@@ -233,10 +260,43 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         }
         //从蓝牙获取信息后存入数据库
         mExecutorService.execute(() -> {
-            DeviceKeyDaoImpl.get().insertDeviceKeys(mAllDeviceKey);
-            //todo 提交数据到后台
+            //TODO 临时
+            initDeviceKeyName(mWebDeviceKeyList);
+            if (mWebDeviceKeyList != null) {
+                initDeviceKeyName(mWebDeviceKeyList);
+                //todo 提交数据到后台
+                CommonApi.initLockKey(Integer.parseInt(mLockKey.getId()), mAllDeviceKey)
+                        .observeOn(io.reactivex.schedulers.Schedulers.io())
+                        .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                        .subscribe(voidResults -> {
+                            if (voidResults.isSuccess()) {
+
+                            }
+                        }, new ErrorHandler());
+            } else {
+                //todo 提交数据到后台
+                CommonApi.getDeviceKeyListByType(0, mLockKey.getId())//从后台拿名字,防止第一次拿不成功
+                        .observeOn(io.reactivex.schedulers.Schedulers.io())
+                        .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                        .flatMap((Function<Results<DeviceKey>, Observable<Result<Void>>>) deviceKeyResults -> {
+                            if (deviceKeyResults.isSuccess()) {
+                                List<DeviceKey> list = deviceKeyResults.getData();
+                                initDeviceKeyName(list);
+                                return CommonApi.initLockKey(Integer.parseInt(mLockKey.getId()), mAllDeviceKey);
+                            }
+                            return null;
+                        })
+                        .subscribe(deviceKeyResults -> {
+                            if (deviceKeyResults.isSuccess()) {
+
+                            }
+                        }, new ErrorHandler());
+
+            }
+
+
         });
-        mRecordIndex = 0;
+        mRecordIndex = 1;
         mRecordList.clear();
         toGetLockRecord();
     }
@@ -263,11 +323,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                     getApplication().getResources().getStringArray(R.array.deviceTypeName)[deviceKey.getKeyType()]);
             record1.setDescription(description);
             record1.setLockId(Integer.parseInt(mLockKey.getId()));
-            record1.setKeyId(0 - mLockKey.getKeyId());
-            record1.setType(mLockKey.getType() + 2);//设备钥匙的类型从2开始
+            record1.setKeyId(0 - deviceKey.getKeyID());
+            record1.setType(deviceKey.getKeyType() + 2);//设备钥匙的类型从2开始
             mRecordList.add(record1);
         }
-        if (mRecordIndex < 6) {//加载25条
+        if (mRecordIndex < 4) {//加载25条
             toGetLockRecord();
         } else {
             endReadRecord();
@@ -280,12 +340,16 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         processTick.postValue(100);//加载结束
         showTip.postValue(getApplication().getString(R.string.lock_device_key_load_success));
         //TODO 发送到后台
+        Disposable disposable = CommonApi.insertInnerLockLog(mRecordList)
+                .subscribe(voidResult -> {
+                }, new ErrorHandler());
+        mCompositeDisposable.add(disposable);
     }
 
     private int mRecordIndex = 1;
 
     private void toGetLockRecord() {
-        mBleOperateManager.readOpenRecord(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mRecordIndex);
+        mBleOperateManager.readOpenRecord(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mRecordIndex++);
     }
 
     private DeviceKey getKeyByKeyId(int id) {
@@ -308,5 +372,19 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         }
 
         mBleOperateManager.disconnect(mLockKey.getMac());
+    }
+
+    //从后台拿名字
+    private void initDeviceKeyName(List<DeviceKey> list) {
+        if (list != null && list.size() > 0) {
+            for (DeviceKey deviceKey : mAllDeviceKey) {
+                if (list.contains(deviceKey)) {
+                    deviceKey.setName(list.get(list.indexOf(deviceKey)).getName());
+                }
+            }
+        }
+        DeviceKeyDaoImpl.get().deleteAll();
+        DeviceKeyDaoImpl.get().insertDeviceKeys(mAllDeviceKey);//从后台拿名字后更新数据库并初始化后台数据
+        UTLog.i("====mm:" + mAllDeviceKey.toString());
     }
 }

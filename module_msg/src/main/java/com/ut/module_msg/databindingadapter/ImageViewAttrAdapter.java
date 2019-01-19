@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.ut.module_msg.R;
 
 /**
  * author : chenjiajun
@@ -19,6 +20,11 @@ public class ImageViewAttrAdapter {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext())
                     .load(url)
+                    .apply(isCircle ? RequestOptions.circleCropTransform() : new RequestOptions())
+                    .into(imageView);
+        } else {
+            Glide.with(imageView.getContext())
+                    .load(R.mipmap.default_icon_b)
                     .apply(isCircle ? RequestOptions.circleCropTransform() : new RequestOptions())
                     .into(imageView);
         }

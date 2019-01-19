@@ -10,6 +10,7 @@ import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.NearScanLock;
+import com.ut.database.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,30 @@ public class CommonApi {
         list.add(deviceKey);
         String volist = mGson.toJson(list);
         Observable<Result<Void>> resultObservable = getCommonApiService().updateKeyInfo(volist);
-        return ObjectLoader.observe(resultObservable);
+        return resultObservable;
+    }
+
+    /**
+     * @param type   钥匙类型，为0时可以拿到所有的钥匙
+     * @param lockId
+     * @return
+     */
+    public static Observable<Results<DeviceKey>> getDeviceKeyListByType(int type, String lockId) {
+        int lockIdInt = Integer.parseInt(lockId);
+        Observable<Results<DeviceKey>> resultsObservable = getCommonApiService().getDeviceKeyListByType(type, lockIdInt);
+        return resultsObservable;
+    }
+
+    public static Observable<Result<Void>> initLockKey(int lockId, List<DeviceKey> list) {
+        String volist = mGson.toJson(list);
+        Observable<Result<Void>> resultsObservable = getCommonApiService().initLockKey(lockId, volist);
+        return resultsObservable;
+    }
+
+    public static Observable<Result<Void>> insertInnerLockLog(List<Record> list) {
+        String volist = mGson.toJson(list);
+        Observable<Result<Void>> resultsObservable = getCommonApiService().insertInnerLockLog(volist);
+        return ObjectLoader.observe(resultsObservable);
     }
 
     /**

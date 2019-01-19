@@ -4,13 +4,10 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.entity.base.Result;
-import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.base.VersionUpdateHelper;
-import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_mine.R;
 import com.ut.module_mine.activity.SystemSettingActivity;
 
@@ -37,7 +34,7 @@ public class SystemSettingViewModel extends BaseViewModel {
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
                         },
-                        throwable -> tip.postValue(throwable.getMessage()));
+                        new ErrorHandler());
     }
 
     public void checkVersion(String currentVersion) {

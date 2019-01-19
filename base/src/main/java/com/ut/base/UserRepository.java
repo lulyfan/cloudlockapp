@@ -55,7 +55,6 @@ public class UserRepository {
     public void refreshUser() {
         MyRetrofit.get().getCommonApiService().getUserInfo()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         userDao.updateUser(result.data);

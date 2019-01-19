@@ -7,10 +7,12 @@ import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
 import com.ut.base.ErrorHandler;
+import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
 import com.ut.module_lock.R;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -32,10 +34,13 @@ public class EditNameVM extends BaseViewModel {
     public void setDeviceName(DeviceKey deviceKey) {
         //向后台更新名字
         Disposable disposable = CommonApi.updateKeyInfo(deviceKey)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .subscribe(voidResult -> {
                     if (voidResult.isSuccess()) {
                         getShowTip().postValue(getApplication().getString(R.string.operate_success));
-                        setDeviceNameResult.setValue(true);
+                        DeviceKeyDaoImpl.get().insertDeviceKeys(deviceKey);
+                        setDeviceNameResult.postValue(true);
                     } else {
                         getShowTip().postValue(getApplication().getString(R.string.operate_success));
                     }

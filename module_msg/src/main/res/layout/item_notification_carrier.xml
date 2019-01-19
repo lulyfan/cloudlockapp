@@ -36,7 +36,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/msg_12dp"
+            android:layout_marginLeft="@dimen/base_12sp"
             android:text="@{lockMessage.lockName}"
             android:textColor="@color/color_base_title"
             android:textSize="@dimen/base_14sp"
@@ -47,20 +47,23 @@
 
         <TextView
             android:id="@+id/content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp"
             android:textStyle="normal"
             android:lines="1"
             android:ellipsize="end"
+            android:layout_marginStart="@dimen/base_12sp"
             android:text="@{lockMessage.description}"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/icon_layout"
-            app:layout_constraintLeft_toLeftOf="@id/title"
+            app:layout_constraintStart_toEndOf="@id/icon_layout"
+            app:layout_constraintEnd_toEndOf="@id/time"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/base_20dp"

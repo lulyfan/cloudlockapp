@@ -41,6 +41,13 @@ public class DatePicker extends FrameLayout {
         initDay();
     }
 
+    public void reset(int year, int month, int day) {
+        initYear(year);
+        initMonth(month);
+        initDay(day);
+        invalidate();
+    }
+
     private void initYear() {
         selectedYear = yearPicker.getCurrentYear();
         yearPicker.setYearStart(selectedYear);
@@ -56,7 +63,24 @@ public class DatePicker extends FrameLayout {
                 }
             }
         });
+    }
 
+
+    public void initYear(int year) {
+        selectedYear = year;
+        yearPicker.setYearStart(selectedYear);
+        yearPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelPicker picker, Object data, int position) {
+                selectedYear = (int) data;
+                setYear(selectedYear);
+                setYearAndMonth(selectedYear, selectedMonth);
+
+                if (dateSelectListener != null) {
+                    dateSelectListener.onDateSelected(selectedYear, selectedMonth + 1, selectedDay);
+                }
+            }
+        });
     }
 
     private void initDay() {
@@ -75,9 +99,40 @@ public class DatePicker extends FrameLayout {
         });
     }
 
+    public void initDay(int day) {
+        setDayStart(day);
+        dayPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelPicker picker, Object data, int position) {
+                selectedDay = Integer.parseInt((String) data);
+
+                if (dateSelectListener != null) {
+                    dateSelectListener.onDateSelected(selectedYear, selectedMonth + 1, selectedDay);
+                }
+            }
+        });
+    }
+
+
     private void initMouth() {
         int currentMouth = Calendar.getInstance().get(Calendar.MONTH);
         setMouthStart(currentMouth);
+
+        monthPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelPicker picker, Object data, int position) {
+                selectedMonth = Integer.parseInt((String) data) - 1;
+                setYearAndMonth(selectedYear, selectedMonth);
+
+                if (dateSelectListener != null) {
+                    dateSelectListener.onDateSelected(selectedYear, selectedMonth + 1, selectedDay);
+                }
+            }
+        });
+    }
+
+    public void initMonth(int month) {
+        setMouthStart(month);
 
         monthPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
@@ -100,7 +155,7 @@ public class DatePicker extends FrameLayout {
     private void updateMouth(int start) {
         List<String> mouths = new ArrayList<>();
         int position = 0;
-        for (int i=start; i<12; i++) {
+        for (int i = start; i < 12; i++) {
             mouths.add(String.format("%02d", i + 1));
 
             if (i == selectedMonth) {
@@ -113,8 +168,8 @@ public class DatePicker extends FrameLayout {
     }
 
     private void setDayStart(int start) {
-        updateDay(start, selectedYear, selectedMonth);
         selectedDay = start;
+        updateDay(start, selectedYear, selectedMonth);
     }
 
     private void updateDay(int start, int year, int mouth) {
@@ -127,7 +182,7 @@ public class DatePicker extends FrameLayout {
 
         List<String> days = new ArrayList<>();
         int position = 0;
-        for (int i=start; i<=dayCount; i++) {
+        for (int i = start; i <= dayCount; i++) {
             days.add(String.format("%02d", i));
 
             if (i == selectedDay) {

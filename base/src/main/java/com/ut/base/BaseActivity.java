@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -86,6 +87,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private synchronized void handlerNotLogin(String url) {
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
+                BaseApplication.clearDataWhenLogout();
+            }
+        });
         //todo
         try {
             if (noLoginDialog != null && noLoginDialog.isShowing()) {
@@ -98,13 +105,6 @@ public class BaseActivity extends AppCompatActivity {
                             dialog1.dismiss();
                         }
                         ARouter.getInstance().build(url).navigation();
-                        Schedulers.io().scheduleDirect(new Runnable() {
-                            @Override
-                            public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
-//                                CloudLockDatabaseHolder.get().clear();
-                                BaseApplication.clearDataWhenLogout();
-                            }
-                        });
                     }).setOnDismissListener(dialog -> {
                         noLoginDialog = null;
                     })
@@ -258,7 +258,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void toastShort(String msg) {
-        if (msg == null || "".equals(msg)) {
+        if (msg == null || "".equals(msg) || "未登录".equals(msg)) {
             return;
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -355,12 +355,18 @@ public class BaseActivity extends AppCompatActivity {
 
         View view = LayoutInflater.from(this).inflate(R.layout.load, null);
         loadDialog = DialogPlus.newDialog(this)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setContentHolder(new ViewHolder(view))
                 .setPadding(padding, padding_24, 0, padding_24)
                 .setMargin(padding, 0, padding, 0)
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
                 .setGravity(Gravity.CENTER)
                 .create();
+    }
+
+    private Handler handler = new Handler();
+
+    public Handler getMainHandler(){
+        return handler;
     }
 }

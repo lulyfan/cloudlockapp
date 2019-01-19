@@ -35,6 +35,8 @@ public class NearScanLock implements Parcelable {
     private String status;
     private int lockEnterpriseId;//锁企id
 
+    private String flowNo;
+
     public int getKeyStatus() {
         return keyStatus;
     }
@@ -99,6 +101,18 @@ public class NearScanLock implements Parcelable {
         this.lockEnterpriseId = lockEnterpriseId;
     }
 
+    public String getFlowNo() {
+        return flowNo;
+    }
+
+    public void setFlowNo(String flowNo) {
+        this.flowNo = flowNo;
+    }
+
+    public static Creator<NearScanLock> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -114,6 +128,7 @@ public class NearScanLock implements Parcelable {
         dest.writeInt(this.bindStatus);
         dest.writeString(this.status);
         dest.writeInt(this.lockEnterpriseId);
+        dest.writeString(this.flowNo);
     }
 
     public NearScanLock() {
@@ -128,6 +143,7 @@ public class NearScanLock implements Parcelable {
         this.bindStatus = in.readInt();
         this.status = in.readString();
         this.lockEnterpriseId = in.readInt();
+        this.flowNo = in.readString();
     }
 
     public static final Parcelable.Creator<NearScanLock> CREATOR = new Parcelable.Creator<NearScanLock>() {

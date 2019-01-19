@@ -15,6 +15,7 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.cloudLock.CloudLock;
 
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Scheduler;
@@ -67,7 +68,7 @@ public class BaseApplication extends MultiDexApplication {
     private void initLeakCanary() {
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
 //            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
+//            // You should not initLockKey your app in this process.
 //            return;
 //        }
 //        LeakCanary.install(this);

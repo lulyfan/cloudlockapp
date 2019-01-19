@@ -150,7 +150,7 @@ public class NearLockActivity extends BaseActivity {
                 @Override
                 public void convert(CommonViewHolder commonViewHolder, int position, NearScanLock item) {
                     TextView textView = commonViewHolder.getView(R.id.tv_ble_name);
-                    textView.setText(item.getMac());
+                    textView.setText(item.getName());
                     ImageButton imageButton = commonViewHolder.getView(R.id.iBtn_ble_add);
                     imageButton.setVisibility(item.getBindStatus() == EnumCollection.BindStatus.UNBIND.ordinal() ? View.VISIBLE : View.GONE);
                     imageButton.setOnClickListener(v -> {
