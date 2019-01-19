@@ -59,6 +59,10 @@ public class JinouxBleLink extends BaseBleLink {
     @Override
     void close(String address) {
         handleDisconnect(CODE_JINOUX_BLE_CLOSE);
+    }
+
+    public void clear() {
+        handleDisconnect(CODE_JINOUX_BLE_CLOSE);
         if (isBind) {
             isBind = false;
             context.unbindService(serviceConnection);
@@ -77,13 +81,21 @@ public class JinouxBleLink extends BaseBleLink {
                 msg =  "jinoux bluetooth connect timeout";
                 break;
 
+            case CODE_JINOUX_BLE_CLOSE:
+                msg = "jinoux bluetooth close";
+                break;
                 default:
         }
         return msg;
     }
 
     private void handleDisconnect(final int code) {
-        bluetoothLeService.disconnect(-1);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                bluetoothLeService.disconnect(-1);
+            }
+        });
 
         if (mConnectionManager != null) {
             mConnectionManager.onDisConnect(address, code);
@@ -100,6 +112,7 @@ public class JinouxBleLink extends BaseBleLink {
     }
 
     private void handleConnect() {
+
         if (mConnectionManager != null) {
             mConnectionManager.onConnect(address);
         }

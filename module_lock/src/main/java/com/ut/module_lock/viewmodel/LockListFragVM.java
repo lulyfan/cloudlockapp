@@ -50,6 +50,7 @@ public class LockListFragVM extends AndroidViewModel {
     private LockKey mLockKey;   //本次要开的锁
     public boolean isStopScan;
     public boolean isScaning;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public LockListFragVM(@NonNull Application application) {
         super(application);
@@ -209,11 +210,15 @@ public class LockListFragVM extends AndroidViewModel {
         }
     }
 
+    private void delayScan() {
+        handler.postDelayed(() -> scan(), 3000);
+    }
+
     private void handleScanEnd() {
         isScaning = false;
         Log.i("autoOpenLock","结束扫描");
         if (!isFindDevice) {
-            scan();
+            delayScan();
         }
 
     }
@@ -230,7 +235,7 @@ public class LockListFragVM extends AndroidViewModel {
             @Override
             public void onDisconnect(int code, String message) {
                 Log.i("autoOpenLock", "连接失败------" + message);
-                scan();
+                delayScan();
             }
         });
     }
@@ -249,13 +254,14 @@ public class LockListFragVM extends AndroidViewModel {
                         public void onSuccess(Void data) {
                             Log.i("autoOpenLock","开锁成功");
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
-                            scan();
+                            delayScan();
                         }
 
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
-                            scan();
+                            UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
+                            delayScan();
                         }
                     });
         } else {
@@ -265,13 +271,14 @@ public class LockListFragVM extends AndroidViewModel {
                         public void onSuccess(Void data) {
                             Log.i("autoOpenLock","开锁成功");
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
-                            scan();
+                            delayScan();
                         }
 
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
-                            scan();
+                            UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
+                            delayScan();
                         }
                     });
 
