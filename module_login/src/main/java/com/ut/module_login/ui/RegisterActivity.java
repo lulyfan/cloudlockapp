@@ -158,7 +158,7 @@ public class RegisterActivity extends BaseActivity {
         }, 500L);
         registerRuleTv.setOnClickListener(v ->
                 ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
-                .withString("load_url", "file:///android_asset/agreement.html")
+                .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockprivate")
                 .navigation());
     }
 

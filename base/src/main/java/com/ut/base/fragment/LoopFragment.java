@@ -17,9 +17,9 @@ import com.ut.base.BaseFragment;
 import com.ut.base.R;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
-import com.ut.base.activity.GrantPermissionActivity;
+import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentLoopBinding;
-import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.base.viewModel.SendKeyViewModel;
 
 import java.util.Calendar;
 
@@ -28,7 +28,7 @@ import java.util.Calendar;
  */
 public class LoopFragment extends BaseFragment {
     private FragmentLoopBinding binding;
-    private GrantPermisssionViewModel viewModel;
+    private SendKeyViewModel viewModel;
     private int mY, mM, mD;
     private int sY, sM, sD, eY, eM, eD;
     private int mHour, mMin;
@@ -45,7 +45,7 @@ public class LoopFragment extends BaseFragment {
         // Inflate the layout for this fragment
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_loop, container, false);
-            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            viewModel = ViewModelProviders.of(getActivity()).get(SendKeyViewModel.class);
             init();
             initData();
         }
@@ -112,7 +112,7 @@ public class LoopFragment extends BaseFragment {
             chooseDate(v, getString(R.string.endDate));
         });
 
-        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
+        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((SendKeyActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = binding.getRoot().findViewById(R.id.et_phoneNum);
         EditText et_name = binding.getRoot().findViewById(R.id.et_receiverName);

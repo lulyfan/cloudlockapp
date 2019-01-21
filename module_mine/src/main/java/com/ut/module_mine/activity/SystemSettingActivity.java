@@ -53,13 +53,13 @@ public class SystemSettingActivity extends BaseActivity {
 
         binding.checkVersion.setOnClickListener(v -> {
             try {
-                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionCode,null);
+                VersionUpdateHelper.updateVersion(this, getPackageManager().getPackageInfo(getPackageName(), 0).versionCode, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
-        binding.userRule.setOnClickListener((v)->{
+        binding.userRule.setOnClickListener((v) -> {
             ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
                     .withString("load_url", "file:///android_asset/agreement.html")
                     .navigation();
@@ -79,6 +79,12 @@ public class SystemSettingActivity extends BaseActivity {
 
         binding.logout.setOnClickListener(v -> {
             logout();
+        });
+
+        binding.privateRule.setOnClickListener(v -> {
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
+                    .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockprivate")
+                    .navigation();
         });
     }
 

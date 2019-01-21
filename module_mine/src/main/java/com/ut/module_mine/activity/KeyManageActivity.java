@@ -1,16 +1,11 @@
 package com.ut.module_mine.activity;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.ut.base.BaseActivity;
-import com.ut.base.activity.GrantPermissionActivity;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.util.BottomLineItemDecoration;
 import com.ut.module_mine.adapter.DataBindingAdapter;

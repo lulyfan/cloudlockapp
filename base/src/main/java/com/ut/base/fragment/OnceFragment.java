@@ -3,7 +3,6 @@ package com.ut.base.fragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,14 @@ import android.widget.ImageView;
 
 import com.ut.base.BaseFragment;
 import com.ut.base.R;
-import com.ut.base.activity.GrantPermissionActivity;
+import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentOnceBinding;
-import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.base.viewModel.SendKeyViewModel;
 
 public class OnceFragment extends BaseFragment {
 
     private FragmentOnceBinding binding;
-    private GrantPermisssionViewModel viewModel;
+    private SendKeyViewModel viewModel;
 
     public OnceFragment() {
         // Required empty public constructor
@@ -32,7 +31,7 @@ public class OnceFragment extends BaseFragment {
         if (binding == null) {
             View view = inflater.inflate(R.layout.fragment_once, container, false);
             binding = DataBindingUtil.bind(view);
-            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            viewModel = ViewModelProviders.of(getActivity()).get(SendKeyViewModel.class);
             initUI();
         }
         return binding.getRoot();
@@ -42,7 +41,7 @@ public class OnceFragment extends BaseFragment {
         if (binding == null) return;
         View view = binding.getRoot();
         ImageView iv_contact = binding.getRoot().findViewById(R.id.contact);
-        iv_contact.setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
+        iv_contact.setOnClickListener(v -> ((SendKeyActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = view.findViewById(R.id.et_phoneNum);
         EditText et_name = view.findViewById(R.id.et_receiverName);

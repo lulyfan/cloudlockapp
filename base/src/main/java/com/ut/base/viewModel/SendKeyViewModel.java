@@ -23,7 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class GrantPermisssionViewModel extends AndroidViewModel {
+public class SendKeyViewModel extends AndroidViewModel {
 
     private CommonApiService service;
     public MutableLiveData<String> tip = new MutableLiveData<>();
@@ -45,7 +45,7 @@ public class GrantPermisssionViewModel extends AndroidViewModel {
     public String mac;
     public int userType = EnumCollection.UserType.ADMIN.ordinal();
 
-    public GrantPermisssionViewModel(@NonNull Application application) {
+    public SendKeyViewModel(@NonNull Application application) {
         super(application);
         service = MyRetrofit.get().getCommonApiService();
     }

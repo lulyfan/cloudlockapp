@@ -8,14 +8,10 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -24,14 +20,17 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.adapter.GrantPermissionAdapter;
 import com.ut.base.databinding.ActivityGrantPermissionBinding;
-import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.base.viewModel.SendKeyViewModel;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @Route(path = RouterUtil.BaseModulePath.GRANTPERMISSION)
-public class GrantPermissionActivity extends BaseActivity {
+public class SendKeyActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
-    private GrantPermisssionViewModel viewModel;
+    private SendKeyViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class GrantPermissionActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(GrantPermisssionViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(SendKeyViewModel.class);
         viewModel.tip.observe(this, s -> {
             CLToast.showAtBottom(getApplicationContext(), s);
             finish();
@@ -121,25 +120,51 @@ public class GrantPermissionActivity extends BaseActivity {
             String weeks = viewModel.weeks.getValue();
             String mac = viewModel.mac;
 
-            switch (binding.viewPager.getCurrentItem()) {
+            String reg = "yyyy-MM-dd HH:ss:mm";
 
-                case 0:
-                    viewModel.sendForeverKey(phoneNum, mac, keyName, isAdmin);
-                    break;
+            SimpleDateFormat sdf = new SimpleDateFormat(reg, Locale.getDefault());
+            try {
+                switch (binding.viewPager.getCurrentItem()) {
 
-                case 1:
-                    viewModel.sendLimitTimeKey(phoneNum, mac, keyName, limitStartTime, limitEndTime);
-                    break;
+                    case 0:
+                        viewModel.sendForeverKey(phoneNum, mac, keyName, isAdmin);
+                        break;
 
-                case 2:
-                    viewModel.sendOnceKey(phoneNum, mac, keyName);
-                    break;
+                    case 1:
+                        long limitedStartTimeStamp = sdf.parse(limitStartTime).getTime();
+                        long limitedEndTimeStamp = sdf.parse(limitEndTime).getTime();
+                        if (limitedEndTimeStamp <= limitedStartTimeStamp) {
+                            CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_send_key_time_error_tips));
+                            return;
+                        }
+                        viewModel.sendLimitTimeKey(phoneNum, mac, keyName, limitStartTime, limitEndTime);
+                        break;
+                    case 2:
+                        viewModel.sendOnceKey(phoneNum, mac, keyName);
+                        break;
 
-                case 3:
-                    viewModel.sendLoopKey(phoneNum, mac, keyName, loopStartTime, loopEndTime, weeks, startTimeRange, endTimeRange);
-                    break;
+                    case 3:
+                        reg = "HH:ss:mm";
+                        sdf = new SimpleDateFormat(reg, Locale.getDefault());
+                        if (sdf.parse(startTimeRange).getTime() >= sdf.parse(endTimeRange).getTime()) {
+                            CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_send_key_time_error_tips));
+                            return;
+                        }
 
-                default:
+                        reg = "yyyy-MM-dd";
+                        sdf = new SimpleDateFormat(reg, Locale.getDefault());
+                        if (sdf.parse(loopStartTime).getTime() >= sdf.parse(loopEndTime).getTime()) {
+                            CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_send_key_date_error_tips));
+                            return;
+                        }
+
+                        viewModel.sendLoopKey(phoneNum, mac, keyName, loopStartTime, loopEndTime, weeks, startTimeRange, endTimeRange);
+                        break;
+
+                    default:
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

@@ -8,18 +8,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ut.base.BaseFragment;
 import com.ut.base.R;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
-import com.ut.base.activity.GrantPermissionActivity;
+import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentLimitTimeBinding;
-import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.base.viewModel.SendKeyViewModel;
 
 import java.util.Calendar;
 
@@ -29,7 +27,7 @@ import java.util.Calendar;
 public class LimitTimeFragment extends BaseFragment {
 
     private FragmentLimitTimeBinding binding;
-    private GrantPermisssionViewModel viewModel;
+    private SendKeyViewModel viewModel;
 
     private int sYear, sMonth, sDay, sHour, sMinute;
     private int eYear, eMonth, eDay, eHour, eMinute;
@@ -46,7 +44,7 @@ public class LimitTimeFragment extends BaseFragment {
         // Inflate the layout for this fragment
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_limit_time, container, false);
-            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            viewModel = ViewModelProviders.of(getActivity()).get(SendKeyViewModel.class);
             initUI();
             initData();
         }
@@ -91,7 +89,7 @@ public class LimitTimeFragment extends BaseFragment {
             chooseTime(v, getString(R.string.invalidTime));
         });
 
-        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
+        binding.getRoot().findViewById(R.id.contact).setOnClickListener(v -> ((SendKeyActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = binding.getRoot().findViewById(R.id.et_phoneNum);
         EditText et_name = binding.getRoot().findViewById(R.id.et_receiverName);

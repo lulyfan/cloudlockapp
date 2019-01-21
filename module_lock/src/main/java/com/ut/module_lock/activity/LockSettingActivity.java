@@ -62,12 +62,12 @@ public class LockSettingActivity extends BaseActivity {
         initViewModel();
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
-        mBinding.switchCanOpen.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        mBinding.switchCanOpen.setOnClickListener(view -> {
             if (isResetChecked) {
                 isResetChecked = false;
                 return;
             }
-            mLockSettingVM.changeCanOpen(isChecked);
+            mLockSettingVM.changeCanOpen(mBinding.switchCanOpen.isChecked());
         });
         mBinding.layoutLockName.setOnClickListener(v -> {
             ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME)

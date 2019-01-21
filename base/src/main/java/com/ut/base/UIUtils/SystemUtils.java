@@ -16,7 +16,6 @@ import com.ut.base.Utils.PreferenceUtil;
 
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

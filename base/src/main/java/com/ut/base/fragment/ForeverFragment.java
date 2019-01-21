@@ -5,21 +5,16 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.ut.base.BaseFragment;
 import com.ut.base.R;
-import com.ut.base.activity.GrantPermissionActivity;
+import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentForeverBinding;
-import com.ut.base.viewModel.GrantPermisssionViewModel;
+import com.ut.base.viewModel.SendKeyViewModel;
 import com.ut.database.entity.EnumCollection;
 
 
@@ -29,7 +24,7 @@ import com.ut.database.entity.EnumCollection;
 public class ForeverFragment extends BaseFragment {
 
     private FragmentForeverBinding binding;
-    private GrantPermisssionViewModel viewModel;
+    private SendKeyViewModel viewModel;
 
     public ForeverFragment() {
         // Required empty public constructor
@@ -42,7 +37,7 @@ public class ForeverFragment extends BaseFragment {
         if(binding == null) {
             View view = inflater.inflate(R.layout.fragment_forever, container, false);
             binding = DataBindingUtil.bind(view);
-            viewModel = ViewModelProviders.of(getActivity()).get(GrantPermisssionViewModel.class);
+            viewModel = ViewModelProviders.of(getActivity()).get(SendKeyViewModel.class);
             initUI();
         }
         return binding.getRoot();
@@ -51,7 +46,7 @@ public class ForeverFragment extends BaseFragment {
     private void initUI() {
         if (binding == null) return;
         View view = binding.getRoot();
-        view.findViewById(R.id.contact).setOnClickListener(v -> ((GrantPermissionActivity) getActivity()).selectContact());
+        view.findViewById(R.id.contact).setOnClickListener(v -> ((SendKeyActivity) getActivity()).selectContact());
 
         EditText et_phoneNum = view.findViewById(R.id.et_phoneNum);
         EditText et_name = view.findViewById(R.id.et_receiverName);
