@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ut.base.Utils.UTLog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.NearScanLock;
@@ -21,6 +22,7 @@ import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityNearLockBinding;
 import com.ut.module_lock.viewmodel.NearLockVM;
 import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.util.Log;
 
 import java.util.List;
 
@@ -72,6 +74,9 @@ public class NearLockActivity extends BaseActivity {
             if (isScanning) {
                 mNearLockBinding.progressBarGreen.setVisibility(View.VISIBLE);
             } else {
+                if (mAdapter == null || mAdapter.getData().isEmpty()) {
+                    CLToast.showAtCenter(getBaseContext(), "暂未搜索到门锁，请再重试");
+                }
                 mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
             }
         });
@@ -145,7 +150,9 @@ public class NearLockActivity extends BaseActivity {
 
     private void refreshListData(List<NearScanLock> datas) {
         if (mAdapter == null) {
-            if (datas == null || datas.size() < 1) return;
+            if (datas == null || datas.size() < 1) {
+                return;
+            }
             mAdapter = new CommonAdapter<NearScanLock>(this, datas, R.layout.item_ble_list) {
                 @Override
                 public void convert(CommonViewHolder commonViewHolder, int position, NearScanLock item) {

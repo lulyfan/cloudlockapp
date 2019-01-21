@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
-import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
@@ -20,7 +19,7 @@ import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
-import com.ut.module_lock.activity.LockSettingActivity;
+import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.entity.SwitchResult;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
@@ -93,7 +92,6 @@ public class LockSettingVM extends AndroidViewModel {
                     if (result.isSuccess()) {
                         AppManager.getAppManager().currentActivity().startLoad();
                         toDeleteAdminKey();
-                        setDeleteBtnEnable(false);
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -390,15 +388,7 @@ public class LockSettingVM extends AndroidViewModel {
         mCompositeDisposable.clear();
     }
 
-    private void setDeleteBtnEnable(boolean b) {
-        if (AppManager.getAppManager().currentActivity() instanceof LockSettingActivity) {
-            LockSettingActivity currentActivity = (LockSettingActivity) AppManager.getAppManager().currentActivity();
-            currentActivity.deleteBtnEnable(b);
-        }
-    }
-
     private void endLoad() {
-        AppManager.getAppManager().currentActivity().endLoad();
-        setDeleteBtnEnable(true);
+        showTip.postValue(Constance.END_LOAD);
     }
 }

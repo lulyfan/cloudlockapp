@@ -11,19 +11,15 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.operation.MyRetrofit;
+import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
-import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
-import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
@@ -34,13 +30,9 @@ import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.AcitivityLockSettingBinding;
 import com.ut.module_lock.viewmodel.LockSettingVM;
-import com.ut.unilink.UnilinkManager;
-
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -108,7 +100,11 @@ public class LockSettingActivity extends BaseActivity {
             }
         });
         mLockSettingVM.getShowTip().observe(this, showTip -> {
-            CLToast.showAtBottom(getBaseContext(), showTip);
+            if (Constance.END_LOAD.equals(showTip)) {
+               endLoad();
+            } else {
+                CLToast.showAtBottom(getBaseContext(), showTip);
+            }
         });
         mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
@@ -248,7 +244,7 @@ public class LockSettingActivity extends BaseActivity {
                 StringBuffer xingqi = new StringBuffer("星期");
                 String[] split = weeks.split(",");
                 for (String s : split) {
-                    if(TextUtils.isEmpty(s)) continue;
+                    if (TextUtils.isEmpty(s)) continue;
                     switch (Integer.valueOf(s)) {
                         case 1:
                             xingqi.append("一,");
@@ -295,9 +291,5 @@ public class LockSettingActivity extends BaseActivity {
                 .subscribe(lockKey1 -> {
                     LockKeyDaoImpl.get().insert(lockKey1);
                 });
-    }
-
-    public void deleteBtnEnable(boolean isEnable) {
-        mBinding.btnDeleteKey.setEnabled(isEnable);
     }
 }
