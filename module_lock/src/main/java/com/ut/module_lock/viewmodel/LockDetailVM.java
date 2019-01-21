@@ -94,17 +94,20 @@ public class LockDetailVM extends AndroidViewModel {
             toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
             return 0;
         } else {
+            isToConnect = false;
             return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
                 public void onScan(ScanDevice scanDevice) {
-                    if (!isToConnect && scanDevice.getAddress().equals(mLockKey.getMac())) {
+                    if (!isToConnect && scanDevice.getAddress().equalsIgnoreCase(mLockKey.getMac())) {
+                        isToConnect = true;
                         toConnect(scanDevice, mLockKey);
                     }
                 }
 
                 @Override
                 public void onFinish(List<ScanDevice> scanDevices) {
-
+                    if (!isToConnect)
+                        showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                 }
 
                 @Override
@@ -124,9 +127,9 @@ public class LockDetailVM extends AndroidViewModel {
                     public void onConnect() {
                         CloudLock cloudLock = getCloucLockFromLockKey();
                         io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
-                            toGetElect(cloudLock);
+//                            toGetElect(cloudLock);
+                            toActOpenLock(getCloucLockFromLockKey());
                         }, 100, TimeUnit.MILLISECONDS);
-
                         isConnectSuccessed = true;
                         connectStatus.postValue(true);
                     }

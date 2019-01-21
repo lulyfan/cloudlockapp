@@ -32,7 +32,7 @@ public class DeviceKey implements Parcelable {
     private int keyCfg;//钥匙配置属性；
     private int keyInId;//钥匙内部编号
 
-    private boolean isAuthKey;//是授权钥匙还是正常钥匙 0：正常钥匙;1:授权钥匙
+    private int isAuthKey;//是授权钥匙还是正常钥匙 0：正常钥匙;1:授权钥匙
 
     /**
      * {@link com.ut.database.entity.EnumCollection.DeviceKeyStatus}
@@ -51,7 +51,7 @@ public class DeviceKey implements Parcelable {
     private long timeEnd;         //结束时间
     private int openLockCntUsed;//已开锁次数
 
-    private int lockId;//锁对应的id
+    private int lockID;//锁对应的id
 
     public DeviceKey() {
     }
@@ -93,6 +93,10 @@ public class DeviceKey implements Parcelable {
 
     public int getKeyID() {
         return keyID;
+    }
+
+    public int getRecordKeyId() {
+        return -(lockID * 100 + 1);
     }
 
     public void setKeyID(int keyID) {
@@ -139,12 +143,16 @@ public class DeviceKey implements Parcelable {
         this.keyStatus = keyStatus;
     }
 
-    public boolean getIsAuthKey() {
-        return isAuthKey;
+    public void setIsAuthKey(boolean isAuthKey) {
+        this.isAuthKey = isAuthKey ? 1 : 0;
     }
 
-    public void setIsAuthKey(boolean isAuthKey) {
+    public void setIsAuthKey(int isAuthKey) {
         this.isAuthKey = isAuthKey;
+    }
+
+    public int getIsAuthKey() {
+        return isAuthKey;
     }
 
     public int getKeyAuthType() {
@@ -154,10 +162,18 @@ public class DeviceKey implements Parcelable {
     public void setKeyAuthType(int keyAuthType) {
         this.keyAuthType = keyAuthType;
         if (keyAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
-            this.isAuthKey = false;
+            this.isAuthKey = 0;
         } else {
-            this.isAuthKey = true;
+            this.isAuthKey = 1;
         }
+    }
+
+    public int getLockID() {
+        return lockID;
+    }
+
+    public void setLockID(int lockID) {
+        this.lockID = lockID;
     }
 
     public void setDeviceKeyAuthData(DeviceKeyAuth deviceKeyAuthData) {
@@ -170,15 +186,15 @@ public class DeviceKey implements Parcelable {
         this.timeEnd = deviceKeyAuthData.getTimeEnd();
         this.openLockCntUsed = deviceKeyAuthData.getOpenLockCntUsed();
 
-        this.keyAuthType = DeviceKeyUtil.getKeyAuthType(this.isAuthKey, this.timeICtl);
+        this.keyAuthType = DeviceKeyUtil.getKeyAuthType(this.isAuthKey == 1, this.timeICtl);
         if (this.keyStatus != EnumCollection.DeviceKeyStatus.FROZEN.ordinal()) {
-            this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey, this.timeICtl, this.timeEnd
+            this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey == 1, this.timeICtl, this.timeEnd
                     , this.openLockCnt, this.openLockCntUsed);
         }
     }
 
     public void setUnfreezeStatus() {
-        this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey, this.timeICtl, this.timeEnd
+        this.keyStatus = DeviceKeyUtil.getKeyStatus(this.isAuthKey == 1, this.timeICtl, this.timeEnd
                 , this.openLockCnt, this.openLockCntUsed);
     }
 
@@ -243,14 +259,6 @@ public class DeviceKey implements Parcelable {
         this.openLockCntUsed = openLockCntUsed;
     }
 
-    public int getLockId() {
-        return lockId;
-    }
-
-    public void setLockId(int lockId) {
-        this.lockId = lockId;
-    }
-
     public Boolean[] getWeekAuthData() {
         return DeviceKeyUtil.getWeekAuthData(this.timeICtl);
     }
@@ -278,7 +286,6 @@ public class DeviceKey implements Parcelable {
                 ", timeStart=" + timeStart +
                 ", timeEnd=" + timeEnd +
                 ", openLockCntUsed=" + openLockCntUsed +
-                ", lockId=" + lockId +
                 '}';
     }
 
@@ -310,7 +317,7 @@ public class DeviceKey implements Parcelable {
         dest.writeInt(this.keyType);
         dest.writeInt(this.keyCfg);
         dest.writeInt(this.keyInId);
-        dest.writeByte(this.isAuthKey ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.isAuthKey == 1 ? 1 : 0);
         dest.writeInt(this.keyStatus);
         dest.writeInt(this.keyAuthType);
         dest.writeInt(this.authId);
@@ -319,7 +326,7 @@ public class DeviceKey implements Parcelable {
         dest.writeLong(this.timeStart);
         dest.writeLong(this.timeEnd);
         dest.writeInt(this.openLockCntUsed);
-        dest.writeInt(this.lockId);
+        dest.writeInt(this.lockID);
     }
 
     protected DeviceKey(Parcel in) {
@@ -329,7 +336,7 @@ public class DeviceKey implements Parcelable {
         this.keyType = in.readInt();
         this.keyCfg = in.readInt();
         this.keyInId = in.readInt();
-        this.isAuthKey = in.readByte() != 0;
+        this.isAuthKey = in.readInt();
         this.keyStatus = in.readInt();
         this.keyAuthType = in.readInt();
         this.authId = in.readInt();
@@ -338,7 +345,7 @@ public class DeviceKey implements Parcelable {
         this.timeStart = in.readLong();
         this.timeEnd = in.readLong();
         this.openLockCntUsed = in.readInt();
-        this.lockId = in.readInt();
+        this.lockID = in.readInt();
     }
 
     public static final Creator<DeviceKey> CREATOR = new Creator<DeviceKey>() {

@@ -6,6 +6,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.operation.CommonApi;
+import com.ut.base.ErrorHandler;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
@@ -19,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -71,7 +76,7 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         GateLockKey gateLockKey = new GateLockKey();
         gateLockKey.setFreezeState(isFreeze);
         gateLockKey.setKeyId(mDeviceKey.getKeyID());
-        gateLockKey.setAuthState(mDeviceKey.getIsAuthKey());
+        gateLockKey.setAuthState(mDeviceKey.getIsAuthKey() == 1);
         gateLockKey.setKeyType((byte) mDeviceKey.getKeyType());
         gateLockKey.setInnerNum(mDeviceKey.getKeyInId());
         mGateLockKeys.add(gateLockKey);
@@ -103,7 +108,7 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
 
     @Override
     public boolean checkScanResult(ScanDevice scanDevice) {
-        if (scanDevice.getAddress().equals(mLockKey.getMac())) return true;
+        if (scanDevice.getAddress().equalsIgnoreCase(mLockKey.getMac())) return true;
         return false;
     }
 
@@ -145,6 +150,11 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         mExecutorService.execute(() -> {
             DeviceKeyDaoImpl.get().delete(mDeviceKey);
         });
+        Disposable disposable = CommonApi.delDeviceKeyInfo(mLockKey.getId(), mDeviceKey.getKeyID())
+                .subscribe(result -> {
+
+                }, new ErrorHandler());
+        mCompositeDisposable.add(disposable);
     }
 
     @Override
@@ -167,7 +177,13 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         mExecutorService.execute(() -> {
             DeviceKeyDaoImpl.get().insertDeviceKeys(mDeviceKey);
         });
-
+        //向后台更新钥匙信息
+        Disposable disposable = CommonApi.updateKeyInfo(mDeviceKey)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(voidResult -> {
+                }, new ErrorHandler());
+        mCompositeDisposable.add(disposable);
     }
 
     @Override

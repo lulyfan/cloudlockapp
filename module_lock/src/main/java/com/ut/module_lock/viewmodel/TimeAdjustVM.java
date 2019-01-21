@@ -70,7 +70,7 @@ public class TimeAdjustVM extends BaseViewModel {
         int scanResult = UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
             @Override
             public void onScan(ScanDevice scanDevice) {
-                if (scanDevice.getAddress().equals(mac)) {
+                if (scanDevice.getAddress().equalsIgnoreCase(mac)) {
                     isFindDevice = true;
                     connect(scanDevice);
                 }

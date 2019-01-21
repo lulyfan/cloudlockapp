@@ -160,8 +160,6 @@ public class DeviceKeyDetailActivity extends BaseActivity {
             this.mDeviceKey = deviceKey;
             initView();
             mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
-        } else {
-
         }
     }
 
@@ -195,8 +193,8 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         public void onRecordClick(View view) {
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
                     .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
-                    .withLong(Constance.KEY_ID, 0 - mDeviceKey.getKeyID())
-                    .navigation(DeviceKeyDetailActivity.this, REQUEST_CODE_EDIT_NAME);
+                    .withLong(Constance.KEY_ID, mDeviceKey.getRecordKeyId())
+                    .navigation();
         }
 
 

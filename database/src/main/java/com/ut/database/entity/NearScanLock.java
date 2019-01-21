@@ -70,7 +70,7 @@ public class NearScanLock implements Parcelable {
     }
 
     public String getMac() {
-        return mac;
+        return mac.toUpperCase();
     }
 
     public void setMac(String mac) {

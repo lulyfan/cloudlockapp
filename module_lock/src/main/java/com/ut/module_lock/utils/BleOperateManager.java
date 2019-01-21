@@ -123,12 +123,19 @@ public class BleOperateManager {
 
             @Override
             public void onFinish(List<ScanDevice> scanDevices) {
-
+                UTLog.i("onScanFinish");
+                if (!canScan) return;
+                if (mOperateCallback != null) {
+                    UTLog.i("onScanTimeout 1");
+                    mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
+                }
             }
 
             @Override
             public void onScanTimeout() {
+                UTLog.i("onScanTimeout");
                 if (mOperateCallback != null) {
+                    UTLog.i("onScanTimeout 1");
                     mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
                 }
             }
