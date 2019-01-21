@@ -203,7 +203,7 @@ public interface ApiUrl {
     String insertInnerLockLog = PREFIX + "/innerLock/insertInnerLockLog" + SUFFIX;
 
     //验证码登录
-    String loginByVerifyCode = "api/user/loginByVerifyCode?json";
+    String loginByVerifyCodeWithDeviceCode = "api/user/loginByVerifyCodeWithDeviceCode?json";
 
     //删除钥匙
     String delKeyInfo = PREFIX + "/innerLock/delKeyInfo" + SUFFIX;

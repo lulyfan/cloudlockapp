@@ -310,8 +310,8 @@ public interface CommonApiService {
     Observable<Result<Void>> insertInnerLockLog(@Field("volist") String volist);
 
     @FormUrlEncoded
-    @POST(ApiUrl.loginByVerifyCode)
-    Observable<Result<User>> loginByCode(@Field("account") String phone, @Field("verifyCode") String code);
+    @POST(ApiUrl.loginByVerifyCodeWithDeviceCode)
+    Observable<Result<User>> loginByCode(@Field("account") String phone, @Field("verifyCode") String code, @Field("deviceCode") String deviceCode);
 
     @FormUrlEncoded
     @POST(ApiUrl.delKeyInfo)
