@@ -312,4 +312,8 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.loginByVerifyCode)
     Observable<Result<User>> loginByCode(@Field("account") String phone, @Field("verifyCode") String code);
+
+    @FormUrlEncoded
+    @POST(ApiUrl.delKeyInfo)
+    Observable<Result<Void>> delKeyInfo(@Field("lockId") int lockId, @Field("localKeys") int localKey);
 }

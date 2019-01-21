@@ -95,8 +95,8 @@ public class NearLockVM extends AndroidViewModel {
 
     //获取锁信息
     public void checkLock(ScanDevice scanDevice) {
-        if (mStringScanDeviceMap.get(scanDevice.getAddress()) != null) return;
-        mStringScanDeviceMap.put(scanDevice.getAddress(), scanDevice);
+        if (mStringScanDeviceMap.get(scanDevice.getAddress().toUpperCase()) != null) return;
+        mStringScanDeviceMap.put(scanDevice.getAddress().toUpperCase(), scanDevice);
         Observable<Result<NearScanLock>> nearScanLock = CommonApi.getLockInfo(scanDevice.getAddress());
         Disposable disposable = nearScanLock.subscribe(nearScanLockResult -> {
             if (nearScanLockResult.code == 200) {

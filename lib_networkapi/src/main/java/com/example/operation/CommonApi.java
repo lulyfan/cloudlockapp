@@ -19,6 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.http.Field;
 
 /**
  * Created by ZYB on 2017-03-10.
@@ -122,6 +123,12 @@ public class CommonApi {
     public static Observable<Result<Void>> insertInnerLockLog(List<Record> list) {
         String volist = mGson.toJson(list);
         Observable<Result<Void>> resultsObservable = getCommonApiService().insertInnerLockLog(volist);
+        return ObjectLoader.observe(resultsObservable);
+    }
+
+    public static Observable<Result<Void>> delDeviceKeyInfo(String lockId, int localKey) {
+        int lockID = Integer.parseInt(lockId);
+        Observable<Result<Void>> resultsObservable = getCommonApiService().delKeyInfo(lockID, localKey);
         return ObjectLoader.observe(resultsObservable);
     }
 

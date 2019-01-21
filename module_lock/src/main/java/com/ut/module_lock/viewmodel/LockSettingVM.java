@@ -53,6 +53,8 @@ public class LockSettingVM extends AndroidViewModel {
     private MutableLiveData<SwitchResult> setCanOpenSwitchResult = new MutableLiveData<>();
     private LockKey lockKey;
 
+    private boolean isToConnect = false;
+
     public static final int BLEREAUESTCODE = 101;
 
     public static final int BLEENABLECODE = 102;
@@ -142,18 +144,22 @@ public class LockSettingVM extends AndroidViewModel {
         if (UnilinkManager.getInstance(getApplication()).isConnect(lockKey.getMac())) {
             toUnbind(lockKey);
         } else {
+            isToConnect = false;
             return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
                 public void onScan(ScanDevice scanDevice) {
                     UTLog.i("scanDevice：" + scanDevice.getAddress());
-                    if (lockKey.getMac().equals(scanDevice.getAddress())) {
+                    if (!isToConnect && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
+                        isToConnect = true;
                         toConnect(lockKey, scanDevice);
                     }
                 }
 
                 @Override
                 public void onFinish(List<ScanDevice> scanDevices) {
-
+                    if (!isToConnect) {
+                        onScanTimeout();
+                    }
                 }
 
                 @Override

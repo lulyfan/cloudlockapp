@@ -27,8 +27,8 @@ public interface DeviceKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDeviceKeys(List<DeviceKey> keys);
 
-    @Query("select * from device_key where keyType like :type")
-    LiveData<List<DeviceKey>> findDeviceKeysByType(int type);
+    @Query("select * from device_key where keyType = :type And lockId ==:lockId")
+    LiveData<List<DeviceKey>> findDeviceKeysByType(int lockId, int type);
 
     @Query("SELECT * FROM device_key ORDER BY keyID ASC")
     LiveData<List<DeviceKey>> getAll();
@@ -36,6 +36,9 @@ public interface DeviceKeyDao {
 
     @Query("DELETE FROM device_key")
     void deleteAll();
+
+    @Query("DELETE FROM device_key where lockId = :lockId")
+    void deleteKeyByLockId(int lockId);
 
     @Delete
     void delete(DeviceKey... deviceKeys);

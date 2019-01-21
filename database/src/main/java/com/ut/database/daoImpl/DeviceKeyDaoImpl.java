@@ -38,8 +38,8 @@ public class DeviceKeyDaoImpl implements DeviceKeyDao {
     }
 
     @Override
-    public LiveData<List<DeviceKey>> findDeviceKeysByType(int type) {
-        return mDeviceKeyDao.findDeviceKeysByType(type);
+    public LiveData<List<DeviceKey>> findDeviceKeysByType(int lockId, int type) {
+        return mDeviceKeyDao.findDeviceKeysByType(lockId, type);
     }
 
     @Override
@@ -50,6 +50,11 @@ public class DeviceKeyDaoImpl implements DeviceKeyDao {
     @Override
     public void deleteAll() {
         mDeviceKeyDao.deleteAll();
+    }
+
+    @Override
+    public void deleteKeyByLockId(int lockId) {
+        mDeviceKeyDao.deleteKeyByLockId(lockId);
     }
 
     @Override

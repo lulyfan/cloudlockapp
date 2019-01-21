@@ -6,6 +6,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.operation.CommonApi;
+import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
@@ -20,6 +22,9 @@ import com.ut.unilink.cloudLock.protocol.data.GateLockKey;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -89,7 +94,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         GateLockKey gateLockKey = new GateLockKey();
         gateLockKey.setFreezeState(deviceKey.getKeyType() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal());
         gateLockKey.setKeyId(deviceKey.getKeyID());
-        gateLockKey.setAuthState(deviceKey.getIsAuthKey());
+        gateLockKey.setAuthState(deviceKey.getIsAuthKey() == 1);
         gateLockKey.setKeyType((byte) deviceKey.getKeyType());
         gateLockKey.setInnerNum(deviceKey.getKeyInId());
         UTLog.i("====mmmm" + gateLockKey.toString());
@@ -127,7 +132,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
 
     @Override
     public boolean checkScanResult(ScanDevice scanDevice) {
-        if (scanDevice.getAddress().equals(mLockKey.getMac())) return true;
+        if (scanDevice.getAddress().equalsIgnoreCase(mLockKey.getMac())) return true;
         return false;
     }
 
@@ -154,11 +159,8 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         }
     }
 
-    private boolean checkNeedWriteKey() {
-        if (mFirstDeviceIsAuth == mDeviceKey.getValue().getIsAuthKey()) {
-            return false;
-        }
-        return true;
+    private boolean checkNeedWriteKey() {//原来与现在都为授权钥匙或正常钥匙时不需要写钥匙信息，反之需要
+        return !(mFirstDeviceIsAuth && (mDeviceKey.getValue().getIsAuthKey() == 1));
     }
 
     @Override
@@ -208,7 +210,8 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         if (mDeviceKey.getValue().getKeyAuthType() != EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
             AuthInfo authInfo = new AuthInfo();
             authInfo.setAuthId(mDeviceKey.getValue().getAuthId());
-            authInfo.setAuthDay(mDeviceKey.getValue().getTimeICtlIntArr());
+            if (mDeviceKey.getValue().getKeyAuthType() == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal())
+                authInfo.setAuthDay(mDeviceKey.getValue().getTimeICtlIntArr());
             authInfo.setStartTime(mDeviceKey.getValue().getTimeStart());
             authInfo.setEndTime(mDeviceKey.getValue().getTimeEnd());
             authInfo.setKeyId(mDeviceKey.getValue().getKeyID());
@@ -220,7 +223,6 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
                 mBleOperateManager.updateDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
             }
         } else {
-            //todo 删除授权或提示成功
             operateSuccess();
         }
     }
@@ -236,15 +238,21 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     }
 
     private void operateSuccess() {
-        mDeviceKey.getValue().setOpenLockCntUsed(0);
-        UTLog.i("====mm" + mDeviceKey.getValue().toString());
+        DeviceKey deviceKey = mDeviceKey.getValue();
+        deviceKey.setOpenLockCntUsed(0);
         getShowDialog().postValue(false);
         getShowTip().postValue(getApplication().getString(R.string.operate_success));
         //写入数据库前设置钥匙状态
-        mDeviceKey.getValue().setUnfreezeStatus();
+        deviceKey.setUnfreezeStatus();
         mExecutorService.execute(() -> {
-            DeviceKeyDaoImpl.get().insertDeviceKeys(mDeviceKey.getValue());
+            DeviceKeyDaoImpl.get().insertDeviceKeys(deviceKey);
         });
+        //向后台更新钥匙信息
+        Disposable disposable = CommonApi.updateKeyInfo(deviceKey)
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(voidResult -> {
+                }, new ErrorHandler());
         saveResult.postValue(true);
     }
 }

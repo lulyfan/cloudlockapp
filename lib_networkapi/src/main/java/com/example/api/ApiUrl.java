@@ -204,4 +204,7 @@ public interface ApiUrl {
 
     //验证码登录
     String loginByVerifyCode = "api/user/loginByVerifyCode?json";
+
+    //删除钥匙
+    String delKeyInfo = PREFIX + "/innerLock/delKeyInfo" + SUFFIX;
 }
