@@ -46,7 +46,7 @@ public class CLJPushReceiver extends BroadcastReceiver {
                         .setWhen(System.currentTimeMillis())
                         .setAutoCancel(true)
                         .setContentIntent(PendingIntent.getActivity(context, (int)(Math.random() * 100), i, PendingIntent.FLAG_UPDATE_CURRENT))
-                        .setSmallIcon(R.mipmap.ic_launcher)
+//                        .setSmallIcon(R.mipmap.ic_launcher)
                         .build();
 
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -58,6 +58,16 @@ public class LockListFragment extends BaseFragment {
     private CommonAdapter<LockGroup> mLockGroupCommonAdapter = null;
     private CommonPopupWindow popupWindow = null;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!UnilinkManager.getInstance(getContext()).checkState()) {
+            UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
+            UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -263,9 +273,6 @@ public class LockListFragment extends BaseFragment {
     private void autuOpenLock() {
         if (UnilinkManager.getInstance(getContext()).checkState()) {
             mLockListFragVM.autoOpenLock();
-        } else {
-            UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
-            UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
         }
     }
 }

@@ -51,7 +51,6 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener addListener = null;
     private OnCustomerClickListener checkAllListener = null;
     private static AlertDialog noLoginDialog = null;
-    private LoadDialogFragment loadDialogFragment = new LoadDialogFragment();
     private DialogPlus loadDialog;
 
     private boolean isResumed = false;
@@ -291,12 +290,6 @@ public class BaseActivity extends AppCompatActivity {
         AppManager.getAppManager().finishActivity(this);
     }
 
-    public void showLoadDialog(String message) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        loadDialogFragment.setMessage(message);
-        loadDialogFragment.show(fragmentManager, "load");
-    }
-
     public void startLoad(String msg) {
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
@@ -336,17 +329,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void endLoad() {
-        if (loadDialog.isShowing()) {
-            loadDialog.dismiss();
-        }
-    }
+        runOnUiThread(() -> {
+            if (loadDialog.isShowing()) {
+                loadDialog.dismiss();
+            }
+        });
 
-    public void showLoadDialog() {
-        showLoadDialog("");
-    }
-
-    public void dismissLoadDialog() {
-        loadDialogFragment.dismiss();
     }
 
     public void initLoadDialog() {
