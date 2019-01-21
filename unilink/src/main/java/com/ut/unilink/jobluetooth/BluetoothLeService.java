@@ -108,6 +108,7 @@ public class BluetoothLeService extends Service {
             synchronized (BluetoothLeService.class) {
                 String intentAction;
                 if (newState == STATE_CONNECTED) {
+                    Log.i("autoOpenLock", "connected mConnectionState:" + mConnectionState);
                     if (mConnectionState == 1) {
                         mServiceHnadler.removeCallbacks(mConnectTimeoutRunnable);
                         mConnectionState = 2;
@@ -120,6 +121,7 @@ public class BluetoothLeService extends Service {
                         mServiceHnadler.postDelayed(mDiscoverServicesTimeoutRunnable, 3000L);
                     }
                 } else if (newState == STATE_DISCONNECTED) {
+                    Log.i("autoOpenLock", "disconnected status:" + status + " newState:" + newState);
                     disconnect(2);
                     intentAction = BlueToothParams.ACTION_GATT_DISCONNECTED;
                     Log.i(TAG, "Disconnected from GATT server.intentAction: " + intentAction);
@@ -146,7 +148,9 @@ public class BluetoothLeService extends Service {
             if (status != 0) {
                 return;
             }
-            Log.i(TAG, "onCharacteristicRead " + characteristic.getUuid().toString() + " --> " + Tools.bytesToHexString(characteristic.getValue()));
+            Log.i(TAG, "====onCharacteristicRead " + characteristic.getUuid().toString() + " --> "
+                    + Tools.bytesToHexString(characteristic.getValue())
+                    + "stateReadSuccess:"+stateReadSuccess);
             if (characteristic.getValue() != null) {
                 if (stateReadSuccess != 5) {
                     if (characteristic.getUuid().toString().equals("0000b353-0000-1000-8000-00805f9b34fb")) {
@@ -172,6 +176,8 @@ public class BluetoothLeService extends Service {
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            Log.i(TAG, "====onCharacteristicChanged " + characteristic.getUuid().toString() + " --> " + Tools.bytesToHexString(characteristic.getValue()));
+
             if (characteristic != null) {
                 whichChanged(characteristic);
             } else {
@@ -341,6 +347,10 @@ public class BluetoothLeService extends Service {
 
     private void checkReadCharacteristic() {
         synchronized (BluetoothLeService.class) {
+            Log.i(TAG, "====checkReadCharacteristic stateReadMaxPacketSize："+stateReadMaxPacketSize
+                            +" stateReadNoResponseMaxPacketCount:"+stateReadNoResponseMaxPacketCount
+                            +" mConnectionState:"+mConnectionState);
+
             if (this.stateReadMaxPacketSize == 1 && this.stateReadNoResponseMaxPacketCount == 1
                     && this.stateReadPacketTimeout == 1 && mConnectionState == 4) {
                 this.mServiceHnadler.removeCallbacks(this.mReadCharacteristicTimeoutRunnable);
