@@ -65,12 +65,7 @@ public class SafeVerifyActivity extends BaseActivity {
             mBinding.verifyBtn.setEnabled(!TextUtils.isEmpty(code));
         });
 
-        mBinding.verifyBtn.setOnClickListener(v -> safeVerifyVm.verifyCodeAndLogin(mBinding.edtPhone.getPhoneText(), mBinding.edtVerifyCode.getText().toString(), result -> {
-            if (result.isSuccess()) {
-                finish();
-                ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
-            }
-        }));
+        mBinding.verifyBtn.setOnClickListener(v -> safeVerifyVm.verifyCodeAndLogin(mBinding.edtPhone.getPhoneText(), mBinding.edtVerifyCode.getText().toString()));
 
         mBinding.tvGetVerifyCode.setOnClickListener(v -> {
             safeVerifyVm.obtainVerifyCode(mBinding.edtPhone.getPhoneText());

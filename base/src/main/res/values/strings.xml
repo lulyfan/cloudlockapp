@@ -49,4 +49,6 @@
     <string name="waiting">等待</string>
     <string name="send_key_phone_hint">请输入接收者手机号</string>
     <string name="lock_send_key_failed_tips_one">钥匙只能发送给已注册手机号</string>
+    <string name="lock_send_key_date_error_tips">停止日期不能晚于启用日期</string>
+    <string name="lock_send_key_time_error_tips">失效时间不能晚于生效时间</string>
 </resources>

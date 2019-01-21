@@ -11,6 +11,7 @@ import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
@@ -42,8 +43,8 @@ public class SafeVerifyVm extends AndroidViewModel {
                 }, new ErrorHandler());
     }
 
-    public void verifyCodeAndLogin(String phone, String code, Consumer<Result<Void>> subscriber) {
-        MyRetrofit.get().getCommonApiService().loginByCode(phone, code)
+    public void verifyCodeAndLogin(String phone, String code) {
+        MyRetrofit.get().getCommonApiService().loginByCode(phone, code, SystemUtils.getMacAddress())
                 .subscribeOn(Schedulers.io())
                 .map(result -> {
                             if (result.isSuccess()) {
