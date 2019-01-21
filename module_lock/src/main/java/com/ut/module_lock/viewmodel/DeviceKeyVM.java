@@ -17,6 +17,7 @@ import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.Record;
 import com.ut.module_lock.R;
@@ -29,6 +30,7 @@ import com.ut.unilink.cloudLock.protocol.data.GateLockOperateRecord;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -148,8 +150,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         UTLog.i("i:onConnectSuccess");
         processTick.postValue(processTickInt++);
         //todo 后台获取时间后进行对时
-        long time = System.currentTimeMillis();
-        mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getType(), mLockKey.getEncryptKey(), time);
+        mExecutorService.schedule(() -> {
+            long time = System.currentTimeMillis();
+            mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), time);
+        }, 100, TimeUnit.MILLISECONDS);
+
     }
 
     @Override
