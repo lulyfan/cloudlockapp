@@ -170,7 +170,7 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void sendKey() {
-        ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
+        ARouter.getInstance().build(RouterUtil.BaseModulePath.SEND_KEY)
                 .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mMac)
                 .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, lockKey.getUserType())
                 .navigation();

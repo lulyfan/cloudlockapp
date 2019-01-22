@@ -45,7 +45,7 @@ public class ApplyMessageInfoActivity extends BaseActivity {
         mBinding.btnIgnoreApply.setOnClickListener(v -> applyMessageVm.ignoreApply(mApplyMessage.getId()));
 
         mBinding.btnSendKey.setOnClickListener(v -> {
-            ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.SEND_KEY)
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, mApplyMessage.getRuleType())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mApplyMessage.getMac())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile())

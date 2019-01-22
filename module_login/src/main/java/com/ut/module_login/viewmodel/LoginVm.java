@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
-import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -17,6 +16,7 @@ import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_login.R;
 import com.ut.module_login.common.LoginUtil;
+import com.ut.module_login.ui.LoginActivity;
 import com.ut.module_login.ui.RegisterActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -48,9 +48,8 @@ public class LoginVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
+                        AppManager.getAppManager().finishActivity(LoginActivity.class);
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                        currentActivity.finish();
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
                     } else {
@@ -86,10 +85,7 @@ public class LoginVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
-                        if (currentActivity instanceof RegisterActivity) {
-                            currentActivity.finish();
-                        }
+                        AppManager.getAppManager().finishActivity(RegisterActivity.class);
                         login(phone, password);
                     }
                     CLToast.showAtCenter(getApplication(), result.msg);

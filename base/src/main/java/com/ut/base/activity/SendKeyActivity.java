@@ -1,13 +1,19 @@
 package com.ut.base.activity;
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
@@ -27,7 +33,7 @@ import com.ut.database.entity.EnumCollection;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@Route(path = RouterUtil.BaseModulePath.GRANTPERMISSION)
+@Route(path = RouterUtil.BaseModulePath.SEND_KEY)
 public class SendKeyActivity extends BaseActivity {
     private ActivityGrantPermissionBinding binding;
     private SendKeyViewModel viewModel;
@@ -229,11 +235,13 @@ public class SendKeyActivity extends BaseActivity {
     static final int REQUEST_SELECT_PHONE_NUMBER = 1;
 
     public void selectContact() {
-        // Start an activity for the user to pick a phone number from contacts
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
+        if (checkAndRequestPermission(Manifest.permission.READ_CONTACTS)) {
+            // Start an activity for the user to pick a phone number from contacts
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
+            }
         }
     }
 
@@ -256,6 +264,36 @@ public class SendKeyActivity extends BaseActivity {
                 viewModel.receiverPhoneNum.setValue(number);
                 viewModel.keyName.setValue(name);
             }
+        }
+    }
+
+    private static final int REQUEST_READ_PERMISSION_CODE = 112;
+
+    private boolean checkAndRequestPermission(String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{permission}, REQUEST_READ_PERMISSION_CODE);//申请权限
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_READ_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 }

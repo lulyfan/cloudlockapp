@@ -123,7 +123,7 @@ public class LockDetailActivity extends BaseActivity {
                 keyHasDeletedTips();
                 return;
             }
-            ARouter.getInstance().build(RouterUtil.BaseModulePath.GRANTPERMISSION)
+            ARouter.getInstance().build(RouterUtil.BaseModulePath.SEND_KEY)
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mLockKey.getMac())
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, mLockKey.getUserType())
                     .navigation();

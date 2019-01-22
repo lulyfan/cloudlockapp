@@ -302,7 +302,9 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
-        Schedulers.io().scheduleDirect(() -> LockKeyDaoImpl.get().insert(lockKey));
+        Schedulers.io().scheduleDirect(() -> {
+            if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
+            LockKeyDaoImpl.get().insert(lockKey);
+        });
     }
 }
