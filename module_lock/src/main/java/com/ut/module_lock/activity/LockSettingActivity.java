@@ -84,6 +84,9 @@ public class LockSettingActivity extends BaseActivity {
         mBinding.adjustTime.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.TIME_ADJUST)
                 .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
                 .navigation());
+        if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
+            mBinding.switchCanOpen.setVisibility(View.GONE);
+        }
     }
 
     private volatile boolean isResetChecked = false;
@@ -302,7 +305,7 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        Schedulers.io().scheduleDirect(() -> {
+        Schedulers.io().scheduleDirect(()-> {
             if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
             LockKeyDaoImpl.get().insert(lockKey);
         });

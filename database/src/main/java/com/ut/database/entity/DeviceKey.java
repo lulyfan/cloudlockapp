@@ -96,7 +96,7 @@ public class DeviceKey implements Parcelable {
     }
 
     public int getRecordKeyId() {
-        return -(lockID * 100 + 1);
+        return -(lockID * 100 + keyID);
     }
 
     public void setKeyID(int keyID) {

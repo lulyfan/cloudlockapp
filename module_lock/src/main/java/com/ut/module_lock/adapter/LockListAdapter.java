@@ -124,6 +124,16 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
         }
     }
 
+    @BindingAdapter("ifShow")
+    public static void ifShow(ImageView imageView, int userType) {
+        if (userType != EnumCollection.UserType.ADMIN.ordinal() &&
+                userType != EnumCollection.UserType.AUTH.ordinal()) {
+            imageView.setVisibility(View.GONE);
+        } else {
+            imageView.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     @BindingAdapter("encryptText")
     public static void loadText(TextView textView, String account) {

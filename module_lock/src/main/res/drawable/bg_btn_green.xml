@@ -21,7 +21,7 @@
             <!--<solid android:color="@color/colorAccent"/>-->
             <gradient
                 android:endColor="@color/lock_color_btn_gray"
-                android:startColor="@color/lock_carview_shadow"
+                android:startColor="@color/lock_color_btn_gray"
                 />
             <corners
                 android:bottomLeftRadius="3dp"

@@ -56,7 +56,7 @@ public class DeviceKeyAuth implements Parcelable {
     }
 
     public void setOpenLockCnt(int openLockCnt) {
-        this.openLockCnt = openLockCnt;
+        this.openLockCnt = openLockCnt & 0xFF;
     }
 
     public String getTimeICtl() {

@@ -92,5 +92,10 @@ public class EnumCollection {
         CYCLE//循环
     }
 
-
+    public interface OpenLockState {
+        int INITIAL = 0;//初始状态
+        int SCANNING = 1;//正在搜索
+        int CONNECTING = 2;//正在连接
+        int OPENING = 3;//正在开锁
+    }
 }

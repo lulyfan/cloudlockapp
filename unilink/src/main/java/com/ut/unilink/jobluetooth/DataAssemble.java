@@ -92,7 +92,7 @@ public class DataAssemble {
                     buffer.put((byte) 0xA5);
                     state = STATE_HEAD2;
                 }
-                pos ++;
+                pos++;
                 break;
 
             case STATE_HEAD2:
@@ -112,7 +112,7 @@ public class DataAssemble {
                 } else {
                     reset();
                 }
-                pos ++;
+                pos++;
                 break;
 
             case STATE_LENGTH:
@@ -124,7 +124,7 @@ public class DataAssemble {
                 buffer.put((byte) dataLength);
                 needMsgLength = 4 + dataLength;
                 state = STATE_BODY;
-                pos ++;
+                pos++;
                 break;
 
             case STATE_BODY:
@@ -139,8 +139,8 @@ public class DataAssemble {
                         buffer.flip();
                         buffer.get(b);
                         mReceiveCallback.onReceiveSuccess(b);
-                        reset();
                     }
+                    reset();
                 }
                 break;
 

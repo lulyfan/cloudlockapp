@@ -108,9 +108,9 @@ public class DeviceKeyListFragment extends BaseFragment {
                 }
             };
             View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.layout_empty_data, null);
-            emptyView.findViewById(R.id.tv_connectLock).setOnClickListener(v -> {
-                mDeviceKeyVM.connectAndGetData(mDeviceKeyVM.getLockKey().getType(), getActivity());
-            });
+//            emptyView.findViewById(R.id.tv_connectLock).setOnClickListener(v -> {
+//                mDeviceKeyVM.connectAndGetData(mDeviceKeyVM.getLockKey().getType(), getActivity());
+//            });
             ViewGroup parent = (ViewGroup) mFragmentDeviceKeyBinding.lvDeviceKey.getParent();
             ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);

@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.entity.base.Result;
+import com.ut.base.ErrorHandler;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.NearScanLock;
 import com.example.operation.CommonApi;
@@ -109,9 +110,7 @@ public class NearLockVM extends AndroidViewModel {
                 nearLockList.add(nearScanLock1);
                 nearScanLocks.postValue(nearLockList);
             }
-        }, throwable -> {//TODO 处理异常
-            UTLog.i("get lock info failed");
-        });
+        }, new ErrorHandler());
         mCompositeDisposable.add(disposable);
     }
 

@@ -160,8 +160,6 @@ public class LockSettingVM extends AndroidViewModel {
                     if (!isToConnect && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
                         isToConnect = true;
                         toConnect(lockKey, scanDevice);
-                    } else {
-                        endLoad();
                     }
                 }
 
@@ -169,8 +167,6 @@ public class LockSettingVM extends AndroidViewModel {
                 public void onFinish(List<ScanDevice> scanDevices) {
                     if (!isToConnect) {
                         onScanTimeout();
-                    } else {
-                        endLoad();
                     }
                 }
 

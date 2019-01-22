@@ -42,13 +42,15 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
+                android:id="@+id/img_touch_open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/base_8dp"
                 android:src="@mipmap/icon_touch_unable"
-                app:touchSrc="@{lockKey.canOpen}"
+                app:ifShow="@{lockKey.userType}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:touchSrc="@{lockKey.canOpen}"/>
 
             <TextView
                 android:id="@+id/tv_lock_name"

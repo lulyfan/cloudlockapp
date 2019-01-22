@@ -36,6 +36,7 @@ public class LockDetailActivity extends BaseActivity {
     private LockDetailVM mLockDetailVM;
     private static final int BLEREAUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
+    private volatile boolean isShowDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +50,23 @@ public class LockDetailActivity extends BaseActivity {
         initView();
         mDetailBinding.setPresent(new Present());
         initViewModel();
+        //todo 自动开锁
+        autoOpen();
+    }
+
+    private void autoOpen() {
+        if (!isNotManager() && (mLockKey.getCanOpen() == 1)) {
+            toOpenLock();
+        }
     }
 
     private void initView() {
-        if (mLockKey.getUserType() != EnumCollection.UserType.ADMIN.ordinal() &&
-                mLockKey.getUserType() != EnumCollection.UserType.AUTH.ordinal()) {
+        if (isNotManager()) {
             mDetailBinding.functionTvBleKey.setVisibility(View.GONE);
             mDetailBinding.functionTvDeviceKey.setVisibility(View.GONE);
             mDetailBinding.functionTvManagekey.setVisibility(View.GONE);
             mDetailBinding.functionTvSendkey.setVisibility(View.GONE);
+            mDetailBinding.tvTouchOpen.setVisibility(View.GONE);
             return;
         }
         if (mLockKey.getType() == EnumCollection.LockType.SMARTLOCK.getType()) {
@@ -66,6 +75,11 @@ public class LockDetailActivity extends BaseActivity {
             mDetailBinding.functionTvBleKey.setVisibility(View.VISIBLE);
             mDetailBinding.functionTvDeviceKey.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isNotManager() {
+        return mLockKey.getUserType() != EnumCollection.UserType.ADMIN.ordinal() &&
+                mLockKey.getUserType() != EnumCollection.UserType.AUTH.ordinal();
     }
 
     private void initLockData() {
@@ -90,16 +104,32 @@ public class LockDetailActivity extends BaseActivity {
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
             endLoad();
-            CLToast.showAtBottom(LockDetailActivity.this, tip);
+            if (isShowDialog)
+                CLToast.showAtBottom(LockDetailActivity.this, tip);
+            isShowDialog = false;
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
             endLoad();
+            isShowDialog = false;
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
             mLockKey = lockKey;
             mLockDetailVM.setLockKey(mLockKey);
             initLockData();
+        });
+        //todo 自动开锁
+        mLockDetailVM.getReAutoOpen().observe(this, reOpen -> {
+            if (reOpen) {
+                autoOpen();
+            }
+        });
+        mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
+            if (isShowDialog) {
+                startLoad();
+            } else {
+                endLoad();
+            }
         });
     }
 
@@ -115,6 +145,7 @@ public class LockDetailActivity extends BaseActivity {
         }
 
         public void onOpenLockClick(View view) {
+            isShowDialog = true;
             toOpenLock();
         }
 
@@ -233,7 +264,8 @@ public class LockDetailActivity extends BaseActivity {
                 UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
                 break;
             case UnilinkManager.SCAN_SUCCESS:
-                startLoad();
+                if (isShowDialog)
+                    startLoad();
                 break;
             case -3:
                 CLToast.showAtCenter(this, getString(R.string.lock_open_lock_invaild_tips));

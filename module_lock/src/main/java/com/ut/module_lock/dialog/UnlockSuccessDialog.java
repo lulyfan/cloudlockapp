@@ -2,9 +2,11 @@ package com.ut.module_lock.dialog;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 
 import com.ut.base.BaseDialog;
@@ -21,18 +23,25 @@ import com.ut.module_lock.databinding.DialogUnlockSuccessBinding;
  */
 public class UnlockSuccessDialog extends BaseDialog {
     private DialogUnlockSuccessBinding mBinding;
+    private Handler mHandler = null;
 
     public UnlockSuccessDialog(Context context, boolean isShowTitle) {
         super(context, isShowTitle);
         initView();
-        setTimout(5000);
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (UnlockSuccessDialog.this.isShowing())
+                    dismiss();
+            }
+        };
+        setTimout(3000);
+        setOnDismissListener(dialog -> mHandler.removeMessages(0));
     }
 
-    public void setTimout(int timout){
-        new Handler(Looper.getMainLooper()).postDelayed(()->{
-            if (this.isShowing())
-            dismiss();
-        },timout);
+    public void setTimout(int timout) {
+        mHandler.sendEmptyMessageDelayed(0, timout);
     }
 
     private void initView() {
@@ -49,4 +58,10 @@ public class UnlockSuccessDialog extends BaseDialog {
             dismiss();
         }
     };
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler.removeMessages(0);
+    }
 }

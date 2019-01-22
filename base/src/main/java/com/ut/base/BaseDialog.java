@@ -62,4 +62,5 @@ public class BaseDialog extends AppCompatDialog {
         super.onStop();
         currentDialog = null;
     }
+
 }

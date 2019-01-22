@@ -4,13 +4,13 @@
 
     <data>
 
-        <import type="com.ut.database.entity.EnumCollection" />
+        <import type="com.ut.database.entity.EnumCollection"/>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="lockKey"
-            type="com.ut.database.entity.LockKey" />
+            type="com.ut.database.entity.LockKey"/>
     </data>
 
     <RelativeLayout
@@ -21,7 +21,7 @@
 
         <include
             android:id="@+id/title"
-            layout="@layout/toolbar_green" />
+            layout="@layout/toolbar_green"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_device_id"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_device_id"
@@ -60,14 +60,14 @@
                             android:layout_marginRight="@dimen/base_53dp"
                             android:text="@{lockKey.id}"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
 
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="@color/color_base_divider" />
+                            android:background="@color/color_base_divider"/>
                     </FrameLayout>
 
                     <FrameLayout
@@ -81,7 +81,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_device_mac"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_device_mac"
@@ -91,14 +91,14 @@
                             android:layout_marginRight="@dimen/base_53dp"
                             android:text="@{lockKey.mac}"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
 
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="@color/color_base_divider" />
+                            android:background="@color/color_base_divider"/>
                     </FrameLayout>
 
                     <FrameLayout
@@ -112,7 +112,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_power"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_device_power"
@@ -122,14 +122,14 @@
                             android:layout_marginRight="@dimen/base_53dp"
                             android:text="@{lockKey.electricityStr}"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
 
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1px"
                             android:layout_gravity="bottom"
-                            android:background="@color/color_base_divider" />
+                            android:background="@color/color_base_divider"/>
                     </FrameLayout>
 
                     <FrameLayout
@@ -143,7 +143,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_valid_date"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_device_valid_date"
@@ -153,7 +153,7 @@
                             android:layout_marginRight="@dimen/base_53dp"
                             android:text="@{lockKey.keyTypeStr}"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
                 </LinearLayout>
 
@@ -169,7 +169,7 @@
                     android:paddingRight="@dimen/base_20dp"
                     android:text="@string/touch_unlock"
                     android:textColor="@color/gray3"
-                    android:textSize="@dimen/base_14sp" />
+                    android:textSize="@dimen/base_14sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -193,7 +193,7 @@
                             android:layout_centerVertical="true"
                             android:text="@string/lock_name"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -204,7 +204,7 @@
                             android:layout_toStartOf="@+id/iv_more"
                             android:text="@{lockKey.name}"
                             android:textColor="@color/color_base_title"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
 
                         <ImageView
                             android:id="@+id/iv_more"
@@ -214,7 +214,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="@dimen/base_27dp"
                             android:src="@mipmap/more_black"
-                            android:visibility="@{lockKey.userType == 1 ? View.VISIBLE: View.INVISIBLE}" />
+                            android:visibility="@{lockKey.userType == 1 ? View.VISIBLE: View.INVISIBLE}"/>
                     </RelativeLayout>
 
                     <View
@@ -222,7 +222,7 @@
                         android:layout_height="1px"
                         android:layout_gravity="bottom"
                         android:layout_marginStart="@dimen/base_20dp"
-                        android:background="@color/color_base_divider" />
+                        android:background="@color/color_base_divider"/>
 
                     <FrameLayout
                         android:id="@+id/choose_group"
@@ -237,7 +237,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_choose_group"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_lock_group"
@@ -248,7 +248,7 @@
                             android:drawableRight="@mipmap/more_black"
                             android:drawablePadding="@dimen/base_10dp"
                             android:textColor="@color/color_base_title"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
 
                     <View
@@ -256,7 +256,7 @@
                         android:layout_height="1px"
                         android:layout_gravity="bottom"
                         android:layout_marginStart="@dimen/base_20dp"
-                        android:background="@color/color_base_divider" />
+                        android:background="@color/color_base_divider"/>
 
                     <FrameLayout
                         android:id="@+id/adjust_time"
@@ -271,7 +271,7 @@
                             android:layout_gravity="center_vertical"
                             android:text="@string/lock_setting_adjust_time"
                             android:textColor="@color/color_base_text"
-                            android:textSize="@dimen/base_14sp" />
+                            android:textSize="@dimen/base_14sp"/>
 
                         <TextView
                             android:id="@+id/tv_lock_adjustTime"
@@ -282,7 +282,7 @@
                             android:drawableRight="@mipmap/more_black"
                             android:drawablePadding="@dimen/base_10dp"
                             android:textColor="@color/color_base_title"
-                            android:textSize="@dimen/base_17sp" />
+                            android:textSize="@dimen/base_17sp"/>
                     </FrameLayout>
                 </LinearLayout>
 
@@ -298,7 +298,7 @@
                     android:background="@drawable/shape_btn_delete_key"
                     android:text="@string/lock_delete"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/base_17sp" />
+                    android:textSize="@dimen/base_17sp"/>
 
             </LinearLayout>
         </ScrollView>

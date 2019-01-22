@@ -359,6 +359,7 @@ public class LockKey implements Parcelable {
         return EnumCollection.KeyStatus.isKeyValid(keyStatus);
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -387,15 +388,16 @@ public class LockKey implements Parcelable {
         dest.writeInt(this.encryptType);
         dest.writeString(this.encryptKey);
         dest.writeLong(this.keyId);
-        dest.writeString(this.statusStr);
-        dest.writeString(this.lockTypeStr);
-        dest.writeString(this.keyTypeStr);
-        dest.writeString(this.electricityStr);
+        dest.writeInt(this.canOpen);
         dest.writeString(this.startTime);
         dest.writeString(this.endTime);
         dest.writeString(this.startTimeRange);
         dest.writeString(this.endTimeRange);
         dest.writeString(this.weeks);
+        dest.writeString(this.statusStr);
+        dest.writeString(this.lockTypeStr);
+        dest.writeString(this.keyTypeStr);
+        dest.writeString(this.electricityStr);
     }
 
     public LockKey() {
@@ -422,16 +424,17 @@ public class LockKey implements Parcelable {
         this.longitude = in.readString();
         this.encryptType = in.readInt();
         this.encryptKey = in.readString();
-        this.keyId = in.readInt();
-        this.statusStr = in.readString();
-        this.lockTypeStr = in.readString();
-        this.keyTypeStr = in.readString();
-        this.electricityStr = in.readString();
+        this.keyId = in.readLong();
+        this.canOpen = in.readInt();
         this.startTime = in.readString();
         this.endTime = in.readString();
         this.startTimeRange = in.readString();
         this.endTimeRange = in.readString();
         this.weeks = in.readString();
+        this.statusStr = in.readString();
+        this.lockTypeStr = in.readString();
+        this.keyTypeStr = in.readString();
+        this.electricityStr = in.readString();
     }
 
     public static final Parcelable.Creator<LockKey> CREATOR = new Parcelable.Creator<LockKey>() {

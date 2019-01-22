@@ -52,7 +52,7 @@ public class DeviceKeyUtil {
                 return EnumCollection.DeviceKeyStatus.EXPIRED.ordinal();
             }
         }
-        if (openLockCnt - openLockCntUsed < 1) {
+        if (openLockCnt != 255 && openLockCnt - openLockCntUsed < 1) {
             return EnumCollection.DeviceKeyStatus.INVALID.ordinal();
         }
         return EnumCollection.DeviceKeyStatus.NORMAL.ordinal();

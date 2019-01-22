@@ -106,6 +106,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
 
     public void connectAndGetData(int type, Activity activity) {
         if (mBleOperateManager.isConnected(mLockKey.getMac())) {
+            processTickInt = 0;
             onConnectSuccess();
         } else {
             mBleOperateManager.scanDevice(type, activity);
@@ -117,7 +118,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     protected void onCleared() {
         super.onCleared();
         DeviceKeyDaoImpl.get().getAll().removeObserver(observer1);
-        mBleOperateManager.disconnect(mLockKey.getMac());
+//        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 
     @Override
@@ -211,7 +212,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         UTLog.i("i:" + code + " msg:" + msg);
         processTick.postValue(-1);
         showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
-        mBleOperateManager.disconnect(mLockKey.getMac());
+//        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 
     @Override
@@ -237,7 +238,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         UTLog.i("i:" + code + " msg:" + msg);
         processTick.postValue(-1);
         showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
-        mBleOperateManager.disconnect(mLockKey.getMac());
+//        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 
     @Override
@@ -310,7 +311,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     public void onReadAuthCountFailed(int code, String msg) {
         processTick.postValue(-1);
         showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
-        mBleOperateManager.disconnect(mLockKey.getMac());
+//        mBleOperateManager.disconnect(mLockKey.getMac());
         UTLog.i("i:" + code + " msg:" + msg);
     }
 
@@ -384,7 +385,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             showTip.postValue(getApplication().getString(R.string.lock_device_key_load_failed));
         }
 
-        mBleOperateManager.disconnect(mLockKey.getMac());
+//        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 
     //从后台拿名字
