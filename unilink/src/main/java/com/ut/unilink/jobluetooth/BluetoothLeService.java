@@ -108,7 +108,6 @@ public class BluetoothLeService extends Service {
             synchronized (BluetoothLeService.class) {
                 String intentAction;
                 if (newState == STATE_CONNECTED) {
-                    Log.i("autoOpenLock", "connected mConnectionState:" + mConnectionState);
                     if (mConnectionState == 1) {
                         mServiceHnadler.removeCallbacks(mConnectTimeoutRunnable);
                         mConnectionState = 2;
@@ -118,10 +117,9 @@ public class BluetoothLeService extends Service {
                         intentAction = BlueToothParams.ACTION_GATT_CONNECTED;
                         broadcastUpdate(intentAction);
                         Log.i(TAG, "Connected to GATT server.");
-                        mServiceHnadler.postDelayed(mDiscoverServicesTimeoutRunnable, 5000L);
+                        mServiceHnadler.postDelayed(mDiscoverServicesTimeoutRunnable, 3000L);
                     }
                 } else if (newState == STATE_DISCONNECTED) {
-                    Log.i("autoOpenLock", "disconnected status:" + status + " newState:" + newState);
                     disconnect(2);
                     intentAction = BlueToothParams.ACTION_GATT_DISCONNECTED;
                     Log.i(TAG, "Disconnected from GATT server.intentAction: " + intentAction);
