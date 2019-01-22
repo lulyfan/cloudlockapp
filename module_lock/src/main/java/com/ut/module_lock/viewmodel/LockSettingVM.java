@@ -46,6 +46,7 @@ import io.reactivex.schedulers.Schedulers;
 @SuppressLint("CheckResult")
 public class LockSettingVM extends AndroidViewModel {
     private MutableLiveData<String> showTip = new MutableLiveData<>();
+    private MutableLiveData<String> dialogHandler = new MutableLiveData<>();
     private boolean isConnected = false;
     private MutableLiveData<Boolean> isDeleteSuccess = new MutableLiveData<>();
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -75,6 +76,10 @@ public class LockSettingVM extends AndroidViewModel {
         return showTip;
     }
 
+    public MutableLiveData<String> getDialogHandler() {
+        return dialogHandler;
+    }
+
     public MutableLiveData<Long> getSelectedGroupId() {
         if (selectedGroupId == null) {
             selectedGroupId = new MutableLiveData<>();
@@ -93,7 +98,7 @@ public class LockSettingVM extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         toDeleteAdminKey();
-                        showTip.postValue(Constance.START_LOAD);
+                        dialogHandler.postValue(Constance.START_LOAD);
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -402,6 +407,6 @@ public class LockSettingVM extends AndroidViewModel {
     }
 
     private void endLoad() {
-        showTip.postValue(Constance.END_LOAD);
+        dialogHandler.postValue(Constance.END_LOAD);
     }
 }

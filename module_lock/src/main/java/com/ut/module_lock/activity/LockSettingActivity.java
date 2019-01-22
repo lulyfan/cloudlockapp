@@ -110,6 +110,15 @@ public class LockSettingActivity extends BaseActivity {
                 CLToast.showAtBottom(getBaseContext(), showTip);
             }
         });
+        mLockSettingVM.getDialogHandler().observe(this, tips -> {
+            if (Constance.END_LOAD.equals(tips)) {
+                endLoad();
+                mBinding.btnDeleteKey.setEnabled(true);
+            } else if (Constance.START_LOAD.equals(tips)) {
+                startLoad();
+                mBinding.btnDeleteKey.setEnabled(false);
+            }
+        });
         mLockSettingVM.setLockKey(lockKey);
         mLockSettingVM.loadLockKey(lockKey.getMac()).observe(this, lk -> {
             if (lk == null) return;
@@ -294,6 +303,6 @@ public class LockSettingActivity extends BaseActivity {
     public void finish() {
         super.finish();
         if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
-        Schedulers.io().scheduleDirect(()-> LockKeyDaoImpl.get().insert(lockKey));
+        Schedulers.io().scheduleDirect(() -> LockKeyDaoImpl.get().insert(lockKey));
     }
 }
