@@ -1,10 +1,6 @@
 package com.ut.unilink.jobluetooth;
 
-import com.ut.unilink.util.Log;
-
 import java.nio.ByteBuffer;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 
 public class DataAssemble {
@@ -107,6 +103,12 @@ public class DataAssemble {
                 if (data[0] == BYTE_HEAD[1]) {
                     buffer.put((byte) 0x5A);
                     state = STATE_LENGTH;
+
+                 } else if (data[0] == BYTE_HEAD[0]) {
+                    buffer.clear();
+                    buffer.put((byte) 0xA5);
+                    state = STATE_HEAD2;
+
                 } else {
                     reset();
                 }
