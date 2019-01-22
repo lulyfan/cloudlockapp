@@ -52,9 +52,7 @@ public class LoginVm extends AndroidViewModel {
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
                         currentActivity.finish();
                     } else if (result.code == 411) {
-                        BaseActivity currentActivity = AppManager.getAppManager().currentActivity();
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
-                        currentActivity.finish();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }

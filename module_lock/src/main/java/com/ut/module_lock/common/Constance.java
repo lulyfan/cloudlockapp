@@ -19,8 +19,4 @@ public interface Constance {
     String USERTYPE = "usertype";
 
     String END_LOAD = "end_load";
-
-
-    //action
-    String CHECK_LOGIN_STATUS = "check_login_status";
 }
