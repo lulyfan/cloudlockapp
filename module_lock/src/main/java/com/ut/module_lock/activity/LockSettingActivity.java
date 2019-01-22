@@ -101,7 +101,11 @@ public class LockSettingActivity extends BaseActivity {
         });
         mLockSettingVM.getShowTip().observe(this, showTip -> {
             if (Constance.END_LOAD.equals(showTip)) {
-               endLoad();
+                endLoad();
+                mBinding.btnDeleteKey.setEnabled(true);
+            } else if (Constance.START_LOAD.equals(showTip)) {
+                startLoad();
+                mBinding.btnDeleteKey.setEnabled(false);
             } else {
                 CLToast.showAtBottom(getBaseContext(), showTip);
             }
@@ -230,6 +234,12 @@ public class LockSettingActivity extends BaseActivity {
         lockKey.setLockTypeStr(this.getResources().getStringArray(R.array.lock_type));
 
         int ruleType = lockKey.getRuleType();
+        settingRueTypeString(ruleType);
+        lockKey.setElectricityStr();
+        mBinding.setLockKey(lockKey);
+    }
+
+    private void settingRueTypeString(int ruleType) {
         if (ruleType == EnumCollection.KeyRuleType.FOREVER.ordinal()) {
             lockKey.setKeyTypeStr(getString(R.string.permanent));
         } else if (ruleType == EnumCollection.KeyRuleType.ONCE.ordinal()) {
@@ -274,8 +284,6 @@ public class LockSettingActivity extends BaseActivity {
                 mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_10sp));
             }
         }
-        lockKey.setElectricityStr();
-        mBinding.setLockKey(lockKey);
     }
 
     private void modifyLockName(String name) {
@@ -286,10 +294,6 @@ public class LockSettingActivity extends BaseActivity {
     public void finish() {
         super.finish();
         if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
-        Observable.just(lockKey)
-                .subscribeOn(Schedulers.io())
-                .subscribe(lockKey1 -> {
-                    LockKeyDaoImpl.get().insert(lockKey1);
-                });
+        Schedulers.io().scheduleDirect(()-> LockKeyDaoImpl.get().insert(lockKey));
     }
 }

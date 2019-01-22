@@ -92,8 +92,8 @@ public class LockSettingVM extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        AppManager.getAppManager().currentActivity().startLoad();
                         toDeleteAdminKey();
+                        showTip.postValue(Constance.START_LOAD);
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -129,12 +129,15 @@ public class LockSettingVM extends AndroidViewModel {
         switch (result) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 CLToast.showAtBottom(getApplication(), getApplication().getString(R.string.lock_tip_ble_not_support));
+                endLoad();
                 break;
             case UnilinkManager.NO_LOCATION_PERMISSION:
                 UnilinkManager.getInstance(getApplication()).requestPermission(AppManager.getAppManager().currentActivity(), BLEREAUESTCODE);
+                endLoad();
                 break;
             case UnilinkManager.BLE_NOT_OPEN:
                 UnilinkManager.getInstance(getApplication()).enableBluetooth(AppManager.getAppManager().currentActivity(), BLEENABLECODE);
+                endLoad();
                 break;
         }
     }
@@ -152,6 +155,8 @@ public class LockSettingVM extends AndroidViewModel {
                     if (!isToConnect && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
                         isToConnect = true;
                         toConnect(lockKey, scanDevice);
+                    } else {
+                        endLoad();
                     }
                 }
 
@@ -159,6 +164,8 @@ public class LockSettingVM extends AndroidViewModel {
                 public void onFinish(List<ScanDevice> scanDevices) {
                     if (!isToConnect) {
                         onScanTimeout();
+                    } else {
+                        endLoad();
                     }
                 }
 
@@ -187,8 +194,8 @@ public class LockSettingVM extends AndroidViewModel {
             public void onDisconnect(int i, String s) {
                 if (!isConnected) {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
-                    endLoad();
                 }
+                endLoad();
             }
         });
     }
