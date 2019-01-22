@@ -195,7 +195,9 @@ public class Key implements Serializable, Cloneable {
     }
 
     public boolean isInvalid() {
-        return status == 11 || status == 12;
+        return status == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()
+                || status == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()
+                || status == EnumCollection.KeyStatus.HAS_INVALID.ordinal();
     }
 
     public String userNameOrMobile() {
@@ -206,7 +208,7 @@ public class Key implements Serializable, Cloneable {
     }
 
     public boolean isFrozened() {
-        return status == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || status == EnumCollection.KeyStatus.FREEZING.ordinal() ;
+        return status == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || status == EnumCollection.KeyStatus.FREEZING.ordinal();
     }
 
 

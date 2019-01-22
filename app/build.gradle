@@ -40,11 +40,21 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signkey
+            manifestPlaceholders = [
+                    JPUSH_PKGNAME: rootProject.ext.appid,
+                    JPUSH_APPKEY : "0eb4b33f1284cc08a766b77a", //JPush上注册的包名对应的appkey.
+                    JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+            ]
         }
 
 
         debug {
 //            signingConfig signingConfigs.signkey
+            manifestPlaceholders = [
+                    JPUSH_PKGNAME: rootProject.ext.appid,
+                    JPUSH_APPKEY : "0eb4b33f1284cc08a766b77a", //JPush上注册的包名对应的appkey.
+                    JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+            ]
         }
     }
 

@@ -149,4 +149,9 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         UserRepository.getInstance().refreshUser();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

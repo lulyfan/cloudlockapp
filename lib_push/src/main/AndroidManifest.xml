@@ -120,13 +120,13 @@
             android:exported="false"/>
 
 
-        <receiver android:name=".MyJPushMessageReceiver"
-            >
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>
-                <category android:name="${JPUSH_PKGNAME}"></category>
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".MyJPushMessageReceiver"-->
+            <!--&gt;-->
+            <!--<intent-filter>-->
+                <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>-->
+                <!--<category android:name="${JPUSH_PKGNAME}"></category>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data

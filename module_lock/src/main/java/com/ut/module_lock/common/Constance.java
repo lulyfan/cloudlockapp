@@ -18,9 +18,6 @@ public interface Constance {
     String LOCK_KEY = "lock_key";
     String USERTYPE = "usertype";
 
+    String START_LOAD = "start_load";
     String END_LOAD = "end_load";
-
-
-    //action
-    String CHECK_LOGIN_STATUS = "check_login_status";
 }

@@ -7,7 +7,7 @@
     <string name="applicant">申请人</string>
     <string name="apply_time">申请时间</string>
     <string name="key_name">钥匙名称</string>
-    <string name="key_type">钥匙类型</string>
+    <string name="key_type">钥匙权限</string>
     <string name="ignore">忽略</string>
     <string name="send_key">发送钥匙</string>
 
@@ -18,4 +18,5 @@
     <string name="wait_for_handle">待处理</string>
     <string name="apply_desc">该用户向您申请%s%s的钥匙，请及时处理</string>
     <string name="notify_title">notify_title</string>
+    <string name="lock_name">锁名称</string>
 </resources>

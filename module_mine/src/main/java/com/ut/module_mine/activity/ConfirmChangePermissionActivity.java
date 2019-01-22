@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ut.base.BaseActivity;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.customView.CheckCodeView;
 import com.ut.module_mine.GlobalData;
 import com.ut.module_mine.R;
@@ -64,8 +65,9 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
         });
 
         binding.confirm.setOnClickListener(v -> {
-                String verifyCode = binding.checkCodeView.getInput();
-                viewModel.changeLockAdmin(verifyCode);
+            String verifyCode = binding.checkCodeView.getInput();
+            viewModel.changeLockAdmin(verifyCode);
+            SystemUtils.hideKeyboard(getBaseContext(), v);
         });
 
         binding.timer.setOnClickListener(v -> sendVerifyCode());

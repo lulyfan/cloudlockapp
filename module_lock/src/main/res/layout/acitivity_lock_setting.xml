@@ -162,8 +162,6 @@
                     android:id="@+id/switch_canOpen"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_60dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/base_10dp"
                     android:background="@drawable/shape_bg_corner"
                     android:checked="@{lockKey.canOpen == 1}"
@@ -176,7 +174,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/base_17dp"
+                    android:layout_marginTop="@dimen/base_10dp"
                     android:background="@drawable/shape_bg_corner"
                     android:orientation="vertical">
 
