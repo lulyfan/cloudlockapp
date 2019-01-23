@@ -280,6 +280,8 @@ public class LockDetailVM extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+        if (mLockKey != null) {
+            UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+        }
     }
 }
