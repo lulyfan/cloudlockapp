@@ -62,15 +62,11 @@ public class LockListFragment extends BaseFragment {
     private CommonPopupWindow popupWindow = null;
 
     private AutoOpenLockService mService;
+    private boolean requestPermissionFlag;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (!UnilinkManager.getInstance(getContext()).checkState()) {
-            UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
-            UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
-        }
 
         Intent intent = new Intent(getContext(), AutoOpenLockService.class);
         getContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -144,9 +140,7 @@ public class LockListFragment extends BaseFragment {
                             .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                             .navigation();
 
-                    if (mService != null) {
-                        mService.stopAutoOpenLock();
-                    }
+                    finish();
                 } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()){
                     CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
                 } else if( lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
@@ -244,21 +238,22 @@ public class LockListFragment extends BaseFragment {
 //            getActivity().startActivity(intent, bundle);
             getActivity().startActivity(intent);
 
-            if (mService != null) {
-                mService.stopAutoOpenLock();
-            }
+            finish();
         }
 
         public void onAddClick(View view) {
             getActivity().startActivity(new Intent(getContext(), AddGuideActivity.class));
             UTLog.i("onAddClick");
 
-            if (mService != null) {
-                mService.stopAutoOpenLock();
-            }
+            finish();
         }
     }
 
+    private void finish() {
+        if (mService != null) {
+            mService.stopAutoOpenLock();
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -273,6 +268,16 @@ public class LockListFragment extends BaseFragment {
         if (mLockListFragVM != null) {
             mLockListFragVM.toGetLockAllList(false);
             mLockListFragVM.toGetAllGroupList(false);
+        }
+
+        autoOpenLock();
+    }
+
+    private void autoOpenLock() {
+        if (mLockListFragVM.isNeedAutoOpenLock() && !UnilinkManager.getInstance(getContext()).checkState() && !requestPermissionFlag) {
+            requestPermissionFlag = true;
+            UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
+            UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
         }
 
         if (mService != null) {
@@ -291,7 +296,7 @@ public class LockListFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK && mService != null) {
-            mService.startAutoOpenLock();
+            autoOpenLock();
         }
     }
 
@@ -300,7 +305,7 @@ public class LockListFragment extends BaseFragment {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((AutoOpenLockService.LocalBinder)service).getService();
             mService.setLockKeys(mLockListFragVM.getLockList().getValue());
-            mService.startAutoOpenLock();
+            autoOpenLock();
         }
 
         @Override

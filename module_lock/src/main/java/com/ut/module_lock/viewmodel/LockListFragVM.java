@@ -141,4 +141,18 @@ public class LockListFragVM extends AndroidViewModel {
 //        lock2.removeObserver(getApplication());
     }
 
+    public boolean isNeedAutoOpenLock() {
+        List<LockKey> lockKeys = mLockKeys.getValue();
+        if (lockKeys == null || lockKeys.size() <= 0) {
+            return false;
+        }
+
+        for (LockKey lockKey : lockKeys) {
+            if (lockKey.getCanOpen() == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
