@@ -216,7 +216,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/customService"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/select_bg_item_up"
@@ -257,7 +257,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toBottomOf="@+id/customService" />
         </android.support.constraint.ConstraintLayout>
 
 

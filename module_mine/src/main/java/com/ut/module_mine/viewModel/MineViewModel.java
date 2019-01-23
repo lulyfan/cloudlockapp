@@ -1,11 +1,14 @@
 package com.ut.module_mine.viewModel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Switch;
@@ -104,25 +107,4 @@ public class MineViewModel extends BaseViewModel {
 
                 });
     }
-
-//    public void getHeadImgUrl() {
-//        SharedPreferences sharedPreferences = getApplication()
-//                .getSharedPreferences(Constant.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-//        String remoteHeadImgUrl = sharedPreferences.getString(Constant.KEY_HEAD_IMG_REMOTE, null);
-//        String localHeadImgUrl = sharedPreferences.getString(Constant.KEY_HEAD_IMG_LOCAL, null);
-//
-//        if (remoteHeadImgUrl == null) {
-//
-//            if (localHeadImgUrl != null) {
-//                headImgUrl.set(localHeadImgUrl);
-//            }
-//        } else {
-//
-//            if (remoteHeadImgUrl.equals(localHeadImgUrl)) {
-//                headImgUrl.set(localHeadImgUrl);
-//            } else {
-//                headImgUrl.set(remoteHeadImgUrl);
-//            }
-//        }
-//    }
 }

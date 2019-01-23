@@ -72,4 +72,5 @@
     <string name="input_20">请输入1-20位中文、字母或数字</string>
     <string name="smartLock">优特智能云锁</string>
     <string name="getVerifyCode">获取验证码</string>
+    <string name="isCallToCustomService">是否拨打客服热线？</string>
 </resources>

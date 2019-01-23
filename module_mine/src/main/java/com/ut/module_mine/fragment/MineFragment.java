@@ -7,22 +7,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.Utils.Util;
 import com.ut.module_mine.Constant;
 import com.ut.module_mine.activity.ChangeLockPermissionActivity;
 import com.ut.module_mine.activity.EditUserInfoActivity;
@@ -121,6 +127,8 @@ public class MineFragment extends BaseFragment {
             Intent intent = new Intent(getContext(), SystemSettingActivity.class);
             startActivity(intent);
         });
+
+        mMineBinding.customService.setOnClickListener(v -> showCustomServiceDialog());
     }
 
     @Override
@@ -128,6 +136,40 @@ public class MineFragment extends BaseFragment {
         super.onUserVisible();
         if(mineViewModel != null) {
             mineViewModel.getUserInfo();
+        }
+    }
+
+    private void showCustomServiceDialog() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_base, null);
+        TextView textView = view.findViewById(R.id.content);
+        textView.setText(getString(R.string.isCallToCustomService));
+
+        DialogPlus dialog = DialogPlus.newDialog(getContext())
+                .setContentHolder(new ViewHolder(view))
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(Util.getWidthPxByDisplayPercent(getContext(), 0.8))
+                .setContentBackgroundResource(R.drawable.mine_bg_dialog)
+                .setOnClickListener((dialog1, view1) -> {
+                    int i = view1.getId();
+                    if (i == R.id.cancel) {
+                        dialog1.dismiss();
+
+                    } else if (i == R.id.confirm) {
+                        dialog1.dismiss();
+                        dialPhoneNumber("18125067770");
+                    } else {
+                    }
+                })
+                .create();
+
+        dialog.show();
+    }
+
+    public void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(intent);
         }
     }
 }
