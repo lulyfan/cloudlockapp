@@ -2,21 +2,17 @@ package com.ut.base;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
-import com.example.entity.base.Result;
+import com.alibaba.fastjson.JSON;
 import com.example.operation.MyRetrofit;
+import com.ut.base.Utils.UTLog;
 import com.ut.database.dao.UserDao;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Executor;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 
 /**
  * author : chenjiajun
@@ -59,7 +55,7 @@ public class UserRepository {
                     if (result.isSuccess()) {
                         userDao.updateUser(result.data);
                     }
-                    Log.d("refreshUser", "refresher" + result.data.toString());
+                    UTLog.d("update user info ---> " + JSON.toJSONString(result.data));
                 }, new ErrorHandler());
     }
 }

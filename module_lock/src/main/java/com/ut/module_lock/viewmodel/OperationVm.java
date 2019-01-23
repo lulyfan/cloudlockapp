@@ -43,6 +43,7 @@ public class OperationVm extends AndroidViewModel {
     private int currentPage = 1;
     private static int DEFAULT_PAGE_SIZE = 10;
     private long currentId = -1;
+    private String currentType;
 
     public OperationVm(@NonNull Application application) {
         super(application);
@@ -54,9 +55,11 @@ public class OperationVm extends AndroidViewModel {
             currentId = id;
         }
         if (Constance.BY_KEY.equals(recordType)) {
+            currentType = Constance.BY_KEY;
             return CloudLockDatabaseHolder.get().recordDao().
                     getRecordsByKeyId(currentId);
         } else if (Constance.BY_LOCK.equals(recordType)) {
+            currentType = Constance.BY_LOCK;
             return CloudLockDatabaseHolder.get().recordDao().
                     getRecordsByLockId(currentId);
         }
@@ -70,10 +73,13 @@ public class OperationVm extends AndroidViewModel {
         }
 
         if (Constance.BY_KEY.equals(recordType)) {
+            currentType = Constance.BY_KEY;
             loadRecordByKey(id);
         } else if (Constance.BY_USER.equals(recordType)) {
+            currentType = Constance.BY_USER;
             loadRecordByUser(id);
         } else if (Constance.BY_LOCK.equals(recordType)) {
+            currentType = Constance.BY_LOCK;
             loadRecordByLock(id);
         }
     }
@@ -114,8 +120,13 @@ public class OperationVm extends AndroidViewModel {
 
     private void saveRecords(List<Record> records) {
         Schedulers.io().scheduleDirect(() -> {
-            CloudLockDatabaseHolder.get().recordDao().deleteAll();
-            CloudLockDatabaseHolder.get().recordDao().insertRecords(records);
+            ORecordDao recordDao = CloudLockDatabaseHolder.get().recordDao();
+            if (Constance.BY_KEY.equals(currentType)) {
+                recordDao.deleteByKeyId(currentId);
+            } else if (Constance.BY_LOCK.equals(currentType)) {
+                recordDao.deleteByLockId(currentId);
+            }
+            recordDao.insertRecords(records);
         });
     }
 
@@ -157,7 +168,7 @@ public class OperationVm extends AndroidViewModel {
     }
 
     public void clear() {
-        if(handlerMap != null) {
+        if (handlerMap != null) {
             handlerMap.clear();
             handlerMap = null;
         }
