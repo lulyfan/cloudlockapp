@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.ut.base.Utils.UTLog;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -20,7 +22,7 @@ public class BaseViewModel extends AndroidViewModel {
     protected ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
     protected CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     protected MutableLiveData<String> showTip = new MutableLiveData<>();
-    private MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
+    protected MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
 
     public MutableLiveData<String> getShowTip() {
         return showTip;

@@ -103,13 +103,11 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
-            endLoad();
             if (isShowDialog)
                 CLToast.showAtBottom(LockDetailActivity.this, tip);
             isShowDialog = false;
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
-            endLoad();
             isShowDialog = false;
             new UnlockSuccessDialog(this, false).show();
         });
@@ -126,7 +124,9 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
             if (isShowDialog) {
-                startLoad();
+                if (LockDetailActivity.this.isShowDialog) {
+                    startLoad();
+                }
             } else {
                 endLoad();
             }
@@ -265,7 +265,7 @@ public class LockDetailActivity extends BaseActivity {
                 break;
             case UnilinkManager.SCAN_SUCCESS:
                 if (isShowDialog)
-                    startLoad();
+                    mLockDetailVM.getShowDialog().postValue(true);
                 break;
             case -3:
                 CLToast.showAtCenter(this, getString(R.string.lock_open_lock_invaild_tips));

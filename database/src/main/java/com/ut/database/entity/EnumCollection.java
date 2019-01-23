@@ -96,6 +96,7 @@ public class EnumCollection {
         int INITIAL = 0;//初始状态
         int SCANNING = 1;//正在搜索
         int CONNECTING = 2;//正在连接
-        int OPENING = 3;//正在开锁
+        int CHECKANDOPENING = 3;//正在判断鉴权
+        int OPENING = 4;//正在开锁
     }
 }

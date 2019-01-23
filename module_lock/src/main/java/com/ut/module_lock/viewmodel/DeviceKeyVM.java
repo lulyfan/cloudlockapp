@@ -14,6 +14,7 @@ import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
@@ -353,11 +354,13 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     private void endReadRecord() {
         processTick.postValue(100);//加载结束
         showTip.postValue(getApplication().getString(R.string.lock_device_key_load_success));
-        //TODO 发送到后台
         Disposable disposable = CommonApi.insertInnerLockLog(mRecordList)
                 .subscribe(voidResult -> {
+                    if (voidResult.isSuccess()) {
+                    }
                 }, new ErrorHandler());
         mCompositeDisposable.add(disposable);
+//        CloudLockDatabaseHolder.get().recordDao().insertRecords(mRecordList);
     }
 
     private int mRecordIndex = 1;
