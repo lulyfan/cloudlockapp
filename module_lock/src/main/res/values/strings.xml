@@ -86,8 +86,6 @@
     <string name="lock_tip_ble_unlock_failed">开锁失败</string>
     <string name="lock_tip_ble_unlock_success">开锁成功</string>
 
-    <string name="lock_tip_ble_unbindlock_failed">删除失败</string>
-
     <string name="refresh_success">刷新成功</string>
 
     <string name="touch_unlock">Touch开锁</string>
@@ -276,4 +274,6 @@
 
     <string name="lock_near_lock_scan_tip">下拉页面，搜索已唤醒的锁设备</string>
     <string name="lock_near_lock_scan_tip_error">搜索失败</string>
+    <string name="lock_bt_disconnect_tips">与锁的蓝牙连接失败，请重试</string>
+    <string name="lock_unbind_fail_tips">解除绑定失败，请重试</string>
 </resources>

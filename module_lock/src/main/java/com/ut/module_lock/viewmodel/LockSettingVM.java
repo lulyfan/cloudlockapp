@@ -194,7 +194,7 @@ public class LockSettingVM extends AndroidViewModel {
             @Override
             public void onDisconnect(int i, String s) {
                 if (!isConnected) {
-                    showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
+                    showTip.postValue(getApplication().getString(R.string.lock_bt_disconnect_tips));
                 }
                 endLoad();
             }
@@ -217,7 +217,7 @@ public class LockSettingVM extends AndroidViewModel {
 
                     @Override
                     public void onFailed(int i, String s) {
-                        showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unbindlock_failed));
+                        showTip.postValue(getApplication().getString(R.string.lock_unbind_fail_tips));
                         UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
                         endLoad();
 

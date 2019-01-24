@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -79,6 +80,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             findViewById(R.id.phone_layout).setSelected(false);
             findViewById(R.id.phone_layout).setEnabled(false);
             findViewById(R.id.img_clear).setEnabled(false);
+            findViewById(R.id.img_clear).setVisibility(View.INVISIBLE);
             passwordEdt.requestFocus();
         } else {
             setTitle(R.string.login_forget_password);

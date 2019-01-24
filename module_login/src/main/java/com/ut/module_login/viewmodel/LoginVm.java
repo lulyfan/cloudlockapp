@@ -48,8 +48,8 @@ public class LoginVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        AppManager.getAppManager().finishActivity(LoginActivity.class);
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                        AppManager.getAppManager().finishActivity(LoginActivity.class);
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
                     } else {

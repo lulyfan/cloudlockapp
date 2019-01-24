@@ -12,6 +12,7 @@ import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.activity.SafeVerifyActivity;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
@@ -58,8 +59,8 @@ public class SafeVerifyVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
-                        AppManager.getAppManager().finishAllActivity();
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                        AppManager.getAppManager().finishActivity(SafeVerifyActivity.class);
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }

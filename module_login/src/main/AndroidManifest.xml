@@ -8,7 +8,7 @@
         android:supportsRtl="true">
         <activity
             android:name=".ui.LoginActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleInstance">
         </activity>
         <activity android:name=".ui.RegisterActivity" />
         <activity android:name=".ui.ForgetPasswordActivity" />

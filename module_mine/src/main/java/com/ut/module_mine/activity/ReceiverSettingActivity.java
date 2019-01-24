@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 import com.ut.base.BaseActivity;
 import com.ut.database.entity.User;
@@ -120,6 +121,18 @@ public class ReceiverSettingActivity extends BaseActivity {
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
                     }
+                } else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    new AlertDialog.Builder(this)
+                            .setMessage("APP需要你的允许获取联系人权限")
+                            .setPositiveButton("设置", (dialogInterface, i) -> {
+                                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            })
+                            .setNegativeButton("取消", null)
+                            .create()
+                            .show();
+
                 }
                 break;
             default:
