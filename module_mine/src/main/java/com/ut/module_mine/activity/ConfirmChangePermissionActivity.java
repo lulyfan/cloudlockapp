@@ -34,6 +34,11 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_confirm_change_permission);
         initUI();
         initViewModel();
+
+        String name = getIntent().getStringExtra(ReceiverSettingActivity.EXTRA_USER_NAME);
+        String headImageUrl = getIntent().getStringExtra(ReceiverSettingActivity.EXTRA_USER_IMAGE_URL);
+        viewModel.receiverName.set(name);
+        viewModel.receiverHeadImgUrl.set(headImageUrl);
     }
 
     private void initViewModel() {
@@ -45,7 +50,6 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        viewModel.getUserInfoByMobile();
         sendVerifyCode();
     }
 

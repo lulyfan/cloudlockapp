@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
+import com.example.entity.base.Result;
+import com.example.operation.MyRetrofit;
+import com.google.gson.JsonElement;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.unilink.UnilinkManager;
@@ -18,6 +21,8 @@ import com.ut.unilink.util.Base64;
 import com.ut.unilink.util.Log;
 
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 public class AutoOpenLockService extends Service {
 
@@ -152,6 +157,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onSuccess(Void data) {
                             Log.i("autoOpenLock", "开锁成功");
+                            addOpenLockLog(1);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
                         }
@@ -159,6 +165,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
+                            addOpenLockLog(2);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
                         }
@@ -169,6 +176,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onSuccess(Void data) {
                             Log.i("autoOpenLock", "开锁成功");
+                            addOpenLockLog(1);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
                         }
@@ -176,6 +184,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
+                            addOpenLockLog(2);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
                         }
@@ -187,5 +196,24 @@ public class AutoOpenLockService extends Service {
     public void stopAutoOpenLock() {
         isStopScan = true;
         UnilinkManager.getInstance(getApplication()).stopScan();
+    }
+
+    private void addOpenLockLog(int type) {
+        MyRetrofit.get().getCommonApiService().addLog(Long.parseLong(mLockKey.getId()),
+                mLockKey.getKeyId(), type, mLockKey.getElectric())
+                .doOnNext(stringResult -> {
+                    if (stringResult == null) {
+                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
+                    }
+
+                    if (!stringResult.isSuccess()) {
+                        throw new Exception(stringResult.msg);
+                    }
+                })
+                .subscribe(jsonElementResult -> {
+
+                }, throwable -> {
+
+                });
     }
 }

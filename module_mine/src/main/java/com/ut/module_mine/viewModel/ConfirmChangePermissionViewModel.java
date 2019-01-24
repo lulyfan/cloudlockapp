@@ -88,22 +88,4 @@ public class ConfirmChangePermissionViewModel extends BaseViewModel {
                 })
                 .subscribe(aLong -> textView.setText((TIME - aLong) + "s"));
     }
-
-    public void getUserInfoByMobile() {
-        service.getUserInfoByMobile(GlobalData.getInstance().receiverPhone)
-                .doOnNext(stringResult -> {
-                    if (stringResult == null) {
-                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
-                    }
-
-                    if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
-                    }
-                })
-                .subscribe(userResult -> {
-                    User user = userResult.data;
-                    receiverName.set(user.getName());
-                    receiverHeadImgUrl.set(user.getHeadPic());
-                }, throwable -> tip.postValue(throwable.getMessage()));
-    }
 }

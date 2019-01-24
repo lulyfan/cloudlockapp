@@ -1,6 +1,7 @@
 package com.ut.module_mine.activity;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,11 +11,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 
 import com.ut.base.BaseActivity;
+import com.ut.database.entity.User;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityReceiverSettingBinding;
 import com.ut.module_mine.viewModel.ReceiverSettingViewModel;
@@ -23,6 +26,8 @@ public class ReceiverSettingActivity extends BaseActivity {
 
     private ActivityReceiverSettingBinding binding;
     private ReceiverSettingViewModel viewModel;
+    public static final String EXTRA_USER_NAME = "userName";
+    public static final String EXTRA_USER_IMAGE_URL = "userImageUrl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,15 @@ public class ReceiverSettingActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ReceiverSettingViewModel.class);
         viewModel.isInputPhone.observe(this, b -> binding.nextStep.setEnabled(b));
+        viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.user.observe(this, user -> {
+            if (user != null) {
+                Intent intent = new Intent(ReceiverSettingActivity.this, ConfirmChangePermissionActivity.class);
+                intent.putExtra(EXTRA_USER_NAME, user.getName());
+                intent.putExtra(EXTRA_USER_IMAGE_URL, user.getHeadPic());
+                startActivity(intent);
+            }
+        });
 
         binding.setViewmodel(viewModel);
     }
@@ -44,8 +58,7 @@ public class ReceiverSettingActivity extends BaseActivity {
         setTitle(getString(R.string.receiverSetting));
 
         binding.nextStep.setOnClickListener(v -> {
-            Intent intent = new Intent(ReceiverSettingActivity.this, ConfirmChangePermissionActivity.class);
-            startActivity(intent);
+            viewModel.getUserInfoByMobile();
         });
 
         binding.addressBook.setOnClickListener(v -> selectContact());
@@ -113,4 +126,5 @@ public class ReceiverSettingActivity extends BaseActivity {
                 break;
         }
     }
+
 }
