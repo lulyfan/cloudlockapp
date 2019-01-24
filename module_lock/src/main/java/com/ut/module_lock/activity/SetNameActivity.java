@@ -1,9 +1,9 @@
 package com.ut.module_lock.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +13,18 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.CommonApi;
 import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivitySetNameBinding;
 import com.ut.module_lock.dialog.AddSuccessDialog;
 
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SetNameActivity extends BaseActivity {
     private ActivitySetNameBinding mSetNameBinding = null;
@@ -85,8 +91,7 @@ public class SetNameActivity extends BaseActivity {
                             AddSuccessDialog dialog = new AddSuccessDialog(this, false, name);
                             dialog.setConfirmListener(v -> {
                                 dialog.dismiss();
-                                AppManager.getAppManager().finishAllActivity();
-                                ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
+                                goToLockDetail();
                             }).show();
                         } else {
                             toastShort(voidResult.msg);
@@ -95,5 +100,32 @@ public class SetNameActivity extends BaseActivity {
                         toastShort(getString(R.string.lock_tip_setname_failed));
                     });
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void goToLockDetail() {
+        CommonApi.pageUserLock(1, -1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(results -> {
+                    if (results.isSuccess()) {
+                        List<LockKey> lockKeyList = results.getData();
+                        LockKey lk = null;
+                        for (LockKey lockKey : lockKeyList) {
+                            if (lockKey.getMac().equals(mMac)) {
+                                lk = lockKey;
+                                break;
+                            }
+                        }
+                        if (lk != null) {
+                            AppManager.getAppManager().finishActivity(SetNameActivity.class);
+                            AppManager.getAppManager().finishActivity(NearLockActivity.class);
+                            AppManager.getAppManager().finishActivity(AddGuideActivity.class);
+                            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lk)
+                                    .navigation();
+                        }
+                    }
+                }, new ErrorHandler());
     }
 }

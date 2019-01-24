@@ -17,15 +17,16 @@ public class ImageViewAttrAdapter {
 
     @BindingAdapter(value = {"url", "circle"}, requireAll = false)
     public static void loadImg(ImageView imageView, String url, boolean isCircle) {
+        RequestOptions requestOptions = isCircle ? RequestOptions.circleCropTransform() : new RequestOptions();
         if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext())
                     .load(url)
-                    .apply(isCircle ? RequestOptions.circleCropTransform() : new RequestOptions())
+                    .apply(requestOptions.error(R.mipmap.default_icon_b).placeholder(R.mipmap.default_icon_b))
                     .into(imageView);
         } else {
             Glide.with(imageView.getContext())
                     .load(R.mipmap.default_icon_b)
-                    .apply(isCircle ? RequestOptions.circleCropTransform() : new RequestOptions())
+                    .apply(requestOptions.error(R.mipmap.default_icon_b).placeholder(R.mipmap.default_icon_b))
                     .into(imageView);
         }
     }
