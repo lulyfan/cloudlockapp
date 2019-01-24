@@ -274,7 +274,11 @@ public class LockListFragment extends BaseFragment {
     }
 
     private void autoOpenLock() {
-        if (mLockListFragVM.isNeedAutoOpenLock() && !UnilinkManager.getInstance(getContext()).checkState() && !requestPermissionFlag) {
+        if (!mLockListFragVM.isNeedAutoOpenLock()) {
+            return;
+        }
+
+        if (!UnilinkManager.getInstance(getContext()).checkState() && !requestPermissionFlag) {
             requestPermissionFlag = true;
             UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
             UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
