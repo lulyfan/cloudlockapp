@@ -14,6 +14,7 @@ import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonViewHolder;
+import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
 import com.ut.module_lock.R;
@@ -65,6 +66,11 @@ public class DeviceKeyListFragment extends BaseFragment {
     private void initListener() {
         mFragmentDeviceKeyBinding.lvDeviceKey.setOnItemClickListener((parent, view, position, id) -> {
             DeviceKey deviceKey = (DeviceKey) parent.getAdapter().getItem(position);
+            if (deviceKey.getKeyType() == EnumCollection.DeviceKeyType.PASSWORD.ordinal()
+                    && deviceKey.getKeyID() == 0) {
+                CLToast.showAtBottom(DeviceKeyListFragment.this.getContext(), getString(R.string.lock_device_key_admin_pwd_tip));
+                return;
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY, deviceKey)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mDeviceKeyVM.getLockKey())

@@ -115,7 +115,13 @@ public class OperationVm extends AndroidViewModel {
                 .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        if (keyId >= 0)
+                            super.accept(throwable);
+                    }
+                });
     }
 
     private void saveRecords(List<Record> records) {

@@ -20,15 +20,26 @@
             layout="@layout/progress_bar_green"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_4dp"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/include"/>
+
+
+        <include
+            android:id="@+id/empty_view_list"
+            layout="@layout/layout_empty_data_full_screen"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progress_bar_green"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swf_ble_device"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar_green">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progress_bar_green"
+            >
 
             <ListView
                 android:id="@+id/lv_ble_device"

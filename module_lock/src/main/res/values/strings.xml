@@ -269,4 +269,11 @@
     <string name="lock_device_key_tip_auth_error3">生效时间不能大于或等于失效时间</string>
     <string name="lock_name_not_allow_null">名称不能为空</string>
     <string name="lock_freezen_key_not_allow_to_fix">解除冻结才能修改有效期</string>
+    <string name="lock_device_key_admin_pwd">管理员密码</string>
+    <string name="lock_device_key_user_pwd">用户密码</string>
+    <string name="lock_device_key_temp_pwd">临时密码</string>
+    <string name="lock_device_key_admin_pwd_tip">管理员密码不能修改</string>
+
+    <string name="lock_near_lock_scan_tip">下拉页面，搜索已唤醒的锁设备</string>
+    <string name="lock_near_lock_scan_tip_error">搜索失败</string>
 </resources>

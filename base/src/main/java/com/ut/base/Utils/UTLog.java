@@ -75,8 +75,8 @@ public class UTLog {
 
     public static void i(String msg) {
         if (isDebug)
-//            Logger.i(msg);
-            Log.i(msg);
+            Logger.i(msg);
+//            Log.i(msg);
     }
 
     public static void i(String tag, String msg) {

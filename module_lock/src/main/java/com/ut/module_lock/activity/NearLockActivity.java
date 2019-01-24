@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -33,12 +35,16 @@ public class NearLockActivity extends BaseActivity {
     private NearScanLock mSelectedLock = null;
     private static final int BLEREAUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
+    private TextView mEmptyTip = null;
+    private TextView mEmptyTip2 = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNearLockBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_lock);
         initToolbar();
+
         initListListener();
         initViewModel();
         toScan();
@@ -73,11 +79,12 @@ public class NearLockActivity extends BaseActivity {
         mNearLockVM.isOperating().observe(this, isScanning -> {
             if (isScanning) {
                 mNearLockBinding.progressBarGreen.setVisibility(View.VISIBLE);
+                mEmptyTip.setText(R.string.scaning);
+                mEmptyTip2.setVisibility(View.GONE);
             } else {
-                if (mAdapter == null || mAdapter.getData().isEmpty()) {
-                    CLToast.showAtCenter(getBaseContext(), "暂未搜索到门锁，请再重试");
-                }
+                mEmptyTip.setText(R.string.lock_near_lock_scan_tip_error);
                 mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
+                mEmptyTip2.setVisibility(View.VISIBLE);
             }
         });
         mNearLockVM.getErrorCode().observe(this, errorMsg -> {
@@ -150,9 +157,10 @@ public class NearLockActivity extends BaseActivity {
 
     private void refreshListData(List<NearScanLock> datas) {
         if (mAdapter == null) {
-            if (datas == null || datas.size() < 1) {
+            if (datas == null) {
                 return;
             }
+
             mAdapter = new CommonAdapter<NearScanLock>(this, datas, R.layout.item_ble_list) {
                 @Override
                 public void convert(CommonViewHolder commonViewHolder, int position, NearScanLock item) {
@@ -167,6 +175,10 @@ public class NearLockActivity extends BaseActivity {
                     });
                 }
             };
+            View emptyView = findViewById(R.id.empty_view_list);
+            mEmptyTip = emptyView.findViewById(R.id.textView4);
+            mEmptyTip2 = emptyView.findViewById(R.id.textView5);
+            mNearLockBinding.lvBleDevice.setEmptyView(emptyView);
             mNearLockBinding.lvBleDevice.setAdapter(mAdapter);
         } else {
             mAdapter.notifyData(datas);

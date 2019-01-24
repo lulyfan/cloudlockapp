@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -82,7 +83,7 @@ public class NearLockVM extends AndroidViewModel {
 
             @Override
             public void onFinish(List<ScanDevice> scanDevices) {
-
+                operating.postValue(false);
             }
 
             @Override

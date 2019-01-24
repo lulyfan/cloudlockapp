@@ -1,5 +1,7 @@
 package com.ut.base.UIUtils;
 
+
+
 /**
  * author : zhouyubin
  * time   : 2018/11/13
@@ -103,6 +105,11 @@ public class RouterUtil {
     public static class MineModulePath {
         //我的模块首页
         public static final String Fragment_Mine = "/mine/main";
+    }
+
+
+    public static class BrocastReceiverAction {
+        public static final String ACTION_RELOAD_WEB_DEVICEKEY = "action_reload_web_devicekey";
     }
 
 

@@ -20,6 +20,7 @@ import com.ut.unilink.cloudLock.LockStateListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 import com.ut.unilink.cloudLock.protocol.data.LockState;
+import com.ut.unilink.util.Log;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,7 @@ public class LockDetailVM extends BaseViewModel {
     private MutableLiveData<Boolean> connectStatus = new MutableLiveData<>();
     private MutableLiveData<Boolean> reAutoOpen = new MutableLiveData<>();//重新自动开锁
     private LockKey mLockKey = null;
+    private static final String TAG = LockDetailVM.class.getSimpleName();
 
     private int openStatus = EnumCollection.OpenLockState.INITIAL;
 
@@ -82,18 +84,22 @@ public class LockDetailVM extends BaseViewModel {
             return 0;
         } else {
             if (openStatus != EnumCollection.OpenLockState.INITIAL) return 0;
-            openStatus = EnumCollection.OpenLockState.SCANNING;
-            return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
+            UTLog.i(TAG, "开始搜索");
+            int result = UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
                 public void onScan(ScanDevice scanDevice) {
+                    Log.i("scan", "scan device 5:" + scanDevice.getAddress() +
+                            " openStatus:" + openStatus);
                     if (openStatus == EnumCollection.OpenLockState.SCANNING
                             && scanDevice.getAddress().equalsIgnoreCase(mLockKey.getMac())) {
+                        Log.i("scan", "scan device 6:" + scanDevice.getAddress());
                         toConnect(scanDevice, mLockKey);
                     }
                 }
 
                 @Override
                 public void onFinish(List<ScanDevice> scanDevices) {
+                    Log.i("scan", "scan device 7:");
                     if (openStatus == EnumCollection.OpenLockState.SCANNING) {
                         showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                         openStatus = EnumCollection.OpenLockState.INITIAL;
@@ -105,6 +111,7 @@ public class LockDetailVM extends BaseViewModel {
 
                 @Override
                 public void onScanTimeout() {
+                    Log.i("scan", "scan device 8:");
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                     openStatus = EnumCollection.OpenLockState.INITIAL;
                     reAutoOpen.postValue(true);
@@ -112,6 +119,10 @@ public class LockDetailVM extends BaseViewModel {
                     UTLog.i("getShowDialog");
                 }
             }, 10);
+            if (result == 0) {
+                openStatus = EnumCollection.OpenLockState.SCANNING;
+            }
+            return result;
         }
     }
 
@@ -123,6 +134,7 @@ public class LockDetailVM extends BaseViewModel {
 
 
     private void toConnect(ScanDevice scanDevice, LockKey lockKey) {
+        UTLog.i(TAG, "开始连接");
         openStatus = EnumCollection.OpenLockState.CONNECTING;
         UnilinkManager.getInstance(getApplication()).stopScan();
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, lockKey.getEncryptType(), lockKey.getEncryptKey(),
@@ -143,7 +155,7 @@ public class LockDetailVM extends BaseViewModel {
 
             @Override
             public void onDisconnect(int i, String s) {
-                UTLog.i("onDisconnect:" + i + " s:" + s);
+                UTLog.i(TAG, "onDisconnect:" + i + " s:" + s);
                 connectStatus.postValue(false);
                 if (openStatus < EnumCollection.OpenLockState.CHECKANDOPENING) {
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
@@ -157,6 +169,7 @@ public class LockDetailVM extends BaseViewModel {
     }
 
     private void toCheckPermissionOrOpenLock(CloudLock cloudLock) {
+        UTLog.i(TAG, "开始检查权限或开锁");
         openStatus = EnumCollection.OpenLockState.CHECKANDOPENING;
         if (mLockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             toCheckPermission();
@@ -190,6 +203,7 @@ public class LockDetailVM extends BaseViewModel {
     };
 
     private void toCheckPermission() {
+        UTLog.i(TAG, "检查权限");
         Disposable result = CommonApi.isAuth(mLockKey.getMac())
                 .subscribe(jsonElementResult -> {
                             if (jsonElementResult.code == 200) {
@@ -216,6 +230,7 @@ public class LockDetailVM extends BaseViewModel {
     }
 
     private void toActOpenLock(CloudLock cloudLock) {
+        UTLog.i(TAG, "开始开锁");
         openStatus = EnumCollection.OpenLockState.OPENING;
         if (mLockKey.getType() == EnumCollection.LockType.SMARTLOCK.getType()) {
             UnilinkManager.getInstance(getApplication()).openGateLock(mLockKey.getMac(),
@@ -225,18 +240,17 @@ public class LockDetailVM extends BaseViewModel {
                             unlockSuccess.postValue(true);
                             toAddLog(1);
                             showDialog.postValue(false);
-                            UTLog.i("getShowDialog");
-                            openStatus = EnumCollection.OpenLockState.INITIAL;
+                            UTLog.i(TAG, "getShowDialog");
+//                            openStatus = EnumCollection.OpenLockState.INITIAL;
                         }
 
                         @Override
                         public void onFailed(int errCode, String errMsg) {
-                            UTLog.i("onOpen Fail:" + errCode + " s:" + errMsg);
+                            UTLog.i(TAG, "onOpen Fail:" + errCode + " s:" + errMsg);
                             showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
                             toAddLog(2);
-                            openStatus = EnumCollection.OpenLockState.INITIAL;
+//                            openStatus = EnumCollection.OpenLockState.INITIAL;
                             showDialog.postValue(false);
-                            UTLog.i("getShowDialog");
                         }
                     });
         } else {

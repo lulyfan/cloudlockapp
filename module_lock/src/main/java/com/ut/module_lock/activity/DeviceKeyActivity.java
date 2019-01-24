@@ -1,7 +1,10 @@
 package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,6 +55,7 @@ public class DeviceKeyActivity extends BaseActivity {
         initData();
         initVM();
         initView();
+        regReceiver();
     }
 
     private void initVM() {
@@ -70,7 +74,7 @@ public class DeviceKeyActivity extends BaseActivity {
                 changeLoadText(String.valueOf(process));
                 endLoad();
             } else {
-                changeLoadText(String.valueOf((process+1) * 5));
+                changeLoadText(String.valueOf((process + 1) * 5));
             }
         });
     }
@@ -154,5 +158,31 @@ public class DeviceKeyActivity extends BaseActivity {
         public int getCount() {
             return mFragments.size();
         }
+    }
+
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() == RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY) {
+                mDeviceKeyVM.initDataFromWeb();
+            }
+        }
+
+    };
+
+    public void regReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY);
+        registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    public void unRegBrocastReceiver() {
+        unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unRegBrocastReceiver();
     }
 }

@@ -275,43 +275,48 @@ public class BleOperateManager {
         });
     }
 
-    public void writeDeviceKey(String mac, int encryptType, String encryptKey, List<GateLockKey> gateLockKeys) {
-        UnilinkManager.getInstance(mContext).writeKeyInfos(mac, encryptType, encryptKey, gateLockKeys, new CallBack2<Void>() {
-            @Override
-            public void onSuccess(Void data) {
-                if (mOperateDeviceKeyDetailCallback != null) {
-                    mOperateDeviceKeyDetailCallback.onWriteDeviceKeySuccess();
-                }
-            }
+    public void writeDeviceKey(String mac, int encryptType,
+                               String encryptKey, List<GateLockKey> gateLockKeys) {
+        UnilinkManager.getInstance(mContext).writeKeyInfos(mac,
+                encryptType, encryptKey, gateLockKeys, new CallBack2<Void>() {
+                    @Override
+                    public void onSuccess(Void data) {
+                        if (mOperateDeviceKeyDetailCallback != null) {
+                            mOperateDeviceKeyDetailCallback.onWriteDeviceKeySuccess();
+                        }
+                    }
 
-            @Override
-            public void onFailed(int errCode, String errMsg) {
-                if (mOperateDeviceKeyDetailCallback != null) {
-                    mOperateDeviceKeyDetailCallback.onWriteDeviceKeyFailed(errCode, errMsg);
-                }
-            }
-        });
+                    @Override
+                    public void onFailed(int errCode, String errMsg) {
+                        if (mOperateDeviceKeyDetailCallback != null) {
+                            mOperateDeviceKeyDetailCallback.onWriteDeviceKeyFailed(errCode, errMsg);
+                        }
+                    }
+                });
     }
 
-    public void addDeviceKeyAuth(String mac, int encryptType, String encryptKey, AuthInfo authInfo) {
-        UnilinkManager.getInstance(mContext).addAuth(mac, encryptType, encryptKey, authInfo, new CallBack2<Integer>() {
-            @Override
-            public void onSuccess(Integer data) {
-                if (mOperateDeviceRuleCallback != null) {
-                    mOperateDeviceRuleCallback.onAddDevicekeyAuthSuccess(data);
-                }
-            }
+    public void addDeviceKeyAuth(String mac, int encryptType,
+                                 String encryptKey, AuthInfo authInfo) {
+        UnilinkManager.getInstance(mContext).addAuth(mac, encryptType,
+                encryptKey, authInfo, new CallBack2<Integer>() {
+                    @Override
+                    public void onSuccess(Integer data) {
+                        if (mOperateDeviceRuleCallback != null) {
+                            mOperateDeviceRuleCallback.onAddDevicekeyAuthSuccess(data);
+                        }
+                    }
 
-            @Override
-            public void onFailed(int errCode, String errMsg) {
-                if (mOperateDeviceRuleCallback != null) {
-                    mOperateDeviceRuleCallback.onAddDeviceKeyAuthFailed(errCode, errMsg);
-                }
-            }
-        });
+                    @Override
+                    public void onFailed(int errCode, String errMsg) {
+                        if (mOperateDeviceRuleCallback != null) {
+                            mOperateDeviceRuleCallback.onAddDeviceKeyAuthFailed(errCode, errMsg);
+                        }
+                    }
+                });
     }
 
-    public void updateDeviceKeyAuth(String mac, int encryptType, String encryptKey, AuthInfo authInfo) {
+    public void updateDeviceKeyAuth(String mac, int
+            encryptType, String encryptKey, AuthInfo authInfo) {
         UnilinkManager.getInstance(mContext).updateAuth(mac, encryptType, encryptKey, authInfo, new CallBack2<Void>() {
             @Override
             public void onSuccess(Void data) {
@@ -339,9 +344,11 @@ public class BleOperateManager {
     };
 
 
-    public void onActivityResult(Activity activity, int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(Activity activity, int requestCode
+            , int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE) {
+            if (requestCode == BLEREAUESTCODE ||
+                    requestCode == BLEENABLECODE) {
                 scanDevice(lockType, activity);
                 UTLog.i("to scan");
             }

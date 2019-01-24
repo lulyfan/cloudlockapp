@@ -27,6 +27,10 @@ import com.ut.module_lock.dialog.UnlockSuccessDialog;
 import com.ut.module_lock.viewmodel.LockDetailVM;
 import com.ut.unilink.UnilinkManager;
 
+import android.arch.lifecycle.Observer;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Route(path = RouterUtil.LockModulePath.LOCK_DETAIL)
 public class LockDetailActivity extends BaseActivity {
     private LockKey mLockKey = null;
@@ -36,7 +40,9 @@ public class LockDetailActivity extends BaseActivity {
     private LockDetailVM mLockDetailVM;
     private static final int BLEREAUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
-    private volatile boolean isShowDialog = false;
+
+    private AtomicBoolean mIsShowDialogAndTip = new AtomicBoolean(false);
+    private AtomicBoolean isToRequestPermission = new AtomicBoolean(true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +56,17 @@ public class LockDetailActivity extends BaseActivity {
         initView();
         mDetailBinding.setPresent(new Present());
         initViewModel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //todo 自动开锁
         autoOpen();
     }
 
     private void autoOpen() {
-        if (!isNotManager() && (mLockKey.getCanOpen() == 1)) {
+        if (!isNotManager() && (mLockKey.getCanOpen() == 1) && isToRequestPermission.get()) {
             toOpenLock();
         }
     }
@@ -103,12 +114,11 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
-            if (isShowDialog)
+            if (mIsShowDialogAndTip.compareAndSet(true, false))
                 CLToast.showAtBottom(LockDetailActivity.this, tip);
-            isShowDialog = false;
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
-            isShowDialog = false;
+            mIsShowDialogAndTip.set(false);
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
@@ -117,14 +127,10 @@ public class LockDetailActivity extends BaseActivity {
             initLockData();
         });
         //todo 自动开锁
-        mLockDetailVM.getReAutoOpen().observe(this, reOpen -> {
-            if (reOpen) {
-                autoOpen();
-            }
-        });
+        mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
         mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
             if (isShowDialog) {
-                if (LockDetailActivity.this.isShowDialog) {
+                if (mIsShowDialogAndTip.compareAndSet(true, false)) {
                     startLoad();
                 }
             } else {
@@ -133,6 +139,11 @@ public class LockDetailActivity extends BaseActivity {
         });
     }
 
+    private Observer<Boolean> mReOpenObserver = (reOpen) -> {
+        if (reOpen) {
+            autoOpen();
+        }
+    };
 
     private void addPaddingTop() {
         View view = findViewById(R.id.parent);
@@ -142,10 +153,11 @@ public class LockDetailActivity extends BaseActivity {
     public class Present {
         public void onBackClick(View view) {
             onBackPressed();
+            endAutoOpenLock();
         }
 
         public void onOpenLockClick(View view) {
-            isShowDialog = true;
+            mIsShowDialogAndTip.set(true);
             toOpenLock();
         }
 
@@ -158,6 +170,7 @@ public class LockDetailActivity extends BaseActivity {
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mLockKey.getMac())
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY_USERTYPE, mLockKey.getUserType())
                     .navigation();
+            endAutoOpenLock();
         }
 
         public void onMangeKeyClick(View view) {
@@ -168,6 +181,7 @@ public class LockDetailActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.KEY_MANAGER)
                     .withParcelable(Constance.LOCK_KEY, mLockKey)
                     .navigation();
+            endAutoOpenLock();
         }
 
         public void onOperateRecordClick(View view) {
@@ -179,6 +193,7 @@ public class LockDetailActivity extends BaseActivity {
                     .withString(Constance.RECORD_TYPE, Constance.BY_LOCK)
                     .withLong(Constance.LOCK_ID, Long.valueOf(mLockKey.getId()))
                     .navigation();
+            endAutoOpenLock();
         }
 
         public void onLockManageClick(View view) {
@@ -189,6 +204,7 @@ public class LockDetailActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_SETTING)
                     .withParcelable(Constance.LOCK_KEY, mLockKey)
                     .navigation();
+            endAutoOpenLock();
         }
 
         public void onDeviceKeyClick(View view) {
@@ -199,7 +215,62 @@ public class LockDetailActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DEVICE_KEY)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, mLockKey)
                     .navigation();
+            endAutoOpenLock();
         }
+    }
+
+    private void toOpenLock() {
+        int scanResult = mLockDetailVM.openLock();
+        switch (scanResult) {
+            case UnilinkManager.BLE_NOT_SUPPORT:
+                toastShort(getString(R.string.lock_tip_ble_not_support));
+                break;
+            case UnilinkManager.NO_LOCATION_PERMISSION:
+                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
+                break;
+            case UnilinkManager.BLE_NOT_OPEN:
+                UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
+                break;
+            case UnilinkManager.SCAN_SUCCESS:
+                mLockDetailVM.getShowDialog().postValue(true);
+                break;
+            case -3:
+                CLToast.showAtCenter(this, getString(R.string.lock_open_lock_invaild_tips));
+                break;
+            case -100:
+                keyHasDeletedTips();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BLEENABLECODE) {
+            if (resultCode == RESULT_OK) {
+                toOpenLock();
+            } else {
+                isToRequestPermission.set(false);//用户拒绝打开蓝牙后不再进行提示
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] paramArrayOfInt) {
+        if (requestCode == BLEREAUESTCODE) {
+            toOpenLock();
+        }
+    }
+
+    private void keyHasDeletedTips() {
+        //TODO 中文
+        CLToast.showAtCenter(this, "钥匙已被删除，无法开锁，请联系钥匙发送者");
+    }
+
+    private void endAutoOpenLock() {
+        UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
+        mLockDetailVM.getReAutoOpen().removeObserver(mReOpenObserver);
     }
 
     @BindingAdapter("electricityDrawable")
@@ -249,52 +320,5 @@ public class LockDetailActivity extends BaseActivity {
         leftDrawable.setBounds(0, 0, leftDrawable.getIntrinsicWidth(), leftDrawable.getIntrinsicHeight());
         textView.setCompoundDrawables(leftDrawable, textView.getCompoundDrawables()[1],
                 textView.getCompoundDrawables()[2], textView.getCompoundDrawables()[3]);
-    }
-
-    private void toOpenLock() {
-        int scanResult = mLockDetailVM.openLock();
-        switch (scanResult) {
-            case UnilinkManager.BLE_NOT_SUPPORT:
-                toastShort(getString(R.string.lock_tip_ble_not_support));
-                break;
-            case UnilinkManager.NO_LOCATION_PERMISSION:
-                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
-                break;
-            case UnilinkManager.BLE_NOT_OPEN:
-                UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
-                break;
-            case UnilinkManager.SCAN_SUCCESS:
-                if (isShowDialog)
-                    mLockDetailVM.getShowDialog().postValue(true);
-                break;
-            case -3:
-                CLToast.showAtCenter(this, getString(R.string.lock_open_lock_invaild_tips));
-                break;
-            case -100:
-                keyHasDeletedTips();
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == BLEENABLECODE)
-                toOpenLock();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] paramArrayOfInt) {
-        if (requestCode == BLEREAUESTCODE) {
-            toOpenLock();
-        }
-    }
-
-    private void keyHasDeletedTips() {
-        //TODO 中文
-        CLToast.showAtCenter(this, "钥匙已被删除，无法开锁，请联系钥匙发送者");
     }
 }

@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.operation.CommonApi;
 import com.ut.base.ErrorHandler;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
@@ -150,12 +153,20 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         mExecutorService.execute(() -> {
             DeviceKeyDaoImpl.get().delete(mDeviceKey);
         });
+
         Disposable disposable = CommonApi.delDeviceKeyInfo(mLockKey.getId(), mDeviceKey.getKeyID())
                 .subscribe(result -> {
-
-                }, new ErrorHandler());
+                    getApplication().sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY));
+                }, new ErrorHandler(){
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        getApplication().sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY));
+                    }
+                });
         mCompositeDisposable.add(disposable);
     }
+
 
     @Override
     public void onDeleteFailed(int errorcode, String errorMsg) {

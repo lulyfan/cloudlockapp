@@ -294,15 +294,15 @@ public class DeviceKey implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeviceKey deviceKey = (DeviceKey) o;
-        return deviceId == deviceKey.deviceId;
+        return keyID == deviceKey.keyID &&
+                lockID == deviceKey.lockID;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(deviceId);
+        return Objects.hash(keyID, lockID);
     }
-
 
     @Override
     public int describeContents() {

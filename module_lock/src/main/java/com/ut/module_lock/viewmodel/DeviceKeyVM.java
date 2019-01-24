@@ -85,7 +85,8 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         initDataFromWeb();
     }
 
-    private void initDataFromWeb() {
+    public void initDataFromWeb() {
+        mWebDeviceKeyList = null;
         Disposable disposable = CommonApi.getDeviceKeyListByType(0, mLockKey.getId())
                 .observeOn(io.reactivex.schedulers.Schedulers.io())
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
@@ -194,7 +195,17 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             UTLog.i("====mm:" + key);
             DeviceKey deviceKey = new DeviceKey(i, key.getKeyId(),
                     "", key.getKeyType(), key.getAttribute(), key.getInnerNum());
-            deviceKey.initName(getApplication().getResources().getStringArray(R.array.deviceTypeName));
+            if (key.getKeyType() == EnumCollection.DeviceKeyType.PASSWORD.ordinal()) {
+                if (key.getInnerNum() == 0) {
+                    deviceKey.setName(getApplication().getString(R.string.lock_device_key_admin_pwd));
+                } else if (key.getInnerNum() == 1) {
+                    deviceKey.setName(getApplication().getString(R.string.lock_device_key_user_pwd));
+                } else if (key.getInnerNum() == 2) {
+                    deviceKey.setName(getApplication().getString(R.string.lock_device_key_temp_pwd));
+                }
+            } else {
+                deviceKey.initName(getApplication().getResources().getStringArray(R.array.deviceTypeName));
+            }
             deviceKey.setIsAuthKey(key.isAuthKey());
             deviceKey.setLockID(Integer.valueOf(mLockKey.getId()));
             if (key.isFreeze()) {

@@ -2,6 +2,7 @@ package com.ut.base.UIUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -114,5 +115,10 @@ public class SystemUtils {
         lp.alpha = alpha;
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         activity.getWindow().setAttributes(lp);
+    }
+
+    public static boolean isLocationEnable(Context context){
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isLocationEnabled();
     }
 }

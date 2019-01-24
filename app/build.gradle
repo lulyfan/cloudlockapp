@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "V1.0.7_" + releaseTime() + "_beta"
+        versionName "V1.0.8_" + releaseTime() + "_beta"
 
         javaCompileOptions {
             annotationProcessorOptions {

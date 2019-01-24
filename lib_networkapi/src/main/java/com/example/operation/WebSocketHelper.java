@@ -18,7 +18,7 @@ import okio.ByteString;
 
 public class WebSocketHelper {
     private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
-//    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
+    //    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
     private WebSocket webSocket;
     private OkHttpClient client;
     private int userId = -1;
@@ -105,7 +105,7 @@ public class WebSocketHelper {
                         heartTimeoutScheduledFuture = executor.schedule(new Runnable() {
                             @Override
                             public void run() {
-                                Log.i("websocket","与服务器的连接断开");
+                                Log.i("websocket", "与服务器的连接断开");
                                 webSocket.close(CODE_CONNECT_INTERRUPT, "与服务器连接断开");
                             }
                         }, 5, TimeUnit.SECONDS);
