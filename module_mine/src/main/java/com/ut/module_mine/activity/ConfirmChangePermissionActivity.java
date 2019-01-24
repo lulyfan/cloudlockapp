@@ -39,18 +39,14 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
         String headImageUrl = getIntent().getStringExtra(ReceiverSettingActivity.EXTRA_USER_IMAGE_URL);
         viewModel.receiverName.set(name);
         viewModel.receiverHeadImgUrl.set(headImageUrl);
+
+        sendVerifyCode();
     }
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ConfirmChangePermissionViewModel.class);
         binding.setViewModel(viewModel);
         viewModel.tip.observe(this, s -> toastShort(s));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        sendVerifyCode();
     }
 
     private void initUI() {
