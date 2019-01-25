@@ -3,6 +3,8 @@ package com.example.operation;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -18,7 +20,7 @@ import okio.ByteString;
 
 public class WebSocketHelper {
     private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
-    //    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
+//        private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
     private WebSocket mWebSocket;
     private OkHttpClient client;
     private int userId = -1;
@@ -86,8 +88,10 @@ public class WebSocketHelper {
 
             Log.i(TAG, "open");
 
-            if (webSocketStateListener != null) {
-                webSocketStateListener.onOpen();
+            for (WebSocketStateListener listener : webSocketStateListeners) {
+                if (listener != null) {
+                    listener.onOpen();
+                }
             }
 
             if (isSendUserId) {
@@ -216,10 +220,14 @@ public class WebSocketHelper {
         void onReceive(String data);
     }
 
-    private WebSocketStateListener webSocketStateListener;
+    private List<WebSocketStateListener> webSocketStateListeners = new ArrayList<>();
 
-    public void setWebSocketStateListener(WebSocketStateListener webSocketStateListener) {
-        this.webSocketStateListener = webSocketStateListener;
+    public void addWebSocketStateListener(WebSocketStateListener webSocketStateListener) {
+        webSocketStateListeners.add(webSocketStateListener);
+    }
+
+    public void removeWebSocketStateListener(WebSocketStateListener webSocketStateListener) {
+        webSocketStateListeners.remove(webSocketStateListener);
     }
 
     public interface WebSocketStateListener {

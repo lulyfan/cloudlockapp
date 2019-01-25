@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
+import com.example.operation.WebSocketHelper;
 import com.ut.base.BaseApplication;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
@@ -271,6 +273,14 @@ public class LockListFragment extends BaseFragment {
         }
 
         autoOpenLock();
+
+        MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MyRetrofit.get().removeWebSocketStateListener(webSocketStateListener);
     }
 
     private void autoOpenLock() {
@@ -315,6 +325,12 @@ public class LockListFragment extends BaseFragment {
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+        }
+    };
+
+    private WebSocketHelper.WebSocketStateListener webSocketStateListener = () -> {
+        if (mLockListFragVM != null) {
+            mLockListFragVM.toGetLockAllList(true);
         }
     };
 

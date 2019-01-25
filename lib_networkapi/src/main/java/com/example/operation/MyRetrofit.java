@@ -197,8 +197,12 @@ public class MyRetrofit {
         mWebSocketHelper.setWebSocketDataListener(webSocketDataListener);
     }
 
-    public void setWebSocketStateListener(WebSocketHelper.WebSocketStateListener webSocketStateListener) {
-        mWebSocketHelper.setWebSocketStateListener(webSocketStateListener);
+    public void addWebSocketStateListener(WebSocketHelper.WebSocketStateListener webSocketStateListener) {
+        mWebSocketHelper.addWebSocketStateListener(webSocketStateListener);
+    }
+
+    public void removeWebSocketStateListener(WebSocketHelper.WebSocketStateListener webSocketStateListener) {
+        mWebSocketHelper.removeWebSocketStateListener(webSocketStateListener);
     }
 
     public void sendUserId(int userId, String appId) {

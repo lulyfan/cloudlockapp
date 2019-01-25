@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
+import com.example.operation.WebSocketHelper;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.entity.LockMessage;
@@ -120,8 +122,21 @@ public class NotificationFragment extends BaseFragment {
     }
 
     @Override
-    protected void onWebSocketOpened() {
-        super.onWebSocketOpened();
-        notificationViewModel.loadNotificationMessages();
+    public void onResume() {
+        super.onResume();
+        MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MyRetrofit.get().removeWebSocketStateListener(webSocketStateListener);
+    }
+
+    private WebSocketHelper.WebSocketStateListener webSocketStateListener = () -> {
+        if (notificationViewModel != null) {
+            notificationViewModel.loadNotificationMessages();
+        }
+    };
 }
+

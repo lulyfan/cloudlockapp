@@ -101,12 +101,6 @@ public class BaseFragment extends Fragment {
         UTLog.i(this.getClass().getSimpleName() + ":onResume");
         onUserVisible();
         StatService.onPageStart(getActivity(), this.getClass().getSimpleName());
-
-        MyRetrofit.get().setWebSocketStateListener(() -> onWebSocketOpened());
-    }
-
-    protected void onWebSocketOpened() {
-
     }
 
     @Override
@@ -115,8 +109,6 @@ public class BaseFragment extends Fragment {
         UTLog.i(this.getClass().getSimpleName() + ":onPause");
         onUserInvisible();
         StatService.onPageEnd(getActivity(), this.getClass().getSimpleName());
-
-        MyRetrofit.get().setWebSocketStateListener(null);
     }
 
     @Override

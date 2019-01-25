@@ -53,6 +53,7 @@ public class BaseActivity extends AppCompatActivity {
     private OnCustomerClickListener checkAllListener = null;
     private static AlertDialog noLoginDialog = null;
     private DialogPlus loadDialog;
+    private WebSocketHelper.WebSocketStateListener webSocketStateListener;
 
     private boolean isResumed = false;
 
@@ -66,6 +67,8 @@ public class BaseActivity extends AppCompatActivity {
 
         if (BuildConfig.DEBUG)
             UnilinkManager.getInstance(this).enableLog(true);
+
+        webSocketStateListener = () -> onWebSocketOpened();
     }
 
     @Override
@@ -74,7 +77,7 @@ public class BaseActivity extends AppCompatActivity {
         isResumed = true;
         StatService.onPageStart(this, this.getClass().getSimpleName());
 
-        MyRetrofit.get().setWebSocketStateListener(() -> onWebSocketOpened());
+        MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
     }
 
     protected void onWebSocketOpened() {
@@ -287,7 +290,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         StatService.onPageEnd(this, this.getClass().getSimpleName());
 
-        MyRetrofit.get().setWebSocketStateListener(null);
+        MyRetrofit.get().removeWebSocketStateListener(webSocketStateListener);
     }
 
     @Override
