@@ -32,6 +32,10 @@ public class AutoOpenLockService extends Service {
     public boolean isScaning;
     private Handler handler = new Handler(Looper.getMainLooper());
     private List<LockKey> mLockKeys;
+    private int connectCount;
+    private int connectFailedCount;
+    private int openLockCount;
+    private int openLockFailedCount;
 
     public AutoOpenLockService() {
 
@@ -109,6 +113,8 @@ public class AutoOpenLockService extends Service {
         }, 10);
 
         if (scanResult == UnilinkManager.SCAN_SUCCESS) {
+            Log.i("autoOpenLock", "-------------------------连接次数:"+ connectCount + "\t连接失败次数:" +connectFailedCount +
+            "\t\t开锁次数:" + openLockCount + "\t开锁失败次数:" + openLockFailedCount);
             isScaning = true;
             Log.i("autoOpenLock", "开始扫描");
         }
@@ -129,6 +135,7 @@ public class AutoOpenLockService extends Service {
 
     private void connect(ScanDevice scanDevice) {
         Log.i("autoOpenLock", "连接设备");
+        connectCount ++;
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
@@ -139,6 +146,7 @@ public class AutoOpenLockService extends Service {
             @Override
             public void onDisconnect(int code, String message) {
                 Log.i("autoOpenLock", "连接失败------" + message);
+                connectFailedCount ++;
                 delayScan();
             }
         });
@@ -149,6 +157,7 @@ public class AutoOpenLockService extends Service {
             return;
         }
 
+        openLockCount ++;
         UnilinkManager.getInstance(getApplication()).setConnectListener(null);
         int lockType = mLockKey.getType();
         if (lockType == EnumCollection.LockType.SMARTLOCK.getType()) {
@@ -165,6 +174,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
+                            openLockFailedCount ++;
                             addOpenLockLog(2);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
@@ -195,6 +205,10 @@ public class AutoOpenLockService extends Service {
 
     public void stopAutoOpenLock() {
         isStopScan = true;
+        connectCount = 0;
+        connectFailedCount = 0;
+        openLockCount = 0;
+        openLockFailedCount = 0;
         UnilinkManager.getInstance(getApplication()).stopScan();
     }
 

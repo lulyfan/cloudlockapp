@@ -108,6 +108,7 @@ public class UTBleLink extends BaseBleLink {
         Ble.get().addBleNotifyDataCallback(deviceUUID, new IBleNotifyDataCallback() {
             @Override
             public void onNotify(BleDevice bleDevice, byte[] data, UUID serviceUUID, UUID characteristicUUID) {
+
                 Log.i("cloudLock receive data:" + Log.toUnsignedHex(data));
                 if (mConnectionManager != null) {
                     mConnectionManager.onReceive(bleDevice.getDeviceUUID(), data);

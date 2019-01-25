@@ -19,13 +19,13 @@ import okio.ByteString;
 public class WebSocketHelper {
     private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
     //    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
-    private WebSocket webSocket;
+    private WebSocket mWebSocket;
     private OkHttpClient client;
     private int userId = -1;
     private String appId;
     private boolean isSendUserId;
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture scheduledFuture;
+    private ScheduledFuture reConnectScheduledFuture;      //用于重连websocket
     private ScheduledFuture heartTimeoutScheduledFuture;   //用于心跳超时
     private ScheduledFuture sendHeartScheduledFuture;   //用于发送心跳
 
@@ -39,7 +39,7 @@ public class WebSocketHelper {
 
     public void initWebSocket(boolean isSendUserId) {
 
-        if (webSocket != null) {
+        if (mWebSocket != null) {
             return;
         }
 
@@ -50,7 +50,7 @@ public class WebSocketHelper {
                 .build();
 
         if (client != null) {
-            webSocket = client.newWebSocket(request, webSocketListener);
+            mWebSocket = client.newWebSocket(request, webSocketListener);
         }
     }
 
@@ -70,8 +70,8 @@ public class WebSocketHelper {
         this.userId = userId;
         this.appId = appId;
 
-        if (webSocket != null) {
-            webSocket.send("userId:" + userId + ",appid:" + appId);
+        if (mWebSocket != null) {
+            mWebSocket.send("userId:" + userId + ",appid:" + appId);
         }
     }
 
@@ -85,6 +85,10 @@ public class WebSocketHelper {
             super.onOpen(webSocket, response);
 
             Log.i(TAG, "open");
+
+            if (webSocketStateListener != null) {
+                webSocketStateListener.onOpen();
+            }
 
             if (isSendUserId) {
                 //每隔一秒发送一次userId,发送5次, 防止过早发送而没有收到推送，太晚发送又丢失某些推送
@@ -142,7 +146,7 @@ public class WebSocketHelper {
             super.onClosed(webSocket, code, reason);
             Log.i(TAG, "websocket onClosed:" + reason);
 
-            WebSocketHelper.this.webSocket = null;
+            mWebSocket = null;
             if (sendHeartScheduledFuture != null) {
                 sendHeartScheduledFuture.cancel(true);
                 sendHeartScheduledFuture = null;
@@ -165,17 +169,17 @@ public class WebSocketHelper {
             super.onFailure(webSocket, t, response);
             Log.i(TAG, "websocket onFailure:" + t.getMessage());
 
-            WebSocketHelper.this.webSocket = null;
+            mWebSocket = null;
             if (sendHeartScheduledFuture != null) {
                 sendHeartScheduledFuture.cancel(true);
                 sendHeartScheduledFuture = null;
             }
 
-            if (scheduledFuture != null) {
-                scheduledFuture.cancel(true);
+            if (reConnectScheduledFuture != null) {
+                reConnectScheduledFuture.cancel(true);
             }
 
-            scheduledFuture = executor.schedule(new Runnable() {
+            reConnectScheduledFuture = executor.schedule(new Runnable() {
                 @Override
                 public void run() {
                     initWebSocket(true);
@@ -195,9 +199,9 @@ public class WebSocketHelper {
     }
 
     public void close() {
-        if (webSocket != null) {
-            webSocket.close(CODE_CLOSE_NORMAL, "主动关闭");
-            webSocket = null;
+        if (mWebSocket != null) {
+            mWebSocket.close(CODE_CLOSE_NORMAL, "主动关闭");
+            mWebSocket = null;
         }
     }
 
@@ -210,5 +214,15 @@ public class WebSocketHelper {
 
     public interface WebSocketDataListener {
         void onReceive(String data);
+    }
+
+    private WebSocketStateListener webSocketStateListener;
+
+    public void setWebSocketStateListener(WebSocketStateListener webSocketStateListener) {
+        this.webSocketStateListener = webSocketStateListener;
+    }
+
+    public interface WebSocketStateListener {
+        void onOpen();
     }
 }
