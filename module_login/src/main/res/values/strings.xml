@@ -2,7 +2,7 @@
     <string name="app_name">module_login</string>
     <string name="login_title">云锁登录</string>
     <string name="phone_hint">请输入手机号</string>
-    <string name="password_hint">请输入6-20位数字或字母作为密码</string>
+    <string name="password_hint">请输入6-20位数字和字母作为密码</string>
     <string name="login">登录</string>
     <string name="login_forget_password">忘记密码</string>
     <string name="new_user_register">新用户注册</string>
