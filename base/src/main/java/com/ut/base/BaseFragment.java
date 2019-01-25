@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baidu.mobstat.StatService;
+import com.example.operation.MyRetrofit;
+import com.example.operation.WebSocketHelper;
 import com.gyf.barlibrary.ImmersionBar;
 import com.ut.base.Utils.UTLog;
 
@@ -100,6 +102,11 @@ public class BaseFragment extends Fragment {
         onUserVisible();
         StatService.onPageStart(getActivity(), this.getClass().getSimpleName());
 
+        MyRetrofit.get().setWebSocketStateListener(() -> onWebSocketOpened());
+    }
+
+    protected void onWebSocketOpened() {
+
     }
 
     @Override
@@ -108,6 +115,8 @@ public class BaseFragment extends Fragment {
         UTLog.i(this.getClass().getSimpleName() + ":onPause");
         onUserInvisible();
         StatService.onPageEnd(getActivity(), this.getClass().getSimpleName());
+
+        MyRetrofit.get().setWebSocketStateListener(null);
     }
 
     @Override

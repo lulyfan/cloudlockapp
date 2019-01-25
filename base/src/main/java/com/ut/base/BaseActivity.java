@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baidu.mobstat.StatService;
 import com.example.operation.MyRetrofit;
+import com.example.operation.WebSocketHelper;
 import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnDismissListener;
@@ -72,6 +73,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         isResumed = true;
         StatService.onPageStart(this, this.getClass().getSimpleName());
+
+        MyRetrofit.get().setWebSocketStateListener(() -> onWebSocketOpened());
+    }
+
+    protected void onWebSocketOpened() {
+
     }
 
     protected void initNoLoginListener() {
@@ -279,6 +286,8 @@ public class BaseActivity extends AppCompatActivity {
             noLoginDialog.dismiss();
         }
         StatService.onPageEnd(this, this.getClass().getSimpleName());
+
+        MyRetrofit.get().setWebSocketStateListener(null);
     }
 
     @Override
