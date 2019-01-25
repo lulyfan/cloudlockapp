@@ -133,7 +133,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByKey)
-    Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize);
+    Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize, @Field("lockId")long lockId);
 
     @GET(ApiUrl.getUserInfo)
     Observable<Result<User>> getUserInfo();

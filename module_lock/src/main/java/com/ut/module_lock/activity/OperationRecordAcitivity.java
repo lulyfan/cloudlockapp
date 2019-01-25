@@ -39,11 +39,11 @@ public class OperationRecordAcitivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_operation_record);
+        operationVm = ViewModelProviders.of(this).get(OperationVm.class);
         initDarkToolbar();
         setTitle(R.string.lock_operation_record);
         handlerIntent();
         initView();
-        operationVm = ViewModelProviders.of(this).get(OperationVm.class);
         operationVm.getRecords(recordType, currentId).observe(this, records -> {
             oprs.clear();
             if (mBinding.operationRecordList.isLoading()) {
@@ -83,6 +83,9 @@ public class OperationRecordAcitivity extends BaseActivity {
         recordType = getIntent().getStringExtra(Constance.RECORD_TYPE);
         if (getIntent().hasExtra(Constance.KEY_ID)) {
             currentId = getIntent().getLongExtra(Constance.KEY_ID, currentId);
+            if(getIntent().hasExtra(Constance.LOCK_ID)) {
+                operationVm.setLockId(getIntent().getLongExtra(Constance.LOCK_ID,  0L));
+            }
         } else if (getIntent().hasExtra(Constance.USER_ID)) {
             currentId = getIntent().getLongExtra(Constance.USER_ID, currentId);
         } else if (getIntent().hasExtra(Constance.LOCK_ID)) {

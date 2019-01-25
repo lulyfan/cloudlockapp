@@ -45,6 +45,12 @@ public class OperationVm extends AndroidViewModel {
     private long currentId = -1;
     private String currentType;
 
+    private long lockId = 0;
+
+    public void setLockId(long lockId) {
+        this.lockId = lockId;
+    }
+
     public OperationVm(@NonNull Application application) {
         super(application);
     }
@@ -112,7 +118,7 @@ public class OperationVm extends AndroidViewModel {
 
     private void loadRecordByKey(long keyId) {
         MyRetrofit.get().getCommonApiService()
-                .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE)
+                .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE, lockId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber, new ErrorHandler() {

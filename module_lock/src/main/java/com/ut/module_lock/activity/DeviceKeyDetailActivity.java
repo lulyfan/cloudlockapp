@@ -194,6 +194,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
                     .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
                     .withLong(Constance.KEY_ID, mDeviceKey.getRecordKeyId())
+                    .withLong(Constance.LOCK_ID, mDeviceKey.getLockID())
                     .navigation();
         }
 

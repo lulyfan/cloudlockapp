@@ -15,6 +15,7 @@ import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivitySetNameBinding;
@@ -106,25 +107,29 @@ public class SetNameActivity extends BaseActivity {
     private void goToLockDetail() {
         CommonApi.pageUserLock(1, -1)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(results -> {
+                .map(results->{
+                    LockKey lk = null;
                     if (results.isSuccess()) {
                         List<LockKey> lockKeyList = results.getData();
-                        LockKey lk = null;
                         for (LockKey lockKey : lockKeyList) {
                             if (lockKey.getMac().equals(mMac)) {
                                 lk = lockKey;
+                                LockKeyDaoImpl.get().insert(lk);
                                 break;
                             }
                         }
-                        if (lk != null) {
-                            AppManager.getAppManager().finishActivity(SetNameActivity.class);
-                            AppManager.getAppManager().finishActivity(NearLockActivity.class);
-                            AppManager.getAppManager().finishActivity(AddGuideActivity.class);
-                            ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                                    .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lk)
-                                    .navigation();
-                        }
+                    }
+                    return lk;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lk -> {
+                    if (lk != null) {
+                        AppManager.getAppManager().finishActivity(SetNameActivity.class);
+                        AppManager.getAppManager().finishActivity(NearLockActivity.class);
+                        AppManager.getAppManager().finishActivity(AddGuideActivity.class);
+                        ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                                .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lk)
+                                .navigation();
                     }
                 }, new ErrorHandler());
     }

@@ -104,7 +104,6 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-        mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
         mLockDetailVM.getConnectStatus().observe(this, isConnected -> {
             if (isConnected) {
                 mDetailBinding.ivLockDetailBle.setImageResource(R.mipmap.icon_bluetooth_green);
