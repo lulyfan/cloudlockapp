@@ -14,6 +14,8 @@ import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.operation.MyRetrofit;
+import com.example.operation.WebSocketHelper;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
@@ -188,6 +190,12 @@ public class KeysManagerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateData();
+    }
+
+    @Override
+    protected void onWebSocketOpened() {
+        super.onWebSocketOpened();
         updateData();
     }
 }

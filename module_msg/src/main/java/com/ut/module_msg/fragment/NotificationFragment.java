@@ -118,4 +118,10 @@ public class NotificationFragment extends BaseFragment {
             notificationViewModel.loadNotificationMessages();
         }
     }
+
+    @Override
+    protected void onWebSocketOpened() {
+        super.onWebSocketOpened();
+        notificationViewModel.loadNotificationMessages();
+    }
 }
