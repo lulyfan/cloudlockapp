@@ -31,8 +31,8 @@ public class SearchLockVM extends AndroidViewModel {
      * @param keyWord 搜索的字段
      * @return
      */
-    public LiveData<List<LockKey>> getLockKeys(String keyWord) {
-        return LockKeyDaoImpl.get().getLockByName(keyWord);
+    public LiveData<List<LockKey>> getLockKeys(String keyWord, long currentGroupId) {
+        return LockKeyDaoImpl.get().getLockByName(keyWord, currentGroupId);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.api;
 
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.example.entity.entity.Cloudlockenterpriseinfo;
 import com.ut.database.entity.ApplyMessage;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.Key;
@@ -21,6 +22,7 @@ import com.ut.database.entity.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Observer;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -133,7 +135,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.queryLogsByKey)
-    Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize, @Field("lockId")long lockId);
+    Observable<Result<List<Record>>> queryLogsByKey(@Field("keyId") long keyId, @Field("currentPage") int currentPage, @Field("pageSize") int pageSize, @Field("lockId") long lockId);
 
     @GET(ApiUrl.getUserInfo)
     Observable<Result<User>> getUserInfo();
@@ -316,4 +318,8 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.delKeyInfo)
     Observable<Result<Void>> delKeyInfo(@Field("lockId") int lockId, @Field("localKeys") int localKey);
+
+    @GET
+    Observable<Cloudlockenterpriseinfo> getInfoFromUrl(@Url String url);
+
 }

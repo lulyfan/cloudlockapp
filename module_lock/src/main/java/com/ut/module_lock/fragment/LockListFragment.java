@@ -143,11 +143,11 @@ public class LockListFragment extends BaseFragment {
                             .navigation();
 
                     finish();
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()){
+                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
                     CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
-                } else if( lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
+                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
                     CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
-                } else if( lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
                     CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
                 }
             });
@@ -158,6 +158,7 @@ public class LockListFragment extends BaseFragment {
 
     private LockGroup allGroup = new LockGroup();
     int currentGroupPosition = -1;
+    long currentGroupId = 0;
 
     private synchronized void refreshGroupList(List<LockGroup> lockGroups) {
         if (popupWindow == null || lockGroups == null) return;
@@ -189,6 +190,7 @@ public class LockListFragment extends BaseFragment {
                 LockGroup lockGroup = (LockGroup) parent.getAdapter().getItem(position);
                 lockGroup.setCurrent(1);
                 String currentGroupName = lockGroup.getName();
+                currentGroupId = lockGroup.getId();
                 ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(currentGroupName);
                 mFragmentLocklistBinding.lockTvGroup.setText(currentGroupName);
                 ((LockGroup) parent.getAdapter().getItem(currentGroupPosition)).setCurrent(0);
@@ -235,6 +237,7 @@ public class LockListFragment extends BaseFragment {
         public void onSearchClick(View view) {
             UTLog.i("onSearchClick");
             Intent intent = new Intent(getContext(), SearchLockActivity.class);
+            intent.putExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_CURRENT_GROUPID, currentGroupId);
 //            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
 //                    mFragmentLocklistBinding.lockTvSearch, getString(R.string.lock_share_string_search)).toBundle();
 //            getActivity().startActivity(intent, bundle);
@@ -317,7 +320,7 @@ public class LockListFragment extends BaseFragment {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((AutoOpenLockService.LocalBinder)service).getService();
+            mService = ((AutoOpenLockService.LocalBinder) service).getService();
             mService.setLockKeys(mLockListFragVM.getLockList().getValue());
             autoOpenLock();
         }

@@ -6,9 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.operation.CommonApi;
 import com.ut.base.BaseActivity;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityAboutUsBinding;
+
+import io.reactivex.disposables.Disposable;
 
 public class AboutUsActivity extends BaseActivity {
 
@@ -19,6 +22,16 @@ public class AboutUsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_about_us);
         initUI();
+        initInfo();
+    }
+
+    private void initInfo() {
+        Disposable disposable = CommonApi.getCloudlockenterpriseinfo()
+                .subscribe(cloudlockenterpriseinfo -> {
+                    binding.textView41.setText(cloudlockenterpriseinfo.getMobile());
+                    binding.textView44.setText(cloudlockenterpriseinfo.getUrl());
+                    binding.textView48.setText(cloudlockenterpriseinfo.getEmail());
+                });
     }
 
     private void initUI() {

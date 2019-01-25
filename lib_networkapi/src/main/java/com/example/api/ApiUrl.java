@@ -207,4 +207,7 @@ public interface ApiUrl {
 
     //删除钥匙
     String delKeyInfo = PREFIX + "/innerLock/delKeyInfo" + SUFFIX;
+
+    //获取企业信息
+    String getCloudlockenterpriseinfo = "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockenterpriseinfo";
 }

@@ -79,8 +79,8 @@ public class LockKeyDaoImpl {
      * @param name
      * @return
      */
-    public LiveData<List<LockKey>> getLockByName(String name) {
-        return mLockKeyDao.getLockByName("%" + name + "%");
+    public LiveData<List<LockKey>> getLockByName(String name, long currentGroupId) {
+        return mLockKeyDao.getLockByName("%" + name + "%", currentGroupId);
     }
 
     public LiveData<LockKey> getLockByMac(String mac) {

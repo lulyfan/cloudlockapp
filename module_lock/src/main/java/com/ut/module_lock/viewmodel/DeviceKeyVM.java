@@ -357,7 +357,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             record1.setDescription(description);
             record1.setLockId(Integer.parseInt(mLockKey.getId()));
             record1.setKeyId(deviceKey.getRecordKeyId());
-            record1.setType(deviceKey.getKeyType() + 2);//设备钥匙的类型从2开始
+            record1.setType(record.getKeyType() + 2);//设备钥匙的类型从2开始
             mRecordList.add(record1);
         }
     }

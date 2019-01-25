@@ -72,6 +72,8 @@ public class RouterUtil {
         String MAC = "mac";
         String KEY_ID = "key_id";
         String NAME = "name";
+
+        String EXTRA_LOCK_CURRENT_GROUPID = "extra_lock_current_groupid";
     }
 
     public interface LockModuleConstParams {

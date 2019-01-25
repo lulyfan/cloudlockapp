@@ -177,6 +177,7 @@
                 android:layout_height="@dimen/base_52dp"
                 android:background="@drawable/select_gray_e"
                 android:clickable="true"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

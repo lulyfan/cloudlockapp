@@ -1,8 +1,10 @@
 package com.example.operation;
 
+import com.example.api.ApiUrl;
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
 import com.example.entity.base.Results;
+import com.example.entity.entity.Cloudlockenterpriseinfo;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.ut.database.entity.DeviceKey;
@@ -139,6 +141,12 @@ public class CommonApi {
      */
     public static Observable<Result<List<LockGroup>>> getGroup() {
         return getCommonApiService().getGroup();
+    }
+
+
+    public static Observable<Cloudlockenterpriseinfo> getCloudlockenterpriseinfo() {
+        return ObjectLoader.observe(getCommonApiService().
+                getInfoFromUrl(ApiUrl.getCloudlockenterpriseinfo));
     }
 
     protected static CommonApiService getCommonApiService() {

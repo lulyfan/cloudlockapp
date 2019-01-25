@@ -27,15 +27,21 @@ public class SearchLockActivity extends BaseActivity {
     private ActivitySearchLockBinding mBinding = null;
     private CommonAdapter<LockKey> mLockKeyCommonAdapter = null;
     private SearchLockVM mSearchLockVM = null;
+    private long currentGroupId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_search_lock);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_lock);
+        initData();
         initTitle();
         initView();
         initViewModel();
+    }
+
+    private void initData() {
+        currentGroupId = getIntent().getLongExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_CURRENT_GROUPID, 0);
     }
 
     private void initViewModel() {
@@ -60,7 +66,7 @@ public class SearchLockActivity extends BaseActivity {
                 if (s.toString().equals("")) {
                     refreshLockListData(new ArrayList<>());
                 } else {
-                    mSearchLockVM.getLockKeys(s.toString()).observe(SearchLockActivity.this, lockKeys -> {
+                    mSearchLockVM.getLockKeys(s.toString(), currentGroupId).observe(SearchLockActivity.this, lockKeys -> {
                         refreshLockListData(lockKeys);
                     });
                 }
