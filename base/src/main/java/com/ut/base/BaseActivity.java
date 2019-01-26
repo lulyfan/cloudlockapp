@@ -27,15 +27,12 @@ import com.example.operation.MyRetrofit;
 import com.example.operation.WebSocketHelper;
 import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
-import com.ut.base.dialog.LoadDialogFragment;
-import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.unilink.UnilinkManager;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -55,8 +52,6 @@ public class BaseActivity extends AppCompatActivity {
     private DialogPlus loadDialog;
     private WebSocketHelper.WebSocketStateListener webSocketStateListener;
 
-    private boolean isResumed = false;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +69,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isResumed = true;
         StatService.onPageStart(this, this.getClass().getSimpleName());
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
@@ -85,47 +79,21 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initNoLoginListener() {
-        MyRetrofit.get().setNoLoginListener(() -> {
-            Observable.just(RouterUtil.LoginModulePath.Login)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(url -> {
-                        handlerNotLogin(url);
-                    });
-        });
+        MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(()-> handlerNotLogin(RouterUtil.LoginModulePath.Login)));
     }
 
     private synchronized void handlerNotLogin(String url) {
-        Schedulers.io().scheduleDirect(new Runnable() {
-            @Override
-            public void run() {//TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
-                BaseApplication.clearDataWhenLogout();
-            }
-        });
+        //TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
+        Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         //todo
         try {
-            if (noLoginDialog != null && noLoginDialog.isShowing()) {
-                noLoginDialog.dismiss();
-            }
-            noLoginDialog = new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
-                    .setMessage(R.string.base_auto_login_time_out)
-                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
-                        if (dialog1 != null) {
-                            dialog1.dismiss();
-                        }
-                        ARouter.getInstance().build(url).navigation();
-                    }).setOnDismissListener(dialog -> {
-                        noLoginDialog = null;
-                    })
-                    .setCancelable(false)
-                    .create();
-            if (!noLoginDialog.isShowing()) {
-                noLoginDialog.show();
-            }
+            DialogHelper.getInstance(AppManager.getAppManager().currentActivity())
+                    .setMessage(getString(R.string.base_auto_login_time_out))
+                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).navigation())
+                    .show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).navigation();
     }
 
     public void setLightStatusBar() {
@@ -284,7 +252,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        isResumed = false;
         if (noLoginDialog != null && noLoginDialog.isShowing()) {
             noLoginDialog.dismiss();
         }
@@ -362,11 +329,5 @@ public class BaseActivity extends AppCompatActivity {
                 .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
                 .setGravity(Gravity.CENTER)
                 .create();
-    }
-
-    private Handler handler = new Handler();
-
-    public Handler getMainHandler(){
-        return handler;
     }
 }

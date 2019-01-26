@@ -14,7 +14,6 @@ import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.FragmentUtil;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.UserRepository;
 import com.ut.base.Utils.UTLog;
 import com.ut.cloudlock.R;
@@ -44,6 +43,7 @@ public class MainActivity extends BaseActivity {
             BaseApplication.setUser(user);
             UTLog.d("observe", "user update ----> " + JSON.toJSONString(user));
         });
+        UserRepository.getInstance().refreshUser();
     }
 
     private void initNavigationItemSelectListener() {
@@ -149,7 +149,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        UserRepository.getInstance().refreshUser();
     }
 
     @Override

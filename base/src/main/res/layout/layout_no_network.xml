@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_40dp"
-            android:text="暂无网络"
+            android:text="@string/base_no_network"
             android:textColor="@color/gray6"
             android:textSize="@dimen/base_14sp" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/base_20dp"
-            android:text="请检查网络后下拉页面刷新"
+            android:text="@string/base_network_retry"
             android:textColor="@color/gray9"
             android:textSize="@dimen/base_12sp" />
     </LinearLayout>
