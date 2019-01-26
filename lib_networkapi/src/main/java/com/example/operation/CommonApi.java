@@ -32,8 +32,10 @@ public class CommonApi {
 
     //绑定锁
     public static Observable<Result<Void>> bindLock(String mac, String lockName, String adminPwd,
-                                                    String blueKey, String encryptType, String encryptKey) {
-        Observable<Result<Void>> resultObservable = getCommonApiService().bindLock(mac, lockName, adminPwd, blueKey, encryptType, encryptKey);
+                                                    String blueKey, String encryptType, String encryptKey,
+                                                    String lockVersion) {
+        Observable<Result<Void>> resultObservable = getCommonApiService().bindLock(mac, lockName, adminPwd,
+                blueKey, encryptType, encryptKey, lockVersion);
         return ObjectLoader.observe(resultObservable);
     }
 

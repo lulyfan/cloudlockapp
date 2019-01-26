@@ -113,8 +113,7 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
-            if (mIsShowDialogAndTip.compareAndSet(true, false))
-                CLToast.showAtBottom(LockDetailActivity.this, tip);
+            CLToast.showAtBottom(LockDetailActivity.this, tip);
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
             mIsShowDialogAndTip.set(false);
@@ -270,6 +269,7 @@ public class LockDetailActivity extends BaseActivity {
     private void endAutoOpenLock() {
         UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
         mLockDetailVM.getReAutoOpen().removeObserver(mReOpenObserver);
+        mIsShowDialogAndTip.set(false);
     }
 
     @BindingAdapter("electricityDrawable")

@@ -22,6 +22,7 @@ import com.ut.unilink.cloudLock.protocol.data.GateLockKey;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -252,7 +253,14 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(voidResult -> {
-                }, new ErrorHandler());
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        Schedulers.io().scheduleDirect(() -> {
+                            super.accept(throwable);
+                        }, 2, TimeUnit.SECONDS);
+                    }
+                });
         saveResult.postValue(true);
     }
 }

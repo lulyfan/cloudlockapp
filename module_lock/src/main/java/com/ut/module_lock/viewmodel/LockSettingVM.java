@@ -6,6 +6,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
@@ -100,7 +101,11 @@ public class LockSettingVM extends AndroidViewModel {
                         toDeleteAdminKey();
                         dialogHandler.postValue(Constance.START_LOAD);
                     }
-                    showTip.postValue(result.msg);
+                    if (TextUtils.isEmpty(result.msg)) {
+                        showTip.postValue(getApplication().getString(R.string.lock_unbind_fail_tips));
+                    } else {
+                        showTip.postValue(result.msg);
+                    }
                 }, new ErrorHandler());
     }
 

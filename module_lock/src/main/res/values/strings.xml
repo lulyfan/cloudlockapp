@@ -29,7 +29,7 @@
     <string name="lock_key_info">钥匙详情</string>
     <string name="valid_time">生效时间</string>
     <string name="invalid_time">失效时间</string>
-    <string name="lock_key_type">钥匙权限</string>
+    <string name="lock_key_type">钥匙类型</string>
     <string name="lock_key_name">钥匙名称</string>
     <string name="lock_key_permission">钥匙权限</string>
     <string name="lock_accept_time">接收时间</string>

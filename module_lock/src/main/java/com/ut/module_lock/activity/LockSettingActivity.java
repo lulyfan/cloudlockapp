@@ -63,10 +63,6 @@ public class LockSettingActivity extends BaseActivity {
         mBinding.chooseGroup.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.CHOOSE_LOCK_GROUP).withParcelable("lock_key", lockKey).navigation(this, REQUEST_CODE_CHOOSE_GROUP));
         mBinding.btnDeleteKey.setOnClickListener(v -> deleteLock());
         mBinding.switchCanOpen.setOnClickListener(view -> {
-            if (isResetChecked) {
-                isResetChecked = false;
-                return;
-            }
             mLockSettingVM.changeCanOpen(mBinding.switchCanOpen.isChecked());
         });
         mBinding.layoutLockName.setOnClickListener(v -> {
@@ -88,9 +84,6 @@ public class LockSettingActivity extends BaseActivity {
             mBinding.switchCanOpen.setVisibility(View.GONE);
         }
     }
-
-    private volatile boolean isResetChecked = false;
-
 
     private void initViewModel() {
         mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
@@ -131,7 +124,6 @@ public class LockSettingActivity extends BaseActivity {
         });
         mLockSettingVM.getSetCanOpenSwitchResult().observe(this, operateSuccess -> {
             if (!operateSuccess.result) {
-                isResetChecked = true;
                 mBinding.switchCanOpen.setChecked(operateSuccess.oldVar);
             }
         });
@@ -305,7 +297,7 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        Schedulers.io().scheduleDirect(()-> {
+        Schedulers.io().scheduleDirect(() -> {
             if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
             LockKeyDaoImpl.get().insert(lockKey);
         });

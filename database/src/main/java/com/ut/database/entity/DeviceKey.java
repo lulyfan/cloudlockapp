@@ -96,7 +96,7 @@ public class DeviceKey implements Parcelable {
     }
 
     public int getRecordKeyId() {
-        return -(lockID * 100 + keyID);
+        return -(lockID * 1000 + keyType * 100 + keyID);
     }
 
     public void setKeyID(int keyID) {
@@ -295,13 +295,15 @@ public class DeviceKey implements Parcelable {
         if (o == null || getClass() != o.getClass()) return false;
         DeviceKey deviceKey = (DeviceKey) o;
         return keyID == deviceKey.keyID &&
+                keyType == deviceKey.keyType &&
+                keyInId == deviceKey.keyInId &&
                 lockID == deviceKey.lockID;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(keyID, lockID);
+        return Objects.hash(keyID, keyType, keyInId, lockID);
     }
 
     @Override

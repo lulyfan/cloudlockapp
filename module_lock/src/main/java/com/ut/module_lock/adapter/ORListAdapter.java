@@ -85,7 +85,8 @@ public class ORListAdapter extends BaseAdapter {
             if (describe.contains(",")) {
                 String[] strings = describe.split(",");
                 if (strings.length >= 2) {
-                    r.setUserName(strings[0]);
+                    if (TextUtils.isEmpty(r.getUserName()))
+                        r.setUserName(strings[0]);
                     r.setDescription(strings[1]);
                 }
             }

@@ -28,6 +28,12 @@ public interface ORecordDao {
     @Query("select * from record where keyId = :keyId ORDER BY id desc limit 10")
     LiveData<List<Record>> getRecordsByKeyId(long keyId);
 
+    @Query("select * from record where keyId = :keyId ORDER BY id desc limit 10")
+    List<Record> getRecordListByKeyId(long keyId);
+
+    @Query("select * from record where lockId = :lockId ORDER BY id desc limit 10 ")
+    List<Record> getRecordListByLockId(long lockId);
+
     @Query("delete from record")
     void deleteAll();
 

@@ -140,16 +140,17 @@
 
         <TextView
             style="@style/TvDeviceKeyDetailLeft"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/base_70dp"
             android:background="@drawable/bg_item_9"
             android:drawableRight="@drawable/right_triangle"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:onClick="@{present::onRecordClick}"
             android:paddingLeft="@dimen/base_20dp"
             android:paddingRight="@dimen/base_20dp"
             android:text="@string/lock_open_record"
-            app:layout_constraintTop_toBottomOf="@+id/lly2"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/lly2"/>
 
         <!--<TextView-->
         <!--style="@style/TvDeviceKeyDetailRight.Drawable"-->

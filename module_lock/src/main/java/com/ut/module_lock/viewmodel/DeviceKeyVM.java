@@ -98,7 +98,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                             DeviceKeyDaoImpl.get().insertDeviceKeys(mWebDeviceKeyList);
                         }
                     }
-                }, new ErrorHandler());
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                    }
+                });
         mCompositeDisposable.add(disposable);
     }
 
@@ -295,7 +299,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                     .subscribe(voidResults -> {
                         if (voidResults.isSuccess()) {
                         }
-                    }, new ErrorHandler());
+                    }, new ErrorHandler() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                        }
+                    });
             mCompositeDisposable.add(disposable);
         } else {
             //todo 提交数据到后台
@@ -314,7 +322,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                         if (deviceKeyResults.isSuccess()) {
 
                         }
-                    }, new ErrorHandler());
+                    }, new ErrorHandler() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                        }
+                    });
             mCompositeDisposable.add(disposable);
         }
     }
@@ -356,8 +368,8 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                     getApplication().getResources().getStringArray(R.array.deviceTypeName)[deviceKey.getKeyType()]);
             record1.setDescription(description);
             record1.setLockId(Integer.parseInt(mLockKey.getId()));
+            record1.setType(deviceKey.getKeyType() + 2);//设备钥匙的类型从2开始
             record1.setKeyId(deviceKey.getRecordKeyId());
-            record1.setType(record.getKeyType() + 2);//设备钥匙的类型从2开始
             mRecordList.add(record1);
         }
     }
@@ -369,9 +381,25 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                 .subscribe(voidResult -> {
                     if (voidResult.isSuccess()) {
                     }
-                }, new ErrorHandler());
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                    }
+                });
         mCompositeDisposable.add(disposable);
-//        CloudLockDatabaseHolder.get().recordDao().insertRecords(mRecordList);
+        mExecutorService.execute(() -> {
+            List<Record> listNew = new ArrayList<>();
+            listNew.addAll(mRecordList);
+            List<Record> list = CloudLockDatabaseHolder.get().recordDao().
+                    getRecordListByLockId(Integer.parseInt(mLockKey.getId()));
+            if (list != null && list.size() > 0) {
+                listNew.removeAll(list);
+                for (int i = 0; i < listNew.size(); i++) {
+                    listNew.get(i).setId(list.get(list.size() - 1).getId() + i + 1);
+                }
+            }
+            CloudLockDatabaseHolder.get().recordDao().insertRecords(listNew);
+        });
     }
 
     private int mRecordIndex = 1;
