@@ -38,8 +38,6 @@ public class CLJPushReceiver extends BroadcastReceiver {
                     }
                 }
             }
-        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-            context.sendBroadcast(new Intent("update_apply_message"));
         }
     }
 }

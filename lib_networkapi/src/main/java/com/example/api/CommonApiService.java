@@ -68,7 +68,7 @@ public interface CommonApiService {
 
     @FormUrlEncoded
     @POST(ApiUrl.getKeyApplyList)
-    Observable<Result<List<ApplyMessage>>> getKeyApplyList(@Field("userId") long userId);
+    Observable<Result<List<ApplyMessage>>> getKeyApplyList();
 
     @FormUrlEncoded
     @POST(ApiUrl.pageKey)

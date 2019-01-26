@@ -1,10 +1,6 @@
 package com.ut.module_msg.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.graphics.Color;
@@ -26,7 +22,6 @@ import com.ut.module_msg.viewmodel.ApplyMessageVm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
@@ -41,16 +36,6 @@ public class ApplyFragment extends BaseFragment {
     private List<ApplyMessage> applyMessages = new ArrayList<>();
     private ListAdapter<ApplyMessage> mAdapter = null;
     private ApplyMessageVm mApplyMessageVm = null;
-    private BroadcastReceiver applyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if ("update_apply_message".equals(intent.getAction())) {
-                if (mApplyMessageVm != null) {
-                    mApplyMessageVm.loadApplyMessages();
-                }
-            }
-        }
-    };
 
     @Nullable
     @Override
@@ -80,7 +65,6 @@ public class ApplyFragment extends BaseFragment {
                 mApplyFgBinding.swipeRefreshLayout.setRefreshing(false);
                 mAdapter.updateDate(ams);
             });
-            Objects.requireNonNull(getActivity()).registerReceiver(applyReceiver, new IntentFilter("update_apply_message"));
         }
         return mApplyFgBinding.getRoot();
     }
@@ -137,6 +121,5 @@ public class ApplyFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Objects.requireNonNull(getActivity()).unregisterReceiver(applyReceiver);
     }
 }

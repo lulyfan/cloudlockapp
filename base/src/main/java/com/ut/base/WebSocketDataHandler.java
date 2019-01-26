@@ -18,6 +18,8 @@ import com.ut.database.entity.LockKey;
 
 import java.util.List;
 
+import io.reactivex.schedulers.Schedulers;
+
 @SuppressLint("CheckResult")
 public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListener {
 
@@ -35,11 +37,13 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public static final int CODE_UPDATE_KEY = 10020;     //刷新钥匙列表
     public static final int CODE_UPDATE_LOCK_KEY = 10030; //刷新锁和钥匙
 
+    public static final int CODE_UPDATE_APPLY_MESSAGE = 20010; //刷新申请消息
+
     @Override
     public void onReceive(String data) {
         UTLog.d("websocket data:" + data);
 
-        if("ok".equals(data.toLowerCase())) {
+        if ("ok".equals(data.toLowerCase())) {
             return;
         }
 
@@ -126,12 +130,16 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
 
             case CODE_UPDATE_KEY:
                 String mac = result.data.getAsString();
-                updateLockAndKey(BaseApplication.getUser().getId(),mac);
+                updateLockAndKey(BaseApplication.getUser().getId(), mac);
                 break;
 
             case CODE_UPDATE_LOCK_KEY:
                 String mac1 = result.data.getAsString();
                 updateLockAndKey(BaseApplication.getUser().getId(), mac1);
+                break;
+
+            case CODE_UPDATE_APPLY_MESSAGE:
+                updateApplyMessage();
                 break;
 
             default:
@@ -188,10 +196,10 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
                     }
                 })
                 .subscribe(listResult -> {
-                    if(listResult.isSuccess()) {
+                    if (listResult.isSuccess()) {
                         CloudLockDatabaseHolder.get().getLockMessageDao().insert(listResult.data);
                     }
-                },throwable -> {
+                }, throwable -> {
 
                 });
     }
@@ -200,5 +208,16 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
         updateLock();
         updateKey(userId, mac);
         updateMessage();
+    }
+
+    private void updateApplyMessage() {
+        MyRetrofit.get().getCommonApiService().getKeyApplyList()
+                .subscribeOn(Schedulers.io())
+                .subscribe(listResult -> {
+                    if (listResult.isSuccess()) {
+                        CloudLockDatabaseHolder.get().getApplyMessageDao().deleteAll();
+                        CloudLockDatabaseHolder.get().getApplyMessageDao().insert(listResult.data);
+                    }
+                }, Throwable::printStackTrace);
     }
 }

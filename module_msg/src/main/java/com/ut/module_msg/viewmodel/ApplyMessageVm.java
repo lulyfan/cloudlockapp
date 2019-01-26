@@ -11,8 +11,6 @@ import android.support.annotation.NonNull;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
@@ -55,7 +53,7 @@ public class ApplyMessageVm extends AndroidViewModel {
     public void loadApplyMessages() {
         Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
-                .getKeyApplyList(BaseApplication.getUser().id)
+                .getKeyApplyList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
