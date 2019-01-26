@@ -69,7 +69,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/base_30dp"
-
                 >
 
                 <TextView
@@ -114,8 +113,8 @@
 
                 <ImageButton
                     android:id="@+id/imageButton2"
-                    android:layout_width="@dimen/base_230dp"
-                    android:layout_height="@dimen/base_230dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:layout_marginTop="@dimen/base_48dp"
                     android:background="@null"
                     android:enabled="@{lockKey.keyStatus == 8}"
@@ -125,7 +124,8 @@
                     app:layout_constraintDimensionRatio="W,1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    app:layout_constraintWidth_percent="0.65"/>
 
                 <ImageView
                     android:id="@+id/iv_lock_detail_ble"
@@ -140,33 +140,38 @@
                     app:layout_constraintVertical_bias="0.75"
                     app:layout_constraintWidth_percent="0.1"/>
 
-                <TextView
-                    android:id="@+id/tv_detail_status"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/base_10dp"
-                    android:text="@{lockKey.statusStr}"
-                    android:textColor="@{lockKey.keyStatus == 8 ? @color/lock_color_tv_normal: @color/lock_color_tv_red}"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/lly_bottom"
                     app:layout_constraintEnd_toEndOf="@+id/imageButton2"
                     app:layout_constraintStart_toStartOf="@+id/imageButton2"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton2">
 
-                <TextView
-                    android:id="@+id/tv_touch_open"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/base_22dp"
-                    android:drawablePadding="@dimen/base_8dp"
-                    android:text="@string/touch_unlock"
-                    android:textColor="@{lockKey.canOpen == 0 ? @color/lock_color_tv_normal: @color/lock_color_tv_gray}"
-                    app:layout_constraintEnd_toEndOf="@+id/imageButton2"
-                    app:layout_constraintStart_toStartOf="@+id/imageButton2"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_detail_status"
-                    app:touchDrawableLeft="@{lockKey.canOpen}"
-                    />
+                    <TextView
+                        android:id="@+id/tv_detail_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/base_17dp"
+                        android:text="@{lockKey.statusStr}"
+                        android:textColor="@{lockKey.keyStatus == 8 ? @color/lock_color_tv_normal: @color/lock_color_tv_red}"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_touch_open"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/base_8dp"
+                        android:text="@string/touch_unlock"
+                        android:textColor="@{lockKey.canOpen == 0 ? @color/lock_color_tv_normal: @color/lock_color_tv_gray}"
+                        app:touchDrawableLeft="@{lockKey.canOpen}"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lly_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"

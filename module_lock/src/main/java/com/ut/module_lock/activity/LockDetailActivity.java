@@ -42,7 +42,7 @@ public class LockDetailActivity extends BaseActivity {
     private static final int BLEENABLECODE = 102;
 
     private AtomicBoolean mIsShowDialogAndTip = new AtomicBoolean(false);
-    private AtomicBoolean isToRequestPermission = new AtomicBoolean(true);
+    private AtomicBoolean isAllowAutoOpen = new AtomicBoolean(true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private void autoOpen() {
-        if (!isNotManager() && (mLockKey.getCanOpen() == 1) && isToRequestPermission.get()) {
+        if (!isNotManager() && (mLockKey.getCanOpen() == 1) && isAllowAutoOpen.get()) {
             toOpenLock();
         }
     }
@@ -113,22 +113,35 @@ public class LockDetailActivity extends BaseActivity {
         });
         mLockDetailVM.getShowTip().observe(this, tip -> {
             UTLog.i("open lock show tip:" + tip);
-            CLToast.showAtBottom(LockDetailActivity.this, tip);
+            if (mIsShowDialogAndTip.compareAndSet(true, false))
+                CLToast.showAtBottom(LockDetailActivity.this, tip);
         });
         mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
             mIsShowDialogAndTip.set(false);
             new UnlockSuccessDialog(this, false).show();
         });
         mLockDetailVM.getLockKey().observe(this, lockKey -> {
-            mLockKey = lockKey;
+            if (lockKey != null) {
+                mLockKey = lockKey;
+            } else {
+                mLockKey.setKeyStatus(EnumCollection.KeyStatus.HAS_DELETE.ordinal());
+            }
+            if (!EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())) {
+                isAllowAutoOpen.set(false);
+                endAutoOpenLock();
+            } else {
+                isAllowAutoOpen.set(true);
+                autoOpen();
+            }
             mLockDetailVM.setLockKey(mLockKey);
             initLockData();
+            initView();
         });
         //todo 自动开锁
         mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
         mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
             if (isShowDialog) {
-                if (mIsShowDialogAndTip.compareAndSet(true, false)) {
+                if (mIsShowDialogAndTip.get()) {
                     startLoad();
                 }
             } else {
@@ -138,7 +151,7 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private Observer<Boolean> mReOpenObserver = (reOpen) -> {
-        if (reOpen) {
+        if (reOpen && isAllowAutoOpen.get()) {
             autoOpen();
         }
     };
@@ -248,7 +261,7 @@ public class LockDetailActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 toOpenLock();
             } else {
-                isToRequestPermission.set(false);//用户拒绝打开蓝牙后不再进行提示
+                isAllowAutoOpen.set(false);//用户拒绝打开蓝牙后不再进行提示
             }
         }
     }
@@ -319,5 +332,11 @@ public class LockDetailActivity extends BaseActivity {
         leftDrawable.setBounds(0, 0, leftDrawable.getIntrinsicWidth(), leftDrawable.getIntrinsicHeight());
         textView.setCompoundDrawables(leftDrawable, textView.getCompoundDrawables()[1],
                 textView.getCompoundDrawables()[2], textView.getCompoundDrawables()[3]);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        endAutoOpenLock();
     }
 }

@@ -198,7 +198,8 @@ public interface CommonApiService {
     @FormUrlEncoded
     @POST(ApiUrl.bindLock)
     Observable<Result<Void>> bindLock(@Field("mac") String mac, @Field("lockName") String lockName, @Field("adminPwd") String adminPwd,
-                                      @Field("blueKey") String blueKey, @Field("encryptType") String encryptType, @Field("encryptKey") String encryptKey);
+                                      @Field("blueKey") String blueKey, @Field("encryptType") String encryptType,
+                                      @Field("encryptKey") String encryptKey, @Field("lockVersion") String lockVersion);
 
     @FormUrlEncoded
     @POST(ApiUrl.getLockInfo)
