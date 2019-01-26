@@ -69,11 +69,7 @@ public class BaseActivity extends AppCompatActivity {
             UnilinkManager.getInstance(this).enableLog(true);
 
         webSocketStateListener = () -> onWebSocketOpened();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         Intent intent = new Intent(this, AutoOpenLockService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -84,12 +80,6 @@ public class BaseActivity extends AppCompatActivity {
         StatService.onPageStart(this, this.getClass().getSimpleName());
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unbindService(serviceConnection);
     }
 
     public AutoOpenLockService getAutoOpenLockService() {
@@ -292,6 +282,7 @@ public class BaseActivity extends AppCompatActivity {
         if (noLoginDialog != null) {
             noLoginDialog.dismiss();
         }
+        unbindService(serviceConnection);
         AppManager.getAppManager().finishActivity(this);
     }
 
