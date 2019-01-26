@@ -33,7 +33,6 @@ public class SystemSettingActivity extends BaseActivity {
 
     private ActivitySystemSettingBinding binding;
     private SystemSettingViewModel viewModel;
-    private AutoOpenLockService mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,37 +42,13 @@ public class SystemSettingActivity extends BaseActivity {
         initViewModel();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, AutoOpenLockService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unbindService(serviceConnection);
-    }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((AutoOpenLockService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-    };
-
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(SystemSettingViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
         viewModel.logoutSuccess.observe(this, aVoid -> {
-            if (mService != null) {
-                mService.stopAutoOpenLock();
+            AutoOpenLockService service = getAutoOpenLockService();
+            if (service != null) {
+                service.stopAutoOpenLock();
             }
         });
     }

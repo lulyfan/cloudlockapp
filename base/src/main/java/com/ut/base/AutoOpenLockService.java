@@ -55,8 +55,26 @@ public class AutoOpenLockService extends Service {
         mLockKeys = lockKeys;
     }
 
+    private boolean isNeedAutoOpenLock() {
+        List<LockKey> lockKeys = mLockKeys;
+        if (lockKeys == null || lockKeys.size() <= 0) {
+            return false;
+        }
+
+        for (LockKey lockKey : lockKeys) {
+            if (lockKey.getCanOpen() == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //自动查询锁设备并开锁
     public void startAutoOpenLock() {
+        if (!isNeedAutoOpenLock()) {
+            return;
+        }
+
         if (!UnilinkManager.getInstance(this).checkState()) {
             return;
         }

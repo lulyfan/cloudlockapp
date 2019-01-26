@@ -1,10 +1,14 @@
 package com.ut.base;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -51,6 +55,7 @@ public class BaseActivity extends AppCompatActivity {
     private static AlertDialog noLoginDialog = null;
     private DialogPlus loadDialog;
     private WebSocketHelper.WebSocketStateListener webSocketStateListener;
+    private AutoOpenLockService autoOpenLockService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +72,28 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, AutoOpenLockService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         StatService.onPageStart(this, this.getClass().getSimpleName());
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
+    }
+
+    public AutoOpenLockService getAutoOpenLockService() {
+        return autoOpenLockService;
     }
 
     protected void onWebSocketOpened() {
@@ -93,6 +115,10 @@ public class BaseActivity extends AppCompatActivity {
                     .show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (autoOpenLockService != null) {
+            autoOpenLockService.stopAutoOpenLock();
         }
     }
 
@@ -330,4 +356,17 @@ public class BaseActivity extends AppCompatActivity {
                 .setGravity(Gravity.CENTER)
                 .create();
     }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            autoOpenLockService = ((AutoOpenLockService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            autoOpenLockService = null;
+        }
+    };
+
 }

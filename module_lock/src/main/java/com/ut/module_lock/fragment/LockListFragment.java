@@ -24,6 +24,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
 import com.example.operation.WebSocketHelper;
+import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.BaseFragment;
 import com.ut.base.UIUtils.RouterUtil;
@@ -63,16 +64,7 @@ public class LockListFragment extends BaseFragment {
     private CommonAdapter<LockGroup> mLockGroupCommonAdapter = null;
     private CommonPopupWindow popupWindow = null;
 
-    private AutoOpenLockService mService;
     private boolean requestPermissionFlag;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Intent intent = new Intent(getContext(), AutoOpenLockService.class);
-        getContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
 
     @Nullable
     @Override
@@ -104,8 +96,9 @@ public class LockListFragment extends BaseFragment {
         mLockListFragVM.getLockList().observe(this, lockKeys -> {
             refreshLockListData(lockKeys);
 
-            if (mService != null) {
-                mService.setLockKeys(lockKeys);
+            AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+            if (service != null) {
+                service.setLockKeys(lockKeys);
             }
 
             if (isResumed()) {
@@ -259,8 +252,9 @@ public class LockListFragment extends BaseFragment {
     }
 
     private void finish() {
-        if (mService != null) {
-            mService.stopAutoOpenLock();
+        AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+        if (service != null) {
+            service.stopAutoOpenLock();
         }
     }
 
@@ -289,49 +283,26 @@ public class LockListFragment extends BaseFragment {
     }
 
     private void autoOpenLock() {
-        if (!mLockListFragVM.isNeedAutoOpenLock()) {
-            return;
-        }
-
         if (!UnilinkManager.getInstance(getContext()).checkState() && !requestPermissionFlag) {
             requestPermissionFlag = true;
             UnilinkManager.getInstance(getContext()).enableBluetooth(getActivity(), 0);
             UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
         }
 
-        if (mService != null) {
-            mService.startAutoOpenLock();
+        AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+        if (service != null) {
+            service.startAutoOpenLock();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getContext().unbindService(serviceConnection);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK && mService != null) {
+        if (resultCode == Activity.RESULT_OK) {
             autoOpenLock();
         }
     }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((AutoOpenLockService.LocalBinder) service).getService();
-            mService.setLockKeys(mLockListFragVM.getLockList().getValue());
-            autoOpenLock();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     private WebSocketHelper.WebSocketStateListener webSocketStateListener = () -> {
         if (mLockListFragVM != null) {
