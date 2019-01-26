@@ -37,7 +37,7 @@ import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
-import com.ut.module_lock.AutoOpenLockService;
+import com.ut.base.AutoOpenLockService;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
 import com.ut.module_lock.activity.SearchLockActivity;
@@ -106,6 +106,10 @@ public class LockListFragment extends BaseFragment {
 
             if (mService != null) {
                 mService.setLockKeys(lockKeys);
+            }
+
+            if (isResumed()) {
+                autoOpenLock();
             }
         });
         mLockListFragVM.getLockGroupList().observe(this, this::refreshGroupList);
@@ -274,8 +278,6 @@ public class LockListFragment extends BaseFragment {
             mLockListFragVM.toGetLockAllList(false);
             mLockListFragVM.toGetAllGroupList(false);
         }
-
-        autoOpenLock();
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
     }

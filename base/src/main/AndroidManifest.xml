@@ -6,5 +6,9 @@
     <application>
         <activity android:name=".activity.SafeVerifyActivity" android:launchMode="singleInstance"/>
         <activity android:name=".activity.WebActivity" />
+        <service
+            android:name="com.ut.base.AutoOpenLockService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 </manifest>

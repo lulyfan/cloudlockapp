@@ -1,4 +1,4 @@
-package com.ut.module_lock;
+package com.ut.base;
 
 import android.app.Service;
 import android.content.Intent;
@@ -7,9 +7,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
-import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.google.gson.JsonElement;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.unilink.UnilinkManager;
@@ -21,8 +19,6 @@ import com.ut.unilink.util.Base64;
 import com.ut.unilink.util.Log;
 
 import java.util.List;
-
-import io.reactivex.functions.Consumer;
 
 public class AutoOpenLockService extends Service {
 

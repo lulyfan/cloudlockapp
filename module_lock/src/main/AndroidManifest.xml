@@ -37,10 +37,6 @@
         <activity android:name=".activity.TimeAdjustActivity"/>
 
         <service
-            android:name=".AutoOpenLockService"
-            android:enabled="true"
-            android:exported="true"/>
-        <service
             android:name=".OpenLockService"
             android:enabled="true"
             android:exported="true">

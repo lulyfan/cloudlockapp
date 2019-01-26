@@ -55,7 +55,7 @@ public class LockUserActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        viewModel.loadLockUser();
+        viewModel.loadLockUser(false);
     }
 
     private void initUI() {
@@ -76,7 +76,7 @@ public class LockUserActivity extends BaseActivity {
 
         binding.userList.setAdapter(adapter);
 
-        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockUser());
+        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockUser(true));
         binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
     }
 
