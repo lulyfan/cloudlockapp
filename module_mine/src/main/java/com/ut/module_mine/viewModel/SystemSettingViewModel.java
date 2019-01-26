@@ -1,6 +1,7 @@
 package com.ut.module_mine.viewModel;
 
 import android.app.Application;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -13,6 +14,9 @@ import com.ut.module_mine.activity.SystemSettingActivity;
 
 
 public class SystemSettingViewModel extends BaseViewModel {
+
+    public MutableLiveData<Void> logoutSuccess = new MutableLiveData<>();
+
     public SystemSettingViewModel(@NonNull Application application) {
         super(application);
     }
@@ -30,13 +34,11 @@ public class SystemSettingViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
+                            logoutSuccess.postValue(null);
                             BaseApplication.clearDataWhenLogout();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
                         },
                         new ErrorHandler());
-    }
-
-    public void checkVersion(String currentVersion) {
     }
 }

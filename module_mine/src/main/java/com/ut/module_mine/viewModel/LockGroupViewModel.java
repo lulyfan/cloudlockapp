@@ -34,7 +34,7 @@ public class LockGroupViewModel extends BaseViewModel {
                 });
     }
 
-    public void loadLockGroup() {
+    public void loadLockGroup(boolean isShowTip) {
         service.getGroup()
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
@@ -52,7 +52,9 @@ public class LockGroupViewModel extends BaseViewModel {
                             LockGroupDaoImpl.get().insertAll(listResult.data);
                         },
                         throwable -> {
-                            tip.postValue(throwable.getMessage());
+                            if (isShowTip) {
+                                tip.postValue(throwable.getMessage());
+                            }
                             loadLockGroupState.postValue(false);
                         });
 

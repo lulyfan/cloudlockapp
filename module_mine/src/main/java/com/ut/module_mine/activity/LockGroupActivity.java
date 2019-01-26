@@ -55,7 +55,7 @@ public class LockGroupActivity extends BaseActivity {
             }
             adapter.setData(lockGroupDataList);
         });
-        viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup());
+        viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup(true));
         viewModel.tip.observe(this, s -> toastShort(s));
         viewModel.loadLockGroupState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));
     }
@@ -63,7 +63,7 @@ public class LockGroupActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.loadLockGroup();
+        viewModel.loadLockGroup(false);
     }
 
     private void initUI() {
@@ -84,7 +84,7 @@ public class LockGroupActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockGroup());
+        binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockGroup(true));
         binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
     }
 

@@ -23,7 +23,7 @@ public class LockUserViewModel extends BaseViewModel {
         LockUserDaoImpl.get().getAll().observeForever(lockUsers -> mLockUsers.postValue(lockUsers));
     }
 
-    public void loadLockUser() {
+    public void loadLockUser(boolean isShowTip) {
         service.pageLockUser(mCurrentPage, PAGE_SIZE)
                 .doOnNext(stringResult -> {
                     if (stringResult == null) {
@@ -40,7 +40,9 @@ public class LockUserViewModel extends BaseViewModel {
                             loadLockUserState.postValue(true);
                         },
                         throwable -> {
-                            tip.postValue(throwable.getMessage());
+                            if (isShowTip) {
+                                tip.postValue(throwable.getMessage());
+                            }
                             loadLockUserState.postValue(false);
                         });
     }
