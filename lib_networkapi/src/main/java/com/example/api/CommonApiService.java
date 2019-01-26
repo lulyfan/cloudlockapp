@@ -66,7 +66,6 @@ public interface CommonApiService {
     @POST(ApiUrl.getRegisterVerifyCode)
     Observable<Result<Void>> getRegisterVerifyCode(@Field("mobile") String mobile);
 
-    @FormUrlEncoded
     @POST(ApiUrl.getKeyApplyList)
     Observable<Result<List<ApplyMessage>>> getKeyApplyList();
 
