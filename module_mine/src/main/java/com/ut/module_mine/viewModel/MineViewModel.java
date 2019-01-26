@@ -1,29 +1,14 @@
 package com.ut.module_mine.viewModel;
 
-import android.app.Activity;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.ObservableField;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Switch;
-
-import com.example.api.CommonApiService;
-import com.example.entity.base.Result;
-import com.example.operation.MyRetrofit;
 import com.ut.base.BaseApplication;
-import com.ut.base.Utils.UTLog;
+import com.ut.base.UserRepository;
 import com.ut.database.entity.User;
 import com.ut.module_mine.Constant;
 import com.ut.module_mine.R;
-
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 public class MineViewModel extends BaseViewModel {
 
@@ -57,8 +42,9 @@ public class MineViewModel extends BaseViewModel {
     }
 
     public void getUserInfo() {
-        User user = BaseApplication.getUser();
+        UserRepository.getInstance().refreshUser();
 
+        User user = BaseApplication.getUser();
         String mobile = user.getAccount();
         if (mobile != null && mobile.length() >= 11) {
             String first = mobile.substring(0, 3) + " ";

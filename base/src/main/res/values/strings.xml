@@ -51,4 +51,6 @@
     <string name="lock_send_key_failed_tips_one">钥匙只能发送给已注册手机号</string>
     <string name="lock_send_key_date_error_tips">停止日期不能早于启用日期</string>
     <string name="lock_send_key_time_error_tips">失效时间不能早于生效时间</string>
+    <string name="base_no_network">暂无网络</string>
+    <string name="base_network_retry">请检查网络后下拉页面刷新</string>
 </resources>
