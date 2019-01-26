@@ -61,7 +61,7 @@ public class SystemSettingActivity extends BaseActivity {
 
         binding.userRule.setOnClickListener((v) -> {
             ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
-                    .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockenterpriseinfo")
+                    .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockinfo")
                     .navigation();
         });
 
