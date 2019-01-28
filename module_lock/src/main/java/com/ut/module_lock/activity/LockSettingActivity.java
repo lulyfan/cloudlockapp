@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
@@ -20,6 +22,7 @@ import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
@@ -219,16 +222,26 @@ public class LockSettingActivity extends BaseActivity {
         if (RESULT_OK == resultCode) {
             if (requestCode == REQUEST_CODE_CHOOSE_GROUP && data != null) {
                 lockKey.setGroupId((int) data.getLongExtra("lock_group_id", lockKey.getGroupId()));
+                Schedulers.io().scheduleDirect(() -> {
+                    if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
+                    LockKeyDaoImpl.get().insert(lockKey);
+                });
                 setBindingLockKey();
-
             } else if (requestCode == REQUEST_CODE_EDIT_NAME && data != null) {
                 String name = data.getStringExtra(Constance.EDIT_NAME);
                 if (!TextUtils.isEmpty(name)) {
                     modifyLockName(name);
                 }
-            } else if (requestCode == LockSettingVM.BLEREAUESTCODE || requestCode == LockSettingVM.BLEENABLECODE) {
+            } else if (requestCode == LockSettingVM.BLEENABLECODE) {
                 mLockSettingVM.toDeleteAdminKey();
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LockSettingVM.BLEREAUESTCODE) {
+            mLockSettingVM.toDeleteAdminKey();
         }
     }
 
@@ -297,9 +310,6 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        Schedulers.io().scheduleDirect(() -> {
-            if (lockKey == null || TextUtils.isEmpty(lockKey.getMac())) return;
-            LockKeyDaoImpl.get().insert(lockKey);
-        });
+
     }
 }

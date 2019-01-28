@@ -95,8 +95,9 @@ public class EnumCollection {
     public interface OpenLockState {
         int INITIAL = 0;//初始状态
         int SCANNING = 1;//正在搜索
-        int CONNECTING = 2;//正在连接
-        int CHECKANDOPENING = 3;//正在判断鉴权
-        int OPENING = 4;//正在开锁
+        int SCANNED = 2;//搜索到设备
+        int CONNECTING = 3;//正在连接
+        int CONNECTED = 4;//连接成功
+        int OPENING = 5;//正在开锁
     }
 }
