@@ -1,11 +1,15 @@
 package com.ut.module_lock.activity;
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +19,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
@@ -40,6 +46,7 @@ public class LockDetailActivity extends BaseActivity {
     private LockDetailVM mLockDetailVM;
     private static final int BLEREAUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
+    private static final int REQUEST_LOCATION_CODE = 103;
 
     private AtomicBoolean mIsShowDialogAndTip = new AtomicBoolean(false);
     private AtomicBoolean isAllowAutoOpen = new AtomicBoolean(true);
@@ -169,7 +176,15 @@ public class LockDetailActivity extends BaseActivity {
 
         public void onOpenLockClick(View view) {
             mIsShowDialogAndTip.set(true);
-            toOpenLock();
+
+            if (checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION_CODE)) {
+                if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
+                    DialogHelper.getInstance().setMessage("APP需要您打开GPS位置定位开关").setPositiveButton("好的", null).show();
+                } else {
+                    toOpenLock();
+                }
+            }
+
         }
 
         public void onSendKeyClick(View view) {
@@ -267,10 +282,23 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] paramArrayOfInt) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == BLEREAUESTCODE) {
             toOpenLock();
+        } else if (requestCode == REQUEST_LOCATION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
+                    DialogHelper.getInstance().setMessage("APP需要您打开GPS位置定位开关").setPositiveButton("好的", null).show();
+                } else {
+                    toOpenLock();
+                }
+            } else {
+                DialogHelper.getInstance().setMessage("APP需要您在应用详情中打开定位权限").setPositiveButton("好的", ((dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                })).show();
+            }
         }
     }
 
@@ -339,4 +367,6 @@ public class LockDetailActivity extends BaseActivity {
         super.onDestroy();
         endAutoOpenLock();
     }
+
+
 }

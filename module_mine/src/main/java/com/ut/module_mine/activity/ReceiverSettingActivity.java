@@ -29,6 +29,7 @@ public class ReceiverSettingActivity extends BaseActivity {
     private ReceiverSettingViewModel viewModel;
     public static final String EXTRA_USER_NAME = "userName";
     public static final String EXTRA_USER_IMAGE_URL = "userImageUrl";
+    private static final int REQUEST_READ_PERMISSION_CODE = 112;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class ReceiverSettingActivity extends BaseActivity {
     static final int REQUEST_SELECT_PHONE_NUMBER = 1;
 
     public void selectContact() {
-        if (checkAndRequestPermission(Manifest.permission.READ_CONTACTS)) {
+        if (checkAndRequestPermission(Manifest.permission.READ_CONTACTS, REQUEST_READ_PERMISSION_CODE)) {
             // Start an activity for the user to pick a phone number from contacts
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
@@ -96,19 +97,6 @@ public class ReceiverSettingActivity extends BaseActivity {
             }
         }
     }
-
-    private static final int REQUEST_READ_PERMISSION_CODE = 112;
-
-    private boolean checkAndRequestPermission(String permission) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permission}, REQUEST_READ_PERMISSION_CODE);//申请权限
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +65,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        AppManager.getAppManager().addActivity(this);
         initNoLoginListener();
         initLoadDialog();
 
@@ -78,8 +81,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         StatService.onPageStart(this, this.getClass().getSimpleName());
-
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
+        AppManager.getAppManager().addActivity(this);
     }
 
     public AutoOpenLockService getAutoOpenLockService() {
@@ -99,7 +102,7 @@ public class BaseActivity extends AppCompatActivity {
         Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         //todo
         try {
-            DialogHelper.getInstance(AppManager.getAppManager().currentActivity())
+            DialogHelper.getInstance()
                     .setMessage(getString(R.string.base_auto_login_time_out))
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).navigation())
                     .show();
@@ -359,5 +362,15 @@ public class BaseActivity extends AppCompatActivity {
             autoOpenLockService = null;
         }
     };
+
+    protected boolean checkAndRequestPermission(String permission, int requestCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);//申请权限
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

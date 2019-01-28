@@ -1,9 +1,10 @@
 package com.ut.base.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+
+import com.ut.base.AppManager;
 
 /**
  * author : chenjiajun
@@ -19,7 +20,7 @@ public class DialogHelper {
 
     private static DialogHelper instance;
 
-    public static DialogHelper getInstance(Context context) {
+    public static DialogHelper getInstance() {
         synchronized (DialogHelper.class) {
             if (instance == null) {
                 instance = new DialogHelper();
@@ -31,7 +32,7 @@ public class DialogHelper {
             }
 
             if (sBuilder == null) {
-                sBuilder = new AlertDialog.Builder(context);
+                sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
             }
         }
         return instance;
