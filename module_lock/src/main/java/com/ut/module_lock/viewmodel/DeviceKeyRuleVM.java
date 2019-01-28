@@ -11,7 +11,6 @@ import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.entity.DeviceKey;
-import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -101,6 +100,7 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         UTLog.i("====mmmm" + gateLockKey.toString());
         mGateLockKeys.add(gateLockKey);
         if (mBleOperateManager.isConnected(mLockKey.getMac())) {
+            mBleOperateManager.setConnectListener();
             onConnectSuccess();
         } else {
             mBleOperateManager.scanDevice(mLockKey.getType(), activity);
@@ -144,20 +144,13 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
 
     @Override
     public void onScanFaile(int errorCode) {
+        getShowDialog().postValue(false);
         getShowTip().postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
     }
 
     @Override
     public void onConnectSuccess() {
-//        mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
-        if (mFirstDeviceAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()
-                && mDeviceKey.getValue().getKeyAuthType() == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
-            operateSuccess();
-        } else if (checkNeedWriteKey()) {
-            mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
-        } else {
-            onWriteDeviceKeySuccess();
-        }
+        setAuthInfo();
     }
 
     private boolean checkNeedWriteKey() {//原来与现在都为授权钥匙或正常钥匙时不需要写钥匙信息，反之需要
@@ -197,17 +190,31 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     }
 
     @Override
-    public void onDeleteSuccess() {
+    public void onDeleteDeviceKeyAuthSuccess() {
 
+    }
+
+    @Override
+    public void onDeleteDeviceKeyAuthFailed(int errCode, String errMsg) {
+
+    }
+
+    @Override
+    public void onDeleteSuccess() {
+        operateSuccess();
     }
 
     @Override
     public void onDeleteFailed(int errorcode, String errorMsg) {
-
+        operateFail();
     }
 
     @Override
     public void onWriteDeviceKeySuccess() {
+        operateSuccess();
+    }
+
+    private void setAuthInfo() {
         if (mDeviceKey.getValue().getKeyAuthType() != EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
             AuthInfo authInfo = new AuthInfo();
             authInfo.setAuthId(mDeviceKey.getValue().getAuthId());
@@ -218,13 +225,16 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
             authInfo.setKeyId(mDeviceKey.getValue().getKeyID());
             authInfo.setOpenLockCount(mDeviceKey.getValue().getOpenLockCnt());
             UTLog.i("====mm" + authInfo.toString());
-            if (mFirstDeviceAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
-                mBleOperateManager.addDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
-            } else {
-                mBleOperateManager.updateDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
-            }
+//            if (mFirstDeviceAuthType == EnumCollection.DeviceKeyAuthType.FOREVER.ordinal()) {
+            mBleOperateManager.addDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
+//            } else {
+//                mBleOperateManager.updateDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), authInfo);
+//            }
         } else {
-            operateSuccess();
+//            operateSuccess();
+//            mBleOperateManager.deleteDeviceKeyAuth(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(),
+//                    mDeviceKey.getValue().getAuthId());
+            mBleOperateManager.writeDeviceKey(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), mGateLockKeys);
         }
     }
 

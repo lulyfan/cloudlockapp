@@ -80,7 +80,7 @@ public class LockDetailVM extends BaseViewModel {
         } else if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {//已连接
             connectStatus.postValue(true);
             toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
-            UnilinkManager.getInstance(getApplication()).setConnectListener(getConnectListener());
+            UnilinkManager.getInstance(getApplication()).setConnectListener(mConnectListener);
             return 0;
         } else {
             if (openStatus != EnumCollection.OpenLockState.INITIAL) return 0;
@@ -137,36 +137,34 @@ public class LockDetailVM extends BaseViewModel {
         UTLog.i(TAG, "开始连接");
         openStatus = EnumCollection.OpenLockState.CONNECTING;
         UnilinkManager.getInstance(getApplication()).stopScan();
+        UnilinkManager.getInstance(getApplication()).setConnectListener(null);
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, lockKey.getEncryptType(), lockKey.getEncryptKey(),
-                getConnectListener(), mLockStateListener);
+                mConnectListener, mLockStateListener);
     }
 
-    @NonNull
-    private ConnectListener getConnectListener() {
-        return new ConnectListener() {
-            @Override
-            public void onConnect() {
-                openStatus = EnumCollection.OpenLockState.CHECKANDOPENING;
-                io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
-                    toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
-                }, 100, TimeUnit.MILLISECONDS);
-                connectStatus.postValue(true);
-            }
+    ConnectListener mConnectListener = new ConnectListener() {
+        @Override
+        public void onConnect() {
+            openStatus = EnumCollection.OpenLockState.CHECKANDOPENING;
+            io.reactivex.schedulers.Schedulers.io().scheduleDirect(() -> {
+                toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
+            }, 100, TimeUnit.MILLISECONDS);
+            connectStatus.postValue(true);
+        }
 
-            @Override
-            public void onDisconnect(int i, String s) {
-                UTLog.i(TAG, "onDisconnect:" + i + " s:" + s);
-                connectStatus.postValue(false);
-                if (openStatus < EnumCollection.OpenLockState.CHECKANDOPENING) {
-                    showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
-                }
-                showDialog.postValue(false);
-                UTLog.i("getShowDialog");
-                openStatus = EnumCollection.OpenLockState.INITIAL;
-                reAutoOpen.postValue(true);
+        @Override
+        public void onDisconnect(int i, String s) {
+            UTLog.i(TAG, "onDisconnect:" + i + " s:" + s);
+            connectStatus.postValue(false);
+            if (openStatus < EnumCollection.OpenLockState.CHECKANDOPENING) {
+                showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
             }
-        };
-    }
+            showDialog.postValue(false);
+            UTLog.i("getShowDialog");
+            openStatus = EnumCollection.OpenLockState.INITIAL;
+            reAutoOpen.postValue(true);
+        }
+    };
 
     private void toCheckPermissionOrOpenLock(CloudLock cloudLock) {
         UTLog.i(TAG, "开始检查权限或开锁");

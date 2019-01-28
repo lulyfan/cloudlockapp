@@ -85,13 +85,13 @@ public class DeviceKeyLimitFrag extends BaseFragment {
     }
 
     private void initListener() {
-        mBinding.tvLockKeyVaildTime.setOnClickListener(v -> {
+        mBinding.rlyValidTime.setOnClickListener(v -> {
             chooseTime(v, getString(R.string.lock_key_vaild_time));
         });
-        mBinding.tvLockKeyInvaildTime.setOnClickListener(v -> {
+        mBinding.rlyInvalidTime.setOnClickListener(v -> {
             chooseTime(v, getString(R.string.lock_key_invaild_time));
         });
-        mBinding.tvLockKeyTime.setOnClickListener(v -> {
+        mBinding.rlyTime.setOnClickListener(v -> {
             chooseCount();
         });
     }
@@ -103,17 +103,16 @@ public class DeviceKeyLimitFrag extends BaseFragment {
 
     private void chooseTime(View v, String title) {
         DialogUtil.chooseDateTime(getContext(), title, (year, month, day, hour, minute) -> {
-            TextView textView = (TextView) v;
-            textView.setText(getString(R.string.dateTime_format, year, month, day, hour, minute));
+            String timeString = getString(R.string.dateTime_format, year, month, day, hour, minute);
 
             if (getString(R.string.lock_key_vaild_time).equals(title)) {
-                String startTime = textView.getText().toString();
-                mDeviceKey.setTimeStart(StringUtils.getTimeStampFromString(startTime));
+                mBinding.tvLockKeyVaildTime.setText(timeString);
+                mDeviceKey.setTimeStart(StringUtils.getTimeStampFromString(timeString));
                 mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
 
             } else if (getString(R.string.lock_key_invaild_time).equals(title)) {
-                String endTime = textView.getText().toString();
-                mDeviceKey.setTimeEnd(StringUtils.getTimeStampFromString(endTime));
+                mBinding.tvLockKeyInvaildTime.setText(timeString);
+                mDeviceKey.setTimeEnd(StringUtils.getTimeStampFromString(timeString));
                 mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
             }
         });

@@ -23,6 +23,7 @@ import com.ut.database.entity.LockKey;
 import com.ut.database.entity.Record;
 import com.ut.module_lock.R;
 import com.ut.module_lock.utils.BleOperateManager;
+import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.protocol.data.AuthCountInfo;
 import com.ut.unilink.cloudLock.protocol.data.AuthInfo;
@@ -113,6 +114,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     public void connectAndGetData(int type, Activity activity) {
         if (mBleOperateManager.isConnected(mLockKey.getMac())) {
             processTickInt = 0;
+            mBleOperateManager.setConnectListener();
             onConnectSuccess();
         } else {
             mBleOperateManager.scanDevice(type, activity);

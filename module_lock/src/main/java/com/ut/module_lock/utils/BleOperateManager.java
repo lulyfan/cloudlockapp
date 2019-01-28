@@ -3,6 +3,7 @@ package com.ut.module_lock.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.ut.base.Utils.UTLog;
@@ -72,6 +73,11 @@ public class BleOperateManager {
 
     public boolean isConnected(String mac) {
         return UnilinkManager.getInstance(mContext).isConnect(mac);
+    }
+
+    public void setConnectListener() {
+        UnilinkManager.getInstance(mContext).setConnectListener(mConnectListener);
+        isConnectSuccessed = true;
     }
 
     public void disconnect(String mac) {
@@ -144,27 +150,31 @@ public class BleOperateManager {
 
     public void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {
         isConnectSuccessed = false;
+        UnilinkManager.getInstance(mContext).setConnectListener(null);
         UnilinkManager.getInstance(mContext).connect(scanDevice, enctyptType, enctyptKey,
-                new ConnectListener() {
-                    @Override
-                    public void onConnect() {
-                        isConnectSuccessed = true;
-                        if (mOperateCallback != null) {
-                            mOperateCallback.onConnectSuccess();
-                        }
-                    }
-
-                    @Override
-                    public void onDisconnect(int i, String s) {
-                        UTLog.i("onDisconnect:" + i + " s:" + s);
-                        if (!isConnectSuccessed) {
-                            if (mOperateCallback != null) {
-                                mOperateCallback.onConnectFailed(i, s);
-                            }
-                        }
-                    }
-                }, mLockStateListener);
+                mConnectListener, mLockStateListener);
     }
+
+    ConnectListener mConnectListener = new ConnectListener() {
+        @Override
+        public void onConnect() {
+            isConnectSuccessed = true;
+            if (mOperateCallback != null) {
+                mOperateCallback.onConnectSuccess();
+            }
+        }
+
+        @Override
+        public void onDisconnect(int i, String s) {
+            UTLog.i("onDisconnect:" + i + " s:" + s);
+            if (!isConnectSuccessed) {
+                if (mOperateCallback != null) {
+                    isConnectSuccessed = false;
+                    mOperateCallback.onConnectFailed(i, s);
+                }
+            }
+        }
+    };
 
     public void updateTime(String mac, int enctyptType, String enctyptKey, long time) {
         UnilinkManager.getInstance(mContext).writeTime(mac, enctyptType, enctyptKey, time, new CallBack2<Void>() {
@@ -334,6 +344,25 @@ public class BleOperateManager {
         });
     }
 
+    public void deleteDeviceKeyAuth(String mac, int encryptType,
+                                    String encryptKey, int authId) {
+        UnilinkManager.getInstance(mContext).deleteAuth(mac, encryptType, encryptKey, authId, new CallBack2<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onDeleteDeviceKeyAuthSuccess();
+                }
+            }
+
+            @Override
+            public void onFailed(int errCode, String errMsg) {
+                if (mOperateDeviceRuleCallback != null) {
+                    mOperateDeviceRuleCallback.onDeleteDeviceKeyAuthFailed(errCode, errMsg);
+                }
+            }
+        });
+    }
+
     private LockStateListener mLockStateListener = new LockStateListener() {
         @Override
         public void onState(LockState lockState) {
@@ -422,5 +451,9 @@ public class BleOperateManager {
         void onUpdateDeviceKeyAuthSuccess();
 
         void onUpdateDeviceKeyAuthFailed(int errCode, String errMsg);
+
+        void onDeleteDeviceKeyAuthSuccess();
+
+        void onDeleteDeviceKeyAuthFailed(int errCode, String errMsg);
     }
 }

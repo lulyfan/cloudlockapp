@@ -338,6 +338,7 @@ public class LockSettingVM extends AndroidViewModel {
                         lockKey.setGroupId((int) lastId);
                         saveLockKey(lockKey);
                         selectedGroupId.postValue(lastId);
+                        //todo 中文
                         CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                     }
                 });
@@ -361,6 +362,7 @@ public class LockSettingVM extends AndroidViewModel {
                         lockKey.setGroupId((int) lastId);
                         saveLockKey(lockKey);
                         selectedGroupId.postValue(lastId);
+                        //todo 中文
                         CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                     }
                 });
@@ -389,6 +391,7 @@ public class LockSettingVM extends AndroidViewModel {
                             lockKey.setGroupId((int) lastId);
                             saveLockKey(lockKey);
                             selectedGroupId.postValue(lastId);
+                            //todo 中文
                             CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                         }
                     });
