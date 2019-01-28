@@ -12,7 +12,7 @@ import com.ut.base.AppManager;
  * desc   :
  */
 public class DialogHelper {
-    private static AlertDialog.Builder sBuilder = null;
+    private AlertDialog.Builder sBuilder = null;
     private AlertDialog alertDialog;
 
     private DialogHelper() {
@@ -21,20 +21,16 @@ public class DialogHelper {
     private static DialogHelper instance;
 
     public static DialogHelper getInstance() {
-        synchronized (DialogHelper.class) {
-            if (instance == null) {
+        if(instance == null) {
+            synchronized (DialogHelper.class) {
                 instance = new DialogHelper();
             }
-
-            if (instance.isShowing()) {
-                instance.alertDialog.dismiss();
-                instance.alertDialog = null;
-            }
-
-            if (sBuilder == null) {
-                sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
-            }
         }
+        if (instance.isShowing()) {
+            instance.alertDialog.dismiss();
+            instance.alertDialog = null;
+        }
+        instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
         return instance;
     }
 

@@ -276,4 +276,16 @@
     <string name="lock_near_lock_scan_tip_error">搜索失败</string>
     <string name="lock_bt_disconnect_tips">与锁的蓝牙连接失败，请重试</string>
     <string name="lock_unbind_fail_tips">解除绑定失败，请重试</string>
+    <string name="lock_gps_open_tips">APP需要您打开GPS位置定位开关</string>
+    <string name="lock_ok">好的</string>
+    <string name="lock_location_need_tips">APP需要您在应用详情中打开定位权限</string>
+    <string name="lock_key_had_deleted_tips">钥匙已被删除，无法开锁，请联系钥匙发送者</string>
+    <string name="lock_yi">一</string>
+    <string name="lock_er">二</string>
+    <string name="lock_san">三</string>
+    <string name="lock_si">四</string>
+    <string name="lock_wu">五</string>
+    <string name="lock_liu">六</string>
+    <string name="lock_ri">日</string>
+    <string name="lock_xingqi">星期</string>
 </resources>

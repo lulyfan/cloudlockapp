@@ -31,9 +31,9 @@
             android:layout_marginEnd="@dimen/base_20dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            android:enabled="false"
             android:gravity="center_vertical"
             android:text="@string/default_country_code"
-            android:enabled="false"
             android:textSize="@dimen/base_14sp" />
 
         <ImageView
@@ -120,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/base_8dp">
+
             <CheckBox
                 android:id="@+id/see_password"
                 android:layout_width="@dimen/base_20dp"
@@ -193,6 +194,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/base_30dp"
         android:layout_marginTop="@dimen/base_20dp"
+        android:paddingTop="@dimen/base_8dp"
+        android:paddingBottom="@dimen/base_8dp"
         android:text="@string/login_register_rule"
         android:textColor="@color/gray6"
         android:textSize="@dimen/base_14sp"

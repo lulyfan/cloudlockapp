@@ -20,6 +20,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.BR;
@@ -123,14 +124,13 @@ public class KeysManagerActivity extends BaseActivity {
 
                 if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal() || lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
                     getView(R.id.item1).setOnClickListener(v -> {
-                        //todo 弹窗
-                        new AlertDialog.Builder(KeysManagerActivity.this)
-                                .setMessage(R.string.lock_clear_all_keys_tips)
-                                .setPositiveButton(R.string.lock_clear, ((dialog, which) -> {
+                        DialogHelper.getInstance()
+                                .setMessage(getString(R.string.lock_clear_all_keys_tips))
+                                .setPositiveButton(getString(R.string.lock_clear), ((dialog, which) -> {
                                     clearKey(lockKey.getMac());
                                     mBinding.refreshLayout.postDelayed(KeysManagerActivity.this::updateData, 500L);
                                 }))
-                                .setNegativeButton(R.string.lock_cancel, null)
+                                .setNegativeButton(getString(R.string.lock_cancel), null)
                                 .show();
                         getPopupWindow().dismiss();
                     });
