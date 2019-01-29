@@ -1,11 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.ut.base">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
     <application>
-        <activity android:name=".activity.SafeVerifyActivity" android:launchMode="singleInstance"/>
-        <activity android:name=".activity.WebActivity" />
+        <activity
+            android:name=".activity.SafeVerifyActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".activity.WebActivity"/>
+
         <service
             android:name="com.ut.base.AutoOpenLockService"
             android:enabled="true"

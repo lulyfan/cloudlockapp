@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @Entity(tableName = "device_key")
 public class DeviceKey implements Parcelable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate=true)
     private int deviceId;//主键
 
     private int keyID;//钥匙编号；

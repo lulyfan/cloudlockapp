@@ -42,6 +42,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LockDetailActivity extends BaseActivity {
     private LockKey mLockKey = null;
 
+    private boolean mIsOnPause = false;
+
     ActivityLockDetailBindingImpl mDetailBinding;
 
     private LockDetailVM mLockDetailVM;
@@ -69,12 +71,24 @@ public class LockDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mIsOnPause = false;
         //todo 自动开锁
         autoOpen();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mIsOnPause = true;
+    }
+
     private void autoOpen() {
-        if (!isNotManager() && (mLockKey.getCanOpen() == 1) && isAllowAutoOpen.get()) {
+        if (!isNotManager() && (mLockKey.getCanOpen() == 1)
+                && isAllowAutoOpen.get()) {
+            //todo 自动开锁
+            if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
+                mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
+            }
             toOpenLock();
         }
     }
@@ -128,25 +142,8 @@ public class LockDetailActivity extends BaseActivity {
             mIsShowDialogAndTip.set(false);
             new UnlockSuccessDialog(this, false).show();
         });
-        mLockDetailVM.getLockKey().observe(this, lockKey -> {
-            if (lockKey != null) {
-                mLockKey = lockKey;
-            } else {
-                mLockKey.setKeyStatus(EnumCollection.KeyStatus.HAS_DELETE.ordinal());
-            }
-            if (!EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())) {
-                isAllowAutoOpen.set(false);
-                endAutoOpenLock();
-            } else {
-                isAllowAutoOpen.set(true);
-                autoOpen();
-            }
-            mLockDetailVM.setLockKey(mLockKey);
-            initLockData();
-            initView();
-        });
-        //todo 自动开锁
-        mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
+        mLockDetailVM.getLockKey().observeForever(mLockKeyObserver);
+
         mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
             if (isShowDialog) {
                 if (mIsShowDialogAndTip.get()) {
@@ -159,9 +156,29 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private Observer<Boolean> mReOpenObserver = (reOpen) -> {
+        UTLog.i("reOpen mReOpenObserver");
         if (reOpen && isAllowAutoOpen.get()) {
             autoOpen();
         }
+    };
+
+    private Observer<LockKey> mLockKeyObserver = lockKey -> {
+        if (lockKey != null) {
+            mLockKey = lockKey;
+        } else {
+            mLockKey.setKeyStatus(EnumCollection.KeyStatus.HAS_DELETE.ordinal());
+        }
+        if (!EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())) {
+            isAllowAutoOpen.set(false);
+            endAutoOpenLock();
+        } else {
+            isAllowAutoOpen.set(true);
+            if (!mIsOnPause)
+                autoOpen();
+        }
+        mLockDetailVM.setLockKey(mLockKey);
+        initLockData();
+        initView();
     };
 
     private void addPaddingTop() {
@@ -309,9 +326,10 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private void endAutoOpenLock() {
-        UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
         mLockDetailVM.getReAutoOpen().removeObserver(mReOpenObserver);
         mIsShowDialogAndTip.set(false);
+        UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
+        UnilinkManager.getInstance(this.getApplicationContext()).disconnect(mLockKey.getMac());
     }
 
     @BindingAdapter("electricityDrawable")
@@ -367,6 +385,7 @@ public class LockDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         endAutoOpenLock();
+        mLockDetailVM.getLockKey().removeObserver(mLockKeyObserver);
     }
 
 

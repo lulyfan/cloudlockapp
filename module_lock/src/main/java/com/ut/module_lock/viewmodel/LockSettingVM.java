@@ -115,7 +115,7 @@ public class LockSettingVM extends AndroidViewModel {
                     if (voidResult.isSuccess()) {
                         setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, true));
                         lockKey.setCanOpen(canOpen ? 1 : 0);
-                        updateLockKey();
+                        saveLockKey(lockKey);
                     } else {
                         setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
                     }
@@ -125,12 +125,6 @@ public class LockSettingVM extends AndroidViewModel {
                     showTip.setValue(getApplication().getString(R.string.lock_tip_setting_failed));
                 });
         mCompositeDisposable.add(disposable);
-    }
-
-    private void updateLockKey() {
-        Schedulers.io().scheduleDirect(() -> {
-            LockKeyDaoImpl.get().insert(lockKey);
-        });
     }
 
 

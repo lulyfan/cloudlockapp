@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 18,
-    "identityHash": "1ea73ff701b712bbefb3b41cfb718b2e",
+    "identityHash": "aa9760b99757fd6394a07e11ee03d6ae",
     "entities": [
       {
         "tableName": "lock_key",
@@ -877,7 +877,7 @@
       },
       {
         "tableName": "device_key",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`deviceId` INTEGER NOT NULL, `keyID` INTEGER NOT NULL, `name` TEXT, `keyType` INTEGER NOT NULL, `keyCfg` INTEGER NOT NULL, `keyInId` INTEGER NOT NULL, `isAuthKey` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `keyAuthType` INTEGER NOT NULL, `authId` INTEGER NOT NULL, `openLockCnt` INTEGER NOT NULL, `timeICtl` TEXT, `timeStart` INTEGER NOT NULL, `timeEnd` INTEGER NOT NULL, `openLockCntUsed` INTEGER NOT NULL, `lockID` INTEGER NOT NULL, PRIMARY KEY(`deviceId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`deviceId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `keyID` INTEGER NOT NULL, `name` TEXT, `keyType` INTEGER NOT NULL, `keyCfg` INTEGER NOT NULL, `keyInId` INTEGER NOT NULL, `isAuthKey` INTEGER NOT NULL, `keyStatus` INTEGER NOT NULL, `keyAuthType` INTEGER NOT NULL, `authId` INTEGER NOT NULL, `openLockCnt` INTEGER NOT NULL, `timeICtl` TEXT, `timeStart` INTEGER NOT NULL, `timeEnd` INTEGER NOT NULL, `openLockCntUsed` INTEGER NOT NULL, `lockID` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "deviceId",
@@ -980,7 +980,7 @@
           "columnNames": [
             "deviceId"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -1086,7 +1086,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1ea73ff701b712bbefb3b41cfb718b2e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"aa9760b99757fd6394a07e11ee03d6ae\")"
     ]
   }
 }
