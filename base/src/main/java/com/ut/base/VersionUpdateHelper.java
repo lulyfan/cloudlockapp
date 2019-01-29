@@ -8,15 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 
 import com.alibaba.fastjson.JSON;
 import com.example.operation.MyRetrofit;
-import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DownloadUtil;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.model.VersionInfo;
 import com.ut.commoncomponent.CLToast;
 
 import java.io.BufferedInputStream;

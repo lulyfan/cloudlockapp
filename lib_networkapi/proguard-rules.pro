@@ -26,6 +26,8 @@
 -keepattributes Signature
 -keepattributes Exceptions
 
+-keep public class javax.annotation.**{*;}
+
 # okhttp
 -dontwarn okio.**
 

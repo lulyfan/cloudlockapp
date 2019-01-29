@@ -1,4 +1,4 @@
-package com.ut.base;
+package com.ut.base.model;
 
 /**
  * author : chenjiajun
