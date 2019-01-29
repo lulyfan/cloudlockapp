@@ -63,6 +63,11 @@ public class DialogHelper {
         return sBuilder != null && alertDialog != null && alertDialog.isShowing();
     }
 
+    public DialogHelper setCanCancleOutSide(boolean can) {
+        sBuilder.setCancelable(can);
+        return instance;
+    }
+
     public void show() {
         if (isShowing()) {
             return;

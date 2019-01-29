@@ -94,7 +94,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initNoLoginListener() {
-        MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(()-> handlerNotLogin(RouterUtil.LoginModulePath.Login)));
+        MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(() -> handlerNotLogin(RouterUtil.LoginModulePath.Login)));
     }
 
     private synchronized void handlerNotLogin(String url) {
@@ -102,6 +102,7 @@ public class BaseActivity extends AppCompatActivity {
         Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         try {
             DialogHelper.getInstance()
+                    .setCanCancleOutSide(false)
                     .setMessage(getString(R.string.base_auto_login_time_out))
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).navigation())
                     .show();
@@ -353,7 +354,7 @@ public class BaseActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            autoOpenLockService = ((AutoOpenLockService.LocalBinder)service).getService();
+            autoOpenLockService = ((AutoOpenLockService.LocalBinder) service).getService();
         }
 
         @Override
