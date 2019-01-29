@@ -83,18 +83,19 @@
             android:textColorHint="@color/grayC"
             android:textSize="@dimen/base_14sp" />
 
-       <FrameLayout
-           android:id="@+id/see_password_layout"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:padding="@dimen/base_8dp">
-           <CheckBox
-               android:id="@+id/see_password"
-               android:layout_width="@dimen/base_20dp"
-               android:layout_height="@dimen/base_20dp"
-               android:background="@drawable/selector_eye"
-               android:button="@null" />
-       </FrameLayout>
+        <FrameLayout
+            android:id="@+id/see_password_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/base_8dp">
+
+            <CheckBox
+                android:id="@+id/see_password"
+                android:layout_width="@dimen/base_20dp"
+                android:layout_height="@dimen/base_20dp"
+                android:background="@drawable/selector_eye"
+                android:button="@null" />
+        </FrameLayout>
     </LinearLayout>
 
     <com.ut.commoncomponent.LoadingButton
@@ -113,8 +114,11 @@
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/base_10dp"
+        android:layout_marginStart="@dimen/base_10dp"
         android:layout_marginTop="@dimen/base_20dp"
+        android:paddingTop="@dimen/base_8dp"
+        android:paddingEnd="@dimen/base_8dp"
+        android:paddingBottom="@dimen/base_8dp"
         android:text="@string/new_user_register"
         android:textColor="@color/color_base_text"
         android:textSize="@dimen/base_14sp"
@@ -127,7 +131,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/base_20dp"
-        android:layout_marginRight="@dimen/base_10dp"
+        android:layout_marginEnd="@dimen/base_10dp"
+        android:paddingStart="@dimen/base_8dp"
+        android:paddingTop="@dimen/base_8dp"
+        android:paddingBottom="@dimen/base_8dp"
         android:text="@string/login_forget_password"
         android:textColor="@color/color_base_text"
         android:textSize="@dimen/base_14sp"

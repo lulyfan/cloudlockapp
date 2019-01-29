@@ -1,7 +1,6 @@
 package com.ut.module_lock.activity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -92,7 +90,6 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
         mLockSettingVM.isDeleteSuccess().observe(this, isUnlockSuccess -> {
             if (isUnlockSuccess) {
-                //TODO 退到首页
                 finish();
                 lockKey = null;
                 ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
@@ -159,7 +156,7 @@ public class LockSettingActivity extends BaseActivity {
 
     private void deleteLock() {
         if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal()) {
-            new AlertDialog.Builder(this)
+            DialogHelper.getInstance()
                     .setMessage(getString(R.string.lock_delete_lock_tips))
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog, which) -> {
                         verifyAdmin();
@@ -169,9 +166,8 @@ public class LockSettingActivity extends BaseActivity {
         } else if (lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
             View contentView = View.inflate(this, R.layout.layout_anthorize_delete_key, null);
             CheckBox checkBox = contentView.findViewById(R.id.check_box);
-            //TODO
-            new AlertDialog.Builder(this).setTitle(getString(R.string.lock_make_sure_delete_auth_key))
-                    .setView(contentView)
+            DialogHelper.getInstance().setTitle(getString(R.string.lock_make_sure_delete_auth_key))
+                    .setContentView(contentView)
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         if (checkBox.isChecked()) {
                             mLockSettingVM.deleteLockKey(lockKey, 1);
@@ -183,8 +179,7 @@ public class LockSettingActivity extends BaseActivity {
                     .setNegativeButton(getString(R.string.lock_cancel), null)
                     .show();
         } else if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
-            //TODO
-            new AlertDialog.Builder(this)
+            DialogHelper.getInstance()
                     .setMessage(getString(R.string.lock_make_sure_delete_auth_key_2))
                     .setPositiveButton(getString(R.string.lock_btn_confirm), ((dialog1, which) -> {
                         mLockSettingVM.deleteLockKey(lockKey, 0);
@@ -200,19 +195,16 @@ public class LockSettingActivity extends BaseActivity {
         EditText edtPwd = contentView.findViewById(R.id.edt);
         edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         edtPwd.setHint(getString(R.string.lock_verify_user_password_hint));
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setView(contentView)
-                .setTitle(R.string.lock_safe_verify)
-                .setPositiveButton(getText(R.string.lock_btn_confirm), (dialog, which) -> {
-                    //todo
+        DialogHelper.getInstance()
+                .setContentView(contentView)
+                .setTitle(getString(R.string.lock_safe_verify))
+                .setPositiveButton(getString(R.string.lock_btn_confirm), (dialog, which) -> {
                     //verify
                     mLockSettingVM.verifyAdmin(edtPwd.getText().toString().trim());
                     SystemUtils.hideKeyboard(getBaseContext(), contentView.getRootView());
                     dialog.dismiss();
                 })
-                .setNegativeButton(getText(R.string.lock_cancel), null)
-                .create();
-        alertDialog.show();
+                .setNegativeButton(getString(R.string.lock_cancel), null).show();
     }
 
 
@@ -268,31 +260,38 @@ public class LockSettingActivity extends BaseActivity {
             String weeks = lockKey.getWeeks();
             if (!TextUtils.isEmpty(weeks)) {
                 //TODO 中文
-                StringBuffer xingqi = new StringBuffer("星期");
+                StringBuffer xingqi = new StringBuffer(getString(R.string.lock_xingqi));
                 String[] split = weeks.split(",");
                 for (String s : split) {
                     if (TextUtils.isEmpty(s)) continue;
                     switch (Integer.valueOf(s)) {
                         case 1:
-                            xingqi.append("一,");
+                            xingqi.append(R.string.lock_yi);
+                            xingqi.append(",");
                             break;
                         case 2:
-                            xingqi.append("二,");
+                            xingqi.append(R.string.lock_er);
+                            xingqi.append(",");
                             break;
                         case 3:
-                            xingqi.append("三,");
+                            xingqi.append(R.string.lock_san);
+                            xingqi.append(",");
                             break;
                         case 4:
-                            xingqi.append("四,");
+                            xingqi.append(R.string.lock_si);
+                            xingqi.append(",");
                             break;
                         case 5:
-                            xingqi.append("五,");
+                            xingqi.append(R.string.lock_wu);
+                            xingqi.append(",");
                             break;
                         case 6:
-                            xingqi.append("六,");
+                            xingqi.append(R.string.lock_liu);
+                            xingqi.append(",");
                             break;
                         case 7:
-                            xingqi.append("七,");
+                            xingqi.append(R.string.lock_ri);
+                            xingqi.append(",");
                             break;
                     }
                 }

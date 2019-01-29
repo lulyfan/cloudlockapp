@@ -100,7 +100,6 @@ public class BaseActivity extends AppCompatActivity {
     private synchronized void handlerNotLogin(String url) {
         //TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
         Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
-        //todo
         try {
             DialogHelper.getInstance()
                     .setMessage(getString(R.string.base_auto_login_time_out))

@@ -17,6 +17,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.dialog.CustomerAlertDialog;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.module_lock.R;
@@ -118,13 +119,10 @@ public class KeyInfoActivity extends BaseActivity {
     }
 
     private void deleteKey() {
-        CustomerAlertDialog dialog = new CustomerAlertDialog(this, false);
-        dialog.setMsg(getString(R.string.lock_delete_key_tips));
-        dialog.setConfirmText(getString(R.string.lock_delete));
-        dialog.setConfirmListener(v -> keyManagerVM.deleteKey(keyInfo.getKeyId()));
-        dialog.setCancelText(getString(R.string.lock_cancel));
-        dialog.setCancelLister(null);
-        dialog.show();
+        DialogHelper.getInstance().setMessage(getString(R.string.lock_delete_key_tips))
+                .setPositiveButton(getString(R.string.lock_delete), ((dialog1, which) -> keyManagerVM.deleteKey(keyInfo.getKeyId())))
+                .setNegativeButton(getString(R.string.lock_cancel), null)
+                .show();
     }
 
     private void popupMoreWindow() {
@@ -144,19 +142,15 @@ public class KeyInfoActivity extends BaseActivity {
                         //ToDO
                         //授权 or not
                         if (keyInfo.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
-                            new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                    .setMsg(getString(R.string.lock_key_cancel_auth_title) + getString(R.string.lock_key_cancel_auth_tips))
-                                    .setCancelText(getString(R.string.lock_btn_confirm))
-                                    .setConfirmListener(v1 -> keyManagerVM.cancelAuth(keyInfo.getKeyId()))
-                                    .setCancelText(getString(R.string.lock_cancel))
+                            DialogHelper.getInstance().setMessage(getString(R.string.lock_key_cancel_auth_title) + getString(R.string.lock_key_cancel_auth_tips))
+                                    .setPositiveButton(getString(R.string.lock_btn_confirm), (dialog, which) -> keyManagerVM.cancelAuth(keyInfo.getKeyId()))
+                                    .setNegativeButton(getString(R.string.lock_cancel), null)
                                     .show();
 
                         } else if (keyInfo.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
-                            new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                    .setMsg(getString(R.string.lock_key_auth_title) + getString(R.string.lock_key_auth_tips))
-                                    .setConfirmText(getString(R.string.lock_auth))
-                                    .setConfirmListener(v1 -> keyManagerVM.toAuth(keyInfo.getKeyId()))
-                                    .setCancelText(getString(R.string.lock_cancel))
+                            DialogHelper.getInstance().setMessage(getString(R.string.lock_key_auth_title) + getString(R.string.lock_key_auth_tips))
+                                    .setPositiveButton(getString(R.string.lock_auth), (dialog, which) -> keyManagerVM.toAuth(keyInfo.getKeyId()))
+                                    .setNegativeButton(getString(R.string.lock_cancel), null)
                                     .show();
                         }
 
@@ -166,34 +160,23 @@ public class KeyInfoActivity extends BaseActivity {
                 }
 
                 TextView item2 = getView(R.id.item2);
-                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal()
-                        ||
-                        keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
                     item2.setVisibility(View.GONE);
                 } else {
-                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()
-                            || keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal()
+                    item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal()
                             ? getString(R.string.lock_unfrozen) : getString(R.string.lock_frozen));
                     item2.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
                         if (keyInfo.isFrozened()) {
-                            new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                    .setMsg(getString(R.string.lock_unfrozen_tips))
-                                    .setConfirmText(getString(R.string.lock_unfrozen))
-                                    .setConfirmListener(v1 ->
-                                            keyManagerVM.unFrozenKey(keyInfo.getKeyId()))
-                                    .setCancelText(getString(R.string.lock_cancel))
-                                    .setCancelLister(null)
+                            DialogHelper.getInstance().setMessage(getString(R.string.lock_unfrozen_tips))
+                                    .setPositiveButton(getString(R.string.lock_unfrozen), (dialog, which) -> keyManagerVM.unFrozenKey(keyInfo.getKeyId()))
+                                    .setNegativeButton(getString(R.string.lock_cancel), null)
                                     .show();
 
                         } else {
-                            new CustomerAlertDialog(KeyInfoActivity.this, false)
-                                    .setMsg(getString(R.string.lock_frozen_tips))
-                                    .setConfirmText(getString(R.string.lock_frozen))
-                                    .setConfirmListener(v1 ->
-                                            keyManagerVM.frozenKey(keyInfo.getKeyId()))
-                                    .setCancelText(getString(R.string.lock_cancel))
-                                    .setCancelLister(null)
+                            DialogHelper.getInstance().setMessage(getString(R.string.lock_frozen_tips))
+                                    .setPositiveButton(getString(R.string.lock_frozen), (dialog, which) -> keyManagerVM.frozenKey(keyInfo.getKeyId()))
+                                    .setNegativeButton(getString(R.string.lock_cancel), null)
                                     .show();
                         }
 

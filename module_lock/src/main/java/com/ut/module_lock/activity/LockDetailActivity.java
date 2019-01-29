@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -196,9 +197,7 @@ public class LockDetailActivity extends BaseActivity {
 
             if (checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION_CODE)) {
                 if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
-                    DialogHelper.getInstance().setMessage("APP需要您打开GPS位置定位开关")
-                            .setPositiveButton("好的", null)
-                            .show();
+                    DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
                 } else {
                     toOpenLock();
                 }
@@ -307,13 +306,13 @@ public class LockDetailActivity extends BaseActivity {
         } else if (requestCode == REQUEST_LOCATION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
-                    DialogHelper.getInstance().setMessage("APP需要您打开GPS位置定位开关").setPositiveButton("好的", null).show();
+                    DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
                 } else {
                     toOpenLock();
                 }
             } else {
-                DialogHelper.getInstance().setMessage("APP需要您在应用详情中打开定位权限").setPositiveButton("好的", ((dialog, which) -> {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                DialogHelper.getInstance().setMessage(getString(R.string.lock_location_need_tips)).setPositiveButton(getString(R.string.lock_ok), ((dialog, which) -> {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     intent.setData(Uri.parse("package:" + getPackageName()));
                     startActivity(intent);
                 })).show();
@@ -323,7 +322,7 @@ public class LockDetailActivity extends BaseActivity {
 
     private void keyHasDeletedTips() {
         //TODO 中文
-        CLToast.showAtCenter(this, "钥匙已被删除，无法开锁，请联系钥匙发送者");
+        CLToast.showAtCenter(this, getString(R.string.lock_key_had_deleted_tips));
     }
 
     private void endAutoOpenLock() {
