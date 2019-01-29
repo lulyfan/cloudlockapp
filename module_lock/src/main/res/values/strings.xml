@@ -102,7 +102,8 @@
     <string name="lock_setting_adjust_time">锁时间</string>
 
     <string-array name="lock_type">
-        <item>蓝牙门锁</item>
+        <item>云锁</item>
+        <item>门锁</item>
     </string-array>
 
     <string-array name="key_type">

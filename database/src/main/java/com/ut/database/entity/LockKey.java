@@ -259,7 +259,7 @@ public class LockKey implements Parcelable {
     }
 
     public void setLockTypeStr(String[] lockTypeStrs) {
-        this.lockTypeStr = lockTypeStrs[0];
+        this.lockTypeStr = lockTypeStrs[this.type == 0xA010 ? 1 : 0];
     }
 
     public String getKeyTypeStr() {

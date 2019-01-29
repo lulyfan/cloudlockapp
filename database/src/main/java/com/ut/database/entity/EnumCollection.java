@@ -55,6 +55,7 @@ public class EnumCollection {
     }
 
     public enum LockType {
+        PADLOCK(0xA070),
         SMARTLOCK(0xA010);
         int type;
 

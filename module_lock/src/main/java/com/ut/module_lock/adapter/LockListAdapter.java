@@ -18,11 +18,13 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.User;
 import com.ut.module_lock.R;
+import com.ut.module_lock.common.LockTypeIcon;
 import com.ut.module_lock.databinding.ItemLockListBinding;
 import com.ut.module_lock.databinding.ItemLockListEmptyBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ZYB on 2017-03-24.
@@ -104,15 +106,24 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
         }
     }
 
-    @BindingAdapter("imgSrc")
-    public static void loadImage(ImageView imageView, int userType) {
-        if (userType == EnumCollection.UserType.ADMIN.ordinal()) {
-            imageView.setImageResource(R.mipmap.icon_user_manager);
-        } else if (userType == EnumCollection.UserType.AUTH.ordinal()) {
-            imageView.setImageResource(R.mipmap.icon_user_auth);
-        } else {
-            imageView.setImageResource(R.mipmap.icon_user_normal);
+    @BindingAdapter({"imgSrc", "imgSrcType"})
+    public static void loadImage(ImageView imageView, int userType, int type) {
+//        if (userType == EnumCollection.UserType.ADMIN.ordinal()) {
+//            imageView.setImageResource(R.mipmap.icon_lock_doorlock_manager);
+//        } else if (userType == EnumCollection.UserType.AUTH.ordinal()) {
+//            imageView.setImageResource(R.mipmap.icon_lock_doorlock_auth);
+//        } else {
+//            imageView.setImageResource(R.mipmap.icon_lock_doorlock_normal);
+//        }
+        Map<Integer, Integer> typeMap = LockTypeIcon.LockTypeIconMap.get(type);
+        if (typeMap == null) {
+            typeMap = LockTypeIcon.LockTypeIconMap.get(EnumCollection.LockType.PADLOCK.getType());
         }
+        if (userType < 1 || userType > 3) {
+            userType = 1;
+        }
+        imageView.setImageResource(typeMap.get(userType));
+//        }
     }
 
     @BindingAdapter("touchSrc")
