@@ -31,6 +31,7 @@ import com.ut.module_lock.viewmodel.DeviceKeyRuleVM;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Route(path = RouterUtil.LockModulePath.LOCK_DEVICE_KEY_PERMISSION)
@@ -113,6 +114,25 @@ public class DeviceKeyRuleActivity extends BaseActivity {
             choosePermission(v);
         });
         mBinding.btnSave.setOnClickListener(v -> {
+            DeviceKey deviceKey = mDeviceKeyRuleVM.getDeviceKey();
+            if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.TIMELIMIT.ordinal()) {
+                if (deviceKey.getTimeEnd() <= deviceKey.getTimeStart()) {
+                    CLToast.showAtCenter(DeviceKeyRuleActivity.this, getString(R.string.lock_device_key_tip_validtime));
+                    return;
+                }
+            } else if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.CYCLE.ordinal()) {
+                Date dateStart = new Date(deviceKey.getTimeStart());
+                Date dateEnd = new Date(deviceKey.getTimeEnd());
+                long timeStart = dateStart.getHours() * 60 + dateStart.getMinutes();
+                long timeEnd = dateEnd.getHours() * 60 + dateEnd.getMinutes();
+                if (deviceKey.getTimeEnd() < deviceKey.getTimeStart()) {
+                    CLToast.showAtCenter(DeviceKeyRuleActivity.this, getString(R.string.lock_device_key_tip_validdate));
+                    return;
+                } else if (timeEnd < timeStart) {
+                    CLToast.showAtCenter(DeviceKeyRuleActivity.this, getString(R.string.lock_device_key_tip_validtime));
+                    return;
+                }
+            }
             mDeviceKeyRuleVM.saveDeviceKey(DeviceKeyRuleActivity.this);
         });
     }

@@ -289,7 +289,7 @@ public class SendKeyActivity extends BaseActivity {
                         startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
                     }
                 } else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    new AlertDialog.Builder(this)
+                    new AlertDialog.Builder(this)//todo 中文
                             .setMessage("APP需要你的允许获取联系人权限")
                             .setPositiveButton("设置", (dialogInterface, i) -> {
                                 Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

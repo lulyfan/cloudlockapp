@@ -39,7 +39,7 @@ public class GrantPermissionAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
+        switch (position) {//todo 中文
             case 0:
                 return "永久";
 
