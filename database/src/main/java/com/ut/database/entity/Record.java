@@ -14,6 +14,7 @@ public class Record {
     private long lockId;//0,
     private long keyId;//0,
     private int type;//0,
+    private String keyName;//钥匙名称
     private String description;//"开锁啦",
     private long createTime;//1542937352000
     private String time;
@@ -124,5 +125,13 @@ public class Record {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public String getKeyName() {
+        return keyName;
+    }
+
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
     }
 }

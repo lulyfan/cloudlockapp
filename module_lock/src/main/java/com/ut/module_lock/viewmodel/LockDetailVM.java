@@ -42,8 +42,9 @@ public class LockDetailVM extends BaseViewModel {
     private MutableLiveData<Boolean> unlockSuccess = new MutableLiveData<>();
     private MutableLiveData<Boolean> connectStatus = new MutableLiveData<>();
     private MutableLiveData<Boolean> reAutoOpen = new MutableLiveData<>();//重新自动开锁
+    private MutableLiveData<Integer> electricity = new MutableLiveData<>();//电量变化更新
     private LockKey mLockKey = null;
-    private static final String TAG = LockDetailVM.class.getSimpleName();
+    public static final String TAG = LockDetailVM.class.getSimpleName();
     private LiveData<LockKey> mLockKeyLiveData = null;
 
     private AtomicInteger mOpenStatus = new AtomicInteger(EnumCollection.OpenLockState.INITIAL);
@@ -59,6 +60,10 @@ public class LockDetailVM extends BaseViewModel {
 
     public LiveData<Boolean> getUnlockSuccessStatus() {
         return unlockSuccess;
+    }
+
+    public LiveData<Integer> getElectricity() {
+        return electricity;
     }
 
     public MutableLiveData<Boolean> getReAutoOpen() {
@@ -91,7 +96,7 @@ public class LockDetailVM extends BaseViewModel {
             return -3;
         } else if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {//已连接
             connectStatus.postValue(true);
-            mOpenStatus.set(EnumCollection.OpenLockState.CONNECTED);
+            UTLog.i(TAG, "锁已连接");
             toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
             UnilinkManager.getInstance(getApplication()).setConnectListener(mConnectListener);
             return 0;
@@ -176,14 +181,10 @@ public class LockDetailVM extends BaseViewModel {
         UnilinkManager.getInstance(getApplication()).getElect(cloudLock, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
-                mLockKey.setElectric(cloudLock.getElect());
                 toCheckPermissionOrOpenLock(cloudLock);
-                rx.Observable.just(mLockKey)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe(lockKey -> {
-                            LockKeyDaoImpl.get().insert(lockKey);
-                        });
+                if (mLockKey.getElectric() != cloudLock.getElect()) {//电量有变化时提示界面更新
+                    electricity.postValue(cloudLock.getElect());
+                }
             }
 
             @Override
@@ -264,8 +265,10 @@ public class LockDetailVM extends BaseViewModel {
             unlockSuccess.postValue(true);
             showDialog.postValue(false);
             toAddLog(1);
-            mOpenStatus.compareAndSet(EnumCollection.OpenLockState.OPENING
-                    , EnumCollection.OpenLockState.CONNECTED);
+//            mOpenStatus.compareAndSet(EnumCollection.OpenLockState.OPENING
+//                    , EnumCollection.OpenLockState.CONNECTED);
+            if (mLockKey != null)
+                UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
         }
 
         @Override
@@ -289,20 +292,21 @@ public class LockDetailVM extends BaseViewModel {
     }
 
     private LockStateListener mLockStateListener = lockState -> {
-        mLockKey.setElectric(lockState.getElect());
-        rx.Observable.just(mLockKey)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(lockKey -> {
-                    LockKeyDaoImpl.get().insert(lockKey);
-                });
+//        mLockKey.setElectric(lockState.getElect());
+//        rx.Observable.just(mLockKey)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.io())
+//                .subscribe(lockKey -> {
+//                    LockKeyDaoImpl.get().insert(lockKey);
+//                });
     };
 
     @Override
     protected void onCleared() {
         super.onCleared();
         UnilinkManager.getInstance(getApplication()).setConnectListener(null);
-        if (mLockKey != null)
+        if (mLockKey != null) {
             UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+        }
     }
 }

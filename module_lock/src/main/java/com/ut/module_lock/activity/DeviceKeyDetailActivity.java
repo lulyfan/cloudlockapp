@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,10 +18,14 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonPopupWindow;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
@@ -112,7 +117,13 @@ public class DeviceKeyDetailActivity extends BaseActivity {
             }
         }
         mBinding.btnDelete.setOnClickListener(v -> {
-            mDeviceKeyDetailVM.deleteKey(DeviceKeyDetailActivity.this);
+            new CustomerAlertDialog(this, false)
+                    .setMsg("确定删除该钥匙吗？删除后不可恢复")//todo 中文
+                    .setConfirmText("删除")
+                    .setConfirmListener(v1 -> {
+                        mDeviceKeyDetailVM.deleteKey(DeviceKeyDetailActivity.this);
+                    }).show();
+
         });
         initPopupwindow();
     }

@@ -96,7 +96,7 @@ public class LockListFragment extends BaseFragment {
         mLockListFragVM.getLockList().observe(this, lockKeys -> {
             refreshLockListData(lockKeys);
 
-            AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+            AutoOpenLockService service = ((BaseActivity) getActivity()).getAutoOpenLockService();
             if (service != null) {
                 service.setLockKeys(lockKeys);
             }
@@ -132,6 +132,7 @@ public class LockListFragment extends BaseFragment {
             mLockListAdapter = new LockListAdapter(getContext(), datas, BaseApplication.getUser());
             mFragmentLocklistBinding.lockRvLock.setAdapter(mLockListAdapter);
             mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
+                if (datas1.size() <= 0) return;
                 LockKey lockKey = (LockKey) datas1.get(position);
                 if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
                     ARouter.getInstance()
@@ -252,7 +253,7 @@ public class LockListFragment extends BaseFragment {
     }
 
     private void finish() {
-        AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+        AutoOpenLockService service = ((BaseActivity) getActivity()).getAutoOpenLockService();
         if (service != null) {
             service.stopAutoOpenLock();
         }
@@ -289,7 +290,7 @@ public class LockListFragment extends BaseFragment {
             UnilinkManager.getInstance(getContext()).requestPermission(getActivity(), 1);
         }
 
-        AutoOpenLockService service = ((BaseActivity)getActivity()).getAutoOpenLockService();
+        AutoOpenLockService service = ((BaseActivity) getActivity()).getAutoOpenLockService();
         if (service != null) {
             service.startAutoOpenLock();
         }

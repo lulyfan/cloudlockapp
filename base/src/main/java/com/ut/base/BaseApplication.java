@@ -63,6 +63,7 @@ public class BaseApplication extends MultiDexApplication {
         initBaidu();
 
         initLeakCanary();
+        
     }
 
     private void initLeakCanary() {

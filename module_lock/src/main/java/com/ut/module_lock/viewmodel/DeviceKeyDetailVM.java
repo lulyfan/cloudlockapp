@@ -17,6 +17,7 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.utils.BleOperateManager;
+import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.protocol.data.GateLockKey;
 
@@ -157,14 +158,14 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         Disposable disposable = CommonApi.delDeviceKeyInfo(mLockKey.getId(), mDeviceKey.getKeyID())
                 .subscribe(result -> {
                     getApplication().sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY));
-                }, new ErrorHandler(){
+                }, new ErrorHandler() {
                     @Override
                     public void accept(Throwable throwable) {
                         super.accept(throwable);
                         getApplication().sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY));
                     }
                 });
-        mCompositeDisposable.add(disposable);
+//        mCompositeDisposable.add(disposable);
     }
 
 

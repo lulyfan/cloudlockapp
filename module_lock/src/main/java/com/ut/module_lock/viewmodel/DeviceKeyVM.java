@@ -126,7 +126,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     protected void onCleared() {
         super.onCleared();
         DeviceKeyDaoImpl.get().getAll().removeObserver(observer1);
-//        mBleOperateManager.disconnect(mLockKey.getMac());
+        mBleOperateManager.disconnect(mLockKey.getMac());
     }
 
     @Override

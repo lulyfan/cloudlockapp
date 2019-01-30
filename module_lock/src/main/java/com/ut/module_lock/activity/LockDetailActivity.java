@@ -73,6 +73,7 @@ public class LockDetailActivity extends BaseActivity {
         super.onResume();
         mIsOnPause = false;
         //todo 自动开锁
+        UTLog.i(LockDetailVM.TAG, "onResume");
         autoOpen();
     }
 
@@ -90,6 +91,7 @@ public class LockDetailActivity extends BaseActivity {
                 mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
             }
             toOpenLock();
+            UTLog.i(LockDetailVM.TAG, "toOpenLock 1");
         }
     }
 
@@ -153,10 +155,14 @@ public class LockDetailActivity extends BaseActivity {
                 endLoad();
             }
         });
+        mLockDetailVM.getElectricity().observe(this, electricity -> {
+            mLockKey.setElectric(electricity);
+            initLockData();
+        });
     }
 
     private Observer<Boolean> mReOpenObserver = (reOpen) -> {
-        UTLog.i("reOpen mReOpenObserver");
+        UTLog.i(LockDetailVM.TAG, "reOpen mReOpenObserver");
         if (reOpen && isAllowAutoOpen.get()) {
             autoOpen();
         }
@@ -173,10 +179,10 @@ public class LockDetailActivity extends BaseActivity {
             endAutoOpenLock();
         } else {
             isAllowAutoOpen.set(true);
-            if (!mIsOnPause)
-                autoOpen();
+            if (!mIsOnPause)//当钥匙被禁用后重新启用时需去判断是否自动开锁
+                UTLog.i(LockDetailVM.TAG, "toOpenLock 11");
+            autoOpen();
         }
-        mLockDetailVM.setLockKey(mLockKey);
         initLockData();
         initView();
     };
@@ -200,6 +206,7 @@ public class LockDetailActivity extends BaseActivity {
                     DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
                 } else {
                     toOpenLock();
+                    UTLog.i(LockDetailVM.TAG, "toOpenLock 5");
                 }
             }
 
@@ -265,6 +272,7 @@ public class LockDetailActivity extends BaseActivity {
 
     private void toOpenLock() {
         int scanResult = mLockDetailVM.openLock();
+        UTLog.i(LockDetailVM.TAG, "toOpenLock");
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 toastShort(getString(R.string.lock_tip_ble_not_support));
@@ -293,6 +301,7 @@ public class LockDetailActivity extends BaseActivity {
         if (requestCode == BLEENABLECODE) {
             if (resultCode == RESULT_OK) {
                 toOpenLock();
+                UTLog.i(LockDetailVM.TAG, "toOpenLock 2");
             } else {
                 isAllowAutoOpen.set(false);//用户拒绝打开蓝牙后不再进行提示
             }
@@ -303,12 +312,14 @@ public class LockDetailActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == BLEREAUESTCODE) {
             toOpenLock();
+            UTLog.i(LockDetailVM.TAG, "toOpenLock 3");
         } else if (requestCode == REQUEST_LOCATION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
                     DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
                 } else {
                     toOpenLock();
+                    UTLog.i(LockDetailVM.TAG, "toOpenLock 4");
                 }
             } else {
                 DialogHelper.getInstance().setMessage(getString(R.string.lock_location_need_tips)).setPositiveButton(getString(R.string.lock_ok), ((dialog, which) -> {

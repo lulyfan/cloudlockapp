@@ -85,12 +85,12 @@ public class ORListAdapter extends BaseAdapter {
             if (describe.contains(",")) {
                 String[] strings = describe.split(",");
                 if (strings.length >= 2) {
-                    if (TextUtils.isEmpty(r.getUserName()))
-                        r.setUserName(strings[0]);
+                    if (TextUtils.isEmpty(r.getKeyName()))
+                        r.setKeyName(strings[0]);
                     r.setDescription(strings[1]);
                 }
             }
-            operatorTv.setText(r.getUserName());
+            operatorTv.setText(r.getKeyName());
             TextView descTv = item.findViewById(R.id.desc);
             descTv.setText(new StringBuffer(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(r.getCreateTime())) + "   " + r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);

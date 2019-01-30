@@ -27,7 +27,7 @@ public interface DeviceKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDeviceKeys(List<DeviceKey> keys);
 
-    @Query("select * from device_key where keyType = :type And lockId ==:lockId")
+    @Query("select * from device_key where keyType = :type And lockId ==:lockId ORDER BY keyID ASC")
     LiveData<List<DeviceKey>> findDeviceKeysByType(int lockId, int type);
 
     @Query("SELECT * FROM device_key ORDER BY keyID ASC")
