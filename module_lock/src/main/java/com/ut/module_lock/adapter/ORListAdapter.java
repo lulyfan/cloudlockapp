@@ -17,16 +17,8 @@ import com.ut.module_lock.R;
 import com.ut.module_lock.entity.OperationRecord;
 import com.ut.database.entity.Record;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * author : chenjiajun
@@ -92,7 +84,7 @@ public class ORListAdapter extends BaseAdapter {
             }
             operatorTv.setText(r.getKeyName());
             TextView descTv = item.findViewById(R.id.desc);
-            descTv.setText(new StringBuffer(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(r.getCreateTime())) + "   " + r.getDescription()));
+            descTv.setText(new StringBuffer(r.getTime() + "   " + r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);
             if (!TextUtils.isEmpty(r.getHeadPic())) {
                 Glide.with(context).load(r.getHeadPic()).apply(RequestOptions.circleCropTransform().placeholder(R.mipmap.default_icon_b)).into(icon);

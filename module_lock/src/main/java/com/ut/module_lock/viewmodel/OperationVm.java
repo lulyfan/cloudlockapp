@@ -152,13 +152,15 @@ public class OperationVm extends AndroidViewModel {
         if (handlerMap == null) {
             handlerMap = new LinkedHashMap<>();
         }
-        Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? -1 : 0;
-        Collections.sort(records, comparator);
         for (Record li : records) {
             String date = SystemUtils.getTimeDate(li.getCreateTime());
             if (handlerMap.containsKey(date)) {
                 ArrayList<Record> tmps = (ArrayList<Record>) handlerMap.get(date);
-                tmps.add(li);
+                if(tmps != null) {
+                    tmps.add(li);
+                    Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? -1 : 0;
+                    Collections.sort(tmps, comparator);
+                }
             } else {
                 ArrayList<Record> newtmps = new ArrayList<Record>();
                 newtmps.add(li);
