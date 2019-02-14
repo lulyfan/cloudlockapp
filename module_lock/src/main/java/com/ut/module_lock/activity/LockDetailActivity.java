@@ -329,7 +329,7 @@ public class LockDetailActivity extends BaseActivity {
         UTLog.i(LockDetailVM.TAG, "onRequestPermissionsResult 1");
         if (requestCode == BLEREAUESTCODE && grantResults.length > 0) {
             for (int i : grantResults) {
-                if (i != PackageManager.PERMISSION_GRANTED) {//定位未允许的时候去
+                if (i != PackageManager.PERMISSION_GRANTED) {//定位未允许的时候提示去详情页修改
                     mPermissionDialog = new CustomerAlertDialog(this, false)
                             .setMsg(getString(R.string.lock_location_need_tips))
                             .setCancelLister(v -> {

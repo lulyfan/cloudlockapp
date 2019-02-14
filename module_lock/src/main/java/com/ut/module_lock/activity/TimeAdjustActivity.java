@@ -8,6 +8,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityTimeAdjustBinding;
 import com.ut.module_lock.viewmodel.TimeAdjustVM;
@@ -45,8 +46,8 @@ public class TimeAdjustActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(TimeAdjustVM.class);
-        String mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.MAC);
-        viewModel.setMac(mac);
+        LockKey lockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
+        viewModel.setLockKey(lockKey);
         viewModel.tip.observe(this, s -> toastShort(s));
 
         viewModel.lockTime.observe(this, aLong -> {
