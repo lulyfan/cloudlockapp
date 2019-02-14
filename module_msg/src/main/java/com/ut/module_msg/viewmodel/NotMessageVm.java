@@ -16,9 +16,12 @@ import com.ut.database.entity.LockMessage;
 import com.ut.database.entity.LockMessageInfo;
 import com.ut.module_msg.repo.NotMessageRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -29,6 +32,8 @@ import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("CheckResult")
 public class NotMessageVm extends AndroidViewModel {
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private LockMessageInfoDao lockMessageInfoDao;
 
@@ -42,7 +47,7 @@ public class NotMessageVm extends AndroidViewModel {
     }
 
     public void loadMessageInfos(String mac) {
-        MyRetrofit.get().getCommonApiService().getLockMessageInfos(mac)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getLockMessageInfos(mac)
                 .subscribeOn(Schedulers.io())
                 .subscribe(listResult -> {
                     if (listResult.isSuccess()) {
@@ -54,15 +59,17 @@ public class NotMessageVm extends AndroidViewModel {
 
                     }
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void readMessages(String mac) {
-        MyRetrofit.get().getCommonApiService().readMessages(mac)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().readMessages(mac)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
 
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
 
@@ -71,7 +78,7 @@ public class NotMessageVm extends AndroidViewModel {
     }
 
     public void loadNotificationMessages() {
-        MyRetrofit.get().getCommonApiService().getMessage()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getMessage()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
@@ -79,11 +86,18 @@ public class NotMessageVm extends AndroidViewModel {
                         saveNotificationMessages(result.data);
                     }
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     private void saveNotificationMessages(List<LockMessage> messages) {
         Schedulers.io().scheduleDirect(() -> {
             CloudLockDatabaseHolder.get().getLockMessageDao().insert(messages);
         });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.dispose();
     }
 }

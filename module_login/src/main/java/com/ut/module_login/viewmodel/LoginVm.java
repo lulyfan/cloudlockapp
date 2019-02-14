@@ -20,6 +20,8 @@ import com.ut.module_login.ui.LoginActivity;
 import com.ut.module_login.ui.RegisterActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -33,8 +35,10 @@ public class LoginVm extends AndroidViewModel {
         super(application);
     }
 
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     public void login(String phone, String password) {
-        MyRetrofit.get()
+        Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
                 .login(phone, password, SystemUtils.getMacAddress())
                 .subscribeOn(Schedulers.io())
@@ -56,6 +60,7 @@ public class LoginVm extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     private void deleteAllOldData() {
@@ -71,14 +76,15 @@ public class LoginVm extends AndroidViewModel {
     }
 
     public void getVerifyCode(String phone) {
-        MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> CLToast.showAtCenter(getApplication(), result.msg), new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void register(String phone, String password, String verifyCode) {
-        MyRetrofit.get()
+        Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
                 .register(phone, password, verifyCode)
                 .subscribeOn(Schedulers.io())
@@ -90,10 +96,11 @@ public class LoginVm extends AndroidViewModel {
                     }
                     CLToast.showAtCenter(getApplication(), result.msg);
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void resetPassword(String phone, String password, String verifyCode) {
-        MyRetrofit.get()
+        Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
                 .resetPassword(phone, password, verifyCode)
                 .subscribeOn(Schedulers.io())
@@ -109,15 +116,17 @@ public class LoginVm extends AndroidViewModel {
                     }
 
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void getForgetPwdCode(String phone) {
-        MyRetrofit.get().getCommonApiService().getForgetPwdVerifyCode(phone)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().getForgetPwdVerifyCode(phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtCenter(getApplication(), result.msg);
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public int checkPhoneBg(String phone) {
@@ -132,5 +141,11 @@ public class LoginVm extends AndroidViewModel {
             return R.drawable.selector_highlight_case;
         }
         return R.drawable.selector_highlight_red;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.dispose();
     }
 }

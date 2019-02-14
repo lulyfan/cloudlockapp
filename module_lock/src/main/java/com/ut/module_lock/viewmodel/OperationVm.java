@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -39,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @SuppressLint("CheckResult")
-public class OperationVm extends AndroidViewModel {
+public class OperationVm extends BaseViewModel {
     private int currentPage = 1;
     private static int DEFAULT_PAGE_SIZE = 10;
     private long currentId = -1;
@@ -54,6 +55,7 @@ public class OperationVm extends AndroidViewModel {
     public OperationVm(@NonNull Application application) {
         super(application);
     }
+
 
     public LiveData<List<Record>> getRecords(String recordType, long id) {
         if (id != currentId) {
@@ -101,23 +103,25 @@ public class OperationVm extends AndroidViewModel {
     };
 
     private void loadRecordByLock(long lockId) {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .queryLogsByLock(lockId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     private void loadRecordByUser(long userId) {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .queryLogsByUser(userId, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     private void loadRecordByKey(long keyId) {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .queryLogsByKey(keyId, currentPage, DEFAULT_PAGE_SIZE, lockId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,6 +132,7 @@ public class OperationVm extends AndroidViewModel {
                             super.accept(throwable);
                     }
                 });
+        mCompositeDisposable.add(subscribe);
     }
 
     private void saveRecords(List<Record> records) {
@@ -156,7 +161,7 @@ public class OperationVm extends AndroidViewModel {
             String date = SystemUtils.getTimeDate(li.getCreateTime());
             if (handlerMap.containsKey(date)) {
                 ArrayList<Record> tmps = (ArrayList<Record>) handlerMap.get(date);
-                if(tmps != null) {
+                if (tmps != null) {
                     tmps.add(li);
                     Comparator<Record> comparator = (o1, o2) -> o1.getCreateTime() > o2.getCreateTime() ? -1 : 0;
                     Collections.sort(tmps, comparator);

@@ -30,6 +30,7 @@ import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,12 +46,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @SuppressLint("CheckResult")
-public class LockSettingVM extends AndroidViewModel {
-    private MutableLiveData<String> showTip = new MutableLiveData<>();
+public class LockSettingVM extends BaseViewModel {
     private MutableLiveData<String> dialogHandler = new MutableLiveData<>();
     private boolean isConnected = false;
     private MutableLiveData<Boolean> isDeleteSuccess = new MutableLiveData<>();
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private MutableLiveData<Long> selectedGroupId = new MutableLiveData<>();
     private MutableLiveData<SwitchResult> setCanOpenSwitchResult = new MutableLiveData<>();
     private LockKey lockKey;
@@ -73,10 +72,6 @@ public class LockSettingVM extends AndroidViewModel {
         return isDeleteSuccess;
     }
 
-    public LiveData<String> getShowTip() {
-        return showTip;
-    }
-
     public MutableLiveData<String> getDialogHandler() {
         return dialogHandler;
     }
@@ -93,7 +88,7 @@ public class LockSettingVM extends AndroidViewModel {
     }
 
     public void verifyAdmin(String pwd) {
-        MyRetrofit.get().getCommonApiService().verifyUserPwd(pwd)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().verifyUserPwd(pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
@@ -107,6 +102,7 @@ public class LockSettingVM extends AndroidViewModel {
                         showTip.postValue(result.msg);
                     }
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void changeCanOpen(boolean canOpen) {
@@ -278,6 +274,7 @@ public class LockSettingVM extends AndroidViewModel {
                     if (result.isSuccess()) {
                     }
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public LiveData<List<LockGroup>> getLockGroups() {
@@ -285,7 +282,7 @@ public class LockSettingVM extends AndroidViewModel {
     }
 
     public void createGroup(String newGroupName) {
-        MyRetrofit.get().getCommonApiService().addGroup(newGroupName)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().addGroup(newGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
@@ -298,6 +295,7 @@ public class LockSettingVM extends AndroidViewModel {
                         saveLockKey(lockKey);
                     }
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void modifyLockName(String mac, String newName) {
@@ -336,6 +334,7 @@ public class LockSettingVM extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                     }
                 });
+        mCompositeDisposable.add(subscribe);
     }
 
 
@@ -360,6 +359,7 @@ public class LockSettingVM extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                     }
                 });
+        mCompositeDisposable.add(subscribe);
     }
 
     public void changeLockGroup(String mac, long groupId) {
@@ -389,6 +389,7 @@ public class LockSettingVM extends AndroidViewModel {
                             CLToast.showAtCenter(getApplication(), "网络错误, 移动失败");
                         }
                     });
+            mCompositeDisposable.add(subscribe);
         }
     }
 

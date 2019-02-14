@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -29,13 +31,14 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 @SuppressLint("CheckResult")
-public class KeyManagerVM extends AndroidViewModel {
+public class KeyManagerVM extends BaseViewModel {
     private MutableLiveData<List<Key>> keys = null;
     private MutableLiveData<String> feedbackMessage = null;
     private int currentPage = 1;
     private static int DEFAULT_PAGE_SIZE = 10;
     private String mac;
     private Key key;
+
 
     private KeyDao keyDao;
 
@@ -73,7 +76,7 @@ public class KeyManagerVM extends AndroidViewModel {
     }
 
     public void loadKeyItems() {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, currentPage, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,6 +90,7 @@ public class KeyManagerVM extends AndroidViewModel {
                         CLToast.showAtBottom(getApplication(), result.msg);
                     }
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     private void saveKeys(List<Key> data) {
@@ -98,7 +102,7 @@ public class KeyManagerVM extends AndroidViewModel {
     }
 
     public void updateKeyItems() {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .pageKeys(BaseApplication.getUser().id, mac, 1, DEFAULT_PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -112,6 +116,7 @@ public class KeyManagerVM extends AndroidViewModel {
                         CLToast.showAtBottom(getApplication(), result.msg);
                     }
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     private void clearAndSaveKey(List<Key> keys) {
@@ -123,23 +128,25 @@ public class KeyManagerVM extends AndroidViewModel {
 
 
     public void unFrozenKey(long keyId) {
-        MyRetrofit.get().getCommonApiService()
+        Disposable subscribe = MyRetrofit.get().getCommonApiService()
                 .unFrozenKey(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
 
     }
 
     public void frozenKey(long keyId) {
-        MyRetrofit.get().getCommonApiService().frozenKey(keyId)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().frozenKey(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> getFeedbackMessage().postValue(String.valueOf(result.msg)), new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void deleteKey(long keyId) {
-        MyRetrofit.get().getCommonApiService().deleteKey(keyId, 0)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().deleteKey(keyId, 0)
                 .subscribeOn(Schedulers.io())
                 .map(result -> {
                     keyDao.deleteKeyByKeyId((int) keyId);
@@ -150,6 +157,7 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribe(result -> {
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void editKeyName(Key key, String name) {
@@ -161,7 +169,7 @@ public class KeyManagerVM extends AndroidViewModel {
 
     public void editKey(Key keyItem) {
         //ToDo
-        MyRetrofit.get().getCommonApiService().editKey(keyItem.getMac(),
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().editKey(keyItem.getMac(),
                 keyItem.getKeyId(),
                 keyItem.getStartTime(),
                 keyItem.getEndTime(),
@@ -178,10 +186,11 @@ public class KeyManagerVM extends AndroidViewModel {
                     }
                     CLToast.showAtBottom(getApplication(), result.msg);
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void clearKeys(String mac) {
-        MyRetrofit.get().getCommonApiService().clearAllKey(mac)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().clearAllKey(mac)
                 .subscribeOn(Schedulers.io())
                 .map(result -> {
                     CloudLockDatabaseHolder.get().getKeyDao().deleteAllByMac(mac);
@@ -191,23 +200,26 @@ public class KeyManagerVM extends AndroidViewModel {
                 .subscribe(result -> {
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void toAuth(long keyId) {
-        MyRetrofit.get().getCommonApiService().toAuth(keyId)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().toAuth(keyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void cancelAuth(long keyId) {
-        MyRetrofit.get().getCommonApiService().cancelAuth(keyId)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().cancelAuth(keyId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     getFeedbackMessage().postValue(String.valueOf(result.msg));
                 }, new ErrorHandler());
+        mCompositeDisposable.add(subscribe);
     }
 
     public void initKey(Key key) {
@@ -270,9 +282,5 @@ public class KeyManagerVM extends AndroidViewModel {
 
     public LiveData<Key> getKeyById(long id) {
         return keyDao.getKeyById(id);
-    }
-
-    public int getCurrentPage() {
-        return currentPage;
     }
 }

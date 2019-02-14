@@ -29,8 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  * version: 1.0
  */
-public class LockListFragVM extends AndroidViewModel {
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+public class LockListFragVM extends BaseViewModel {
     private MutableLiveData<Boolean> refreshStatus = new MutableLiveData<>();
     private MutableLiveData<List<LockKey>> mLockKeys = new MutableLiveData<>();
     private volatile boolean mIsReset = false;
@@ -56,7 +55,6 @@ public class LockListFragVM extends AndroidViewModel {
         lock1.observeForever(lockKeys -> {
             assert lockKeys != null;
             if (currentGroupId != -1) return;
-//            if (mIsReset && lockKeys.size() < 1) return;
             mLockKeys.setValue(lockKeys);
         });
     }
@@ -137,8 +135,6 @@ public class LockListFragVM extends AndroidViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
-//        lock1.removeObservers(getApplication());
-//        lock2.removeObserver(getApplication());
     }
 
 }

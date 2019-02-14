@@ -21,13 +21,16 @@ import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_msg.R;
 import com.ut.database.entity.ApplyMessage;
+import com.ut.unilink.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -39,6 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 
 @SuppressLint("CheckResult")
 public class ApplyMessageVm extends AndroidViewModel {
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private MutableLiveData<List<ApplyMessage>> applyMessages = null;
 
@@ -62,21 +66,22 @@ public class ApplyMessageVm extends AndroidViewModel {
                     }
                     UTLog.d(String.valueOf(result.toString()));
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void ignoreApply(long applyId) {
-        if (BaseApplication.getUser() == null) return;
-        MyRetrofit.get().getCommonApiService().ignoreApply(BaseApplication.getUser().id, applyId)
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().ignoreApply(BaseApplication.getUser().id, applyId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     CLToast.showAtBottom(getApplication(), result.msg);
                     AppManager.getAppManager().currentActivity().finish();
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void checkApplyStatus(ApplyMessage message) {
-        MyRetrofit.get().getCommonApiService().checkKeyStatus(message.getId())
+        Disposable subscribe = MyRetrofit.get().getCommonApiService().checkKeyStatus(message.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(jsonObject -> {
@@ -107,6 +112,7 @@ public class ApplyMessageVm extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), msg);
                     }
                 }, new ErrorHandler());
+        compositeDisposable.add(subscribe);
     }
 
     public void saveApplyMessages(List<ApplyMessage> list) {
@@ -143,5 +149,11 @@ public class ApplyMessageVm extends AndroidViewModel {
     public String description(ApplyMessage applyMessage) {
         String string = getApplication().getString(R.string.apply_desc);
         return String.format(string, applyMessage.getRuleTypeStr(), applyMessage.getLockName());
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.dispose();
     }
 }
