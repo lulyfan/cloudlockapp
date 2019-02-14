@@ -58,6 +58,12 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         initVM();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDeviceKeyDetailVM.mBleOperateManager.onActivityOnpause();
+    }
+
     private void initVM() {
         mDeviceKeyDetailVM = ViewModelProviders.of(this).get(DeviceKeyDetailVM.class);
         mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
@@ -118,8 +124,8 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
         mBinding.btnDelete.setOnClickListener(v -> {
             new CustomerAlertDialog(this, false)
-                    .setMsg("确定删除该钥匙吗？删除后不可恢复")//todo 中文
-                    .setConfirmText("删除")
+                    .setMsg(getString(R.string.lock_deivce_key_tip_del))
+                    .setConfirmText(getString(R.string.delete))
                     .setConfirmListener(v1 -> {
                         mDeviceKeyDetailVM.deleteKey(DeviceKeyDetailActivity.this);
                     }).show();

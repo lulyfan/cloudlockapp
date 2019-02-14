@@ -58,6 +58,12 @@ public class DeviceKeyActivity extends BaseActivity {
         regReceiver();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDeviceKeyVM.mBleOperateManager.onActivityOnpause();
+    }
+
     private void initVM() {
         mDeviceKeyVM = ViewModelProviders.of(this).get(DeviceKeyVM.class);
         mDeviceKeyVM.setLockKey(mLockKey);

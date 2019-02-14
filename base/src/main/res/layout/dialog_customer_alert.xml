@@ -16,20 +16,19 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="@dimen/base_350dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_dialog_customer_alert">
 
         <TextView
             android:id="@+id/tv_alert_msg"
-            android:layout_width="@dimen/base_350dp"
-            android:layout_height="@dimen/base_150dp"
+            android:layout_width="@dimen/base_294dp"
+            android:layout_height="@dimen/base_120dp"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/base_35dp"
-            android:paddingRight="@dimen/base_35dp"
+            android:paddingLeft="@dimen/base_20dp"
+            android:paddingRight="@dimen/base_20dp"
             android:text="@{msg}"
-            android:textColor="@color/color_base_title"
-            android:textSize="@dimen/base_14sp"
+            android:textSize="@dimen/base_17sp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="parent"/>
 

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.base.dialog.DialogHelper;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
@@ -52,6 +54,8 @@ public class LockSettingActivity extends BaseActivity {
     private final int REQUEST_CODE_CHOOSE_GROUP = 1002;
 
     private LockSettingVM mLockSettingVM = null;
+
+    private CustomerAlertDialog mPermissionDialog = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,15 +100,7 @@ public class LockSettingActivity extends BaseActivity {
             }
         });
         mLockSettingVM.getShowTip().observe(this, showTip -> {
-            if (Constance.END_LOAD.equals(showTip)) {
-                endLoad();
-                mBinding.btnDeleteKey.setEnabled(true);
-            } else if (Constance.START_LOAD.equals(showTip)) {
-                startLoad();
-                mBinding.btnDeleteKey.setEnabled(false);
-            } else {
-                CLToast.showAtBottom(getBaseContext(), showTip);
-            }
+            CLToast.showAtBottom(getBaseContext(), showTip);
         });
         mLockSettingVM.getDialogHandler().observe(this, tips -> {
             if (Constance.END_LOAD.equals(tips)) {
@@ -137,6 +133,14 @@ public class LockSettingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mPermissionDialog != null && mPermissionDialog.isShowing()) {
+            mPermissionDialog.dismiss();
+        }
     }
 
     private void loadGroupName() {
@@ -232,7 +236,23 @@ public class LockSettingActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == LockSettingVM.BLEREAUESTCODE) {
+        if (requestCode == LockSettingVM.BLEREAUESTCODE && grantResults.length > 0) {
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {//定位未允许的时候去
+                    mPermissionDialog = new CustomerAlertDialog(this, false)
+                            .setMsg(getString(R.string.lock_location_need_tips))
+                            .setCancelLister(v -> {
+                            })
+                            .setConfirmListener(v -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            });
+                    mPermissionDialog.show();
+                    return;
+                }
+            }
+            mLockSettingVM.getDialogHandler().postValue(Constance.START_LOAD);
             mLockSettingVM.toDeleteAdminKey();
         }
     }

@@ -120,11 +120,6 @@ public class SystemUtils {
         activity.getWindow().setAttributes(lp);
     }
 
-    public static boolean isLocationEnable(Context context){
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isLocationEnabled();
-    }
-
     public static boolean isGPSOpen(Context context) {
         LocationManager locationManager
                 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -136,6 +131,7 @@ public class SystemUtils {
 
     /**
      * 强行打开gps开关
+     *
      * @param context
      */
     public static void openGPS(Context context) {

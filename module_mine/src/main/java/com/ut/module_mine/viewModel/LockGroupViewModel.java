@@ -2,6 +2,7 @@ package com.ut.module_mine.viewModel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
@@ -26,13 +27,18 @@ public class LockGroupViewModel extends BaseViewModel {
     public MutableLiveData<Void> addGroupSuccess = new MutableLiveData<>();
     public MutableLiveData<Boolean> loadLockGroupState = new MutableLiveData<>();
 
+    private LiveData<List<LockGroup>> mAllLockGroupLiveData = null;
+
     public LockGroupViewModel(@NonNull Application application) {
         super(application);
-        LockGroupDaoImpl.get().getAllLockGroup()
-                .observeForever(lockGroups -> {
-                    mLockGroups.postValue(lockGroups);
-                });
+        mAllLockGroupLiveData = LockGroupDaoImpl.get().getAllLockGroup();
+        mAllLockGroupLiveData.observeForever(mLockGroupsObserver);
     }
+
+    Observer<List<LockGroup>> mLockGroupsObserver = lockGroups -> {
+        mLockGroups.postValue(lockGroups);
+    };
+
 
     public void loadLockGroup(boolean isShowTip) {
         service.getGroup()
@@ -75,5 +81,11 @@ public class LockGroupViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> tip.postValue(voidResult.msg),
                         throwable -> tip.postValue(throwable.getMessage()));
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mAllLockGroupLiveData.removeObserver(mLockGroupsObserver);
     }
 }

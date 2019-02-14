@@ -50,7 +50,7 @@ public class NearLockVM extends AndroidViewModel {
 
     public NearLockVM(@NonNull Application application) {
         super(application);
-        operating.setValue(false);
+//        operating.setValue(false);
     }
 
     public MutableLiveData<List<NearScanLock>> getNearScanLocks() {

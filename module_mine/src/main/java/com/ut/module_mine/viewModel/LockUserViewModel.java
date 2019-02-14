@@ -1,6 +1,7 @@
 package com.ut.module_mine.viewModel;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
@@ -18,10 +19,15 @@ public class LockUserViewModel extends BaseViewModel {
     public MutableLiveData<List<LockUser>> mLockUsers = new MutableLiveData<>();
     public MutableLiveData<Boolean> loadLockUserState = new MutableLiveData<>();
 
+    private LiveData<List<LockUser>> mLockUserListLiveData = null;
+
     public LockUserViewModel(@NonNull Application application) {
         super(application);
-        LockUserDaoImpl.get().getAll().observeForever(lockUsers -> mLockUsers.postValue(lockUsers));
+        mLockUserListLiveData = LockUserDaoImpl.get().getAll();
+        mLockUserListLiveData.observeForever(mLockUserObserver);
     }
+
+    private Observer<List<LockUser>> mLockUserObserver = lockUsers -> mLockUsers.postValue(lockUsers);
 
     public void loadLockUser(boolean isShowTip) {
         service.pageLockUser(mCurrentPage, PAGE_SIZE)
@@ -45,5 +51,11 @@ public class LockUserViewModel extends BaseViewModel {
                             }
                             loadLockUserState.postValue(false);
                         });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mLockUserListLiveData.removeObserver(mLockUserObserver);
     }
 }

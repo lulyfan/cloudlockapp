@@ -1,25 +1,19 @@
 package com.ut.module_lock.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
-import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
-import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 
 import java.util.List;
 
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -50,13 +44,15 @@ public class LockListFragVM extends BaseViewModel {
         return mLockKeys;
     }
 
+    private Observer<List<LockKey>> mLockKeyListObserver1 = lockKeys -> {
+        assert lockKeys != null;
+        if (currentGroupId != -1) return;
+        mLockKeys.setValue(lockKeys);
+    };
+
     private void getLockKeyFromDb() {//监听数据库变化
         lock1 = LockKeyDaoImpl.get().getAllLockKey();
-        lock1.observeForever(lockKeys -> {
-            assert lockKeys != null;
-            if (currentGroupId != -1) return;
-            mLockKeys.setValue(lockKeys);
-        });
+        lock1.observeForever(mLockKeyListObserver1);
     }
 
 
@@ -121,13 +117,14 @@ public class LockListFragVM extends BaseViewModel {
             getLockKeyFromDb();
         } else {
             lock2 = LockKeyDaoImpl.get().getLockByGroupId(lockGroup.getId());
-            lock2.observeForever(lockKeys -> {
-                if (currentGroupId == -1 || lockKeys == null) return;
-//                if (mIsReset && lockKeys.size() < 1) return;
-                mLockKeys.setValue(lockKeys);
-            });
+            lock2.observeForever(mLockKeyListObserver2);
         }
     }
+
+    private Observer<List<LockKey>> mLockKeyListObserver2 = lockKeys -> {
+        if (currentGroupId == -1 || lockKeys == null) return;
+        mLockKeys.setValue(lockKeys);
+    };
 
 
     @Override
@@ -135,6 +132,8 @@ public class LockListFragVM extends BaseViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
+        lock1.removeObserver(mLockKeyListObserver1);
+        lock2.removeObserver(mLockKeyListObserver2);
     }
 
 }

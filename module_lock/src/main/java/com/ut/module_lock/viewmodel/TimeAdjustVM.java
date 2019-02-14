@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
+import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -26,6 +27,7 @@ public class TimeAdjustVM extends BaseViewModel {
     public MutableLiveData<String> tip = new MutableLiveData<>();
     public MutableLiveData<Integer> state = new MutableLiveData<>();
     public String mac;
+    public LockKey mLockKey;
     private int operate;
     private boolean isFindDevice;
     private long time;  //用于写入锁时间
@@ -43,6 +45,11 @@ public class TimeAdjustVM extends BaseViewModel {
     public TimeAdjustVM(@NonNull Application application) {
         super(application);
         state.setValue(STATE_DEFAULT);
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+        mLockKey = LockKeyDaoImpl.get().getLockKeyByMac(mac);
     }
 
     public void readLockTime() {
@@ -143,44 +150,40 @@ public class TimeAdjustVM extends BaseViewModel {
 
     private void sendReadTimeCmd() {
         state.postValue(STATE_READ_TIME);
-        LiveData<LockKey> lockKeyLiveData = CloudLockDatabaseHolder.get().getLockKeyDao().getByMac(mac);
-        lockKeyLiveData.observeForever(lockKey ->
-                UnilinkManager.getInstance(getApplication()).readTime(mac, lockKey.getEncryptType(), lockKey.getEncryptKey(),
-                        new CallBack2<Long>() {
-                            @Override
-                            public void onSuccess(Long data) {
-                                lockTime.postValue(data);
-                                state.postValue(STATE_DEFAULT);
-                            }
+        UnilinkManager.getInstance(getApplication()).readTime(mac, mLockKey.getEncryptType(), mLockKey.getEncryptKey(),
+                new CallBack2<Long>() {
+                    @Override
+                    public void onSuccess(Long data) {
+                        lockTime.postValue(data);
+                        state.postValue(STATE_DEFAULT);
+                    }
 
-                            @Override
-                            public void onFailed(int errCode, String errMsg) {
-                                tip.postValue(getApplication().getString(R.string.err_readLockTime) + errMsg);
-                                state.postValue(STATE_FAILED);
-                            }
-                        }));
+                    @Override
+                    public void onFailed(int errCode, String errMsg) {
+                        tip.postValue(getApplication().getString(R.string.err_readLockTime) + errMsg);
+                        state.postValue(STATE_FAILED);
+                    }
+                });
 
     }
 
     private void sendWriteTimeCmd() {
         state.postValue(STATE_WRITE_TIME);
-        LiveData<LockKey> lockKeyLiveData = CloudLockDatabaseHolder.get().getLockKeyDao().getByMac(mac);
-        lockKeyLiveData.observeForever(lockKey ->
-                UnilinkManager.getInstance(getApplication()).writeTime(mac, lockKey.getEncryptType(), lockKey.getEncryptKey(), time,
-                        new CallBack2<Void>() {
-                            @Override
-                            public void onSuccess(Void data) {
-                                tip.postValue(getApplication().getString(R.string.operateSuccess));
-                                state.postValue(STATE_DEFAULT);
-                                readLockTime();
-                            }
+        UnilinkManager.getInstance(getApplication()).writeTime(mac, mLockKey.getEncryptType(), mLockKey.getEncryptKey(), time,
+                new CallBack2<Void>() {
+                    @Override
+                    public void onSuccess(Void data) {
+                        tip.postValue(getApplication().getString(R.string.operateSuccess));
+                        state.postValue(STATE_DEFAULT);
+                        readLockTime();
+                    }
 
-                            @Override
-                            public void onFailed(int errCode, String errMsg) {
-                                tip.postValue(getApplication().getString(R.string.err_writeLockTime) + errMsg);
-                                state.postValue(STATE_FAILED);
-                            }
-                        }));
+                    @Override
+                    public void onFailed(int errCode, String errMsg) {
+                        tip.postValue(getApplication().getString(R.string.err_writeLockTime) + errMsg);
+                        state.postValue(STATE_FAILED);
+                    }
+                });
 
     }
 

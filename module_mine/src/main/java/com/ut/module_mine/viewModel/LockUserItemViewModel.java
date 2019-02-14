@@ -1,6 +1,7 @@
 package com.ut.module_mine.viewModel;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
@@ -20,11 +21,15 @@ public class LockUserItemViewModel extends BaseViewModel {
 
     public MutableLiveData<List<LockUserKey>> mLockUserKeys = new MutableLiveData<>();
 
+    private LiveData<List<LockUserKey>> mLockUserKeyLiveData = null;
+
     public LockUserItemViewModel(@NonNull Application application) {
         super(application);
-        LockUserKeyDaoImpl.get().getAll()
-                .observeForever(lockUserKeys -> mLockUserKeys.postValue(lockUserKeys));
+        mLockUserKeyLiveData = LockUserKeyDaoImpl.get().getAll();
+        mLockUserKeyLiveData.observeForever(mLockUserKeyListObserver);
     }
+
+    private Observer<List<LockUserKey>> mLockUserKeyListObserver = lockUserKeys -> mLockUserKeys.postValue(lockUserKeys);
 
     public void loadLockUserKey() {
 
@@ -65,5 +70,11 @@ public class LockUserItemViewModel extends BaseViewModel {
                             LockUserKeyDaoImpl.get().deleteById((int) keyId);
                         },
                         throwable -> tip.postValue(throwable.getMessage()));
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mLockUserKeyLiveData.removeObserver(mLockUserKeyListObserver);
     }
 }

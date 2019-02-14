@@ -12,7 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_44dp"
-        android:layout_marginTop="@dimen/base_10dp">
+        android:layout_marginTop="@dimen/base_15dp">
 
         <ImageView
             android:id="@+id/close_window"

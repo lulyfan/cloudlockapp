@@ -58,6 +58,12 @@ public class DeviceKeyRuleActivity extends BaseActivity {
         initFragment();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDeviceKeyRuleVM.mBleOperateManager.onActivityOnpause();
+    }
+
     private void initVM() {
         mDeviceKeyRuleVM = ViewModelProviders.of(this).get(DeviceKeyRuleVM.class);
         mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);

@@ -1,6 +1,5 @@
 package com.ut.module_lock.activity;
 
-import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,7 +8,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -21,9 +19,10 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.RomUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
-import com.ut.base.dialog.DialogHelper;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
@@ -47,12 +46,16 @@ public class LockDetailActivity extends BaseActivity {
     ActivityLockDetailBindingImpl mDetailBinding;
 
     private LockDetailVM mLockDetailVM;
-    private static final int BLEREAUESTCODE = 101;
-    private static final int BLEENABLECODE = 102;
-    private static final int REQUEST_LOCATION_CODE = 103;
+    private static final int BLEREAUESTCODE = 10001;
+    private static final int BLEENABLECODE = 10002;
 
     private AtomicBoolean mIsShowDialogAndTip = new AtomicBoolean(false);
     private AtomicBoolean isAllowAutoOpen = new AtomicBoolean(true);
+    private AtomicBoolean isNotCreateReusme = new AtomicBoolean(false);
+
+    private long lastAutoOpenTime = 0L;
+
+    private CustomerAlertDialog mPermissionDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +64,10 @@ public class LockDetailActivity extends BaseActivity {
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_lock_detail);
         mLockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
         mLockDetailVM = ViewModelProviders.of(this).get(LockDetailVM.class);
-        initLockData();
         addPaddingTop();
-        initView();
         mDetailBinding.setPresent(new Present());
         initViewModel();
+        isNotCreateReusme.set(false);
     }
 
     @Override
@@ -74,18 +76,26 @@ public class LockDetailActivity extends BaseActivity {
         mIsOnPause = false;
         //todo 自动开锁
         UTLog.i(LockDetailVM.TAG, "onResume");
-        autoOpen();
+        if (isNotCreateReusme.get()) {
+            autoOpen();
+        }
+        isNotCreateReusme.set(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        UTLog.i(LockDetailVM.TAG, "onPause");
         mIsOnPause = true;
+        if (mPermissionDialog != null && mPermissionDialog.isShowing()) {
+            mPermissionDialog.dismiss();
+        }
     }
+
 
     private void autoOpen() {
         if (!isNotManager() && (mLockKey.getCanOpen() == 1)
-                && isAllowAutoOpen.get()) {
+                && isAllowAutoOpen.get() && ifCanAutoOpen()) {
             //todo 自动开锁
             if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
                 mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
@@ -93,6 +103,15 @@ public class LockDetailActivity extends BaseActivity {
             toOpenLock();
             UTLog.i(LockDetailVM.TAG, "toOpenLock 1");
         }
+    }
+
+    private synchronized boolean ifCanAutoOpen() {//防止同时调用自动开锁，魅族手机在禁用权限后请求权限会立即调用一次onpause和onresume
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAutoOpenTime < 500) {
+            return false;
+        }
+        lastAutoOpenTime = currentTime;
+        return true;
     }
 
     private void initView() {
@@ -144,7 +163,7 @@ public class LockDetailActivity extends BaseActivity {
             mIsShowDialogAndTip.set(false);
             new UnlockSuccessDialog(this, false).show();
         });
-        mLockDetailVM.getLockKey().observeForever(mLockKeyObserver);
+        mLockDetailVM.getLockKey(mLockKey.getMac()).observeForever(mLockKeyObserver);
 
         mLockDetailVM.getShowDialog().observe(this, isShowDialog -> {
             if (isShowDialog) {
@@ -174,17 +193,20 @@ public class LockDetailActivity extends BaseActivity {
         } else {
             mLockKey.setKeyStatus(EnumCollection.KeyStatus.HAS_DELETE.ordinal());
         }
+        //初始化页面显示
+        initLockData();
+        initView();
+        //判断是否开启自动开锁
         if (!EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())) {
             isAllowAutoOpen.set(false);
             endAutoOpenLock();
         } else {
             isAllowAutoOpen.set(true);
-            if (!mIsOnPause)//当钥匙被禁用后重新启用时需去判断是否自动开锁
+            if (!mIsOnPause) {//当钥匙被禁用后重新启用时需去判断是否自动开锁
                 UTLog.i(LockDetailVM.TAG, "toOpenLock 11");
-            autoOpen();
+                autoOpen();
+            }
         }
-        initLockData();
-        initView();
     };
 
     private void addPaddingTop() {
@@ -200,16 +222,7 @@ public class LockDetailActivity extends BaseActivity {
 
         public void onOpenLockClick(View view) {
             mIsShowDialogAndTip.set(true);
-
-            if (checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION_CODE)) {
-                if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
-                    DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
-                } else {
-                    toOpenLock();
-                    UTLog.i(LockDetailVM.TAG, "toOpenLock 5");
-                }
-            }
-
+            toOpenLock();
         }
 
         public void onSendKeyClick(View view) {
@@ -271,6 +284,9 @@ public class LockDetailActivity extends BaseActivity {
     }
 
     private void toOpenLock() {
+        if (RomUtils.isFlymeRom()//当为魅族手机时需要提醒用户打开定位服务
+                && !checkGpsAndOpenLock())
+            return;
         int scanResult = mLockDetailVM.openLock();
         UTLog.i(LockDetailVM.TAG, "toOpenLock");
         switch (scanResult) {
@@ -310,25 +326,48 @@ public class LockDetailActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == BLEREAUESTCODE) {
+        UTLog.i(LockDetailVM.TAG, "onRequestPermissionsResult 1");
+        if (requestCode == BLEREAUESTCODE && grantResults.length > 0) {
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {//定位未允许的时候去
+                    mPermissionDialog = new CustomerAlertDialog(this, false)
+                            .setMsg(getString(R.string.lock_location_need_tips))
+                            .setCancelLister(v -> {
+                                isAllowAutoOpen.set(false);//用户拒绝打开蓝牙权限后不再进行自动开锁
+                            })
+                            .setConfirmListener(v -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            });
+                    mPermissionDialog.show();
+                    isAllowAutoOpen.set(false);
+                    UTLog.i(LockDetailVM.TAG, "onRequestPermissionsResult 2");
+                    return;
+                }
+            }
             toOpenLock();
             UTLog.i(LockDetailVM.TAG, "toOpenLock 3");
-        } else if (requestCode == REQUEST_LOCATION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
-                    DialogHelper.getInstance().setMessage(getString(R.string.lock_gps_open_tips)).setPositiveButton(getString(R.string.lock_ok), null).show();
-                } else {
-                    toOpenLock();
-                    UTLog.i(LockDetailVM.TAG, "toOpenLock 4");
-                }
-            } else {
-                DialogHelper.getInstance().setMessage(getString(R.string.lock_location_need_tips)).setPositiveButton(getString(R.string.lock_ok), ((dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    intent.setData(Uri.parse("package:" + getPackageName()));
-                    startActivity(intent);
-                })).show();
-            }
         }
+    }
+
+    private boolean checkGpsAndOpenLock() {
+        if (!SystemUtils.isGPSOpen(LockDetailActivity.this)) {
+            new CustomerAlertDialog(this, false)
+                    .setMsg(getString(R.string.lock_gps_open_tips))
+                    .setCancelLister(v -> {
+                        isAllowAutoOpen.set(false);//用户拒绝打开蓝牙后不再进行提示
+                    })
+                    .setConfirmListener(v -> {
+                        // 转到手机设置界面，用户设置GPS
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 0); // 设置完成后返回到原来的界面
+                    })
+                    .show();
+            return false;
+        }
+        return true;
     }
 
     private void keyHasDeletedTips() {
@@ -396,8 +435,6 @@ public class LockDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         endAutoOpenLock();
-        mLockDetailVM.getLockKey().removeObserver(mLockKeyObserver);
+        mLockDetailVM.getLockKey(mLockKey.getMac()).removeObserver(mLockKeyObserver);
     }
-
-
 }

@@ -2,29 +2,31 @@ package com.ut.module_lock.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.ut.base.Utils.UTLog;
-import com.ut.commoncomponent.CLToast;
-import com.ut.database.entity.EnumCollection;
-import com.ut.database.entity.NearScanLock;
 import com.ut.base.BaseActivity;
+import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.RomUtils;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.base.dialog.CustomerAlertDialog;
+import com.ut.commoncomponent.CLToast;
+import com.ut.database.entity.EnumCollection;
+import com.ut.database.entity.NearScanLock;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityNearLockBinding;
 import com.ut.module_lock.viewmodel.NearLockVM;
 import com.ut.unilink.UnilinkManager;
-import com.ut.unilink.util.Log;
 
 import java.util.List;
 
@@ -33,18 +35,19 @@ public class NearLockActivity extends BaseActivity {
     private CommonAdapter<NearScanLock> mAdapter;
     private NearLockVM mNearLockVM = null;
     private NearScanLock mSelectedLock = null;
-    private static final int BLEREAUESTCODE = 101;
+    private static final int BLEREQUESTCODE = 101;
     private static final int BLEENABLECODE = 102;
     private TextView mEmptyTip = null;
     private TextView mEmptyTip2 = null;
-
+    private View emptyView = null;
+    private CustomerAlertDialog mPermissionDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNearLockBinding = DataBindingUtil.setContentView(this, R.layout.activity_near_lock);
         initToolbar();
-
+        initEmptyView();
         initListListener();
         initViewModel();
         toScan();
@@ -55,17 +58,29 @@ public class NearLockActivity extends BaseActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mPermissionDialog != null && mPermissionDialog.isShowing()) {
+            mPermissionDialog.dismiss();
+        }
+    }
+
     private void toScan() {
-        int scanResult = mNearLockVM.startScan();
         mNearLockBinding.swfBleDevice.postDelayed(() -> {
             mNearLockBinding.swfBleDevice.setRefreshing(false);
         }, 1500);
+        if (RomUtils.isFlymeRom()//当为魅族手机时需要提醒用户打开定位服务
+                && !checkGpsAndOpenLock()) {
+            return;
+        }
+        int scanResult = mNearLockVM.startScan();
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
                 toastShort(getString(R.string.lock_tip_ble_not_support));
                 break;
             case UnilinkManager.NO_LOCATION_PERMISSION:
-                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREAUESTCODE);
+                UnilinkManager.getInstance(getApplicationContext()).requestPermission(this, BLEREQUESTCODE);
                 break;
             case UnilinkManager.BLE_NOT_OPEN:
                 UnilinkManager.getInstance(getApplicationContext()).enableBluetooth(this, BLEENABLECODE);
@@ -175,9 +190,6 @@ public class NearLockActivity extends BaseActivity {
                     });
                 }
             };
-            View emptyView = findViewById(R.id.empty_view_list);
-            mEmptyTip = emptyView.findViewById(R.id.textView4);
-            mEmptyTip2 = emptyView.findViewById(R.id.textView5);
             mNearLockBinding.lvBleDevice.setEmptyView(emptyView);
             mNearLockBinding.lvBleDevice.setAdapter(mAdapter);
         } else {
@@ -185,20 +197,66 @@ public class NearLockActivity extends BaseActivity {
         }
     }
 
+    @NonNull
+    private void initEmptyView() {
+        emptyView = findViewById(R.id.empty_view_list);
+        mEmptyTip = emptyView.findViewById(R.id.textView4);
+        mEmptyTip2 = emptyView.findViewById(R.id.textView5);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == BLEREAUESTCODE || requestCode == BLEENABLECODE)
+            if (requestCode == BLEENABLECODE)
                 toScan();
         } else {
             mNearLockBinding.progressBarGreen.setVisibility(View.INVISIBLE);
-            if (requestCode == BLEREAUESTCODE) {
-                CLToast.showAtBottom(this, getString(R.string.lock_tip_ble_permission_not_allow));
-            } else if (requestCode == BLEENABLECODE) {
+            if (requestCode == BLEENABLECODE) {
                 CLToast.showAtBottom(this, getString(R.string.lock_tip_open_ble));
             }
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == BLEREQUESTCODE && grantResults.length > 0) {
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {//定位权限被禁止时去详情页设置
+                    mPermissionDialog = new CustomerAlertDialog(this, false)
+                            .setMsg(getString(R.string.lock_location_need_tips))
+                            .setCancelLister(v -> {
+                            })
+                            .setConfirmListener(v -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            });
+                    mPermissionDialog.show();
+                    return;
+                }
+            }
+            toScan();
+        }
+    }
+
+    private boolean checkGpsAndOpenLock() {
+        if (!SystemUtils.isGPSOpen(this)) {
+            new CustomerAlertDialog(this, false)
+                    .setMsg(getString(R.string.lock_gps_open_tips))
+                    .setCancelLister(v -> {
+                    })
+                    .setConfirmListener(v -> {
+                        // 转到手机设置界面，用户设置GPS
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 0); // 设置完成后返回到原来的界面
+                    })
+                    .show();
+            return false;
+        }
+        return true;
+    }
+
 }

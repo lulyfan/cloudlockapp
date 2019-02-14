@@ -3,10 +3,17 @@ package com.ut.module_lock.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 
+import com.ut.base.AppManager;
+import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.RomUtils;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.dialog.CustomerAlertDialog;
+import com.ut.module_lock.R;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack2;
 import com.ut.unilink.cloudLock.ConnectListener;
@@ -44,6 +51,8 @@ public class BleOperateManager {
     private OperateDeviceRuleCallback mOperateDeviceRuleCallback = null;
 
     private int lockType = -1;
+
+    private CustomerAlertDialog mPermissionDialog = null;
 
     public void setOperateDeviceKeyDetailCallback(OperateDeviceKeyDetailCallback operateDeviceKeyDetailCallback) {
         mOperateDeviceKeyDetailCallback = operateDeviceKeyDetailCallback;
@@ -87,6 +96,9 @@ public class BleOperateManager {
     public void scanDevice(int type, Activity activity) {
         UTLog.i("to scan 0");
         this.lockType = type;
+        if (RomUtils.isFlymeRom()//当为魅族手机时需要提醒用户打开定位服务
+                && !checkGpsAndOpenLock())
+            return;
         int scanResult = toScanDevice(type);
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
@@ -375,23 +387,58 @@ public class BleOperateManager {
 
     public void onActivityResult(Activity activity, int requestCode
             , int resultCode, @Nullable Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == BLEREAUESTCODE ||
-                    requestCode == BLEENABLECODE) {
-                scanDevice(lockType, activity);
-                UTLog.i("to scan");
-            }
-        }
-    }
-
-    public void onRequestPermissionsResult(Activity activity, int requestCode,
-                                           String[] permissions, int[] paramArrayOfInt) {
-        if (requestCode == BLEREAUESTCODE) {
+        if (resultCode == Activity.RESULT_OK &&
+                requestCode == BLEENABLECODE) {
             scanDevice(lockType, activity);
             UTLog.i("to scan");
         }
     }
 
+    public void onActivityOnpause() {
+        if (mPermissionDialog != null && mPermissionDialog.isShowing()) {
+            mPermissionDialog.dismiss();
+        }
+    }
+
+    public void onRequestPermissionsResult(Activity activity, int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        if (requestCode == BLEREAUESTCODE && grantResults.length > 0) {
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED) {//定位未允许的时候去
+                    mPermissionDialog = new CustomerAlertDialog(activity, false)
+                            .setMsg(activity.getString(R.string.lock_location_need_tips))
+                            .setCancelLister(v -> {
+                            })
+                            .setConfirmListener(v -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                                activity.startActivity(intent);
+                            });
+                    mPermissionDialog.show();
+                    return;
+                }
+            }
+            scanDevice(lockType, activity);
+        }
+    }
+
+    private boolean checkGpsAndOpenLock() {
+        if (!SystemUtils.isGPSOpen(AppManager.getAppManager().currentActivity())) {
+            new CustomerAlertDialog(AppManager.getAppManager().currentActivity(), false)
+                    .setMsg(AppManager.getAppManager().currentActivity().getString(R.string.lock_gps_open_tips))
+                    .setCancelLister(v -> {
+                    })
+                    .setConfirmListener(v -> {
+                        // 转到手机设置界面，用户设置GPS
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        AppManager.getAppManager().currentActivity().startActivityForResult(intent, 0); // 设置完成后返回到原来的界面
+                    })
+                    .show();
+            return false;
+        }
+        return true;
+    }
 
     public interface OperateCallback {
         void onStartScan();

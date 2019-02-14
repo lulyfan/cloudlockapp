@@ -74,9 +74,9 @@ public class LockDetailVM extends BaseViewModel {
         this.mLockKey = lockKey;
     }
 
-    public LiveData<LockKey> getLockKey() {
+    public LiveData<LockKey> getLockKey(String mac) {
         if (mLockKeyLiveData == null) {
-            mLockKeyLiveData = LockKeyDaoImpl.get().getLockByMac(mLockKey.getMac());
+            mLockKeyLiveData = LockKeyDaoImpl.get().getLockByMac(mac);
         }
         return mLockKeyLiveData;
     }
@@ -267,8 +267,8 @@ public class LockDetailVM extends BaseViewModel {
             toAddLog(1);
 //            mOpenStatus.compareAndSet(EnumCollection.OpenLockState.OPENING
 //                    , EnumCollection.OpenLockState.CONNECTED);
-            if (mLockKey != null)
-                UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+//            if (mLockKey != null)
+//                UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
         }
 
         @Override

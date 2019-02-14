@@ -5,6 +5,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -12,7 +14,10 @@ import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
+import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.RomUtils;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
@@ -30,7 +35,6 @@ import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -88,20 +92,28 @@ public class LockSettingVM extends BaseViewModel {
     }
 
     public void verifyAdmin(String pwd) {
+        dialogHandler.postValue(Constance.START_LOAD);
         Disposable subscribe = MyRetrofit.get().getCommonApiService().verifyUserPwd(pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         toDeleteAdminKey();
-                        dialogHandler.postValue(Constance.START_LOAD);
-                    }
-                    if (TextUtils.isEmpty(result.msg)) {
-                        showTip.postValue(getApplication().getString(R.string.lock_unbind_fail_tips));
                     } else {
-                        showTip.postValue(result.msg);
+                        if (TextUtils.isEmpty(result.msg)) {
+                            showTip.postValue(getApplication().getString(R.string.lock_unbind_fail_tips));
+                        } else {
+                            showTip.postValue(result.msg);
+                        }
+                        endLoad();
                     }
-                }, new ErrorHandler());
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        endLoad();
+                    }
+                });
         mCompositeDisposable.add(subscribe);
     }
 
@@ -125,6 +137,11 @@ public class LockSettingVM extends BaseViewModel {
 
 
     public void toDeleteAdminKey() {
+        if (RomUtils.isFlymeRom()//当为魅族手机时需要提醒用户打开定位服务
+                && !checkGpsAndOpenLock()) {
+            endLoad();
+            return;
+        }
         int result = unbindLock(lockKey);
         switch (result) {
             case UnilinkManager.BLE_NOT_SUPPORT:
@@ -142,6 +159,23 @@ public class LockSettingVM extends BaseViewModel {
         }
     }
 
+    private boolean checkGpsAndOpenLock() {
+        if (!SystemUtils.isGPSOpen(AppManager.getAppManager().currentActivity())) {
+            new CustomerAlertDialog(AppManager.getAppManager().currentActivity(), false)
+                    .setMsg(AppManager.getAppManager().currentActivity().getString(R.string.lock_gps_open_tips))
+                    .setCancelLister(v -> {
+                    })
+                    .setConfirmListener(v -> {
+                        // 转到手机设置界面，用户设置GPS
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        AppManager.getAppManager().currentActivity().startActivityForResult(intent, 0); // 设置完成后返回到原来的界面
+                    })
+                    .show();
+            return false;
+        }
+        return true;
+    }
 
     public int unbindLock(LockKey lockKey) {
         if (UnilinkManager.getInstance(getApplication()).isConnect(lockKey.getMac())) {

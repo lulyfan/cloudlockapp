@@ -15,6 +15,7 @@ import com.ut.unilink.UnilinkManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 @Route(path = RouterUtil.LockModulePath.TIME_ADJUST)
 public class TimeAdjustActivity extends BaseActivity {
 
@@ -38,13 +39,14 @@ public class TimeAdjustActivity extends BaseActivity {
         binding.date.setVisibility(View.GONE);
         binding.tip.setVisibility(View.GONE);
         binding.button.setOnClickListener(v -> {
-                viewModel.adjustTime();
+            viewModel.adjustTime();
         });
     }
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(TimeAdjustVM.class);
-        viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.MAC);
+        String mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.MAC);
+        viewModel.setMac(mac);
         viewModel.tip.observe(this, s -> toastShort(s));
 
         viewModel.lockTime.observe(this, aLong -> {
