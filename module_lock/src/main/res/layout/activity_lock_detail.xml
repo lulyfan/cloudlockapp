@@ -9,6 +9,10 @@
             name="lockKey"
             type="com.ut.database.entity.LockKey"/>
 
+        <import
+            alias="KeyStatus"
+            type="com.ut.database.entity.EnumCollection.KeyStatus"/>
+
         <variable
             name="present"
             type="com.ut.module_lock.activity.LockDetailActivity.Present"/>
@@ -31,7 +35,8 @@
             android:layout_marginTop="@dimen/base_10dp"
             android:onClick="@{present::onBackClick}"
             android:src="@mipmap/icon_back_white"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"/>
 
 
         <TextView
@@ -82,7 +87,7 @@
                     android:textSize="@dimen/base_14sp"
                     app:electricityDrawable="@{lockKey.electric}"
                     app:layout_constraintStart_toStartOf="parent"
-                    />
+                    tools:ignore="MissingConstraints"/>
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -185,6 +190,7 @@
                         android:focusable="@{lockKey.keyStatus == 8}"
                         android:onClick="@{present::onSendKeyClick}"
                         android:text="@string/func_send_key"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
 
                     <TextView
@@ -195,6 +201,7 @@
                         android:focusable="@{lockKey.keyStatus == 8}"
                         android:onClick="@{present::onMangeKeyClick}"
                         android:text="@string/func_manage_key"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
 
                     <TextView
@@ -206,6 +213,7 @@
                         android:onClick="@{present::onMangeKeyClick}"
                         android:text="@string/func_key_ble"
                         android:visibility="gone"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
 
                     <TextView
@@ -217,6 +225,7 @@
                         android:onClick="@{present::onDeviceKeyClick}"
                         android:text="@string/func_key_device"
                         android:visibility="gone"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
 
                     <TextView
@@ -227,16 +236,18 @@
                         android:focusable="@{lockKey.keyStatus == 8}"
                         android:onClick="@{present::onOperateRecordClick}"
                         android:text="@string/func_operate_record"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
 
                     <TextView
                         android:id="@+id/textView3"
                         style="@style/function_tv"
-                        android:clickable="@{lockKey.keyStatus == 8}"
+                        android:clickable="@{lockKey.keyStatus !=KeyStatus.HAS_DELETE.ordinal()}"
                         android:drawableTop="@mipmap/icon_func_lock_manage"
-                        android:focusable="@{lockKey.keyStatus == 8}"
+                        android:focusable="@{lockKey.keyStatus !=KeyStatus.HAS_DELETE.ordinal()}"
                         android:onClick="@{present::onLockManageClick}"
                         android:text="@string/func_lock_manage"
+                        app:setBackgroundGray="@{lockKey.keyStatus}"
                         />
                 </LinearLayout>
             </android.support.constraint.ConstraintLayout>

@@ -24,6 +24,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.DeviceKeyAuth;
@@ -82,6 +83,13 @@ public class DeviceKeyActivity extends BaseActivity {
             } else {
                 changeLoadText(String.valueOf((process + 1) * 5));
             }
+        });
+        mDeviceKeyVM.getShowLockResetDialog().observe(this, isShow -> {
+            if (isShow)
+                new CustomerAlertDialog(DeviceKeyActivity.this, false)
+                        .setMsg(getString(R.string.lock_detail_dialog_msg_reset))
+                        .hideCancel()
+                        .show();
         });
     }
 

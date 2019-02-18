@@ -32,6 +32,7 @@ import com.ut.module_lock.databinding.ActivityLockDetailBindingImpl;
 import com.ut.module_lock.dialog.UnlockSuccessDialog;
 import com.ut.module_lock.viewmodel.LockDetailVM;
 import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import android.arch.lifecycle.Observer;
 
@@ -159,9 +160,18 @@ public class LockDetailActivity extends BaseActivity {
             if (mIsShowDialogAndTip.compareAndSet(true, false))
                 CLToast.showAtBottom(LockDetailActivity.this, tip);
         });
-        mLockDetailVM.getUnlockSuccessStatus().observe(this, success -> {
-            mIsShowDialogAndTip.set(false);
-            new UnlockSuccessDialog(this, false).show();
+        mLockDetailVM.getUnlockSuccessStatus().observe(this, type -> {
+            if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_UNLOCKSUCCESS) {
+                mIsShowDialogAndTip.set(false);
+                mLockDetailVM.setIsAutoOpen(true);
+                new UnlockSuccessDialog(this, false).show();
+            } else if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_LOCKRESET) {
+                new CustomerAlertDialog(LockDetailActivity.this, false)
+                        .setMsg(getString(R.string.lock_detail_dialog_msg_reset))
+                        .hideCancel()
+                        .show();
+            }
+
         });
         mLockDetailVM.getLockKey(mLockKey.getMac()).observeForever(mLockKeyObserver);
 
@@ -222,6 +232,7 @@ public class LockDetailActivity extends BaseActivity {
 
         public void onOpenLockClick(View view) {
             mIsShowDialogAndTip.set(true);
+            mLockDetailVM.setIsAutoOpen(false);
             toOpenLock();
         }
 
@@ -405,6 +416,21 @@ public class LockDetailActivity extends BaseActivity {
             srcId = R.mipmap.icon_bubble_gray;
         }
         textView.setBackgroundResource(srcId);
+    }
+
+    @BindingAdapter("setBackgroundGray")
+    public static void setBackgroundGray(TextView textView, int lockStatus) {
+        UTLog.i("======name:" + textView.getText() + " lockStatus:" + lockStatus);
+        if (EnumCollection.KeyStatus.isKeyValid(lockStatus)) {
+            textView.getCompoundDrawables()[1].setAlpha(255);
+            return;
+        } else if (textView.getId() == R.id.textView3) {
+            if (lockStatus != EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                textView.getCompoundDrawables()[1].setAlpha(255);
+                return;
+            }
+        }
+        textView.getCompoundDrawables()[1].setAlpha(128);
     }
 
     @BindingAdapter("userType")

@@ -148,7 +148,7 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
 
     @BindingAdapter("encryptText")
     public static void loadText(TextView textView, String account) {
-        textView.setText(TxtUtils.toEncryptAccount(account));
+        textView.setText(account);
     }
 
     @Override

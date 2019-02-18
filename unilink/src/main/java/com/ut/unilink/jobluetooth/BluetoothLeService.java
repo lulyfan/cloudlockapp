@@ -113,16 +113,16 @@ public class BluetoothLeService extends Service {
                         mConnectionState = 2;
                         lastSendTime = 0;
                         boolean bo = mBluetoothGatt.discoverServices();
-                        Log.i(TAG, "Attempting to start service discovery:" + bo);
+                        //Log.i(TAG, "Attempting to start service discovery:" + bo);
                         intentAction = BlueToothParams.ACTION_GATT_CONNECTED;
                         broadcastUpdate(intentAction);
-                        Log.i(TAG, "Connected to GATT server.");
+                        //Log.i(TAG, "Connected to GATT server.");
                         mServiceHnadler.postDelayed(mDiscoverServicesTimeoutRunnable, 3000L);
                     }
                 } else if (newState == STATE_DISCONNECTED) {
                     disconnect(2);
                     intentAction = BlueToothParams.ACTION_GATT_DISCONNECTED;
-                    Log.i(TAG, "Disconnected from GATT server.intentAction: " + intentAction);
+                    //Log.i(TAG, "Disconnected from GATT server.intentAction: " + intentAction);
                     broadcastUpdate(intentAction);
                 }
             }
@@ -136,7 +136,7 @@ public class BluetoothLeService extends Service {
                     mConnectionState = 4;
                     getGattServices(getSupportedGattServices());
                 } else {
-                    Log.i(TAG, "onServicesDiscovered received: " + status);
+                    //Log.i(TAG, "onServicesDiscovered received: " + status);
                 }
             }
         }
@@ -146,9 +146,9 @@ public class BluetoothLeService extends Service {
             if (status != 0) {
                 return;
             }
-            Log.i(TAG, "====onCharacteristicRead " + characteristic.getUuid().toString() + " --> "
-                    + Tools.bytesToHexString(characteristic.getValue())
-                    + "stateReadSuccess:"+stateReadSuccess);
+            //Log.i(TAG, "====onCharacteristicRead " + characteristic.getUuid().toString() + " --> "
+//                    + Tools.bytesToHexString(characteristic.getValue())
+//                    + "stateReadSuccess:"+stateReadSuccess);
             if (characteristic.getValue() != null) {
                 if (stateReadSuccess != 5) {
                     if (characteristic.getUuid().toString().equals("0000b353-0000-1000-8000-00805f9b34fb")) {
@@ -174,28 +174,28 @@ public class BluetoothLeService extends Service {
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            Log.i(TAG, "====onCharacteristicChanged " + characteristic.getUuid().toString() + " --> " + Tools.bytesToHexString(characteristic.getValue()));
+            //Log.i(TAG, "====onCharacteristicChanged " + characteristic.getUuid().toString() + " --> " + Tools.bytesToHexString(characteristic.getValue()));
 
             if (characteristic != null) {
                 whichChanged(characteristic);
             } else {
-                Log.i(TAG, "characteristic = null");
+                //Log.i(TAG, "characteristic = null");
             }
 
         }
 
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            Log.i(TAG, "rssi = " + rssi);
+            //Log.i(TAG, "rssi = " + rssi);
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.i(TAG, "====ble uuid:" + characteristic.getUuid() + " write data success:" + HexUtils.getFormatHex(characteristic.getValue()));
+            //Log.i(TAG, "====ble uuid:" + characteristic.getUuid() + " write data success:" + HexUtils.getFormatHex(characteristic.getValue()));
 
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (characteristic.getUuid().toString().equals(SERIAL_PORT_WRITE_Characteristic.getUuid().toString())) {
-                    Log.i(TAG,  "write data success:" + HexUtils.getFormatHex(characteristic.getValue()));
+                    //Log.i(TAG,  "write data success:" + HexUtils.getFormatHex(characteristic.getValue()));
                     mSuccessSendSequence ++;
                     writeDataPacket();
                 }
@@ -219,7 +219,7 @@ public class BluetoothLeService extends Service {
         public void run() {
             synchronized (BluetoothLeService.class) {
                 if (BluetoothLeService.mConnectionState == 1) {
-                    Log.i(TAG, "conect timeout --> disconnect");
+                    //Log.i(TAG, "conect timeout --> disconnect");
                     disconnect(11);
                     refreshGatt();//刷新一下，三星的蓝牙在连接过程中断开，下次连接会直接返回133，加这个好一点
                 }
@@ -232,7 +232,7 @@ public class BluetoothLeService extends Service {
         public void run() {
             synchronized (BluetoothLeService.class) {
                 if (BluetoothLeService.mConnectionState != 4) {
-                    Log.i(TAG, "discoverServices timeout --> disconnect");
+                    //Log.i(TAG, "discoverServices timeout --> disconnect");
                     disconnect(11);
                 }
             }
@@ -244,17 +244,17 @@ public class BluetoothLeService extends Service {
                 if (BluetoothLeService.mConnectionState == 4) {
                     if (stateReadSuccess != 5) {
                         if (readCharacteristicCount < 1) {
-                            Log.i(TAG, "Try read characteristic one more time!");
+                            //Log.i(TAG, "Try read characteristic one more time!");
                             startReadCharacteristic();
                             mServiceHnadler.postDelayed(mReadCharacteristicTimeoutRunnable, 3000L);//超时重读
                             readCharacteristicCount = readCharacteristicCount + 1;
                         } else {
-                            Log.i(TAG, "Read characteristic timeout, disconnect!");
+                            //Log.i(TAG, "Read characteristic timeout, disconnect!");
                             disconnect(11);
                         }
                     }
                 } else {
-                    Log.i(TAG, "Device not connected or service not discovered,can not read characteristic, disconnect!");
+                    //Log.i(TAG, "Device not connected or service not discovered,can not read characteristic, disconnect!");
                     disconnect(11);
                 }
             }
@@ -309,12 +309,12 @@ public class BluetoothLeService extends Service {
                     }
                     break;
                 case 2:
-                    Log.i(TAG, "接收 发送 应答模块与设备数据");
+                    //Log.i(TAG, "接收 发送 应答模块与设备数据");
                     disconnect(1);
                     break;
                 case 3:
                     broadcastUpdate(BlueToothParams.ACTION_GATT_DATARECEIVED, (byte[]) msg.obj);
-                    Log.i(TAG, "msg:" + HexUtils.getFormatHex((byte[]) msg.obj));
+                    //Log.i(TAG, "msg:" + HexUtils.getFormatHex((byte[]) msg.obj));
                     break;
                 case 4:
                     if (BluetoothLeService.mConnectionState == 4 && stateReadSuccess == 5) {
@@ -345,9 +345,9 @@ public class BluetoothLeService extends Service {
 
     private void checkReadCharacteristic() {
         synchronized (BluetoothLeService.class) {
-            Log.i(TAG, "====checkReadCharacteristic stateReadMaxPacketSize："+stateReadMaxPacketSize
-                            +" stateReadNoResponseMaxPacketCount:"+stateReadNoResponseMaxPacketCount
-                            +" mConnectionState:"+mConnectionState);
+            //Log.i(TAG, "====checkReadCharacteristic stateReadMaxPacketSize："+stateReadMaxPacketSize
+//                            +" stateReadNoResponseMaxPacketCount:"+stateReadNoResponseMaxPacketCount
+//                            +" mConnectionState:"+mConnectionState);
 
             if (this.stateReadMaxPacketSize == 1 && this.stateReadNoResponseMaxPacketCount == 1
                     && this.stateReadPacketTimeout == 1 && mConnectionState == 4) {
@@ -356,10 +356,10 @@ public class BluetoothLeService extends Service {
                 this.nNextSendPacketSequence = 0;
 
                 mSuccessSendSequence = 0;
-                Log.i(TAG,  "checkReadCharacteristic");
+                //Log.i(TAG,  "checkReadCharacteristic");
 
                 this.nNextWantRecvPacketSequence = 0;
-                Log.i(TAG, "stateReadSuccess --> " + this.stateReadSuccess);
+                //Log.i(TAG, "stateReadSuccess --> " + this.stateReadSuccess);
                 this.broadcastUpdate(BlueToothParams.ACTION_GATT_READCHARACTERISTICSUCCESS);
             }
         }
@@ -381,13 +381,13 @@ public class BluetoothLeService extends Service {
             if (value != null) {
                 this.recvDataFromPeer(value);
             } else {
-                Log.i(TAG, "characteristic.getValue()== null");
+                //Log.i(TAG, "characteristic.getValue()== null");
             }
         } else if (UUIDStr.equals("0000b353-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
                 this.nMaxPacketSize = value[0];
             } else {
-                Log.i(TAG, "characteristic.getValue()== null");
+                //Log.i(TAG, "characteristic.getValue()== null");
             }
         } else if (UUIDStr.equals("0000b354-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
@@ -395,9 +395,9 @@ public class BluetoothLeService extends Service {
             }
         } else if (UUIDStr.equals("0000b357-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
-                Log.i(TAG, "数据包应答超时时间==" + value[0]);
+                //Log.i(TAG, "数据包应答超时时间==" + value[0]);
             } else {
-                Log.i(TAG, "characteristic.getValue()== null");
+                //Log.i(TAG, "characteristic.getValue()== null");
             }
         } else if (UUIDStr.equals("0000b355-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
@@ -406,7 +406,7 @@ public class BluetoothLeService extends Service {
                 }
                 this.broadcastUpdate(BlueToothParams.ACTION_GATT_SENDDATAB355, value);
             } else {
-                Log.i(TAG, "characteristic.getValue()== null");
+                //Log.i(TAG, "characteristic.getValue()== null");
             }
         } else if (UUIDStr.equals("0000b358-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
@@ -416,14 +416,14 @@ public class BluetoothLeService extends Service {
 
                 this.broadcastUpdate(BlueToothParams.ACTION_GATT_SENDDATAB358, value);
             } else {
-                Log.i(TAG, "characteristic.getValue()== null");
+                //Log.i(TAG, "characteristic.getValue()== null");
             }
         } else if (UUIDStr.equals("0000b35A-0000-1000-8000-00805f9b34fb")) {
             if (value != null) {
                 byte flag = value[0];
                 if (flag == 0) {
                     this.bPeerCanReceive = false;
-                    Log.i(TAG, "------Device Can not Receive------");
+                    //Log.i(TAG, "------Device Can not Receive------");
                 } else {
                     this.bPeerCanReceive = true;
                 }
@@ -431,7 +431,7 @@ public class BluetoothLeService extends Service {
                 this.bPeerCanReceive = true;
             }
         } else if (UUIDStr.equals("0000b35C-0000-1000-8000-00805f9b34fb")) {
-            Log.i(TAG, "RESET_SEQUENCE --> 0000b35C-0000-1000-8000-00805f9b34fb");
+            //Log.i(TAG, "RESET_SEQUENCE --> 0000b35C-0000-1000-8000-00805f9b34fb");
         }
 
     }
@@ -469,11 +469,11 @@ public class BluetoothLeService extends Service {
         synchronized (BluetoothLeService.class) {
             mServiceHnadler.removeCallbacks(mConnectTimeoutRunnable);//连接之前先去掉之前的超时判断
             if (mBluetoothAdapter == null) {
-                Log.i(TAG, "BluetoothAdapter未初始化");
+                //Log.i(TAG, "BluetoothAdapter未初始化");
                 return false;
             }
             if (TextUtils.isEmpty(address)) {
-                Log.i(TAG, "要连接的设备地址为空");
+                //Log.i(TAG, "要连接的设备地址为空");
                 return false;
             }
 
@@ -499,7 +499,7 @@ public class BluetoothLeService extends Service {
         synchronized (BluetoothLeService.class) {
             if (mConnectionState != 0) {
                 BluetoothGattClose();
-                Log.i(TAG, "====ble BluetoothGattClose type:" + type);
+                //Log.i(TAG, "====ble BluetoothGattClose type:" + type);
                 switch (type) {
                     case 0:
                         broadcastUpdate(BlueToothParams.ACTION_GATT_READCHARACTERISTICERROR);
@@ -553,17 +553,17 @@ public class BluetoothLeService extends Service {
         if (mBluetoothAdapter != null && mBluetoothGatt != null) {
             mBluetoothGatt.writeCharacteristic(characteristic);
         } else {
-            Log.i(TAG, "send data but BluetoothAdapter not initialized");
+            //Log.i(TAG, "send data but BluetoothAdapter not initialized");
         }
     }
 
     public boolean readCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.i(TAG, "BluetoothAdapter not initialized");
+            //Log.i(TAG, "BluetoothAdapter not initialized");
             return false;
         }
         if (characteristic != null) {
-            Log.i(TAG, "readCharacteristic for -->" + characteristic.getUuid().toString());
+            //Log.i(TAG, "readCharacteristic for -->" + characteristic.getUuid().toString());
             return mBluetoothGatt.readCharacteristic(characteristic);
         } else {
             return false;
@@ -572,14 +572,14 @@ public class BluetoothLeService extends Service {
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.i(TAG, "BluetoothAdapter not initialized");
+            //Log.i(TAG, "BluetoothAdapter not initialized");
             return;
         }
         boolean ba = mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-        Log.i(TAG, "setCharacteristicNotification for --> " + characteristic.getUuid().toString() + " to --> " + enabled + " result --> " + ba);
+        //Log.i(TAG, "setCharacteristicNotification for --> " + characteristic.getUuid().toString() + " to --> " + enabled + " result --> " + ba);
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(characteristic.getUuid());
         if (descriptor != null) {
-            Log.i(TAG, "write descriptor uuid -->" + characteristic.getUuid().toString());
+            //Log.i(TAG, "write descriptor uuid -->" + characteristic.getUuid().toString());
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
@@ -659,7 +659,7 @@ public class BluetoothLeService extends Service {
     public synchronized void wirte(byte[] data) {
         if (data.length > this.sendDataNumber) {
             String intentAction = BlueToothParams.ACTION_GATT_SENDDATALENGTHEXCEED;
-            Log.i(TAG, "intentAction: " + intentAction);
+            //Log.i(TAG, "intentAction: " + intentAction);
             this.broadcastUpdate(intentAction);
         } else {
             long nowTime = System.currentTimeMillis();
@@ -673,8 +673,8 @@ public class BluetoothLeService extends Service {
                 arrayWaitSendData.clear();
             }
             this.arrayWaitResponseData = new ArrayList();
-            Log.i(TAG, "发送开始序号 " + Tools.byteToHexString((byte) this.nNextSendPacketSequence));
-            Log.i(TAG, "====SelectBlue sendData");
+            //Log.i(TAG, "发送开始序号 " + Tools.byteToHexString((byte) this.nNextSendPacketSequence));
+            //Log.i(TAG, "====SelectBlue sendData");
             this.initSendDataToPeer(data);
             writeDataPacket();
             lastSendTime = nowTime;
@@ -696,7 +696,7 @@ public class BluetoothLeService extends Service {
     }
 
     public synchronized boolean initSendDataToPeer(byte[] data) {
-        Log.i(TAG, "====ble send data:" + HexUtils.getFormatHex(data));
+        //Log.i(TAG, "====ble send data:" + HexUtils.getFormatHex(data));
         int nIndex = 0;
         boolean nLength = true;
 
@@ -717,7 +717,7 @@ public class BluetoothLeService extends Service {
             sb.append(HexUtils.getFormatHex(bytes));
             sb.append(" ");
         }
-        Log.i(TAG, sb.toString());
+        //Log.i(TAG, sb.toString());
         this.nNextSendDataIndex = 0;
         this.timeincrease = 0;
         this.answerDataPacketSum = 0;
@@ -738,11 +738,11 @@ public class BluetoothLeService extends Service {
         if (this.bPeerCanReceive && !pauseSend && this.arrayWaitSendData.size() > 0 && this.arrayWaitResponseData.size() < this.nNoResponseAllowMaxPacketCount) {
 //            byte[] buffer = (byte[]) this.arrayWaitSendData.get(0);
             byte[] buffer = this.arrayWaitSendData.remove(0);
-            Log.i(TAG, "====ble send data 0:" + HexUtils.getFormatHex(buffer));
+            //Log.i(TAG, "====ble send data 0:" + HexUtils.getFormatHex(buffer));
 
             if (nNextSendPacketSequence != mSuccessSendSequence) {
-                Log.i(TAG,  "nNextSendPacketSequence:" + nNextSendPacketSequence);
-                Log.i(TAG,  "mSuccessSendSequence" + mSuccessSendSequence);
+                //Log.i(TAG,  "nNextSendPacketSequence:" + nNextSendPacketSequence);
+                //Log.i(TAG,  "mSuccessSendSequence" + mSuccessSendSequence);
                 nNextSendPacketSequence = mSuccessSendSequence;
             }
 
@@ -759,9 +759,9 @@ public class BluetoothLeService extends Service {
                 this.SERIAL_PORT_WRITE_Characteristic.setValue(buffer);
                 this.SERIAL_PORT_WRITE_Characteristic.setWriteType(1);
                 this.wirteCharacteristic(this.SERIAL_PORT_WRITE_Characteristic);
-//                Log.i(TAG, "====ble send buffer:" + HexUtils.getFormatHex(buffer));
+//                //Log.i(TAG, "====ble send buffer:" + HexUtils.getFormatHex(buffer));
 //                this.arrayWaitResponseData.add(buffer);
-                Log.i(TAG, "====ble send data 1:" + HexUtils.getFormatHex(buffer));
+                //Log.i(TAG, "====ble send data 1:" + HexUtils.getFormatHex(buffer));
                 try {
                     Thread.sleep(3);
                 } catch (InterruptedException e) {
@@ -774,7 +774,7 @@ public class BluetoothLeService extends Service {
     public void velocityWirte(byte[] data) {
         if (this.SERIAL_PORT_WRITE_Characteristic != null) {
             this.state = 0;
-            Log.i(TAG, "发送数据包序号" + Tools.byteToHexString(data[0]));
+            //Log.i(TAG, "发送数据包序号" + Tools.byteToHexString(data[0]));
             data[data.length - 1] = Tools.checksum(data, data.length - 1);
             this.SERIAL_PORT_WRITE_Characteristic.setValue(data);
             this.SERIAL_PORT_WRITE_Characteristic.setWriteType(1);
@@ -851,7 +851,7 @@ public class BluetoothLeService extends Service {
                 if (this.arrayWaitResponseData.size() > 0) {
                     byte[] var11 = this.arrayWaitResponseData.get(0);
                     byte[] var12 = this.arrayWaitResponseData.get(this.arrayWaitResponseData.size() - 1);
-                    Log.i(TAG, "应答序号不合法,应该在" + Tools.byteToHexString(var11[0]) + "和" + Tools.byteToHexString(var12[0]));
+                    //Log.i(TAG, "应答序号不合法,应该在" + Tools.byteToHexString(var11[0]) + "和" + Tools.byteToHexString(var12[0]));
                     if (this.arrayWaitResponseData.size() == 1) {
                         for (i = this.arrayWaitResponseData.size() - 1; i >= 0; --i) {
                             buffer = this.arrayWaitResponseData.get(i);
@@ -884,7 +884,7 @@ public class BluetoothLeService extends Service {
 
                 for (i = this.arrayWaitResponseData.size() - 1; i >= nDataIndex; --i) {
                     buffer = this.arrayWaitResponseData.get(i);
-                    Log.i(TAG, "====ble arrayWaitSendData.add");
+                    //Log.i(TAG, "====ble arrayWaitSendData.add");
                     this.arrayWaitSendData.add(0, buffer);
                     ++lastResendindex;
                 }
@@ -922,9 +922,9 @@ public class BluetoothLeService extends Service {
             byte[] respPacket;
             if (data[data.length - 1] == nCurrChecksum) {
 
-                Log.i(TAG, "Checksum success");
-                Log.i(TAG,  "response sequence:" + data[0]);
-                Log.i(TAG,  "nNextWantRecvPacketSequence:" + nNextWantRecvPacketSequence);
+                //Log.i(TAG, "Checksum success");
+                //Log.i(TAG,  "response sequence:" + data[0]);
+                //Log.i(TAG,  "nNextWantRecvPacketSequence:" + nNextWantRecvPacketSequence);
 
                 if (data[0] == (byte) this.nNextWantRecvPacketSequence) {
 
@@ -938,7 +938,7 @@ public class BluetoothLeService extends Service {
                     this.writeResponsePacket(respPacket, false);
                 } else if (this.IsHistoryPacketSeq(data[0])) {
                     respPacket = new byte[]{data[0]};
-                    Log.i(TAG, "====ble IsHistoryPacketSeq");
+                    //Log.i(TAG, "====ble IsHistoryPacketSeq");
                     this.writeResponsePacket(respPacket, false);
                 } else {
                     respPacket = new byte[]{(byte) this.nNextWantRecvPacketSequence};
@@ -946,7 +946,7 @@ public class BluetoothLeService extends Service {
                 }
             } else {
 
-                Log.i(TAG, "Checksum failed");
+                //Log.i(TAG, "Checksum failed");
 
                 respPacket = new byte[]{(byte) this.nNextWantRecvPacketSequence};
                 this.writeResponsePacket(respPacket, true);
@@ -965,7 +965,7 @@ public class BluetoothLeService extends Service {
         this.broadcastUpdate(BlueToothParams.ACTION_GATT_DATARECEIVED, data);
 
 //        i("bleBug", "buffer:" + HexUtils.getFormatHex(buffer) + " length:" + length);
-        Log.i(TAG,  "didDataReceived:" + HexUtils.getFormatHex(data));
+        //Log.i(TAG,  "didDataReceived:" + HexUtils.getFormatHex(data));
     }
 
     public void writeResponsePacket(byte[] respPacket, boolean error) {

@@ -187,8 +187,13 @@ public class LockSettingVM extends BaseViewModel {
                 public void onScan(ScanDevice scanDevice) {
                     UTLog.i("scanDevice：" + scanDevice.getAddress());
                     if (!isToConnect && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
-                        isToConnect = true;
-                        toConnect(lockKey, scanDevice);
+                        if (!scanDevice.isActive()) {//当锁是未激活状态时直接删除后台数据
+                            deleteAdminLock(lockKey);
+                            endLoad();
+                        } else {
+                            isToConnect = true;
+                            toConnect(lockKey, scanDevice);
+                        }
                     }
                 }
 

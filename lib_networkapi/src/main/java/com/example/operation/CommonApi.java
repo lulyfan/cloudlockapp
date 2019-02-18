@@ -64,8 +64,8 @@ public class CommonApi {
     }
 
     //添加开锁记录
-    public static Observable<Result<JsonElement>> addLog(long lockId, long keyId, int type, int electric) {
-        Observable<Result<JsonElement>> resultObservable = getCommonApiService().addLog(lockId, keyId, type, electric);
+    public static Observable<Result<JsonElement>> addLog(long lockId, long keyId, int type, int openLockType, int electric) {
+        Observable<Result<JsonElement>> resultObservable = getCommonApiService().addLog(lockId, keyId, type, openLockType, electric);
         return ObjectLoader.observe(resultObservable);
     }
 

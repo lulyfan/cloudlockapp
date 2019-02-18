@@ -37,7 +37,7 @@
                 app:imgSrc="@{lockKey.userType}"
                 app:imgSrcType="@{lockKey.type}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="H,1"
+                app:layout_constraintDimensionRatio="H,1.127"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="1"
                 app:layout_constraintTop_toTopOf="parent"/>

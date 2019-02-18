@@ -115,6 +115,7 @@ public class LockListFragment extends BaseFragment {
 //                CLToast.showAtBottom(getContext(), getString(R.string.refresh_success));
 //            }
         });
+        mLockListFragVM.toGetAllGroupList(false);
     }
 
     private void initView() {
@@ -134,20 +135,20 @@ public class LockListFragment extends BaseFragment {
             mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
                 if (datas1.size() <= 0) return;
                 LockKey lockKey = (LockKey) datas1.get(position);
-                if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
-                    ARouter.getInstance()
-                            .build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                            .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
-                            .navigation();
+//                if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
+                ARouter.getInstance()
+                        .build(RouterUtil.LockModulePath.LOCK_DETAIL)
+                        .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
+                        .navigation();
 
-                    finish();
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
-                }
+                finish();
+//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
+//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
+//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
+//                }
             });
         } else {
             mLockListAdapter.notifyData(datas);
@@ -271,7 +272,7 @@ public class LockListFragment extends BaseFragment {
         super.onResume();
         if (mLockListFragVM != null) {
             mLockListFragVM.toGetLockAllList(false);
-            mLockListFragVM.toGetAllGroupList(false);
+//
         }
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
