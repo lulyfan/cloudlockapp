@@ -1,12 +1,9 @@
 package com.ut.module_mine.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -19,14 +16,12 @@ import com.ut.module_mine.databinding.ActivityLockUserBinding;
 import com.ut.module_mine.databinding.ItemLockUserBinding;
 import com.ut.module_mine.viewModel.LockUserViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class LockUserActivity extends BaseActivity {
 
     private ActivityLockUserBinding binding;
     private LockUserViewModel viewModel;
-    private DataBindingAdapter<User, ItemLockUserBinding> adapter;
+    private DataBindingAdapter<LockUser, ItemLockUserBinding> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +35,12 @@ public class LockUserActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
 
         viewModel.mLockUsers.observe(this, lockUsers -> {
-            List<User> userList = new ArrayList<>();
-            for (LockUser lockUser : lockUsers) {
-                User user = new User(lockUser.getUserId(), lockUser.getHeadPic(), lockUser.getName(), lockUser.getTelNo());
-                userList.add(user);
+            for (LockUser lu : lockUsers) {
+                String keyStatusStr = viewModel.getKeyStatusStr(lu.getKeyStatus());
+                lu.setKeyStatusStr(keyStatusStr);
             }
-            adapter.setData(userList);
+
+            adapter.setData(lockUsers);
         });
 
         viewModel.loadLockUserState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));
@@ -65,12 +60,12 @@ public class LockUserActivity extends BaseActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.userList.setLayoutManager(layoutManager);
 
-        adapter = new DataBindingAdapter<>(this, R.layout.item_lock_user, BR.user);
+        adapter = new DataBindingAdapter<>(this, R.layout.item_lock_user, BR.lockUser);
 
         adapter.setOnClickItemListener((selectedbinding, position, lastSelectedBinding) -> {
             Intent intent = new Intent(LockUserActivity.this, LockUserItemActivity.class);
             intent.putExtra(LockUserItemActivity.EXTRA_USER_NAME, selectedbinding.userName.getText());
-            intent.putExtra(LockUserItemActivity.EXTRA_USER_ID, selectedbinding.getUser().userId);
+            intent.putExtra(LockUserItemActivity.EXTRA_USER_ID, selectedbinding.getLockUser().getUserId());
             startActivity(intent);
         });
 
@@ -78,20 +73,5 @@ public class LockUserActivity extends BaseActivity {
 
         binding.swipeLayout.setOnRefreshListener(() -> viewModel.loadLockUser(true));
         binding.swipeLayout.setColorSchemeResources(R.color.themeColor);
-    }
-
-    public static class User {
-        public String headImgUrl;
-        public String userName;
-        public String phoneNum;
-        public long userId;
-
-        public User(long userId, String headImgUrl, String userName, String phoneNum) {
-            this.headImgUrl = headImgUrl;
-            this.userName = userName;
-            this.phoneNum = phoneNum;
-            this.userId = userId;
-        }
-
     }
 }

@@ -265,6 +265,9 @@ public class SendKeyActivity extends BaseActivity {
                 int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 String number = cursor.getString(numberIndex).replace(" ", "");
                 String name = cursor.getString(nameIndex);
+                if(number.contains("+")) {
+                    number = number.substring(number.indexOf("1"));
+                }
                 viewModel.receiverPhoneNum.setValue(number);
                 viewModel.keyName.setValue(name);
             }

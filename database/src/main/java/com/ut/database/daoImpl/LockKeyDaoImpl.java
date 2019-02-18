@@ -88,7 +88,7 @@ public class LockKeyDaoImpl {
     }
 
     public LockKey getLockKeyByMac(String mac) {
-        return mLockKeyDao.getLockKeyByMac(mac);
+        return mLockKeyDao.getLockKeyByMac(mac).getValue();
     }
 
     public void deleteByMac(String mac) {

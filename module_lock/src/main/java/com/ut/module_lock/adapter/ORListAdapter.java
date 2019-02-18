@@ -2,6 +2,7 @@ package com.ut.module_lock.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,9 +87,7 @@ public class ORListAdapter extends BaseAdapter {
             TextView descTv = item.findViewById(R.id.desc);
             descTv.setText(new StringBuffer(r.getTime() + "   " + r.getDescription()));
             ImageView icon = item.findViewById(R.id.icon);
-            if (!TextUtils.isEmpty(r.getHeadPic())) {
-                Glide.with(context).load(r.getHeadPic()).apply(RequestOptions.circleCropTransform().placeholder(R.mipmap.default_icon_b)).into(icon);
-            }
+            Glide.with(context).load(getRecordIcon(r.getOpenLockType())).apply(RequestOptions.circleCropTransform()).into(icon);
             holder.container.addView(item, lp);
             if (records.indexOf(r) == records.size() - 1) {
                 continue;
@@ -107,5 +106,28 @@ public class ORListAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView header;
         ViewGroup container;
+    }
+
+    private Drawable getRecordIcon(int openType) {
+        switch (openType) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+        }
+
+        return null;
     }
 }

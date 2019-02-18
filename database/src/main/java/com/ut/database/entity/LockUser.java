@@ -1,6 +1,7 @@
 package com.ut.database.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
@@ -19,6 +20,11 @@ public class LockUser {
     private long userId;
     private String telNo;
     private String headPic;
+
+    private int keyStatus;
+
+    @Ignore
+    private String keyStatusStr;
 
     public String getHeadPic() {
         return headPic;
@@ -58,5 +64,21 @@ public class LockUser {
 
     public void setTelNo(String telNo) {
         this.telNo = telNo;
+    }
+
+    public int getKeyStatus() {
+        return keyStatus;
+    }
+
+    public void setKeyStatus(int keyStatus) {
+        this.keyStatus = keyStatus;
+    }
+
+    public String getKeyStatusStr() {
+        return keyStatusStr;
+    }
+
+    public void setKeyStatusStr(String keyStatusStr) {
+        this.keyStatusStr = keyStatusStr;
     }
 }

@@ -74,4 +74,18 @@
     <string name="getVerifyCode">获取验证码</string>
     <string name="isCallToCustomService">是否拨打客服热线？</string>
     <string name="cannotTransformToSelf">不能转移给自己</string>
+
+    <string name="status_sending">发送中</string>
+    <string name="status_frozening">冻结中</string>
+    <string name="status_cancel_frozen">解除冻结中</string>
+    <string name="status_delete">删除中</string>
+    <string name="status_authorize">授权中</string>
+    <string name="status_cancel_authorize">取消授权中</string>
+    <string name="status_fix">修改中</string>
+    <string name="lock_key_status_normal">正常</string>
+    <string name="status_has_frozen">已冻结</string>
+    <string name="status_has_deleted">已删除</string>
+    <string name="status_has_invailed">已失效</string>
+    <string name="status_out_of_date">已过期</string>
+    <string name="status_normal">正常</string>
 </resources>

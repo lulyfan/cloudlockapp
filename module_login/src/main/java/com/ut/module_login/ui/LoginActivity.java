@@ -145,6 +145,10 @@ public class LoginActivity extends BaseActivity {
         mainHandler.postDelayed(() -> {
             SystemUtils.showKeyboard(this, phoneEdt);
         }, 500L);
+
+        if (getIntent().hasExtra("phone")) {
+            phoneEdt.setText(getIntent().getStringExtra("phone"));
+        }
     }
 
     private void subscribeEvent() {

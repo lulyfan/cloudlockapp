@@ -104,7 +104,7 @@ public class BaseActivity extends AppCompatActivity {
             DialogHelper.getInstance()
                     .setCanCancleOutSide(false)
                     .setMessage(getString(R.string.base_auto_login_time_out))
-                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).navigation())
+                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).withString("phone", BaseApplication.getUser().account).navigation())
                     .show();
         } catch (Exception e) {
             e.printStackTrace();

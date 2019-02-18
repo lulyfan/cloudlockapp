@@ -142,10 +142,4 @@ public class LoginVm extends AndroidViewModel {
         }
         return R.drawable.selector_highlight_red;
     }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        compositeDisposable.dispose();
-    }
 }
