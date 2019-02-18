@@ -18,6 +18,7 @@ import com.ut.unilink.cloudLock.CloudLock;
 import com.ut.unilink.cloudLock.ConnectListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
+import com.ut.unilink.cloudLock.protocol.cmd.ErrCode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class NearLockVM extends AndroidViewModel {
     private List<NearScanLock> nearLockList = new ArrayList<>();//存放后台放回的对象
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private boolean hasConnected = false;
+    private String lockBindPassword;
 
 
     public NearLockVM(@NonNull Application application) {
@@ -115,6 +117,16 @@ public class NearLockVM extends AndroidViewModel {
         mCompositeDisposable.add(disposable);
     }
 
+    /**
+     * 绑定锁
+     * @param lock
+     * @param password 锁的认证密码
+     */
+    public void bindLock(NearScanLock lock, String password) {
+        lockBindPassword = password;
+        bindLock(lock);
+    }
+
     //绑定锁
     public void bindLock(NearScanLock lock) {
         operating.postValue(false);
@@ -147,7 +159,7 @@ public class NearLockVM extends AndroidViewModel {
             errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
             return;
         }
-        UnilinkManager.getInstance(getApplication()).initLock(scanDevice, new CallBack() {
+        UnilinkManager.getInstance(getApplication()).initLock(scanDevice, lockBindPassword, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
                 Disposable disposable = CommonApi.bindLock(cloudLock.getAddress(), lock.getName(), cloudLock.getAdminPasswordString(),
@@ -165,10 +177,14 @@ public class NearLockVM extends AndroidViewModel {
             }
 
             @Override
-            public void onFailed(int i, String s) {
+            public void onFailed(int errcode, String errInfo) {
                 UnilinkManager.getInstance(getApplication()).disconnect(lock.getMac());
-                errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
-                UTLog.i("ble initLockKey failed:" + s);
+                String errMessage = getApplication().getString(R.string.lock_tip_bind_failed);
+                if (errcode == ErrCode.ERR_BIND_PASSWORD) {
+                    errMessage = errInfo;
+                }
+                errorMsg.postValue(errMessage);
+                UTLog.i("ble initLockKey failed:" + errInfo);
             }
         });
     }

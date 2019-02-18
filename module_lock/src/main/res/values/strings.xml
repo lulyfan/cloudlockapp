@@ -294,4 +294,6 @@
     <string name="lock_device_key_tip_validdate">停止日期不能早于启用日期</string>
     <string name="lock_deivce_key_tip_del">确定删除该钥匙吗？删除后不可恢复</string>
     <string name="delete">删除</string>
+    <string name="bind_check">身份认证</string>
+    <string name="input_bind_password">请输入门锁的管理员密码</string>
 </resources>
