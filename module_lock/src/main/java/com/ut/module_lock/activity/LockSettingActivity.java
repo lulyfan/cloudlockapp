@@ -83,7 +83,7 @@ public class LockSettingActivity extends BaseActivity {
             mBinding.adjustTime.setVisibility(View.GONE);
         }
         mBinding.adjustTime.setOnClickListener(v -> ARouter.getInstance().build(RouterUtil.LockModulePath.TIME_ADJUST)
-                .withString(RouterUtil.LockModuleExtraKey.MAC, lockKey.getMac())
+                .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                 .navigation());
         if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             mBinding.switchCanOpen.setVisibility(View.GONE);

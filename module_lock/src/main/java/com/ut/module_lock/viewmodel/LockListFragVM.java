@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
+import com.ut.base.ErrorHandler;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockGroup;
@@ -26,7 +27,6 @@ import io.reactivex.schedulers.Schedulers;
 public class LockListFragVM extends BaseViewModel {
     private MutableLiveData<Boolean> refreshStatus = new MutableLiveData<>();
     private MutableLiveData<List<LockKey>> mLockKeys = new MutableLiveData<>();
-    private volatile boolean mIsReset = false;
     private LiveData<List<LockKey>> lock1 = null;//全部分组的锁
     private LiveData<List<LockKey>> lock2 = null;//当前分组的锁
     private long currentGroupId = -1;
@@ -69,15 +69,18 @@ public class LockListFragVM extends BaseViewModel {
                     LockKey[] lockKeys = new LockKey[list.size()];
                     //TODO 先清除数据,后面再做优化
                     if (isReset) {
-                        mIsReset = true;
                         LockKeyDaoImpl.get().deleteAll();
                     }
                     LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                     if (isReset)
                         refreshStatus.postValue(true);
-                }, throwable -> {
-                    //TODO 获取锁列表失败处理
-                    refreshStatus.postValue(false);
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        //TODO 获取锁列表失败处理
+                        refreshStatus.postValue(false);
+                    }
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -97,10 +100,13 @@ public class LockListFragVM extends BaseViewModel {
                     LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                     if (isReset)
                         refreshStatus.postValue(true);
-                }, throwable -> {
-                    throwable.printStackTrace();
-                    //TODO
-                    refreshStatus.postValue(false);
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        //TODO 获取锁列表失败处理
+                        refreshStatus.postValue(false);
+                    }
                 });
         mCompositeDisposable.add(disposable);
     }
@@ -132,8 +138,10 @@ public class LockListFragVM extends BaseViewModel {
     protected void onCleared() {
         super.onCleared();
         mCompositeDisposable.dispose();
-        lock1.removeObserver(mLockKeyListObserver1);
-        lock2.removeObserver(mLockKeyListObserver2);
+        if (lock1 != null)
+            lock1.removeObserver(mLockKeyListObserver1);
+        if (lock2 != null)
+            lock2.removeObserver(mLockKeyListObserver2);
     }
 
 }

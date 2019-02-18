@@ -47,9 +47,9 @@ public class TimeAdjustVM extends BaseViewModel {
         state.setValue(STATE_DEFAULT);
     }
 
-    public void setMac(String mac) {
-        this.mac = mac;
-        mLockKey = LockKeyDaoImpl.get().getLockKeyByMac(mac);
+    public void setLockKey(LockKey lockKey) {
+        this.mLockKey = lockKey;
+        this.mac = mLockKey.getMac();
     }
 
     public void readLockTime() {
