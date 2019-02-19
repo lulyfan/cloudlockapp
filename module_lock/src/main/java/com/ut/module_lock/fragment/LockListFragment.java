@@ -183,7 +183,7 @@ public class LockListFragment extends BaseFragment {
                     //如果之前选的分组已删除，则需要页面默认全部分组查询
                     if(hasDeleted) {
                         mLockListFragVM.getGroupLockList(allGroup);
-                        ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(allGroup.getName());
+//                        ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(allGroup.getName());
                     }
                 }
 
@@ -289,7 +289,7 @@ public class LockListFragment extends BaseFragment {
         super.onResume();
         if (mLockListFragVM != null) {
             mLockListFragVM.toGetLockAllList(false);
-            mLockListFragVM.toGetAllGroupList(false);
+            mLockListFragVM.toGetAllGroupList(true);
         }
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);

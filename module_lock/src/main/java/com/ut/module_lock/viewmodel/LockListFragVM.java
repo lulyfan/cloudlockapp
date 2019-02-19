@@ -95,7 +95,7 @@ public class LockListFragVM extends BaseViewModel {
                     if (list == null) return;
                     LockGroup[] lockGroups = new LockGroup[list.size()];
                     if (isReset) {//刷新时清除所有组数据
-                        LockKeyDaoImpl.get().deleteAll();
+                        LockGroupDaoImpl.get().deleteAll();
                     }
                     LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                     if (isReset)
