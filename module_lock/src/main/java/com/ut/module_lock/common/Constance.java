@@ -20,4 +20,5 @@ public interface Constance {
 
     String START_LOAD = "start_load";
     String END_LOAD = "end_load";
+    String FIND_GATE_RECORD = "find_gate_record";
 }

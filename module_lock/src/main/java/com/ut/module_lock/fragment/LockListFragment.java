@@ -66,6 +66,10 @@ public class LockListFragment extends BaseFragment {
 
     private boolean requestPermissionFlag;
 
+    private LockGroup allGroup = new LockGroup();
+    int currentGroupPosition = -1;
+    long currentGroupId = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -134,29 +138,26 @@ public class LockListFragment extends BaseFragment {
             mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
                 if (datas1.size() <= 0) return;
                 LockKey lockKey = (LockKey) datas1.get(position);
-                if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
+                if (lockKey.getKeyStatus() != EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
                     ARouter.getInstance()
                             .build(RouterUtil.LockModulePath.LOCK_DETAIL)
                             .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                             .navigation();
 
                     finish();
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
-                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
-                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
                 }
+//                else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
+//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
+//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
+//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
+//                }
             });
         } else {
             mLockListAdapter.notifyData(datas);
         }
     }
-
-    private LockGroup allGroup = new LockGroup();
-    int currentGroupPosition = -1;
-    long currentGroupId = 0;
 
     private synchronized void refreshGroupList(List<LockGroup> lockGroups) {
         if (popupWindow == null || lockGroups == null) return;
@@ -169,6 +170,22 @@ public class LockListFragment extends BaseFragment {
             ListView listView = popupWindow.getView(R.id.lv_group_list);
 
             mLockGroupCommonAdapter = new CommonAdapter<LockGroup>(getContext(), lockGroups, R.layout.item_goup_list) {
+                @Override
+                public void notifyData(List<LockGroup> list) {
+                    super.notifyData(list);
+                    long currentGroupId = mLockListFragVM.getCurrentGroupId();
+                    boolean hasDeleted = true;
+                    for (LockGroup lockGroup: list) {
+                        if(currentGroupId == lockGroup.getId() && currentGroupId != allGroup.getId()) {
+                            hasDeleted = false;
+                        }
+                    }
+                    //如果之前选的分组已删除，则需要页面默认全部分组查询
+                    if(hasDeleted) {
+                        mLockListFragVM.getGroupLockList(allGroup);
+                    }
+                }
+
                 @Override
                 public void convert(CommonViewHolder commonViewHolder, int position, LockGroup item) {
                     ((TextView) commonViewHolder.getView(R.id.tv_group_name)).setText(item.getName());

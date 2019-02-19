@@ -8,8 +8,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ut.base.BaseApplication;
-import com.ut.base.UserRepository;
+import com.ut.base.AppManager;
 
 
 import cn.jpush.android.api.JPushInterface;
@@ -33,8 +32,7 @@ public class CLJPushReceiver extends BroadcastReceiver {
                     JSONObject jsonObject = JSON.parseObject(dataJson);
                     int code = jsonObject.getIntValue("code");
                     if (code == 521) {
-                        if (BaseApplication.getUser() == null) return;
-                        UserRepository.getInstance().refreshUser();
+                        AppManager.getAppManager().currentActivity().remoteLogin();
                     }
                 }
             }

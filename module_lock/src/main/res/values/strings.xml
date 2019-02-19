@@ -294,4 +294,5 @@
     <string name="lock_device_key_tip_validdate">停止日期不能早于启用日期</string>
     <string name="lock_deivce_key_tip_del">确定删除该钥匙吗？删除后不可恢复</string>
     <string name="delete">删除</string>
+    <string name="lock_void_time_edit_error">生效时间不能晚于失效时间</string>
 </resources>

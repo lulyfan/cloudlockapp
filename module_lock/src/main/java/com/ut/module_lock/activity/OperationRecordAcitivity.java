@@ -81,6 +81,8 @@ public class OperationRecordAcitivity extends BaseActivity {
 
     private void handlerIntent() {
         recordType = getIntent().getStringExtra(Constance.RECORD_TYPE);
+        boolean isGateRecord = getIntent().getBooleanExtra(Constance.FIND_GATE_RECORD, false);
+        operationVm.setGateRecord(isGateRecord);
         if (getIntent().hasExtra(Constance.KEY_ID)) {
             currentId = getIntent().getLongExtra(Constance.KEY_ID, currentId);
             if(getIntent().hasExtra(Constance.LOCK_ID)) {

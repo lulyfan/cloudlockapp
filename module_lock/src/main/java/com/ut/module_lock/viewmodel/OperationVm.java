@@ -2,16 +2,12 @@ package com.ut.module_lock.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
-import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.database.dao.ORecordDao;
@@ -47,6 +43,7 @@ public class OperationVm extends BaseViewModel {
     private String currentType;
 
     private long lockId = 0;
+    private boolean isGateRecord;
 
     public void setLockId(long lockId) {
         this.lockId = lockId;
@@ -62,14 +59,15 @@ public class OperationVm extends BaseViewModel {
             currentPage = 1;
             currentId = id;
         }
+
+        ORecordDao oRecordDao = CloudLockDatabaseHolder.get().recordDao();
+
         if (Constance.BY_KEY.equals(recordType)) {
             currentType = Constance.BY_KEY;
-            return CloudLockDatabaseHolder.get().recordDao().
-                    getRecordsByKeyId(currentId);
+            return isGateRecord ? oRecordDao.getGateLockRecordsByKeyId(lockId) : oRecordDao.getRecordsByKeyId(currentId);
         } else if (Constance.BY_LOCK.equals(recordType)) {
             currentType = Constance.BY_LOCK;
-            return CloudLockDatabaseHolder.get().recordDao().
-                    getRecordsByLockId(currentId);
+            return isGateRecord ? oRecordDao.getGateLockRecordsByLockId(currentId) : oRecordDao.getRecordsByLockId(currentId);
         }
         return new MutableLiveData<>();
     }
@@ -191,5 +189,9 @@ public class OperationVm extends BaseViewModel {
             handlerMap.clear();
             handlerMap = null;
         }
+    }
+
+    public void setGateRecord(boolean isGateRecord) {
+        this.isGateRecord = isGateRecord;
     }
 }

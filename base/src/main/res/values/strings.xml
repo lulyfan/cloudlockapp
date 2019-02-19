@@ -30,7 +30,7 @@
     <string name="checkAll">全选</string>
     <string name="loading">加载中...</string>
     <string name="serviceErr">服务器开小差</string>
-    <string name="base_auto_login_time_out">自动登录已过期，请重新登录。</string>
+    <string name="base_auto_login_time_out">您的账号于##在异地登录，如非本人，请尽快修改密码。</string>
     <string name="mine_version_update_title">云锁App版本更新</string>
     <string name="mine_version_update_waiting">正在等待...</string>
     <string name="mine_version_update_has_downloaded">已下载</string>
@@ -55,4 +55,5 @@
     <string name="base_network_retry">请检查网络后下拉页面刷新</string>
     <string name="lock_contact_request_tips">APP需要你的允许获取联系人权限</string>
     <string name="lock_setting">设置</string>
+    <string name="base_over_data_login">自动登录已过期，请重新登陆。</string>
 </resources>

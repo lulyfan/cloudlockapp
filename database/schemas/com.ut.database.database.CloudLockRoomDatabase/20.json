@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 20,
-    "identityHash": "b15aaac670069f994e3d05375c24b2f4",
+    "identityHash": "d1c24bce2ae7fa57a29821a9cb7363c2",
     "entities": [
       {
         "tableName": "lock_key",
@@ -425,7 +425,7 @@
       },
       {
         "tableName": "LockUser",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`createTime` INTEGER NOT NULL, `name` TEXT, `userId` INTEGER NOT NULL, `telNo` TEXT, `headPic` TEXT, PRIMARY KEY(`userId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`createTime` INTEGER NOT NULL, `name` TEXT, `userId` INTEGER NOT NULL, `telNo` TEXT, `headPic` TEXT, `keyStatus` INTEGER NOT NULL, PRIMARY KEY(`userId`))",
         "fields": [
           {
             "fieldPath": "createTime",
@@ -456,6 +456,12 @@
             "columnName": "headPic",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "keyStatus",
+            "columnName": "keyStatus",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -785,7 +791,7 @@
       },
       {
         "tableName": "Record",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `icon` TEXT, `operator` TEXT, `userId` INTEGER NOT NULL, `lockId` INTEGER NOT NULL, `keyId` INTEGER NOT NULL, `type` INTEGER NOT NULL, `keyName` TEXT, `description` TEXT, `createTime` INTEGER NOT NULL, `time` TEXT, `userName` TEXT, `headPic` TEXT, `date` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `icon` TEXT, `operator` TEXT, `userId` INTEGER NOT NULL, `lockId` INTEGER NOT NULL, `keyId` INTEGER NOT NULL, `type` INTEGER NOT NULL, `keyName` TEXT, `description` TEXT, `createTime` INTEGER NOT NULL, `time` TEXT, `userName` TEXT, `headPic` TEXT, `date` TEXT, `openLockType` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -870,6 +876,12 @@
             "columnName": "date",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "openLockType",
+            "columnName": "openLockType",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1092,7 +1104,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b15aaac670069f994e3d05375c24b2f4\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d1c24bce2ae7fa57a29821a9cb7363c2\")"
     ]
   }
 }

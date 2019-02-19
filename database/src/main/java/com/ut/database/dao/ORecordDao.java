@@ -34,6 +34,12 @@ public interface ORecordDao {
     @Query("select * from record where lockId = :lockId ORDER BY createTime desc limit 10 ")
     List<Record> getRecordListByLockId(long lockId);
 
+    @Query("select * from record where lockId = :lockId and id < 0  ORDER BY createTime desc limit 10")
+    LiveData<List<Record>> getGateLockRecordsByLockId(long lockId);
+
+    @Query("select * from record where keyId = :keyId and id < 0  ORDER BY createTime desc limit 10")
+    LiveData<List<Record>> getGateLockRecordsByKeyId(long keyId);
+
     @Query("delete from record")
     void deleteAll();
 

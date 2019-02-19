@@ -5,6 +5,7 @@
 
     <data>
 
+        <import type="android.view.View"/>
         <variable
             name="keyItem"
             type="com.ut.database.entity.Key" />
@@ -76,9 +77,8 @@
                 android:id="@+id/validTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/right_triangle"
-                android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.startTimeRange}"
+                android:drawablePadding="@dimen/base_16dp"
                 android:textColor="@color/color_base_title"
                 android:textSize="@dimen/s"
                 app:layout_constraintBottom_toBottomOf="@+id/textView22"
@@ -113,7 +113,6 @@
                 android:id="@+id/invalidTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.endTimeRange}"
                 android:textColor="@color/color_base_title"
@@ -151,7 +150,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/base_16dp"
                 android:layout_marginRight="@dimen/base_16dp"
-                android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.startTime}"
                 android:textColor="@color/color_base_title"
@@ -186,7 +184,6 @@
                 android:id="@+id/endDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/right_triangle"
                 android:drawablePadding="@dimen/base_16dp"
                 android:text="@{keyItem.endTime}"
                 android:textColor="@color/color_base_title"
@@ -206,6 +203,7 @@
             android:layout_marginBottom="@dimen/base_20dp"
             android:background="@drawable/selector_btn_save"
             android:text="@string/lock_save"
+            android:visibility="@{keyItem.keyId == 0 ? View.GONE: View.VISIBLE}"
             android:textColor="@android:color/white"
             android:textSize="@dimen/base_17sp"
             app:layout_constraintBottom_toBottomOf="parent" />

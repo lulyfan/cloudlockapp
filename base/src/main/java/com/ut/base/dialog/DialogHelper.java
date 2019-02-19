@@ -5,6 +5,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.ut.base.AppManager;
+import com.ut.base.R;
+
+import java.util.Objects;
 
 /**
  * author : chenjiajun
@@ -27,10 +30,10 @@ public class DialogHelper {
             }
         }
         if (instance.isShowing()) {
-            instance.alertDialog.dismiss();
-            instance.alertDialog = null;
+            return instance;
+        } else {
+            instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
         }
-        instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
         return instance;
     }
 
@@ -63,7 +66,7 @@ public class DialogHelper {
         return sBuilder != null && alertDialog != null && alertDialog.isShowing();
     }
 
-    public DialogHelper setCanCancleOutSide(boolean can) {
+    public DialogHelper setCanCancelOutSide(boolean can) {
         sBuilder.setCancelable(can);
         return instance;
     }
@@ -78,6 +81,7 @@ public class DialogHelper {
         });
         alertDialog = sBuilder.create();
         alertDialog.show();
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(alertDialog.getContext().getResources().getDrawable(R.drawable.shape_bg_corner));
     }
 
 }

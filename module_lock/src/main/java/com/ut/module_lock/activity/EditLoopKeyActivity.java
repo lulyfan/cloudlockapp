@@ -2,10 +2,12 @@ package com.ut.module_lock.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -44,6 +46,18 @@ public class EditLoopKeyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit_loop);
         mKey = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
+
+        if (mKey == null) {
+            if (getIntent().hasExtra("weeks")) {
+                mKey = new Key();
+                mKey.setWeeks(getIntent().getStringExtra("weeks"));
+                mKey.setStartTime(getIntent().getStringExtra("valid_time"));
+                mKey.setEndTime(getIntent().getStringExtra("invalid_time"));
+                mKey.setStartTimeRange(getIntent().getStringExtra("start_time_range"));
+                mKey.setEndTimeRange(getIntent().getStringExtra("end_time_range"));
+            }
+        }
+
         mBinding.setKeyItem(mKey);
         initUI();
 
@@ -59,41 +73,6 @@ public class EditLoopKeyActivity extends BaseActivity {
         checkBox5 = mBinding.include5.findViewById(R.id.friday);
         checkBox6 = mBinding.include5.findViewById(R.id.saturday);
         checkBox7 = mBinding.include5.findViewById(R.id.sunday);
-        mBinding.validTime.setOnClickListener(v -> {
-//
-//            Calendar calendar = Calendar.getInstance();
-//            mHour = calendar.get(Calendar.HOUR_OF_DAY);
-//            mMin = calendar.get(Calendar.MINUTE);
-            mHour = sHour;
-            mMin = sMin;
-            chooseTime(v, getString(R.string.valid_time));
-
-        });
-        mBinding.invalidTime.setOnClickListener(v -> {
-            mHour = sHour;
-            mMin = sMin;
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, mHour);
-            calendar.set(Calendar.MINUTE, mMin);
-            calendar.add(Calendar.MINUTE, 15);
-
-            mHour = calendar.get(Calendar.HOUR_OF_DAY);
-            mMin = calendar.get(Calendar.MINUTE);
-            chooseTime(v, getString(R.string.invalid_time));
-        });
-
-        mBinding.startDate.setOnClickListener(v -> {
-            mY = sY;
-            mM = sM;
-            mD = sD;
-            chooseDate(v, getString(R.string.lock_start_date));
-        });
-
-        mBinding.endDate.setOnClickListener(v -> {
-            handleEnDate();
-            chooseDate(v, getString(R.string.lock_end_state));
-        });
 
         mBinding.btnSave.setOnClickListener(v -> save());
 
@@ -122,21 +101,55 @@ public class EditLoopKeyActivity extends BaseActivity {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-
         try {
             long validTime = sdf.parse(mKey.getStartTimeRange()).getTime();
-            long inValidTime = sdf.parse(mKey.getEndTimeRange()).getTime();
-
             Calendar calendar = Calendar.getInstance();
-
             calendar.setTimeInMillis(validTime);
             sHour = calendar.get(Calendar.HOUR_OF_DAY);
-            sMin  = calendar.get(Calendar.MINUTE);
-
+            sMin = calendar.get(Calendar.MINUTE);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+
+        if(mKey.getKeyId() > 0) {
+            setRightArrow(mBinding.validTime);
+            setRightArrow(mBinding.invalidTime);
+            setRightArrow(mBinding.startDate);
+            setRightArrow(mBinding.endDate);
+
+            mBinding.validTime.setOnClickListener(v -> {
+                mHour = sHour;
+                mMin = sMin;
+                chooseTime(v, getString(R.string.valid_time));
+
+            });
+            mBinding.invalidTime.setOnClickListener(v -> {
+                mHour = sHour;
+                mMin = sMin;
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, mHour);
+                calendar.set(Calendar.MINUTE, mMin);
+                calendar.add(Calendar.MINUTE, 15);
+
+                mHour = calendar.get(Calendar.HOUR_OF_DAY);
+                mMin = calendar.get(Calendar.MINUTE);
+                chooseTime(v, getString(R.string.invalid_time));
+            });
+
+            mBinding.startDate.setOnClickListener(v -> {
+                mY = sY;
+                mM = sM;
+                mD = sD;
+                chooseDate(v, getString(R.string.lock_start_date));
+            });
+
+            mBinding.endDate.setOnClickListener(v -> {
+                handleEnDate();
+                chooseDate(v, getString(R.string.lock_end_state));
+            });
+        }
 
     }
 
@@ -232,5 +245,9 @@ public class EditLoopKeyActivity extends BaseActivity {
         }, mY != mM, mY, mM, mD);
     }
 
-
+    private void setRightArrow(TextView textView) {
+        Drawable dra = getResources().getDrawable(R.drawable.right_triangle);
+        dra.setBounds(0, 0, dra.getMinimumWidth(), dra.getMinimumHeight());
+        textView.setCompoundDrawables(null, null, dra, null);
+    }
 }

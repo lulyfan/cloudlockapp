@@ -133,6 +133,10 @@ public class LockListFragVM extends BaseViewModel {
     };
 
 
+    public long getCurrentGroupId() {
+        return currentGroupId;
+    }
+
     @Override
 
     protected void onCleared() {

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.operation.MyRetrofit;
@@ -29,13 +30,13 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  */
 @SuppressLint("Registered")
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends AppCompatActivity {
     Handler mHandler = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setLightStatusBar();
+//        setLightStatusBar();
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override

@@ -88,6 +88,21 @@ public class LockSettingActivity extends BaseActivity {
         if (lockKey.getUserType() == EnumCollection.UserType.NORMAL.ordinal()) {
             mBinding.switchCanOpen.setVisibility(View.GONE);
         }
+
+        mBinding.layoutFrame.setOnClickListener(v -> {
+            if (lockKey.getRuleType() == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
+                ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_LIMITED_TIME)
+                        .withString("valid_time", lockKey.getStartTime())
+                        .withString("invalid_time", lockKey.getEndTime()).navigation();
+            } else if (lockKey.getRuleType() == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
+                ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_LOOP_TIME)
+                        .withString("weeks", lockKey.getWeeks())
+                        .withString("valid_time", lockKey.getStartTime())
+                        .withString("invalid_time", lockKey.getEndTime())
+                        .withString("start_time_range", lockKey.getStartTimeRange())
+                        .withString("end_time_range", lockKey.getEndTimeRange()).navigation();
+            }
+        });
     }
 
     private void initViewModel() {
@@ -274,51 +289,9 @@ public class LockSettingActivity extends BaseActivity {
         } else if (ruleType == EnumCollection.KeyRuleType.ONCE.ordinal()) {
             lockKey.setKeyTypeStr(getString(R.string.once_time));
         } else if (ruleType == EnumCollection.KeyRuleType.TIMELIMIT.ordinal()) {
-            lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime());
-            mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_12sp));
+            lockKey.setKeyTypeStr(getString(R.string.limit_time));
         } else if (ruleType == EnumCollection.KeyRuleType.CYCLE.ordinal()) {
-            String weeks = lockKey.getWeeks();
-            if (!TextUtils.isEmpty(weeks)) {
-                //TODO 中文
-                StringBuffer xingqi = new StringBuffer(getString(R.string.lock_xingqi));
-                String[] split = weeks.split(",");
-                for (String s : split) {
-                    if (TextUtils.isEmpty(s)) continue;
-                    switch (Integer.valueOf(s)) {
-                        case 1:
-                            xingqi.append(R.string.lock_yi);
-                            xingqi.append(",");
-                            break;
-                        case 2:
-                            xingqi.append(R.string.lock_er);
-                            xingqi.append(",");
-                            break;
-                        case 3:
-                            xingqi.append(R.string.lock_san);
-                            xingqi.append(",");
-                            break;
-                        case 4:
-                            xingqi.append(R.string.lock_si);
-                            xingqi.append(",");
-                            break;
-                        case 5:
-                            xingqi.append(R.string.lock_wu);
-                            xingqi.append(",");
-                            break;
-                        case 6:
-                            xingqi.append(R.string.lock_liu);
-                            xingqi.append(",");
-                            break;
-                        case 7:
-                            xingqi.append(R.string.lock_ri);
-                            xingqi.append(",");
-                            break;
-                    }
-                }
-                xingqi = xingqi.delete(xingqi.lastIndexOf(","), xingqi.length());
-                lockKey.setKeyTypeStr(lockKey.getStartTime() + " - " + lockKey.getEndTime() + "," + xingqi + "," + lockKey.getStartTimeRange() + " - " + lockKey.getEndTimeRange());
-                mBinding.tvDeviceValidDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.lock_text_size_10sp));
-            }
+            lockKey.setKeyTypeStr(getString(R.string.loop));
         }
     }
 

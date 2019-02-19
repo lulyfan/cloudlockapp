@@ -133,9 +133,12 @@
                     </FrameLayout>
 
                     <FrameLayout
+                        android:id="@+id/layout_frame"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/base_70dp"
-                        android:paddingLeft="@dimen/base_20dp">
+                        android:clickable="@{lockKey.ruleType == 2 || lockKey.ruleType == 4}"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:paddingStart="@dimen/base_20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -154,6 +157,14 @@
                             android:text="@{lockKey.keyTypeStr}"
                             android:textColor="@color/color_base_text"
                             android:textSize="@dimen/base_17sp"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/base_27dp"
+                            android:layout_gravity="end|center_vertical"
+                            android:src="@mipmap/more_black"
+                            android:visibility="@{lockKey.ruleType == 2 || lockKey.ruleType == 4 ? View.VISIBLE: View.INVISIBLE}"/>
                     </FrameLayout>
                 </LinearLayout>
 

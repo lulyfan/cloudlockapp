@@ -209,6 +209,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
 
         public void onRecordClick(View view) {
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
+                    .withBoolean(Constance.FIND_GATE_RECORD, true)
                     .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
                     .withLong(Constance.KEY_ID, mDeviceKey.getRecordKeyId())
                     .withLong(Constance.LOCK_ID, mDeviceKey.getLockID())

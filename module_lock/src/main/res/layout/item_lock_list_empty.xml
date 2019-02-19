@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.text.TextUtils" />
+
         <variable
             name="user"
-            type="com.ut.database.entity.User"/>
+            type="com.ut.database.entity.User" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/card_lock_empty"/>
+            android:src="@mipmap/card_lock_empty" />
 
         <TextView
             android:id="@+id/tv_hi"
@@ -34,8 +35,7 @@
             android:textSize="@dimen/base_30dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <!--app:encryAccount="@{user.account}"-->
+            app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/tv_account"
             android:layout_width="wrap_content"
@@ -44,10 +44,9 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/base_30dp"
             android:textStyle="bold"
-            app:encryptText="@{user.account}"
+            app:encryptText="@{TextUtils.isEmpty(user.name) ? user.account: user.name}"
             app:layout_constraintBaseline_toBaselineOf="@+id/tv_hi"
-            app:layout_constraintStart_toEndOf="@+id/tv_hi"
-            />
+            app:layout_constraintStart_toEndOf="@+id/tv_hi" />
 
         <TextView
             android:id="@+id/textView"
@@ -61,7 +60,7 @@
             android:textColor="@color/lock_color_tv_normal"
             android:textSize="@dimen/base_17sp"
             app:layout_constraintStart_toStartOf="@+id/tv_hi"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hi"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_hi" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,6 +70,6 @@
             android:textColor="@color/lock_color_tv_normal"
             android:textSize="@dimen/base_17sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView"
-            app:layout_constraintStart_toEndOf="@+id/textView"/>
+            app:layout_constraintStart_toEndOf="@+id/textView" />
     </android.support.constraint.ConstraintLayout>
 </layout>

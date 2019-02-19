@@ -147,7 +147,9 @@ public class LoginActivity extends BaseActivity {
         }, 500L);
 
         if (getIntent().hasExtra("phone")) {
-            phoneEdt.setText(getIntent().getStringExtra("phone"));
+            String phone = getIntent().getStringExtra("phone");
+            phoneEdt.setText(phone);
+            phoneEdt.setSelection(phoneEdt.getText().length());
         }
     }
 

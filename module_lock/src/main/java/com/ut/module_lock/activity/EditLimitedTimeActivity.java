@@ -3,6 +3,7 @@ package com.ut.module_lock.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.DialogUtil;
 import com.ut.commoncomponent.CLToast;
+import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_lock.R;
 import com.ut.module_lock.common.Constance;
 import com.ut.module_lock.databinding.ActivityEditLimitedTimeBinding;
@@ -21,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author : chenjiajun
@@ -46,6 +50,11 @@ public class EditLimitedTimeActivity extends BaseActivity {
         initDarkToolbar();
         setTitle(R.string.lock_limited_time_key);
         keyInfo = (Key) getIntent().getSerializableExtra(Constance.KEY_INFO);
+        if (keyInfo == null) {
+            keyInfo = new Key();
+            keyInfo.setStartTime(getIntent().getStringExtra("valid_time"));
+            keyInfo.setEndTime(getIntent().getStringExtra("invalid_time"));
+        }
         mBinding.setKeyItem(keyInfo);
         initData();
     }
@@ -68,7 +77,6 @@ public class EditLimitedTimeActivity extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
             long startTime = sdf.parse(keyInfo.getStartTime()).getTime();
-
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(startTime);
             sYear = calendar.get(Calendar.YEAR);
@@ -86,11 +94,8 @@ public class EditLimitedTimeActivity extends BaseActivity {
             eDay = calendar.get(Calendar.DAY_OF_MONTH);
             eHour = calendar.get(Calendar.HOUR_OF_DAY);
             eMinute = calendar.get(Calendar.MINUTE);
-
             selectedEndTime = calendar.getTimeInMillis();
-
-
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -134,8 +139,8 @@ public class EditLimitedTimeActivity extends BaseActivity {
                 calendar.set(Calendar.SECOND, 59);
                 selectedEndTime = calendar.getTimeInMillis();
 
-                if(selectedStartTime > selectedEndTime) {
-                    CLToast.showAtCenter(getBaseContext(), "生效时间不能晚于失效时间");
+                if (selectedStartTime > selectedEndTime) {
+                    CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_void_time_edit_error));
                     return;
                 }
 
@@ -152,8 +157,8 @@ public class EditLimitedTimeActivity extends BaseActivity {
 
     private void save() {
 
-        if(selectedStartTime > selectedEndTime) {
-            CLToast.showAtCenter(getBaseContext(), "生效时间不能晚于失效时间");
+        if (selectedStartTime > selectedEndTime) {
+            CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_void_time_edit_error));
             return;
         }
 

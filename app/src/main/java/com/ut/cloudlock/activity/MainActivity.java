@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSON;
+import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.FragmentUtil;
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         enableImmersive();
         initViewPager();

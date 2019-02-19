@@ -109,25 +109,41 @@ public class ORListAdapter extends BaseAdapter {
     }
 
     private Drawable getRecordIcon(int openType) {
+//                BLEMANUAL(0,"蓝牙手动开锁"),
+//                BLEAUTO(1,"蓝牙无感开锁"),
+//                FINGERPRINT( 2,"指纹"),
+//                PASSWORD(3,"密码"),
+//                ELECTRONICKEY(4,"电子钥匙"),
+//                BLUETOOTH(5,"手机蓝牙"),
+//                ICCARD(6,"卡片");
+
+        int rid = 0;
         switch (openType) {
+            case 0:
+                rid = 0;
+                break;
             case 1:
+                rid = R.mipmap.open_touch;
                 break;
             case 2:
+                rid = R.mipmap.open_fingerprint;
                 break;
             case 3:
+                rid = R.mipmap.open_password;
                 break;
             case 4:
+                rid = R.mipmap.open_key;
                 break;
             case 5:
+                rid = R.mipmap.open_bluetooth;
                 break;
             case 6:
-                break;
-            case 7:
-                break;
-            case 8:
+                rid = R.mipmap.open_door_card;
                 break;
         }
-
+        if(rid > 0) {
+            return context.getResources().getDrawable(rid);
+        }
         return null;
     }
 }

@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="keyItem"
             type="com.ut.database.entity.Key" />
@@ -27,6 +29,7 @@
                 android:id="@+id/choose_start_time"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_70dp"
+                android:clickable="@{keyItem.keyId > 0}"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/base_20dp">
@@ -55,7 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="@dimen/base_20dp"
-                    android:src="@mipmap/more_black" />
+                    android:src="@mipmap/more_black"
+                    android:visibility="@{keyItem.keyId == 0 ? View.GONE: View.VISIBLE}" />
 
                 <View
                     android:layout_width="match_parent"
@@ -68,6 +72,7 @@
                 android:id="@+id/choose_end_time"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_70dp"
+                android:clickable="@{keyItem.keyId > 0}"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/base_20dp">
@@ -101,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="@dimen/base_20dp"
-                    android:src="@mipmap/more_black" />
+                    android:src="@mipmap/more_black"
+                    android:visibility="@{keyItem.keyId == 0 ? View.GONE: View.VISIBLE}" />
 
             </FrameLayout>
         </LinearLayout>
@@ -124,7 +130,8 @@
             android:background="@drawable/selector_btn_save"
             android:text="@string/lock_save"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/base_17sp" />
+            android:textSize="@dimen/base_17sp"
+            android:visibility="@{keyItem.keyId == 0 ? View.GONE: View.VISIBLE}" />
 
     </LinearLayout>
 </layout>

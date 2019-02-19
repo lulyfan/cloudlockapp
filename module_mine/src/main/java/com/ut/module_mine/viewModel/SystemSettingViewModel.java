@@ -10,6 +10,7 @@ import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.module_mine.R;
+import com.ut.module_mine.activity.MainActivity;
 import com.ut.module_mine.activity.SystemSettingActivity;
 
 
@@ -35,6 +36,7 @@ public class SystemSettingViewModel extends BaseViewModel {
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
                             logoutSuccess.postValue(null);
+                            BaseApplication.clearDataBase();
                             BaseApplication.clearDataWhenLogout();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);

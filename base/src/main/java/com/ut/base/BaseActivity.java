@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +37,11 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.Util;
 import com.ut.base.dialog.DialogHelper;
 import com.ut.unilink.UnilinkManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -94,17 +96,43 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initNoLoginListener() {
-        MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(() -> handlerNotLogin(RouterUtil.LoginModulePath.Login)));
+        MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(this::overDateLogin));
     }
 
-    private synchronized void handlerNotLogin(String url) {
-        //TODO 暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
+    private synchronized void overDateLogin() {
         Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         try {
+            String message = getString(R.string.base_over_data_login);
             DialogHelper.getInstance()
-                    .setCanCancleOutSide(false)
-                    .setMessage(getString(R.string.base_auto_login_time_out))
-                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> ARouter.getInstance().build(url).withString("phone", BaseApplication.getUser().account).navigation())
+                    .setCanCancelOutSide(false)
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
+                        Schedulers.io().scheduleDirect(BaseApplication::clearDataBase, 500L, TimeUnit.MILLISECONDS);
+                        ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
+                    })
+                    .show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (autoOpenLockService != null) {
+            autoOpenLockService.stopAutoOpenLock();
+        }
+    }
+
+    public synchronized void remoteLogin() {
+        //暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
+        Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
+        try {
+            String message = getString(R.string.base_auto_login_time_out);
+            message = message.replace("##", new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
+            DialogHelper.getInstance()
+                    .setCanCancelOutSide(false)
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
+                        ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
+                        Schedulers.io().scheduleDirect(BaseApplication::clearDataBase, 500L, TimeUnit.MILLISECONDS);
+                    })
                     .show();
         } catch (Exception e) {
             e.printStackTrace();
