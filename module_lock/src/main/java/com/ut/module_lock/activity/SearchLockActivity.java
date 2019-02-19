@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.database.entity.LockKey;
@@ -28,6 +29,7 @@ public class SearchLockActivity extends BaseActivity {
     private CommonAdapter<LockKey> mLockKeyCommonAdapter = null;
     private SearchLockVM mSearchLockVM = null;
     private long currentGroupId = 0;
+    private List<SearchRecord> mSearchRecords = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class SearchLockActivity extends BaseActivity {
         mSearchLockVM = ViewModelProviders.of(this).get(SearchLockVM.class);
         mSearchLockVM.getSearchRecords().observe(this, searchRecords -> {
             assert searchRecords != null;
+            mSearchRecords = searchRecords;
             refreshSearchRecord(searchRecords);
         });
 
@@ -79,7 +82,16 @@ public class SearchLockActivity extends BaseActivity {
         });
         mBinding.lvSearchLock.setOnItemClickListener((parent, view, position, id) -> {
             LockKey lockKey = (LockKey) parent.getAdapter().getItem(position);
-            mSearchLockVM.insertSearchRecord(lockKey.getName());
+            boolean ifHad = false;
+            for (SearchRecord record: mSearchRecords) {
+                if(record.getWord().equals(lockKey.getName())) {
+                    ifHad = true;
+                    break;
+                }
+            }
+            if(!ifHad) {
+                mSearchLockVM.insertSearchRecord(lockKey.getName());
+            }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                     .navigation();
@@ -87,8 +99,8 @@ public class SearchLockActivity extends BaseActivity {
     }
 
     ViewGroup.MarginLayoutParams searchWordlp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
     private void refreshSearchRecord(List<SearchRecord> records) {
+        searchWordlp.rightMargin = SystemUtils.dp2px(getBaseContext(), 8);
         mBinding.flySearchHistory.removeAllViews();
         for (SearchRecord record : records) {
             TextView view = new TextView(this);

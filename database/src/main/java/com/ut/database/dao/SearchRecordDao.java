@@ -21,7 +21,7 @@ import java.util.List;
 @Dao
 public interface SearchRecordDao {
 
-    @Query("SELECT * FROM search_record ORDER BY id DESC")
+    @Query("SELECT * FROM search_record ORDER BY id DESC LIMIT 10")
     LiveData<List<SearchRecord>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
