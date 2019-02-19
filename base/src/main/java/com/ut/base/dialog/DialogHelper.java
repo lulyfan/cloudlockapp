@@ -30,10 +30,10 @@ public class DialogHelper {
             }
         }
         if (instance.isShowing()) {
-            return instance;
-        } else {
-            instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
+            instance.alertDialog.dismiss();
+            instance.alertDialog = null;
         }
+        instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
         return instance;
     }
 
