@@ -288,7 +288,7 @@ public class LockListFragment extends BaseFragment {
         super.onResume();
         if (mLockListFragVM != null) {
             mLockListFragVM.toGetLockAllList(false);
-//
+            mLockListFragVM.toGetAllGroupList(false);
         }
 
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
