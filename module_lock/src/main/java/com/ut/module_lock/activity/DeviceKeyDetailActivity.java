@@ -88,6 +88,13 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                 finish();
             }
         });
+        mDeviceKeyDetailVM.getShowLockResetDialog().observe(this, isShow -> {
+            if (isShow)
+                new CustomerAlertDialog(DeviceKeyDetailActivity.this, false)
+                        .setMsg(getString(R.string.lock_detail_dialog_msg_reset))
+                        .hideCancel()
+                        .show();
+        });
     }
 
     private void initTitle() {

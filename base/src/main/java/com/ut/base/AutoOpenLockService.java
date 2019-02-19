@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
+import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
+import com.ut.base.Utils.UTLog;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.unilink.UnilinkManager;
@@ -19,6 +21,8 @@ import com.ut.unilink.util.Base64;
 import com.ut.unilink.util.Log;
 
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class AutoOpenLockService extends Service {
 
@@ -127,8 +131,8 @@ public class AutoOpenLockService extends Service {
         }, 10);
 
         if (scanResult == UnilinkManager.SCAN_SUCCESS) {
-            Log.i("autoOpenLock", "-------------------------连接次数:"+ connectCount + "\t连接失败次数:" +connectFailedCount +
-            "\t\t开锁次数:" + openLockCount + "\t开锁失败次数:" + openLockFailedCount);
+            Log.i("autoOpenLock", "-------------------------连接次数:" + connectCount + "\t连接失败次数:" + connectFailedCount +
+                    "\t\t开锁次数:" + openLockCount + "\t开锁失败次数:" + openLockFailedCount);
             isScaning = true;
             Log.i("autoOpenLock", "开始扫描");
         }
@@ -149,7 +153,7 @@ public class AutoOpenLockService extends Service {
 
     private void connect(ScanDevice scanDevice) {
         Log.i("autoOpenLock", "连接设备");
-        connectCount ++;
+        connectCount++;
         UnilinkManager.getInstance(getApplication()).connect(scanDevice, new ConnectListener() {
             @Override
             public void onConnect() {
@@ -160,7 +164,7 @@ public class AutoOpenLockService extends Service {
             @Override
             public void onDisconnect(int code, String message) {
                 Log.i("autoOpenLock", "连接失败------" + message);
-                connectFailedCount ++;
+                connectFailedCount++;
                 delayScan();
             }
         });
@@ -171,7 +175,7 @@ public class AutoOpenLockService extends Service {
             return;
         }
 
-        openLockCount ++;
+        openLockCount++;
         UnilinkManager.getInstance(getApplication()).setConnectListener(null);
         int lockType = mLockKey.getType();
         if (lockType == EnumCollection.LockType.SMARTLOCK.getType()) {
@@ -188,7 +192,7 @@ public class AutoOpenLockService extends Service {
                         @Override
                         public void onFailed(int errCode, String errMsg) {
                             Log.i("autoOpenLock", "开锁失败:" + errMsg);
-                            openLockFailedCount ++;
+                            openLockFailedCount++;
                             addOpenLockLog(2);
                             UnilinkManager.getInstance(getApplication()).close(mLockKey.getMac());
                             delayScan();
@@ -227,21 +231,13 @@ public class AutoOpenLockService extends Service {
     }
 
     private void addOpenLockLog(int type) {
-        MyRetrofit.get().getCommonApiService().addLog(Long.parseLong(mLockKey.getId()),
-                mLockKey.getKeyId(), type, mLockKey.getElectric())
-                .doOnNext(stringResult -> {
-                    if (stringResult == null) {
-                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
-                    }
-
-                    if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
-                    }
-                })
+        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type,
+                EnumCollection.OpenLockType.BLEAUTO.ordinal(), mLockKey.getElectric())
                 .subscribe(jsonElementResult -> {
-
+                    UTLog.i(jsonElementResult.toString());
                 }, throwable -> {
-
+                    throwable.printStackTrace();
+                    //TODO 将未成功提交的记录保存在本地，后面继续提交
                 });
     }
 }

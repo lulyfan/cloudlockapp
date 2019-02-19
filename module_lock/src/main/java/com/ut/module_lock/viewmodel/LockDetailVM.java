@@ -1,7 +1,6 @@
 package com.ut.module_lock.viewmodel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
@@ -21,16 +20,13 @@ import com.ut.unilink.cloudLock.ConnectListener;
 import com.ut.unilink.cloudLock.LockStateListener;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
-import com.ut.unilink.cloudLock.protocol.data.LockState;
 import com.ut.unilink.util.Log;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import rx.schedulers.Schedulers;
 
 /**
  * author : zhouyubin
@@ -39,13 +35,16 @@ import rx.schedulers.Schedulers;
  * version: 1.0
  */
 public class LockDetailVM extends BaseViewModel {
-    private MutableLiveData<Boolean> unlockSuccess = new MutableLiveData<>();
+    private MutableLiveData<Integer> mShowTipDialog = new MutableLiveData<>();//1:显示开锁成功提示框，2：显示锁被重置提示框
+    public static final int SHOWTIPDIALOG_TYPE_UNLOCKSUCCESS = 1;
+    public static final int SHOWTIPDIALOG_TYPE_LOCKRESET = 2;
     private MutableLiveData<Boolean> connectStatus = new MutableLiveData<>();
     private MutableLiveData<Boolean> reAutoOpen = new MutableLiveData<>();//重新自动开锁
     private MutableLiveData<Integer> electricity = new MutableLiveData<>();//电量变化更新
     private LockKey mLockKey = null;
     public static final String TAG = LockDetailVM.class.getSimpleName();
     private LiveData<LockKey> mLockKeyLiveData = null;
+    private int mOpenLockType = EnumCollection.OpenLockType.BLEMANUAL.ordinal();
 
     private AtomicInteger mOpenStatus = new AtomicInteger(EnumCollection.OpenLockState.INITIAL);
 
@@ -54,12 +53,17 @@ public class LockDetailVM extends BaseViewModel {
         connectStatus.setValue(false);
     }
 
+    public void setIsAutoOpen(boolean isAutoOpen) {
+        mOpenLockType = isAutoOpen ? EnumCollection.OpenLockType.BLEAUTO.ordinal()
+                : EnumCollection.OpenLockType.BLEMANUAL.ordinal();
+    }
+
     public LiveData<Boolean> getConnectStatus() {
         return connectStatus;
     }
 
-    public LiveData<Boolean> getUnlockSuccessStatus() {
-        return unlockSuccess;
+    public LiveData<Integer> getUnlockSuccessStatus() {
+        return mShowTipDialog;
     }
 
     public LiveData<Integer> getElectricity() {
@@ -111,7 +115,14 @@ public class LockDetailVM extends BaseViewModel {
                     if (scanDevice.getAddress().equalsIgnoreCase(mLockKey.getMac())) {
                         if (mOpenStatus.compareAndSet(EnumCollection.OpenLockState.SCANNING
                                 , EnumCollection.OpenLockState.SCANNED)) {
-                            toConnect(scanDevice, mLockKey);
+                            UnilinkManager.getInstance(getApplication()).stopScan();
+                            if (!scanDevice.isActive()) {//当锁没有激活的时候，给出提示
+                                showDialog.postValue(false);
+                                mShowTipDialog.postValue(SHOWTIPDIALOG_TYPE_LOCKRESET);
+                                mOpenStatus.set(EnumCollection.OpenLockState.INITIAL);
+                            } else {
+                                toConnect(scanDevice, mLockKey);
+                            }
                         }
                     }
                 }
@@ -129,8 +140,8 @@ public class LockDetailVM extends BaseViewModel {
                     Log.i(TAG, "scan device onScanTimeout 8:");
                     showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
                     mOpenStatus.set(EnumCollection.OpenLockState.INITIAL);
-                    reAutoOpen.postValue(true);
                     showDialog.postValue(false);
+                    reAutoOpen.postValue(true);
                 }
             }, 10);
             if (result == 0) {
@@ -144,7 +155,6 @@ public class LockDetailVM extends BaseViewModel {
         UTLog.i(TAG, "开始连接");
         if (mOpenStatus.compareAndSet(EnumCollection.OpenLockState.SCANNED
                 , EnumCollection.OpenLockState.CONNECTING)) {
-            UnilinkManager.getInstance(getApplication()).stopScan();
             UnilinkManager.getInstance(getApplication()).setConnectListener(null);
             UnilinkManager.getInstance(getApplication()).connect(scanDevice, lockKey.getEncryptType(), lockKey.getEncryptKey(),
                     mConnectListener, mLockStateListener);
@@ -248,8 +258,8 @@ public class LockDetailVM extends BaseViewModel {
 
     }
 
-    private void toAddLog(int type) {
-        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type, mLockKey.getElectric())
+    private void toAddLog(int type, int openLockType) {
+        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type, openLockType, mLockKey.getElectric())
                 .subscribe(jsonElementResult -> {
                     UTLog.i(jsonElementResult.toString());
                 }, throwable -> {
@@ -262,21 +272,26 @@ public class LockDetailVM extends BaseViewModel {
     private CallBack2<Void> mOpenCallback = new CallBack2<Void>() {
         @Override
         public void onSuccess(Void data) {
-            unlockSuccess.postValue(true);
+            toAddLog(1, mOpenLockType);
+            mShowTipDialog.postValue(SHOWTIPDIALOG_TYPE_UNLOCKSUCCESS);
             showDialog.postValue(false);
-            toAddLog(1);
+            //todo 暂时先提示断开
+//            connectStatus.postValue(false);
 //            mOpenStatus.compareAndSet(EnumCollection.OpenLockState.OPENING
 //                    , EnumCollection.OpenLockState.CONNECTED);
-//            if (mLockKey != null)
-//                UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+            if (mLockKey != null) {
+                mExecutorService.schedule(() -> {
+                    UnilinkManager.getInstance(getApplication()).disconnect(mLockKey.getMac());
+                }, 500, TimeUnit.MILLISECONDS);
+            }
         }
 
         @Override
         public void onFailed(int errCode, String errMsg) {
             UTLog.i(TAG, "onOpen Fail:" + errCode + " s:" + errMsg);
+            toAddLog(2, mOpenLockType);
             showTip.postValue(getApplication().getString(R.string.lock_tip_ble_unlock_failed));
             showDialog.postValue(false);
-            toAddLog(2);
             mOpenStatus.compareAndSet(EnumCollection.OpenLockState.OPENING
                     , EnumCollection.OpenLockState.CONNECTED);
         }

@@ -9,14 +9,21 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.RomUtils;
+import com.ut.base.Utils.Util;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.base.dialog.CustomerAlertDialog;
@@ -41,6 +48,7 @@ public class NearLockActivity extends BaseActivity {
     private TextView mEmptyTip2 = null;
     private View emptyView = null;
     private CustomerAlertDialog mPermissionDialog = null;
+    private String mBindPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,9 +192,15 @@ public class NearLockActivity extends BaseActivity {
                     ImageButton imageButton = commonViewHolder.getView(R.id.iBtn_ble_add);
                     imageButton.setVisibility(item.getBindStatus() == EnumCollection.BindStatus.UNBIND.ordinal() ? View.VISIBLE : View.GONE);
                     imageButton.setOnClickListener(v -> {
-                        startLoad();
-                        mNearLockVM.bindLock(item);
+
                         mSelectedLock = item;
+
+                        if (item.getType() == EnumCollection.LockType.SMARTLOCK.getType()) {
+                            bindCheck(item);
+                        } else {
+                            startLoad();
+                            mNearLockVM.bindLock(item);
+                        }
                     });
                 }
             };
@@ -257,6 +271,44 @@ public class NearLockActivity extends BaseActivity {
             return false;
         }
         return true;
+    }
+
+    //绑定认证
+    private void bindCheck(NearScanLock lock) {
+        mBindPassword = null;
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_bind_check, null);
+        EditText et_password = view.findViewById(R.id.et_password);
+
+        DialogPlus dialog = DialogPlus.newDialog(this)
+                .setContentHolder(new ViewHolder(view))
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(Util.getWidthPxByDisplayPercent(this, 0.8))
+                .setContentBackgroundResource(R.drawable.bg_dialog_lock)
+                .setOnClickListener((dialog1, view1) -> {
+                    int i = view1.getId();
+                    if (i == R.id.cancel) {
+                        dialog1.dismiss();
+
+                    } else if (i == R.id.confirm) {
+
+                        String bindPassword = et_password.getText().toString();
+                        if ("".equals(bindPassword.trim())) {
+                            toastShort(getString(R.string.input_bind_password));
+                            return;
+                        }
+                        mBindPassword = bindPassword;
+                        dialog1.dismiss();
+                    }
+                })
+                .setOnDismissListener(dialog12 -> {
+                    if (mBindPassword != null) {
+                        startLoad();
+                        mNearLockVM.bindLock(lock, mBindPassword);
+                    }
+                })
+                .create();
+
+        dialog.show();
     }
 
 }

@@ -76,6 +76,16 @@ public class EnumCollection {
         ICCARD//4：卡片；
     }
 
+    public enum OpenLockType {
+        BLEMANUAL,//0蓝牙手动开锁
+        BLEAUTO,//1蓝牙无感开锁
+        FINGERPRINT,// 2：指纹
+        PASSWORD,//3：密码
+        ELECTRONICKEY,//4：电子钥匙
+        BLUETOOTH,//5：手机蓝牙
+        ICCARD//6：卡片；
+    }
+
     public enum DeviceKeyStatus {
         NORMAL,// 0：正常
         EXPIRED,//1：已过期

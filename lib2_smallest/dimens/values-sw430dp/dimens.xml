@@ -2,6 +2,7 @@
 <resources>
 <dimen name="base_10sp">10.39sp</dimen>
 <dimen name="base_17sp">17.66sp</dimen>
+<dimen name="base_16sp">16.62sp</dimen>
 <dimen name="base_20dp">20.77dp</dimen>
 <dimen name="base_10dp">10.39dp</dimen>
 <dimen name="base_35dp">36.35dp</dimen>

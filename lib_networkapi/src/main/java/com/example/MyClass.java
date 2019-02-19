@@ -32,9 +32,28 @@ public class MyClass {
         return simpleDateFormat.format(new Date(timeStamp));
     }
 
+    public static String getTimeString(long timeStamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        return simpleDateFormat.format(new Date(timeStamp));
+    }
+
     public static void main(String[] args) {
 
-
+        long start = 1548816300000L;
+        long end = 1548883740000L;
+        System.out.println(getDateString(start));
+        System.out.println(getDateString(end));
+        Date date1 = new Date(end);
+        Date date2 = new Date(start);
+        long timeEnd = date1.getHours() * 60 + date1.getMinutes();
+        long timeStart = date2.getHours() * 60 + date2.getMinutes();
+        long dateTime = 1000 * 60 * 60 * 24L;
+        System.out.println(timeStart);
+        System.out.println(timeEnd);
+        System.out.println(getTimeString(start));
+        System.out.println(getTimeString(end));
+        System.out.println(start % dateTime);
+        System.out.println(end % dateTime);
 //        System.out.println(false == false);
         int i = 2;
         System.out.println(0 - i);

@@ -123,7 +123,12 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
 
     @Override
     public void onScanFaile(int errorCode) {
-        getShowTip().postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+        getShowDialog().postValue(false);
+        if (errorCode == BleOperateManager.ERROR_SCANTIMEOUT) {
+            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+        } else if (errorCode == BleOperateManager.ERROR_LOCKRESET) {
+            mShowLockResetDialog.postValue(true);
+        }
     }
 
     @Override

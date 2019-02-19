@@ -295,4 +295,7 @@
     <string name="lock_deivce_key_tip_del">确定删除该钥匙吗？删除后不可恢复</string>
     <string name="delete">删除</string>
     <string name="lock_void_time_edit_error">生效时间不能晚于失效时间</string>
+    <string name="bind_check">身份认证</string>
+    <string name="input_bind_password">请输入门锁的管理员密码</string>
+    <string name="lock_detail_dialog_msg_reset">该锁已重置，请删除锁后重新绑定</string>
 </resources>

@@ -50,6 +50,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     private List<DeviceKeyAuth> mAllDeviceKeyAuth = new ArrayList<>();
     private Observer<List<DeviceKey>> observer1 = null;
 
+
     public LockKey getLockKey() {
         return mLockKey;
     }
@@ -151,7 +152,11 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     @Override
     public void onScanFaile(int errorCode) {
         processTick.postValue(-1);
-        showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+        if (errorCode == BleOperateManager.ERROR_SCANTIMEOUT) {
+            showTip.postValue(getApplication().getString(R.string.lock_tip_ble_not_finded));
+        } else if (errorCode == BleOperateManager.ERROR_LOCKRESET) {
+            mShowLockResetDialog.postValue(true);
+        }
     }
 
     @Override

@@ -35,6 +35,7 @@
         android:dividerHeight="1px"
         android:paddingLeft="@dimen/base_20dp"
         android:paddingRight="@dimen/base_20dp"
+        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@+id/lock_tv_group">
 
     </ListView>

@@ -42,6 +42,7 @@ public class BleOperateManager {
 
     public static final int ERROR_SCANTIMEOUT = -101;
     public static final int ERROR_SCANNOTSUPPORT = -102;
+    public static final int ERROR_LOCKRESET = -103;//锁被重置或未激活
     private OperateCallback mOperateCallback = null;
 
     private boolean canScan = true;
@@ -134,7 +135,11 @@ public class BleOperateManager {
                     canScan = false;
                     UnilinkManager.getInstance(mContext).stopScan();
                     if (mOperateCallback != null) {
-                        mOperateCallback.onScanSuccess(scanDevice);
+                        if (!scanDevice.isActive()) {
+                            mOperateCallback.onScanFaile(ERROR_LOCKRESET);
+                        } else {
+                            mOperateCallback.onScanSuccess(scanDevice);
+                        }
                     }
                 }
             }

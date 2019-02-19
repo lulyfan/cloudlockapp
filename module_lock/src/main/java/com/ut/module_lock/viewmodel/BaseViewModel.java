@@ -23,6 +23,7 @@ public class BaseViewModel extends AndroidViewModel {
     protected CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     protected MutableLiveData<String> showTip = new MutableLiveData<>();
     protected MutableLiveData<Boolean> showDialog = new MutableLiveData<>();
+    protected MutableLiveData<Boolean> mShowLockResetDialog = new MutableLiveData<>();
 
     public MutableLiveData<String> getShowTip() {
         return showTip;
@@ -30,6 +31,10 @@ public class BaseViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getShowDialog() {
         return showDialog;
+    }
+
+    public MutableLiveData<Boolean> getShowLockResetDialog() {
+        return mShowLockResetDialog;
     }
 
     public BaseViewModel(@NonNull Application application) {
