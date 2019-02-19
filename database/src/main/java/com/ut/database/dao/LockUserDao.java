@@ -13,7 +13,7 @@ import java.util.List;
 
 @Dao
 public interface LockUserDao {
-    @Query("select * from lockuser")
+    @Query("select * from lockuser ORDER BY createTime DESC")
     LiveData<List<LockUser>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
