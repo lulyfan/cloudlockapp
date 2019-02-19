@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
 import com.ut.base.ErrorHandler;
@@ -22,6 +23,7 @@ import com.ut.module_login.ui.RegisterActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -76,11 +78,11 @@ public class LoginVm extends AndroidViewModel {
         holder.recordDao().deleteAll();
     }
 
-    public void getVerifyCode(String phone) {
+    public void getVerifyCode(String phone, Consumer<Result<Void>> subscriber) {
         Disposable subscribe = MyRetrofit.get().getCommonApiService().getRegisterVerifyCode(phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> CLToast.showAtCenter(getApplication(), result.msg), new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
         compositeDisposable.add(subscribe);
     }
 
@@ -119,13 +121,11 @@ public class LoginVm extends AndroidViewModel {
         compositeDisposable.add(subscribe);
     }
 
-    public void getForgetPwdCode(String phone) {
+    public void getForgetPwdCode(String phone, Consumer<Result<Void>> subscriber) {
         Disposable subscribe = MyRetrofit.get().getCommonApiService().getForgetPwdVerifyCode(phone)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    CLToast.showAtCenter(getApplication(), result.msg);
-                }, new ErrorHandler());
+                .subscribe(subscriber, new ErrorHandler());
         compositeDisposable.add(subscribe);
     }
 

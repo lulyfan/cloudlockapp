@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.entity.base.Result;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
@@ -26,6 +27,7 @@ import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.viewmodel.LoginVm;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 @Route(path = RouterUtil.LoginModulePath.FORGET_PWD)
 public class ForgetPasswordActivity extends BaseActivity {
@@ -127,8 +129,10 @@ public class ForgetPasswordActivity extends BaseActivity {
 
         getVerifyCodeTv.setOnClickListener(v -> {
             ((ViewGroup) getVerifyCodeTv.getParent()).setSelected(true);
-            getVerifyCode(phoneEdt.getPhoneText());
-            mainHandler.sendEmptyMessage(RECIPROCAL);
+            getVerifyCode(phoneEdt.getPhoneText(), result -> {
+                CLToast.showAtCenter(getApplication(), result.msg);
+                mainHandler.sendEmptyMessage(RECIPROCAL);
+            });
         });
 
         RxTextView.afterTextChangeEvents(verifyCodeEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
@@ -144,7 +148,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         findViewById(R.id.root).setOnClickListener(v -> SystemUtils.hideKeyboard(getBaseContext(), v));
 
         mainHandler.postDelayed(() -> {
-            SystemUtils.showKeyboard(this, phoneEdt.isEnabled() ? phoneEdt: passwordEdt);
+            SystemUtils.showKeyboard(this, phoneEdt.isEnabled() ? phoneEdt : passwordEdt);
         }, 500L);
     }
 
@@ -176,9 +180,9 @@ public class ForgetPasswordActivity extends BaseActivity {
         return false;
     }
 
-    private void getVerifyCode(String phone) {
+    private void getVerifyCode(String phone, Consumer<Result<Void>> subscriber) {
         if (LoginUtil.isPhone(phone)) {
-            loginVm.getForgetPwdCode(phone);
+            loginVm.getForgetPwdCode(phone, subscriber);
         } else {
             CLToast.showAtCenter(this, getString(R.string.login_please_input_right_num));
         }

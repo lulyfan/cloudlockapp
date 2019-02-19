@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.entity.base.Result;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
@@ -33,6 +34,7 @@ import com.ut.module_login.viewmodel.LoginVm;
 import java.io.File;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 @Route(path = RouterUtil.LoginModulePath.REGISTER)
 public class RegisterActivity extends BaseActivity {
@@ -117,8 +119,11 @@ public class RegisterActivity extends BaseActivity {
 
         getVerifyCodeTv.setOnClickListener(v -> {
             ((ViewGroup) getVerifyCodeTv.getParent()).setSelected(true);
-            getVerifyCode(phoneEdt.getPhoneText());
-            mainHandler.sendEmptyMessage(RECIPROCAL);
+            getVerifyCode(phoneEdt.getPhoneText(), result -> {
+                CLToast.showAtCenter(getApplication(), result.msg);
+                mainHandler.sendEmptyMessage(RECIPROCAL);
+            });
+
         });
 
         RxTextView.afterTextChangeEvents(verifyCodeEdt).observeOn(AndroidSchedulers.mainThread()).doOnNext((event) -> {
@@ -158,8 +163,8 @@ public class RegisterActivity extends BaseActivity {
         }, 500L);
         registerRuleTv.setOnClickListener(v ->
                 ARouter.getInstance().build(RouterUtil.BaseModulePath.WEB)
-                .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockprivate")
-                .navigation());
+                        .withString("load_url", "https://smarthome.zhunilink.com/realtimeadmin/api/buss/executeBackString?scriptName=cloudlockprivate")
+                        .navigation());
     }
 
     private boolean handleMessage(Message msg) {
@@ -210,9 +215,9 @@ public class RegisterActivity extends BaseActivity {
         supportFinishAfterTransition();
     }
 
-    private void getVerifyCode(String phone) {
+    private void getVerifyCode(String phone, Consumer<Result<Void>> subscriber) {
         if (LoginUtil.isPhone(phone)) {
-            loginVm.getVerifyCode(phone);
+            loginVm.getVerifyCode(phone, subscriber);
         } else {
             CLToast.showAtCenter(this, getString(R.string.login_please_input_right_num));
         }

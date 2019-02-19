@@ -14,7 +14,9 @@ import android.widget.ListView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.adapter.ListAdapter;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.BR;
@@ -90,16 +92,15 @@ public class ChooseLockGroupActivity extends BaseActivity {
         View contentView = View.inflate(this, R.layout.dialog_edit, null);
         EditText edt = contentView.findViewById(R.id.edt);
         edt.setHint(R.string.lock_create_group_hint);
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setView(contentView)
-                .setTitle(R.string.lock_create_group)
-                .setPositiveButton(getText(R.string.lock_btn_confirm), (dialog, which) -> {
-                    dialog.dismiss();
+        DialogHelper.getInstance().setContentView(contentView)
+                .setTitle(getString(R.string.lock_create_group))
+                .setPositiveButton(getString(R.string.lock_btn_confirm), (dialog, which) -> {
+                    SystemUtils.hideKeyboard(getBaseContext(), edt);
                     lockSettingVM.createGroup(edt.getText().toString().trim());
+                    dialog.dismiss();
                 })
-                .setNegativeButton(getText(R.string.lock_cancel), null)
-                .create();
-        alertDialog.show();
+                .setNegativeButton(getString(R.string.lock_cancel), null)
+                .show();
     }
 
 //    private void loadGroup() {
