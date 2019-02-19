@@ -8,12 +8,14 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivityTimeAdjustBinding;
 import com.ut.module_lock.viewmodel.TimeAdjustVM;
 import com.ut.unilink.UnilinkManager;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -49,6 +51,14 @@ public class TimeAdjustActivity extends BaseActivity {
         LockKey lockKey = getIntent().getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY);
         viewModel.setLockKey(lockKey);
         viewModel.tip.observe(this, s -> toastShort(s));
+        viewModel.getShowLockResetDialog().observe(this, isShow -> {
+            if (isShow) {
+                new CustomerAlertDialog(TimeAdjustActivity.this, false)
+                        .setMsg(getString(R.string.lock_detail_dialog_msg_reset))
+                        .hideCancel()
+                        .show();
+            }
+        });
 
         viewModel.lockTime.observe(this, aLong -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");

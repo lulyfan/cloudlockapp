@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.ut.module_mine.viewModel.MineViewModel"/>
@@ -35,7 +36,7 @@
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/m"
                 app:layout_constraintStart_toEndOf="@+id/headImg"
-                app:layout_constraintTop_toTopOf="@+id/headImg" />
+                app:layout_constraintTop_toTopOf="@+id/headImg"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -50,7 +51,7 @@
                 android:textColor="@color/color_base_highlight"
                 android:textSize="@dimen/xs"
                 app:layout_constraintBottom_toBottomOf="@+id/headImg"
-                app:layout_constraintStart_toStartOf="@+id/textView" />
+                app:layout_constraintStart_toStartOf="@+id/textView"/>
 
             <ImageView
                 android:id="@+id/headImg"
@@ -70,7 +71,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/right_triangle" />
+                app:srcCompat="@drawable/right_triangle"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -78,7 +79,6 @@
             android:id="@+id/constraintLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,31 +89,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/select_bg_item_up"
+                android:checked="@={viewModel.isWebLoginEnable}"
                 android:paddingLeft="@dimen/base_16dp"
                 android:paddingRight="@dimen/base_16dp"
                 android:text="@string/webLoginPermission"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                android:checked="@={viewModel.isWebLoginEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <Switch
                 android:id="@+id/switchOpenLockVolume"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/select_bg_item_bottom"
+                android:checked="@={viewModel.isOpenLockVolumeEnable}"
                 android:paddingLeft="@dimen/base_16dp"
                 android:paddingRight="@dimen/base_16dp"
                 android:text="@string/openLockVoice"
                 android:textColor="@color/gray3"
                 android:textSize="@dimen/s"
-                android:checked="@={viewModel.isOpenLockVolumeEnable}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/divider"/>
 
             <View
                 android:id="@+id/divider"
@@ -121,7 +121,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/switchWebLogin" />
+                app:layout_constraintTop_toBottomOf="@id/switchWebLogin"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -150,7 +150,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/lockGroup"
@@ -168,7 +168,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2"/>
 
             <TextView
                 android:id="@+id/changeLockPermission"
@@ -186,7 +186,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/divider3"/>
 
             <View
                 android:id="@+id/divider2"
@@ -194,7 +194,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/lockUserManage"
-                app:layout_constraintTop_toBottomOf="@+id/lockUserManage" />
+                app:layout_constraintTop_toBottomOf="@+id/lockUserManage"/>
 
             <View
                 android:id="@+id/divider3"
@@ -202,7 +202,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/lockGroup"
-                app:layout_constraintTop_toBottomOf="@+id/lockGroup" />
+                app:layout_constraintTop_toBottomOf="@+id/lockGroup"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -231,7 +231,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/systemSetting"
@@ -249,7 +249,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider5" />
+                app:layout_constraintTop_toBottomOf="@+id/divider5"/>
 
             <View
                 android:id="@+id/divider5"
@@ -257,7 +257,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/customService" />
+                app:layout_constraintTop_toBottomOf="@+id/customService"/>
         </android.support.constraint.ConstraintLayout>
 
 

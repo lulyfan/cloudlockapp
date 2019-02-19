@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.example.operation.CommonApi;
 import com.ut.base.BaseActivity;
+import com.ut.base.ErrorHandler;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityAboutUsBinding;
 
@@ -31,7 +32,7 @@ public class AboutUsActivity extends BaseActivity {
                     binding.textView41.setText(cloudlockenterpriseinfo.getMobile());
                     binding.textView44.setText(cloudlockenterpriseinfo.getUrl());
                     binding.textView48.setText(cloudlockenterpriseinfo.getEmail());
-                });
+                }, new ErrorHandler());
     }
 
     private void initUI() {

@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.AudioPlayUtil;
 import com.ut.base.Utils.RomUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
@@ -164,6 +165,7 @@ public class LockDetailActivity extends BaseActivity {
             if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_UNLOCKSUCCESS) {
                 mIsShowDialogAndTip.set(false);
                 mLockDetailVM.setIsAutoOpen(true);
+                AudioPlayUtil.get(this).play(0, true);
                 new UnlockSuccessDialog(this, false).show();
             } else if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_LOCKRESET) {
                 new CustomerAlertDialog(LockDetailActivity.this, false)
