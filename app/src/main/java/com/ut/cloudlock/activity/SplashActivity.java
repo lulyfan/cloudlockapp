@@ -30,13 +30,13 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  */
 @SuppressLint("Registered")
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     Handler mHandler = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setLightStatusBar();
+        setLightStatusBar();
         getWindow().setBackgroundDrawableResource(R.mipmap.splash);
         mHandler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -60,5 +60,13 @@ public class SplashActivity extends AppCompatActivity {
                 mHandler.sendEmptyMessageDelayed(200, 800);
             }
         });
+    }
+
+    @Override
+    protected synchronized void overDateLogin() {
+    }
+
+    @Override
+    public synchronized void remoteLogin() {
     }
 }

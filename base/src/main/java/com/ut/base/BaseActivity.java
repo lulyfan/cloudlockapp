@@ -99,7 +99,7 @@ public class BaseActivity extends AppCompatActivity {
         MyRetrofit.get().setNoLoginListener(() -> AndroidSchedulers.mainThread().scheduleDirect(this::overDateLogin));
     }
 
-    private synchronized void overDateLogin() {
+    protected synchronized void overDateLogin() {
         Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         try {
             String message = getString(R.string.base_over_data_login);
