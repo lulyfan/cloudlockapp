@@ -1,6 +1,7 @@
 package com.ut.cloudlock;
 
 import com.ut.base.BaseApplication;
+import com.ut.base.Utils.AudioPlayUtil;
 
 /**
  * author : zhouyubin
@@ -12,5 +13,6 @@ public class MyApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        AudioPlayUtil.get(this);
     }
 }

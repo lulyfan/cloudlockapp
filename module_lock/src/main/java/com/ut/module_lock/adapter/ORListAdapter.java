@@ -120,7 +120,7 @@ public class ORListAdapter extends BaseAdapter {
         int rid = 0;
         switch (openType) {
             case 0:
-                rid = 0;
+                rid = R.mipmap.open_bluetooth;
                 break;
             case 1:
                 rid = R.mipmap.open_touch;
@@ -135,13 +135,13 @@ public class ORListAdapter extends BaseAdapter {
                 rid = R.mipmap.open_key;
                 break;
             case 5:
-                rid = R.mipmap.open_bluetooth;
+//                rid = R.mipmap.open_bluetooth;
                 break;
             case 6:
                 rid = R.mipmap.open_door_card;
                 break;
         }
-        if(rid > 0) {
+        if (rid > 0) {
             return context.getResources().getDrawable(rid);
         }
         return null;

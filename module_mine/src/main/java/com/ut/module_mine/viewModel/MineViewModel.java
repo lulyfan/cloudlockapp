@@ -4,8 +4,10 @@ import android.app.Application;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.ut.base.BaseApplication;
 import com.ut.base.UserRepository;
+import com.ut.base.Utils.UTLog;
 import com.ut.database.entity.User;
 import com.ut.module_mine.Constant;
 import com.ut.module_mine.R;
@@ -35,7 +37,7 @@ public class MineViewModel extends BaseViewModel {
         isOpenLockVolumeEnable.addOnPropertyChangedCallback(new android.databinding.Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(android.databinding.Observable sender, int propertyId) {
-                Log.d("debug","onPropertyChanged isOpenLockVolumeEnable");
+                Log.d("debug", "onPropertyChanged isOpenLockVolumeEnable");
                 enableOpenLockVolume(isOpenLockVolumeEnable.get());
             }
         });
@@ -79,18 +81,20 @@ public class MineViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(voidResult -> {
-                    Log.d("debug", voidResult.msg);
-                    tip.postValue(voidResult.msg);
-                    if (Constant.CONFIG_TYPE_WEB_LOGIN.equals(type)) {
-                        user.enableWebLogin = enable ? 1 : 0;
-                    } else if (Constant.CONFIG_TYPE_ENABLE_VOLUME.equals(type)) {
-                        user.enableSound = enable ? 1 : 0;
-                    }
-                },
-                    throwable -> {
-                        Log.d("debug", throwable.getMessage());
-                        tip.postValue(throwable.getMessage());
+                            Log.d("debug", voidResult.msg);
+                            tip.postValue(voidResult.msg);
+                            if (Constant.CONFIG_TYPE_WEB_LOGIN.equals(type)) {
+                                user.enableWebLogin = enable ? 1 : 0;
+                            } else if (Constant.CONFIG_TYPE_ENABLE_VOLUME.equals(type)) {
+                                user.enableSound = enable ? 1 : 0;
+                                UTLog.i("user.enableSound" + user.enableSound + " use=" + user + " BaseApplication.getUser()" + BaseApplication.getUser());
+                            }
+                            BaseApplication.setUser(user);
+                        },
+                        throwable -> {
+                            Log.d("debug", throwable.getMessage());
+                            tip.postValue(throwable.getMessage());
 
-                });
+                        });
     }
 }

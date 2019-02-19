@@ -79,7 +79,11 @@ public class TimeAdjustVM extends BaseViewModel {
             public void onScan(ScanDevice scanDevice) {
                 if (scanDevice.getAddress().equalsIgnoreCase(mac)) {
                     isFindDevice = true;
-                    connect(scanDevice);
+                    if (!scanDevice.isActive()) {
+                        mShowLockResetDialog.postValue(true);
+                    } else {
+                        connect(scanDevice);
+                    }
                 }
             }
 
