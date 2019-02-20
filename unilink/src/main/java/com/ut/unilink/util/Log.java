@@ -1,7 +1,7 @@
 package com.ut.unilink.util;
 
 public class Log {
-    private static boolean isEnableLog = false;
+    private static boolean isEnableLog = true;
     private static final String TAG = "unilink";
 
     public static void enableLog(boolean isEnable) {
@@ -61,7 +61,7 @@ public class Log {
         for (int i = 0; i < data.length; i++) {
             result += String.format("%02x", data[i] & 0xFF) + split;
         }
-        return result;
+        return result.substring(0, result.length() - 1);
     }
 
     public static byte[] getBytes(String data) {
