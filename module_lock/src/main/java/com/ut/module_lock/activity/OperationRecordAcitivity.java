@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -54,6 +55,9 @@ public class OperationRecordAcitivity extends BaseActivity {
                 List<OperationRecord> tmps = operationVm.handlerRecords(records);
                 oprs.addAll(tmps);
             }
+
+            mBinding.nodata.setVisibility(oprs.isEmpty() ? View.VISIBLE : View.GONE);
+
             listAdapter.notifyDataSetChanged();
         });
         operationVm.loadRecord(recordType, currentId);
@@ -85,8 +89,8 @@ public class OperationRecordAcitivity extends BaseActivity {
         operationVm.setGateRecord(isGateRecord);
         if (getIntent().hasExtra(Constance.KEY_ID)) {
             currentId = getIntent().getLongExtra(Constance.KEY_ID, currentId);
-            if(getIntent().hasExtra(Constance.LOCK_ID)) {
-                operationVm.setLockId(getIntent().getLongExtra(Constance.LOCK_ID,  0L));
+            if (getIntent().hasExtra(Constance.LOCK_ID)) {
+                operationVm.setLockId(getIntent().getLongExtra(Constance.LOCK_ID, 0L));
             }
         } else if (getIntent().hasExtra(Constance.USER_ID)) {
             currentId = getIntent().getLongExtra(Constance.USER_ID, currentId);

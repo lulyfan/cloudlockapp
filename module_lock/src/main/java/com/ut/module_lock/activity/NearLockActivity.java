@@ -304,6 +304,7 @@ public class NearLockActivity extends BaseActivity {
                     if (mBindPassword != null) {
                         startLoad();
                         mNearLockVM.bindLock(lock, mBindPassword);
+                        SystemUtils.hideKeyboard(getBaseContext(), et_password);
                     }
                 })
                 .create();

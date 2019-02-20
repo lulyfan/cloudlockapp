@@ -55,6 +55,7 @@
             android:layout_marginEnd="@dimen/base_20dp"
             android:text="@{userLock.keyStatus}"
             android:textSize="@dimen/base_12sp"
+            android:textColor="@{userLock.keyStatusColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

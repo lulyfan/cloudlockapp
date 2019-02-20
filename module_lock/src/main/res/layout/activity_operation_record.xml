@@ -17,20 +17,30 @@
 
         <include layout="@layout/toolbar_green" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_layout"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <com.ut.commoncomponent.LoadMoreListView
-                android:id="@+id/operation_record_list"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/base_10dp"
-                android:layout_weight="1"
-                android:divider="@null"
-                android:listSelector="@android:color/transparent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+                android:layout_height="wrap_content">
+
+                <com.ut.commoncomponent.LoadMoreListView
+                    android:id="@+id/operation_record_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/base_10dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:listSelector="@android:color/transparent" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <include android:id="@+id/nodata" layout="@layout/layout_no_data" android:visibility="gone"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 </layout>

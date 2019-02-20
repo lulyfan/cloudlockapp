@@ -2,6 +2,7 @@ package com.ut.module_mine.activity;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.Utils.Util;
+import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockUserKey;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.Constant;
@@ -71,7 +73,7 @@ public class LockUserItemActivity extends BaseActivity {
 
                     default:
                 }
-                Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus);
+                Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus, Color.parseColor(EnumCollection.KeyStatus.isKeyValid(key.getKeyStatus()) ? "#999999" : "#F55D54"));
                 dataList.add(data);
             }
             adapter.setData(dataList);
@@ -148,11 +150,14 @@ public class LockUserItemActivity extends BaseActivity {
         public long keyId;
         public String keyStatus;
 
-        public Data(String lockName, long keyId, String keyType, String keyStatus) {
+        public int keyStatusColor;
+
+        public Data(String lockName, long keyId, String keyType, String keyStatus, int keyStatusColor) {
             this.lockName = lockName;
             this.keyType = keyType;
             this.keyId = keyId;
             this.keyStatus = keyStatus;
+            this.keyStatusColor = keyStatusColor;
         }
     }
 }

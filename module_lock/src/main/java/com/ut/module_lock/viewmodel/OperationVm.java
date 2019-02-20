@@ -64,7 +64,7 @@ public class OperationVm extends BaseViewModel {
 
         if (Constance.BY_KEY.equals(recordType)) {
             currentType = Constance.BY_KEY;
-            return isGateRecord ? oRecordDao.getGateLockRecordsByKeyId(lockId) : oRecordDao.getRecordsByKeyId(currentId);
+            return isGateRecord ? oRecordDao.getGateLockRecordsByKeyId(currentId) : oRecordDao.getRecordsByKeyId(currentId);
         } else if (Constance.BY_LOCK.equals(recordType)) {
             currentType = Constance.BY_LOCK;
             return isGateRecord ? oRecordDao.getGateLockRecordsByLockId(currentId) : oRecordDao.getRecordsByLockId(currentId);
