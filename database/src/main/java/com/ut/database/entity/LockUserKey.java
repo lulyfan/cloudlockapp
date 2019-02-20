@@ -19,6 +19,8 @@ public class LockUserKey {
     private long keyId;
     private String lockName;
     private String mac;
+    private int keyStatus;
+
 
     public int getRuleType() {
         return ruleType;
@@ -50,5 +52,13 @@ public class LockUserKey {
 
     public void setMac(String mac) {
         this.mac = mac;
+    }
+
+    public int getKeyStatus() {
+        return keyStatus;
+    }
+
+    public void setKeyStatus(int keyStatus) {
+        this.keyStatus = keyStatus;
     }
 }

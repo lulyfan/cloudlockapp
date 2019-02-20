@@ -35,10 +35,10 @@ public class LockUserActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
 
         viewModel.mLockUsers.observe(this, lockUsers -> {
-            for (LockUser lu : lockUsers) {
-                String keyStatusStr = viewModel.getKeyStatusStr(lu.getKeyStatus());
-                lu.setKeyStatusStr(keyStatusStr);
-            }
+//            for (LockUser lu : lockUsers) {
+//                String keyStatusStr = viewModel.getKeyStatusStr(lu.getKeyStatus());
+//                lu.setKeyStatusStr(keyStatusStr);
+//            }
 
             adapter.setData(lockUsers);
         });

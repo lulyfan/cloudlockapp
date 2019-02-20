@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="lockUser"
             type="com.ut.database.entity.LockUser"/>
@@ -20,12 +21,12 @@
             android:layout_marginStart="@dimen/base_16dp"
             android:layout_marginTop="@dimen/base_8dp"
             android:layout_marginBottom="@dimen/base_8dp"
+            app:imageUrl="@{lockUser.headPic}"
+            app:isCircle="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/headimg"
-            app:imageUrl="@{lockUser.headPic}"
-            app:isCircle="@{true}"/>
+            app:srcCompat="@drawable/headimg"/>
 
         <TextView
             android:id="@+id/userName"
@@ -36,7 +37,7 @@
             android:textColor="@color/gray3"
             android:textSize="@dimen/s"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+            app:layout_constraintTop_toTopOf="@+id/imageView2"/>
 
         <TextView
             android:id="@+id/textView13"
@@ -46,7 +47,7 @@
             android:textColor="@color/gray9"
             android:textSize="@dimen/xs"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="@+id/userName" />
+            app:layout_constraintStart_toStartOf="@+id/userName"/>
 
         <ImageView
             android:id="@+id/imageView"
@@ -56,18 +57,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/right_triangle" />
+            app:srcCompat="@drawable/right_triangle"/>
 
-        <TextView
-            android:id="@+id/state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/base_12sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/base_20dp"
-            android:text="@{lockUser.keyStatusStr}"
-            app:layout_constraintRight_toLeftOf="@id/imageView" />
+        <!--<TextView-->
+        <!--android:id="@+id/state"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="@dimen/base_12sp"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--android:layout_marginEnd="@dimen/base_20dp"-->
+        <!--android:text="@{lockUser.keyStatusStr}"-->
+        <!--app:layout_constraintRight_toLeftOf="@id/imageView" />-->
 
         <View
             style="@style/dividerStyle"

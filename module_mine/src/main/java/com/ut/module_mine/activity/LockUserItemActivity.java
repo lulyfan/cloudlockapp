@@ -51,6 +51,7 @@ public class LockUserItemActivity extends BaseActivity {
             List<Data> dataList = new ArrayList<>();
             for (LockUserKey key : lockUserKeys) {
                 String keyType = "";
+                String keyStatus = getResources().getStringArray(R.array.key_status)[key.getKeyStatus()];
                 switch (key.getRuleType()) {
                     case Constant.TYPE_KEY_FOREVER:
                         keyType = getString(R.string.mine_forever);
@@ -68,9 +69,9 @@ public class LockUserItemActivity extends BaseActivity {
                         keyType = getString(R.string.mine_loop);
                         break;
 
-                        default:
+                    default:
                 }
-                Data data = new Data(key.getLockName(), key.getKeyId(), keyType);
+                Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus);
                 dataList.add(data);
             }
             adapter.setData(dataList);
@@ -145,11 +146,13 @@ public class LockUserItemActivity extends BaseActivity {
         public String lockName;
         public String keyType;
         public long keyId;
+        public String keyStatus;
 
-        public Data(String lockName, long keyId, String keyType) {
+        public Data(String lockName, long keyId, String keyType, String keyStatus) {
             this.lockName = lockName;
             this.keyType = keyType;
             this.keyId = keyId;
+            this.keyStatus = keyStatus;
         }
     }
 }
