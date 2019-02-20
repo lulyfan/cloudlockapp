@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentLimitTimeBinding;
 import com.ut.base.viewModel.SendKeyViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,25 +56,41 @@ public class LimitTimeFragment extends BaseFragment {
     }
 
     private void initData() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         String limitStartTime = viewModel.limitStartTime.getValue();
 
-        if (limitStartTime != null && !"".equals(limitStartTime)) {
+        if (!TextUtils.isEmpty(limitStartTime)) {
             limitStartTime = limitStartTime.replace("-", "/");
             limitStartTime = limitStartTime.substring(0, limitStartTime.length() - 3);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            limitStartTime = sdf.format(new Date(calendar.getTimeInMillis()));
+            sYear = calendar.get(Calendar.YEAR);
+            sMonth = calendar.get(Calendar.MONTH);
+            sDay = calendar.get(Calendar.DATE);
+            sHour = calendar.get(Calendar.HOUR_OF_DAY);
+            sMinute = calendar.get(Calendar.MINUTE);
 
-            binding.tvValidTime.setText(limitStartTime);
-            binding.tvValidTime.setTextColor(getResources().getColor(R.color.gray3));
+            viewModel.limitStartTime.setValue(limitStartTime.concat(":00"));
         }
+
+        binding.tvValidTime.setText(limitStartTime);
+        binding.tvValidTime.setTextColor(getResources().getColor(R.color.gray3));
 
         String limitEndTime = viewModel.limitEndTime.getValue();
 
-        if (limitEndTime != null && !"".equals(limitEndTime)) {
+        if (!TextUtils.isEmpty(limitEndTime)) {
             limitEndTime = limitEndTime.replace("-", "/");
             limitEndTime = limitEndTime.substring(0, limitEndTime.length() - 3);
-
-            binding.tvInvalidTime.setText(limitEndTime);
-            binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+            limitEndTime = sdf.format(new Date(calendar.getTimeInMillis()));
+            viewModel.limitEndTime.setValue(limitEndTime.concat(":00"));
         }
+
+        binding.tvInvalidTime.setText(limitEndTime);
+        binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
 
     }
 
@@ -119,7 +139,7 @@ public class LimitTimeFragment extends BaseFragment {
             mMinute = sMinute;
             Calendar calendar = Calendar.getInstance();
             calendar.set(mYear, mMonth, mDay, mHour, mMinute);
-            calendar.add(Calendar.MINUTE, 15);
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
             mYear = calendar.get(Calendar.YEAR);
             mMonth = calendar.get(Calendar.MONTH);
             mDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -132,12 +152,11 @@ public class LimitTimeFragment extends BaseFragment {
         SystemUtils.hideKeyboard(getContext(), v);
         DialogUtil.chooseDateTime(getContext(), title, (year, month, day, hour, minute) -> {
             TextView textView = (TextView) v;
-            textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day)
+            textView.setText(year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day)
                     + " " + String.format("%02d", hour) + ":" + String.format("%02d", minute));
-            textView.setTextColor(getResources().getColor(R.color.gray3));
 
             if (getString(R.string.validTime).equals(title)) {
-                String startTime = textView.getText().toString().replace("/", "-").concat(":00");
+                String startTime = textView.getText().toString().concat(":00");
                 viewModel.limitStartTime.setValue(startTime);
 
                 sYear = year;
@@ -147,7 +166,7 @@ public class LimitTimeFragment extends BaseFragment {
                 sMinute = minute;
 
             } else if (getString(R.string.invalidTime).equals(title)) {
-                String endTime = textView.getText().toString().replace("/", "-").concat(":00");
+                String endTime = textView.getText().toString().concat(":00");
                 viewModel.limitEndTime.setValue(endTime);
 
                 eYear = year;
