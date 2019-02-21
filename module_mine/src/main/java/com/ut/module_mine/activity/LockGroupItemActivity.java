@@ -20,6 +20,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.Util;
 import com.ut.database.entity.LockKey;
 import com.ut.module_mine.BR;
@@ -116,7 +117,7 @@ public class LockGroupItemActivity extends BaseActivity {
                     int i = view1.getId();
                     if (i == R.id.cancel) {
                         dialog1.dismiss();
-
+                        SystemUtils.hideKeyboard(getBaseContext(), view1);
                     } else if (i == R.id.confirm) {
 
                         String groupName = et_groupName.getText().toString();
@@ -126,8 +127,7 @@ public class LockGroupItemActivity extends BaseActivity {
                         }
                         viewModel.editGroupName(groupName);
                         dialog1.dismiss();
-
-                    } else {
+                        SystemUtils.hideKeyboard(getBaseContext(), view1);
                     }
                 })
                 .create();

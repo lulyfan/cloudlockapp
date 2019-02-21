@@ -41,12 +41,12 @@
     <string name="userProtocol">用户协议</string>
     <string name="privacyPolicy">隐私政策</string>
     <string name="mine_logout">退出登录</string>
-    <string name="contactNumber">联系电话</string>
-    <string name="_contactNum">0756-1234567</string>
-    <string name="officialWebSite">官方网站</string>
+    <string name="contactNumber">客服电话</string>
+    <string name="_contactNum">18125067770</string>
+    <string name="officialWebSite">公司官网</string>
     <string name="_officialWebSite">http://www.zhunilink.com</string>
     <string name="developWebSite">开发平台网站</string>
-    <string name="BusinessMail">业务合作邮箱</string>
+    <string name="BusinessMail">官方邮箱</string>
     <string name="_businessMail">yunsuo@ut.com</string>
     <string name="companyName">珠海优特物联科技有限公司</string>
     <string name="inputGroupName">请输入组名</string>

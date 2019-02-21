@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -95,6 +96,7 @@ public class CheckCodeView extends FrameLayout {
         editText.setCursorVisible(false);
         editText.setTextColor(Color.TRANSPARENT);
         editText.setBackgroundColor(Color.TRANSPARENT);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(checkCodeLength)});
         addView(editText, containerLayoutPara);
         addView(linearLayout, containerLayoutPara);

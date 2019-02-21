@@ -160,7 +160,8 @@ public class KeyInfoActivity extends BaseActivity {
                 }
 
                 TextView item2 = getView(R.id.item2);
-                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()) {
+                if (keyInfo.getStatus() == EnumCollection.KeyStatus.DELETING.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_DELETE.ordinal()
+                        || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
                     item2.setVisibility(View.GONE);
                 } else {
                     item2.setText(keyInfo.getStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || keyInfo.getStatus() == EnumCollection.KeyStatus.FREEZING.ordinal()
