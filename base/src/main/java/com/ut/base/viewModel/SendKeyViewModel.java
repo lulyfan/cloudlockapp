@@ -26,12 +26,14 @@ import io.reactivex.schedulers.Schedulers;
 public class SendKeyViewModel extends AndroidViewModel {
 
     private CommonApiService service;
-    public MutableLiveData<String> tip = new MutableLiveData<>();
+
     public static final int KEY_TYPE_FOREVER = 1;
     public static final int KEY_TYPE_LIMI_TTIME = 2;
     public static final int KEY_TYPE_ONCE = 3;
     public static final int KEY_TYPE_LOOP = 4;
 
+    public MutableLiveData<String> tip = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isSendKeySuccess = new MutableLiveData<>();
     public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();
     public MutableLiveData<String> keyName = new MutableLiveData<>();
     public boolean isAdmin;
@@ -81,14 +83,16 @@ public class SendKeyViewModel extends AndroidViewModel {
                 .subscribe(voidResult -> {
                     if (voidResult.code == 400) {
                         CLToast.showAtCenter(getApplication(), voidResult.msg);
+                        isSendKeySuccess.setValue(false);
                     } else {
                         tip.postValue(voidResult.msg);
+                        isSendKeySuccess.setValue(true);
                     }
                 }, new ErrorHandler() {
                     @Override
                     public void accept(Throwable throwable) {
                         super.accept(throwable);
-                        tip.postValue(throwable.getMessage());
+                        isSendKeySuccess.setValue(false);
                     }
                 });
     }

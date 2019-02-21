@@ -59,6 +59,12 @@ public class LockGroupItemActivity extends BaseActivity {
 
         viewModel.locks.observe(this, locks -> {
             adapter.setData(locks);
+
+            if (locks == null || locks.size() <= 0) {
+                binding.noDataPage.setVisibility(View.VISIBLE);
+            } else {
+                binding.noDataPage.setVisibility(View.GONE);
+            }
         });
         viewModel.updateGroupName.observe(this, groupName -> setTitle(groupName));
         viewModel.delGroupSuccess.observe(this, aVoid -> onBackPressed());

@@ -1,5 +1,6 @@
 package com.ut.module_mine.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -15,23 +16,16 @@ import java.util.List;
 
 public class LockGroupViewModel extends BaseViewModel {
 
-    public MutableLiveData<List<LockGroup>> mLockGroups = new MutableLiveData<>();
+    public LiveData<List<LockGroup>> mLockGroups;
     public MutableLiveData<Void> addGroupSuccess = new MutableLiveData<>();
     public MutableLiveData<Boolean> loadLockGroupState = new MutableLiveData<>();
 
-    private LiveData<List<LockGroup>> mAllLockGroupLiveData = null;
-
     public LockGroupViewModel(@NonNull Application application) {
         super(application);
-        mAllLockGroupLiveData = LockGroupDaoImpl.get().getAllLockGroup();
-        mAllLockGroupLiveData.observeForever(mLockGroupsObserver);
+        mLockGroups = LockGroupDaoImpl.get().getAllLockGroup();
     }
 
-    Observer<List<LockGroup>> mLockGroupsObserver = lockGroups -> {
-        mLockGroups.postValue(lockGroups);
-    };
-
-
+    @SuppressLint("CheckResult")
     public void loadLockGroup(boolean isShowTip) {
         service.getGroup()
                 .doOnNext(stringResult -> {
@@ -44,12 +38,10 @@ public class LockGroupViewModel extends BaseViewModel {
                     }
                 })
                 .subscribe(listResult -> {
-                            mLockGroups.postValue(listResult.data);
-                            loadLockGroupState.postValue(true);
                             LockGroupDaoImpl.get().deleteAll();
                             LockGroupDaoImpl.get().insertAll(listResult.data);
+                            loadLockGroupState.postValue(true);
                         },
-                        throwable ->
                            new ErrorHandler(){
                                @Override
                                public void accept(Throwable throwable) {
@@ -61,6 +53,7 @@ public class LockGroupViewModel extends BaseViewModel {
 
     }
 
+    @SuppressLint("CheckResult")
     public void addLockGroup(String groupName) {
         service.addGroup(groupName)
                 .doOnNext(stringResult -> {
@@ -76,11 +69,5 @@ public class LockGroupViewModel extends BaseViewModel {
                 })
                 .subscribe(voidResult -> tip.postValue(voidResult.msg),
                         new ErrorHandler());
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mAllLockGroupLiveData.removeObserver(mLockGroupsObserver);
     }
 }

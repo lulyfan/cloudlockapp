@@ -56,4 +56,5 @@
     <string name="lock_contact_request_tips">APP需要你的允许获取联系人权限</string>
     <string name="lock_setting">设置</string>
     <string name="base_over_data_login">自动登录已过期，请重新登陆。</string>
+    <string name="sending">发送中</string>
 </resources>

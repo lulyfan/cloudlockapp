@@ -6,15 +6,20 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.ut.base.BaseActivity;
 import com.ut.database.entity.LockUser;
 import com.ut.module_mine.BR;
+import com.ut.module_mine.PreventShakeObserver;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityLockUserBinding;
 import com.ut.module_mine.databinding.ItemLockUserBinding;
 import com.ut.module_mine.viewModel.LockUserViewModel;
+
+import java.util.List;
 
 
 public class LockUserActivity extends BaseActivity {
@@ -34,13 +39,23 @@ public class LockUserActivity extends BaseActivity {
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockUserViewModel.class);
 
-        viewModel.mLockUsers.observe(this, lockUsers -> {
+        viewModel.mLockUsers.observe(this, new PreventShakeObserver<List<LockUser>>() {
+            @Override
+            public void onChange(List<LockUser> lockUsers) {
+
 //            for (LockUser lu : lockUsers) {
 //                String keyStatusStr = viewModel.getKeyStatusStr(lu.getKeyStatus());
 //                lu.setKeyStatusStr(keyStatusStr);
 //            }
 
-            adapter.setData(lockUsers);
+                adapter.setData(lockUsers);
+
+                if (lockUsers == null || lockUsers.size() <= 0) {
+                    binding.noDataPage.setVisibility(View.VISIBLE);
+                } else {
+                    binding.noDataPage.setVisibility(View.GONE);
+                }
+            }
         });
 
         viewModel.loadLockUserState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));

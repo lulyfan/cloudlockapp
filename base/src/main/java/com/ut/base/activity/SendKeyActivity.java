@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -61,7 +62,13 @@ public class SendKeyActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(SendKeyViewModel.class);
         viewModel.tip.observe(this, s -> {
             CLToast.showAtBottom(getApplicationContext(), s);
-            finish();
+        });
+        viewModel.isSendKeySuccess.observe(this, aBoolean -> {
+            if (aBoolean) {
+                finish();
+            } else {
+                binding.sendKey.setEnabled(true);
+            }
         });
         viewModel.mac = getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC);
 
@@ -173,6 +180,8 @@ public class SendKeyActivity extends BaseActivity {
 
                     default:
                 }
+
+                binding.sendKey.setEnabled(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
