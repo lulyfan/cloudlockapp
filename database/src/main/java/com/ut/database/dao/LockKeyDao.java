@@ -34,6 +34,9 @@ public interface LockKeyDao {
     @Query("SELECT * FROM lock_key WHERE groupId = :groupId ORDER BY userType ASC")
     LiveData<List<LockKey>> getLockByGroupId(long groupId);
 
+    @Query("SELECT * FROM lock_key WHERE groupId = :groupId ORDER BY userType ASC")
+    List<LockKey> syncGetLockByGroupId(long groupId);
+
     @Query("SELECT * FROM lock_key WHERE name LIKE :name ORDER BY ABS(groupId-:currentGroupId),userType ASC")
     LiveData<List<LockKey>> getLockByName(String name, long currentGroupId);
 

@@ -51,12 +51,8 @@ public class LockGroupItemActivity extends BaseActivity {
             setTitle(lockGroupName);
             viewModel.groupId = getIntent().getLongExtra(EXTRA_LOCK_GROUP_ID, -1);
         }
+
         viewModel.getLockByGroupId();
-    }
-
-    private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(LockGroupItemViewModel.class);
-
         viewModel.locks.observe(this, locks -> {
             adapter.setData(locks);
 
@@ -66,6 +62,11 @@ public class LockGroupItemActivity extends BaseActivity {
                 binding.noDataPage.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(LockGroupItemViewModel.class);
+
         viewModel.updateGroupName.observe(this, groupName -> setTitle(groupName));
         viewModel.delGroupSuccess.observe(this, aVoid -> onBackPressed());
         viewModel.tip.observe(this, s -> toastShort(s));

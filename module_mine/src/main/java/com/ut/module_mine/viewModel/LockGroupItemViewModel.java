@@ -18,7 +18,7 @@ import java.util.List;
 public class LockGroupItemViewModel extends BaseViewModel {
 
     public long groupId = -1;
-    public LiveData<List<LockKey>> locks = new MutableLiveData<>();
+    public LiveData<List<LockKey>> locks;
     public MutableLiveData<Void> delGroupSuccess = new MutableLiveData<>();
     public MutableLiveData<String> updateGroupName = new MutableLiveData<>();
 
@@ -27,7 +27,7 @@ public class LockGroupItemViewModel extends BaseViewModel {
     }
 
     public void getLockByGroupId() {
-        locks = LockKeyDaoImpl.get().getLockByGroupId((int) groupId);
+        locks = LockKeyDaoImpl.get().getLockByGroupId(groupId);
     }
 
     @SuppressLint("CheckResult")

@@ -72,6 +72,15 @@ public class LockKeyDaoImpl {
         return mLockKeyDao.getLockByGroupId(groupId);
     }
 
+    /**
+     * 根据锁组id获取锁
+     *
+     * @param groupId
+     * @return
+     */
+    public List<LockKey> syncGetLockByGroupId(long groupId) {
+        return mLockKeyDao.syncGetLockByGroupId(groupId);
+    }
 
     /**
      * 根据锁名称获取锁
