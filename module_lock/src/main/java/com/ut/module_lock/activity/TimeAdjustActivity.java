@@ -40,6 +40,7 @@ public class TimeAdjustActivity extends BaseActivity {
 
         binding.time.setVisibility(View.GONE);
         binding.date.setVisibility(View.GONE);
+        binding.topTip.setVisibility(View.GONE);
         binding.tip.setVisibility(View.GONE);
         binding.button.setOnClickListener(v -> {
             viewModel.adjustTime();
@@ -61,7 +62,7 @@ public class TimeAdjustActivity extends BaseActivity {
         });
 
         viewModel.lockTime.observe(this, aLong -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             String dateTime = dateFormat.format(new Date(aLong));
             String[] temp = dateTime.split(" ");
             String date = temp[0];
@@ -70,11 +71,13 @@ public class TimeAdjustActivity extends BaseActivity {
             binding.time.setText(time);
             binding.time.setTextSize(50);
 
+            binding.topTip.setText(getString(R.string.currentLockTime));
             binding.tip.setText(getString(R.string.timeAdjustTip));
             binding.button.setText(getString(R.string.timeAdjust));
 
             binding.time.setVisibility(View.VISIBLE);
             binding.date.setVisibility(View.VISIBLE);
+            binding.topTip.setVisibility(View.VISIBLE);
             binding.tip.setVisibility(View.VISIBLE);
         });
 
@@ -93,6 +96,7 @@ public class TimeAdjustActivity extends BaseActivity {
 
                     binding.time.setVisibility(View.VISIBLE);
                     binding.tip.setVisibility(View.VISIBLE);
+                    binding.topTip.setVisibility(View.GONE);
                     binding.date.setVisibility(View.GONE);
                     break;
 
