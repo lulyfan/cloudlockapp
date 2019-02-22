@@ -1,5 +1,6 @@
 package com.ut.module_mine.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -7,6 +8,7 @@ import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.ut.base.ErrorHandler;
 import com.ut.database.daoImpl.LockUserKeyDaoImpl;
 import com.ut.database.entity.LockUserKey;
 import com.ut.module_mine.R;
@@ -18,19 +20,14 @@ public class LockUserItemViewModel extends BaseViewModel {
     private static final int PAGE_SIZE = -1;
     public long userId;
     public MutableLiveData<Boolean> loadLockUserKeyState = new MutableLiveData<>();
-
-    public MutableLiveData<List<LockUserKey>> mLockUserKeys = new MutableLiveData<>();
-
-    private LiveData<List<LockUserKey>> mLockUserKeyLiveData = null;
+    public LiveData<List<LockUserKey>> mLockUserKeys;
 
     public LockUserItemViewModel(@NonNull Application application) {
         super(application);
-        mLockUserKeyLiveData = LockUserKeyDaoImpl.get().getAll();
-        mLockUserKeyLiveData.observeForever(mLockUserKeyListObserver);
+        mLockUserKeys = LockUserKeyDaoImpl.get().getAll();
     }
 
-    private Observer<List<LockUserKey>> mLockUserKeyListObserver = lockUserKeys -> mLockUserKeys.postValue(lockUserKeys);
-
+    @SuppressLint("CheckResult")
     public void loadLockUserKey() {
 
         service.pageLockUserKey(userId, mCurrentPage, PAGE_SIZE)
@@ -48,12 +45,16 @@ public class LockUserItemViewModel extends BaseViewModel {
                             LockUserKeyDaoImpl.get().insert(listResult.data);
                             loadLockUserKeyState.postValue(true);
                         },
-                        throwable -> {
-                            tip.postValue(throwable.getMessage());
-                            loadLockUserKeyState.postValue(false);
-                        });
+                            new ErrorHandler() {
+                                @Override
+                                public void accept(Throwable throwable) {
+                                    super.accept(throwable);
+                                    loadLockUserKeyState.postValue(false);
+                                }
+                            });
     }
 
+    @SuppressLint("CheckResult")
     public void deleteKey(long keyId) {
         service.deleteKey(keyId, 0)
                 .doOnNext(stringResult -> {
@@ -68,13 +69,6 @@ public class LockUserItemViewModel extends BaseViewModel {
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
                             LockUserKeyDaoImpl.get().deleteById((int) keyId);
-                        },
-                        throwable -> tip.postValue(throwable.getMessage()));
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mLockUserKeyLiveData.removeObserver(mLockUserKeyListObserver);
+                        }, new ErrorHandler());
     }
 }

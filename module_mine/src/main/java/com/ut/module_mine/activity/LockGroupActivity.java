@@ -23,6 +23,7 @@ import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.Util;
 import com.ut.database.entity.LockGroup;
 import com.ut.module_mine.BR;
+import com.ut.module_mine.PreventShakeObserver;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.R;
 import com.ut.module_mine.databinding.ActivityLockGroupBinding;
@@ -48,13 +49,22 @@ public class LockGroupActivity extends BaseActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(LockGroupViewModel.class);
-        viewModel.mLockGroups.observe(this, lockGroups -> {
-            List<LockGroupData> lockGroupDataList = new ArrayList<>();
-            for (LockGroup lockGroup : lockGroups) {
-                LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
-                lockGroupDataList.add(item);
+        viewModel.mLockGroups.observe(this, new PreventShakeObserver<List<LockGroup>>() {
+            @Override
+            public void onChange(List<LockGroup> lockGroups) {
+                List<LockGroupData> lockGroupDataList = new ArrayList<>();
+                for (LockGroup lockGroup : lockGroups) {
+                    LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
+                    lockGroupDataList.add(item);
+                }
+                adapter.setData(lockGroupDataList);
+
+                if (lockGroupDataList.size() <= 0) {
+                    binding.noDataPage.setVisibility(View.VISIBLE);
+                } else {
+                    binding.noDataPage.setVisibility(View.GONE);
+                }
             }
-            adapter.setData(lockGroupDataList);
         });
         viewModel.addGroupSuccess.observe(this, aVoid -> viewModel.loadLockGroup(true));
         viewModel.tip.observe(this, s -> toastShort(s));

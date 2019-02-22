@@ -19,6 +19,7 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockUserKey;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.Constant;
+import com.ut.module_mine.PreventShakeObserver;
 import com.ut.module_mine.R;
 import com.ut.module_mine.adapter.DataBindingAdapter;
 import com.ut.module_mine.databinding.ActivityLockUserItemBinding;
@@ -47,36 +48,39 @@ public class LockUserItemActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this).get(LockUserItemViewModel.class);
         viewModel.tip.observe(this, s -> toastShort(s));
 
-        viewModel.mLockUserKeys.observe(this, lockUserKeys -> {
-            binding.swipeLayout.setRefreshing(false);
+        viewModel.mLockUserKeys.observe(this, new PreventShakeObserver<List<LockUserKey>>() {
+            @Override
+            public void onChange(List<LockUserKey> lockUserKeys) {
+                binding.swipeLayout.setRefreshing(false);
 
-            List<Data> dataList = new ArrayList<>();
-            for (LockUserKey key : lockUserKeys) {
-                String keyType = "";
-                String keyStatus = getResources().getStringArray(R.array.key_status)[key.getKeyStatus()];
-                switch (key.getRuleType()) {
-                    case Constant.TYPE_KEY_FOREVER:
-                        keyType = getString(R.string.mine_forever);
-                        break;
+                List<Data> dataList = new ArrayList<>();
+                for (LockUserKey key : lockUserKeys) {
+                    String keyType = "";
+                    String keyStatus = getResources().getStringArray(R.array.key_status)[key.getKeyStatus()];
+                    switch (key.getRuleType()) {
+                        case Constant.TYPE_KEY_FOREVER:
+                            keyType = getString(R.string.mine_forever);
+                            break;
 
-                    case Constant.TYPE_KEY_LIMIT_TIME:
-                        keyType = getString(R.string.mine_limitTime);
-                        break;
+                        case Constant.TYPE_KEY_LIMIT_TIME:
+                            keyType = getString(R.string.mine_limitTime);
+                            break;
 
-                    case Constant.TYPE_KEY_ONCE:
-                        keyType = getString(R.string.mine_once);
-                        break;
+                        case Constant.TYPE_KEY_ONCE:
+                            keyType = getString(R.string.mine_once);
+                            break;
 
-                    case Constant.TYPE_KEY_LOOP:
-                        keyType = getString(R.string.mine_loop);
-                        break;
+                        case Constant.TYPE_KEY_LOOP:
+                            keyType = getString(R.string.mine_loop);
+                            break;
 
-                    default:
+                        default:
+                    }
+                    Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus, Color.parseColor(EnumCollection.KeyStatus.isKeyValid(key.getKeyStatus()) ? "#999999" : "#F55D54"));
+                    dataList.add(data);
                 }
-                Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus, Color.parseColor(EnumCollection.KeyStatus.isKeyValid(key.getKeyStatus()) ? "#999999" : "#F55D54"));
-                dataList.add(data);
+                adapter.setData(dataList);
             }
-            adapter.setData(dataList);
         });
 
         viewModel.loadLockUserKeyState.observe(this, aBoolean -> binding.swipeLayout.setRefreshing(false));

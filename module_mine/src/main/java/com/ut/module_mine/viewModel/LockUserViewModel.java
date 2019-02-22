@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
+import com.ut.base.ErrorHandler;
 import com.ut.database.daoImpl.LockUserDaoImpl;
 import com.ut.database.entity.LockUser;
 import com.ut.module_mine.R;
@@ -16,18 +17,13 @@ import java.util.List;
 public class LockUserViewModel extends BaseViewModel {
     private int mCurrentPage = 1;
     private static final int PAGE_SIZE = -1;
-    public MutableLiveData<List<LockUser>> mLockUsers = new MutableLiveData<>();
+    public LiveData<List<LockUser>> mLockUsers;
     public MutableLiveData<Boolean> loadLockUserState = new MutableLiveData<>();
-
-    private LiveData<List<LockUser>> mLockUserListLiveData = null;
 
     public LockUserViewModel(@NonNull Application application) {
         super(application);
-        mLockUserListLiveData = LockUserDaoImpl.get().getAll();
-        mLockUserListLiveData.observeForever(mLockUserObserver);
+        mLockUsers = LockUserDaoImpl.get().getAll();
     }
-
-    private Observer<List<LockUser>> mLockUserObserver = lockUsers -> mLockUsers.postValue(lockUsers);
 
     @SuppressLint("CheckResult")
     public void loadLockUser(boolean isShowTip) {
@@ -46,18 +42,13 @@ public class LockUserViewModel extends BaseViewModel {
                             LockUserDaoImpl.get().insert(listResult.data);
                             loadLockUserState.postValue(true);
                         },
-                        throwable -> {
-                            if (isShowTip) {
-                                tip.postValue(throwable.getMessage());
+                        new ErrorHandler() {
+                            @Override
+                            public void accept(Throwable throwable) {
+                                super.accept(throwable);
+                                loadLockUserState.postValue(false);
                             }
-                            loadLockUserState.postValue(false);
                         });
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mLockUserListLiveData.removeObserver(mLockUserObserver);
     }
 
     public String getKeyStatusStr(int keyStatus) {

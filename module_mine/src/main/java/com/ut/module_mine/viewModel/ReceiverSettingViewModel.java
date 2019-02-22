@@ -8,6 +8,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import com.ut.base.BaseApplication;
+import com.ut.base.ErrorHandler;
 import com.ut.database.entity.User;
 import com.ut.module_mine.GlobalData;
 import com.ut.module_mine.R;
@@ -53,6 +54,6 @@ public class ReceiverSettingViewModel extends BaseViewModel {
                 })
                 .subscribe(userResult -> {
                     user.postValue(userResult.data);
-                }, throwable -> tip.postValue(throwable.getMessage()));
+                }, new ErrorHandler());
     }
 }

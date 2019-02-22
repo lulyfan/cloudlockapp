@@ -1,11 +1,13 @@
 package com.ut.module_mine.viewModel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 
+import com.ut.base.ErrorHandler;
 import com.ut.database.daoImpl.LockGroupDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.LockKey;
@@ -16,7 +18,7 @@ import java.util.List;
 public class LockGroupItemViewModel extends BaseViewModel {
 
     public long groupId = -1;
-    public MutableLiveData<List<LockKey>> locks = new MutableLiveData<>();
+    public LiveData<List<LockKey>> locks;
     public MutableLiveData<Void> delGroupSuccess = new MutableLiveData<>();
     public MutableLiveData<String> updateGroupName = new MutableLiveData<>();
 
@@ -24,17 +26,11 @@ public class LockGroupItemViewModel extends BaseViewModel {
         super(application);
     }
 
-    private LiveData<List<LockKey>> mlockKeysInGroupLiveData = null;
-
     public void getLockByGroupId() {
-        mlockKeysInGroupLiveData = LockKeyDaoImpl.get().getLockByGroupId((int) groupId);
-        mlockKeysInGroupLiveData.observeForever(mLockListObserver);
+        locks = LockKeyDaoImpl.get().getLockByGroupId(groupId);
     }
 
-    Observer<List<LockKey>> mLockListObserver = lockKeys -> {
-        locks.setValue(lockKeys);
-    };
-
+    @SuppressLint("CheckResult")
     public void editGroupName(String groupName) {
         service.updateGroupName(groupId, groupName)
                 .doOnNext(stringResult -> {
@@ -51,9 +47,10 @@ public class LockGroupItemViewModel extends BaseViewModel {
                             updateGroupName.postValue(groupName);
                             LockGroupDaoImpl.get().updateGroupName(groupId, groupName);
                         },
-                        throwable -> tip.postValue(throwable.getMessage()));
+                        new ErrorHandler());
     }
 
+    @SuppressLint("CheckResult")
     public void delGroup() {
         if (groupId < 0) {
             return;
@@ -76,12 +73,6 @@ public class LockGroupItemViewModel extends BaseViewModel {
                             groupId = -1;
 
                         },
-                        throwable -> tip.postValue(throwable.getMessage()));
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        mlockKeysInGroupLiveData.removeObserver(mLockListObserver);
+                        new ErrorHandler());
     }
 }
