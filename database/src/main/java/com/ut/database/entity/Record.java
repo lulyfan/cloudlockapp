@@ -3,10 +3,12 @@ package com.ut.database.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class Record {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private long id;//1,
     private String icon;
     private String operator;
@@ -143,5 +145,21 @@ public class Record {
 
     public void setOpenLockType(int openLockType) {
         this.openLockType = openLockType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Record record = (Record) o;
+        return lockId == record.lockId &&
+                keyId == record.keyId &&
+                type == record.type &&
+                createTime == record.createTime;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lockId, keyId, type, createTime);
     }
 }

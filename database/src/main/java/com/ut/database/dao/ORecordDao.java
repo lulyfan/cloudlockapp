@@ -43,6 +43,6 @@ public interface ORecordDao {
     @Query("delete from record where lockId = :lockId")
     void deleteByLockId(long lockId);
 
-    @Query("delete from record where lockId = :keyId")
+    @Query("delete from record where keyId = :keyId")
     void deleteByKeyId(long keyId);
 }

@@ -23,6 +23,7 @@ import com.ut.database.entity.LockKey;
 import com.ut.database.entity.Record;
 import com.ut.module_lock.R;
 import com.ut.module_lock.utils.BleOperateManager;
+import com.ut.module_lock.utils.StringUtils;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.protocol.data.AuthCountInfo;
@@ -375,7 +376,9 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                     getApplication().getResources().getStringArray(R.array.deviceTypeName)[deviceKey.getKeyType()]);
             record1.setDescription(description);
             record1.setLockId(Integer.parseInt(mLockKey.getId()));
+            record1.setTime(StringUtils.getTimeStringWithSecond(record.getOperateTime()));
             record1.setType(deviceKey.getKeyType() + 2);//设备钥匙的类型从2开始
+            record1.setOpenLockType(deviceKey.getKeyType() + 2);
             record1.setKeyId(deviceKey.getRecordKeyId());
             mRecordList.add(record1);
         }
@@ -401,9 +404,6 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
                     getRecordListByLockId(Integer.parseInt(mLockKey.getId()));
             if (list != null && list.size() > 0) {
                 listNew.removeAll(list);
-                for (int i = 0; i < listNew.size(); i++) {
-                    listNew.get(i).setId(list.get(list.size() - 1).getId() + i + 1);
-                }
             }
             CloudLockDatabaseHolder.get().recordDao().insertRecords(listNew);
         });

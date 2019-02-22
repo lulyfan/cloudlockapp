@@ -126,9 +126,12 @@ public class LockSettingVM extends BaseViewModel {
                         setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
                     }
                     showTip.postValue(voidResult.msg);
-                }, throwable -> {
-                    setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
-                    showTip.setValue(getApplication().getString(R.string.lock_tip_setting_failed));
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        super.accept(throwable);
+                        setCanOpenSwitchResult.postValue(new SwitchResult(!canOpen, false));
+                    }
                 });
         mCompositeDisposable.add(disposable);
     }

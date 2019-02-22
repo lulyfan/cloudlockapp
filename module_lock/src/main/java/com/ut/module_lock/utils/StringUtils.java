@@ -36,4 +36,9 @@ public class StringUtils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         return simpleDateFormat.format(new Date(timeStamp));
     }
+
+    public static String getTimeStringWithSecond(long timeStamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        return simpleDateFormat.format(new Date(timeStamp));
+    }
 }
