@@ -4,19 +4,21 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
+import com.ut.base.Utils.PreferenceUtil;
 import com.ut.base.common.CommonAdapter;
 import com.ut.base.common.CommonViewHolder;
 import com.ut.database.entity.LockKey;
-import com.ut.database.entity.SearchRecord;
 import com.ut.module_lock.R;
 import com.ut.module_lock.databinding.ActivitySearchLockBinding;
 import com.ut.module_lock.viewmodel.SearchLockVM;
@@ -25,32 +27,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchLockActivity extends BaseActivity {
+
+    private static final String EXTRA_SEARCH_DATA = "extra_search_data";
+
     private ActivitySearchLockBinding mBinding = null;
     private CommonAdapter<LockKey> mLockKeyCommonAdapter = null;
     private SearchLockVM mSearchLockVM = null;
     private long currentGroupId = 0;
-    private List<SearchRecord> mSearchRecords = new ArrayList<>();
+    private List<String> mSearchRecords = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_search_lock);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_lock);
-        initData();
         initTitle();
         initView();
         initViewModel();
+        initData();
     }
 
     private void initData() {
         currentGroupId = getIntent().getLongExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_CURRENT_GROUPID, 0);
+
+        String json = PreferenceUtil.getInstance(getBaseContext()).getString(EXTRA_SEARCH_DATA);
+        if (!TextUtils.isEmpty(json)) {
+            mSearchRecords = JSON.parseArray(json, String.class);
+            mSearchRecords = mSearchRecords.subList(0, mSearchRecords.size() > 9 ? 10 : mSearchRecords.size());
+            mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
+        }
     }
 
     private void initViewModel() {
         mSearchLockVM = ViewModelProviders.of(this).get(SearchLockVM.class);
         mSearchLockVM.getSearchRecords().observe(this, searchRecords -> {
             assert searchRecords != null;
-            mSearchRecords = searchRecords;
+            searchRecords = searchRecords.subList(0, searchRecords.size() > 9 ? 10 : searchRecords.size());
             refreshSearchRecord(searchRecords);
         });
 
@@ -77,20 +88,24 @@ public class SearchLockActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                mSearchRecords.add(0, s.toString());
+                mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
+                PreferenceUtil.getInstance(getBaseContext()).setString(EXTRA_SEARCH_DATA, JSON.toJSONString(mSearchRecords));
             }
         });
         mBinding.lvSearchLock.setOnItemClickListener((parent, view, position, id) -> {
             LockKey lockKey = (LockKey) parent.getAdapter().getItem(position);
             boolean ifHad = false;
-            for (SearchRecord record: mSearchRecords) {
-                if(record.getWord().equals(lockKey.getName())) {
+            for (String record : mSearchRecords) {
+                if (record.equals(lockKey.getName())) {
                     ifHad = true;
                     break;
                 }
             }
-            if(!ifHad) {
-                mSearchLockVM.insertSearchRecord(lockKey.getName());
+            if (!ifHad) {
+                mSearchRecords.add(lockKey.getName());
+                mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
+                PreferenceUtil.getInstance(getBaseContext()).setString(EXTRA_SEARCH_DATA, JSON.toJSONString(mSearchRecords));
             }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
@@ -99,13 +114,15 @@ public class SearchLockActivity extends BaseActivity {
     }
 
     ViewGroup.MarginLayoutParams searchWordlp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    private void refreshSearchRecord(List<SearchRecord> records) {
+
+    private void refreshSearchRecord(List<String> records) {
         searchWordlp.rightMargin = SystemUtils.dp2px(getBaseContext(), 8);
+        searchWordlp.bottomMargin = SystemUtils.dp2px(getBaseContext(), 4);
         mBinding.flySearchHistory.removeAllViews();
-        for (SearchRecord record : records) {
+        for (String record : records) {
             TextView view = new TextView(this);
-            view.setText(record.getWord());
-            view.setTag(record.getWord());
+            view.setText(record);
+            view.setTag(record);
             view.setTextColor(getResources().getColor(R.color.gray3));
             view.setPadding(20, 8, 20, 8);
             view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_serarch_word));

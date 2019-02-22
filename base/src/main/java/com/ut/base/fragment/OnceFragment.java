@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.ut.base.BaseFragment;
 import com.ut.base.R;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentOnceBinding;
 import com.ut.base.viewModel.SendKeyViewModel;
@@ -52,6 +53,14 @@ public class OnceFragment extends BaseFragment {
             if (!et_phoneNum.getText().toString().equals(s) && s != null) {
                 et_phoneNum.setText(s);
                 et_phoneNum.setSelection(s.length());
+
+                if(getActivity()!= null) {
+                    String extraPhone = getActivity().getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
+                    boolean cantEdit = getActivity().getIntent().getBooleanExtra(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE,false);
+                    if(s.equals(extraPhone) && cantEdit) {
+                        et_phoneNum.setEnabled(false);
+                    }
+                }
             }
         });
         viewModel.keyName.observe(this, s -> {

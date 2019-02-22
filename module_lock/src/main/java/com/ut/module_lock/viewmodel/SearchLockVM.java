@@ -3,9 +3,9 @@ package com.ut.module_lock.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.daoImpl.SearchRecordDaoImpl;
 import com.ut.database.entity.LockKey;
@@ -40,8 +40,11 @@ public class SearchLockVM extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<List<SearchRecord>> getSearchRecords() {
-        return SearchRecordDaoImpl.get().getAll();
+
+    private MutableLiveData<List<String>> searchRecords = new MutableLiveData<>();
+
+    public MutableLiveData<List<String>> getSearchRecords() {
+        return searchRecords;
     }
 
     /**

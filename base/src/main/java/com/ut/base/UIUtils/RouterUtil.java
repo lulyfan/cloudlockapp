@@ -74,6 +74,7 @@ public class RouterUtil {
         String NAME = "name";
 
         String EXTRA_LOCK_CURRENT_GROUPID = "extra_lock_current_groupid";
+        String EXTRA_CANT_EDIT_PHONE =  "extra_cant_edit_phone";
     }
 
     public interface LockModuleConstParams {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ut.base.BaseFragment;
 import com.ut.base.R;
+import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.DialogUtil;
 import com.ut.base.activity.SendKeyActivity;
@@ -120,6 +121,15 @@ public class LimitTimeFragment extends BaseFragment {
             if (!et_phoneNum.getText().toString().equals(s) && s != null) {
                 et_phoneNum.setText(s);
                 et_phoneNum.setSelection(s.length());
+
+
+                if(getActivity()!= null) {
+                    String extraPhone = getActivity().getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
+                    boolean cantEdit = getActivity().getIntent().getBooleanExtra(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE,false);
+                    if(s.equals(extraPhone) && cantEdit) {
+                        et_phoneNum.setEnabled(false);
+                    }
+                }
             }
         });
         viewModel.keyName.observe(this, s -> {

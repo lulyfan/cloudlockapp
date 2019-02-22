@@ -49,6 +49,7 @@ public class ApplyMessageInfoActivity extends BaseActivity {
                     .withInt(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_RULER_TYPE, mApplyMessage.getRuleType())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MAC, mApplyMessage.getMac())
                     .withString(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE, mApplyMessage.getMobile())
+                    .withBoolean(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE, true)
                     .navigation(ApplyMessageInfoActivity.this, REQUEST_CODE_SEND_KEY);
         });
     }
