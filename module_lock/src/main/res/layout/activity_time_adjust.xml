@@ -32,29 +32,27 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/base_40dp"
-            android:drawableLeft="@mipmap/calendar"
-            android:drawablePadding="9dp"
-            android:text="2018年11月23日"
-            android:textColor="@color/gray3"
+            android:layout_marginTop="@dimen/base_10dp"
+            android:text="2018/11/23"
+            android:textColor="@color/gray9"
             android:textSize="@dimen/base_17sp"
-            app:layout_constraintBottom_toTopOf="@+id/time"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/time"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toStartOf="@+id/time"
+            app:layout_constraintTop_toBottomOf="@+id/time" />
 
         <TextView
             android:id="@+id/tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/base_30dp"
+            android:layout_marginTop="@dimen/base_17dp"
             android:text="@string/timeAdjustTip"
             android:textColor="@color/gray6"
             android:textSize="@dimen/base_14sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/time"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time" />
+            app:layout_constraintStart_toStartOf="@+id/time"
+            app:layout_constraintTop_toBottomOf="@+id/date" />
 
         <Button
             android:id="@+id/button"
@@ -72,6 +70,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/topTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_17dp"
+            android:text="@string/currentLockTime"
+            android:textColor="@color/gray9"
+            android:textSize="@dimen/base_17sp"
+            app:layout_constraintBottom_toTopOf="@+id/time"
+            app:layout_constraintEnd_toEndOf="@+id/time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/time" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
