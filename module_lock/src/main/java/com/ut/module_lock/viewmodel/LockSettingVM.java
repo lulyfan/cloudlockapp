@@ -2,7 +2,6 @@ package com.ut.module_lock.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -58,7 +56,7 @@ public class LockSettingVM extends BaseViewModel {
     private MutableLiveData<SwitchResult> setCanOpenSwitchResult = new MutableLiveData<>();
     private LockKey lockKey;
 
-    private boolean isToConnect = false;
+    private boolean hasFindedDevice = false;
 
     public static final int BLEREAUESTCODE = 101;
 
@@ -181,17 +179,17 @@ public class LockSettingVM extends BaseViewModel {
         if (UnilinkManager.getInstance(getApplication()).isConnect(lockKey.getMac())) {
             toUnbind(lockKey);
         } else {
-            isToConnect = false;
+            hasFindedDevice = false;
             return UnilinkManager.getInstance(getApplication()).scan(new ScanListener() {
                 @Override
                 public void onScan(ScanDevice scanDevice) {
                     UTLog.i("scanDevice：" + scanDevice.getAddress());
-                    if (!isToConnect && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
+                    if (!hasFindedDevice && lockKey.getMac().equalsIgnoreCase(scanDevice.getAddress())) {
+                        hasFindedDevice = true;
                         if (!scanDevice.isActive()) {//当锁是未激活状态时直接删除后台数据
                             deleteAdminLock(lockKey);
                             endLoad();
                         } else {
-                            isToConnect = true;
                             toConnect(lockKey, scanDevice);
                         }
                     }
@@ -199,7 +197,7 @@ public class LockSettingVM extends BaseViewModel {
 
                 @Override
                 public void onFinish(List<ScanDevice> scanDevices) {
-                    if (!isToConnect) {
+                    if (!hasFindedDevice) {
                         onScanTimeout();
                     }
                 }

@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "V1.1.0 build" + releaseTime()+"beta"
+        versionName "V1.1.0 build" + releaseTime() + "beta"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -40,22 +40,30 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.signkey
-            manifestPlaceholders = [
-                    JPUSH_PKGNAME: rootProject.ext.appid,
-                    JPUSH_APPKEY : "0eb4b33f1284cc08a766b77a", //JPush上注册的包名对应的appkey.
-                    JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
-            ]
         }
 
 
         debug {
-//            signingConfig signingConfigs.signkey
-            manifestPlaceholders = [
-                    JPUSH_PKGNAME: rootProject.ext.appid,
-                    JPUSH_APPKEY : "0eb4b33f1284cc08a766b77a", //JPush上注册的包名对应的appkey.
-                    JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
-            ]
         }
+    }
+
+    productFlavors {
+        main_ {
+            //默认大众普通版本
+            manifestPlaceholders = [APP_NAME: "UNILINK", BUILD_DATE: releaseTime(), PACKNAME: "com.ut.cloudlock"]
+            flavorDimensions "versionCode"
+            versionCode 10104
+            versionName "v1.1.4 unilink" + releaseTime()
+        }
+        proApp {
+            //工程项目版本
+            applicationIdSuffix ".pro"
+            manifestPlaceholders = [APP_NAME: "UNILINK(工程)", BUILD_DATE: releaseTime(), PACKNAME: "com.ut.cloudlock.pro"]
+            flavorDimensions "versionCode"
+            versionCode 10005
+            versionName "v1.0.5 build" + releaseTime()
+        }
+
     }
 
     compileOptions {

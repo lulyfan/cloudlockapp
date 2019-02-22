@@ -1,4 +1,4 @@
-package com.ut.base.jpush;
+package com.ut.jpushlib;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ut.base.AppManager;
 
 
 import cn.jpush.android.api.JPushInterface;
@@ -19,6 +19,7 @@ import cn.jpush.android.api.JPushInterface;
  * desc   : 极光推送接收器
  */
 public class CLJPushReceiver extends BroadcastReceiver {
+    public static final String REMOTELOGIN_ACTION = "com.ut.cloudlock.remotelogin";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,8 +32,8 @@ public class CLJPushReceiver extends BroadcastReceiver {
                 if (!TextUtils.isEmpty(dataJson)) {
                     JSONObject jsonObject = JSON.parseObject(dataJson);
                     int code = jsonObject.getIntValue("code");
-                    if (code == 521) {
-                        AppManager.getAppManager().currentActivity().remoteLogin();
+                    if (code == 521) {//异地登录
+                        context.sendBroadcast(new Intent(REMOTELOGIN_ACTION));
                     }
                 }
             }

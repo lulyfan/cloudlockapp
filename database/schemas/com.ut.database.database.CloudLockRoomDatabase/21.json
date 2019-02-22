@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 21,
-    "identityHash": "d1c24bce2ae7fa57a29821a9cb7363c2",
+    "identityHash": "9206c545ad3d3974ae17aca83569275e",
     "entities": [
       {
         "tableName": "lock_key",
@@ -475,7 +475,7 @@
       },
       {
         "tableName": "LockUserKey",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ruleType` INTEGER NOT NULL, `keyId` INTEGER NOT NULL, `lockName` TEXT, `mac` TEXT, PRIMARY KEY(`keyId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ruleType` INTEGER NOT NULL, `keyId` INTEGER NOT NULL, `lockName` TEXT, `mac` TEXT, `keyStatus` INTEGER NOT NULL, PRIMARY KEY(`keyId`))",
         "fields": [
           {
             "fieldPath": "ruleType",
@@ -500,6 +500,12 @@
             "columnName": "mac",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "keyStatus",
+            "columnName": "keyStatus",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1104,7 +1110,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d1c24bce2ae7fa57a29821a9cb7363c2\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9206c545ad3d3974ae17aca83569275e\")"
     ]
   }
 }

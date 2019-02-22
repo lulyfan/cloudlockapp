@@ -3,6 +3,7 @@ package com.ut.base;
 import android.annotation.SuppressLint;
 
 import com.example.entity.base.Result;
+import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
 import com.example.operation.WebSocketHelper;
 import com.google.gson.Gson;
@@ -10,8 +11,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.ut.base.Utils.UTLog;
+import com.ut.database.daoImpl.DeviceKeyDaoImpl;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.database.CloudLockDatabaseHolder;
+import com.ut.database.entity.DeviceKey;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.Key;
 import com.ut.database.entity.LockKey;
@@ -38,6 +41,8 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
     public static final int CODE_UPDATE_LOCK_KEY = 10030; //刷新锁和钥匙
 
     public static final int CODE_UPDATE_APPLY_MESSAGE = 20010; //刷新申请消息
+
+    public static final int CODE_UPDATE_DEVICE_KEY = 30010;//刷新设备钥匙信息
 
     @Override
     public void onReceive(String data) {
@@ -142,6 +147,11 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
                 updateApplyMessage();
                 break;
 
+            case CODE_UPDATE_DEVICE_KEY:
+                String lockid = result.data.getAsString();
+                updateDeviceKey(lockid);
+                break;
+
             default:
         }
     }
@@ -219,5 +229,25 @@ public class WebSocketDataHandler implements WebSocketHelper.WebSocketDataListen
                         CloudLockDatabaseHolder.get().getApplyMessageDao().insert(listResult.data);
                     }
                 }, Throwable::printStackTrace);
+    }
+
+    private void updateDeviceKey(String lockId) {
+        //TODO
+        CommonApi.getDeviceKeyListByType(0, lockId)
+                .observeOn(io.reactivex.schedulers.Schedulers.io())
+                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .subscribe(deviceKeyResults -> {
+                    if (deviceKeyResults.isSuccess()) {
+                        List<DeviceKey> deviceKeyList = deviceKeyResults.getData();
+                        if (deviceKeyList.size() > 0) {
+                            DeviceKeyDaoImpl.get().deleteKeyByLockId(Integer.parseInt(lockId));
+                            DeviceKeyDaoImpl.get().insertDeviceKeys(deviceKeyList);
+                        }
+                    }
+                }, new ErrorHandler() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                    }
+                });
     }
 }

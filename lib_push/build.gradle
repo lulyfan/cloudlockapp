@@ -46,5 +46,8 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+
+    //导入fastJson
+    implementation 'com.alibaba:fastjson:1.2.48'
     implementation "com.android.support:appcompat-v7:${rootProject.project.ext.support_library}"
 }

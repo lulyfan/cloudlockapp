@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.ut.base">
 
@@ -6,14 +7,24 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application>
+        <receiver
+            android:name=".push.UTCLReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.ut.cloudlock.remotelogin"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".activity.SafeVerifyActivity"
             android:launchMode="singleInstance"/>
         <activity android:name=".activity.WebActivity"/>
 
         <service
-            android:name="com.ut.base.AutoOpenLockService"
+            android:name=".AutoOpenLockService"
             android:enabled="true"
             android:exported="true"/>
     </application>
+
 </manifest>

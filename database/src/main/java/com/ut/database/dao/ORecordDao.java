@@ -22,10 +22,10 @@ public interface ORecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRecords(List<Record> records);
 
-    @Query("select * from record where lockId = :lockId and keyId > 0 ORDER BY createTime desc limit 10 ")
+    @Query("select * from record where lockId = :lockId ORDER BY createTime desc limit 10 ")
     LiveData<List<Record>> getRecordsByLockId(long lockId);
 
-    @Query("select * from record where keyId = :keyId and keyId > 0 ORDER BY createTime desc limit 10")
+    @Query("select * from record where keyId = :keyId ORDER BY createTime desc limit 10")
     LiveData<List<Record>> getRecordsByKeyId(long keyId);
 
     @Query("select * from record where lockId = :lockId ORDER BY createTime desc limit 10 ")

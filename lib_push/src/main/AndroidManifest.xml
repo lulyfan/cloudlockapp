@@ -56,7 +56,7 @@
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
-            android:process=":mult"
+            android:process=":Push"
             tools:node="replace">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER"/>
@@ -120,13 +120,31 @@
             android:exported="false"/>
 
 
-        <!--<receiver android:name=".MyJPushMessageReceiver"-->
-            <!--&gt;-->
-            <!--<intent-filter>-->
-                <!--<action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>-->
-                <!--<category android:name="${JPUSH_PKGNAME}"></category>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <!-- 极光推送配置开始 -->
+
+        <receiver
+            android:name="com.ut.jpushlib.CLJPushMessageReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>
+                <category android:name="${JPUSH_PKGNAME}"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.ut.jpushlib.CLJPushReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!--Required  用户注册SDK的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!--Required  用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!--Required  用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!--Required  用户打开自定义通知栏的intent-->
+                <action android:name="cn.jpush.android.intent.CONNECTION"/><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="${JPUSH_PKGNAME}"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- 极光推送配置结束 -->
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data

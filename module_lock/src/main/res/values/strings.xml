@@ -235,6 +235,7 @@
 
     <string name="operate_success">操作成功</string>
     <string name="lock_device_key_operate_failed">操作失败，请检查蓝牙设置</string>
+    <string name="operate_failed">操作失败</string>
 
     <string name="lock_device_key_connect_failed">连接失败</string>
 

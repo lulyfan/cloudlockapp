@@ -20,7 +20,7 @@ import okio.ByteString;
 
 public class WebSocketHelper {
     private static final String PUSH_URL = "ws://smarthome.zhunilink.com:5009/websocket/userId";
-//        private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
+    //    private static final String PUSH_URL = "ws://192.168.104.48:8201/websocket/userId";
     private WebSocket mWebSocket;
     private OkHttpClient client;
     private int userId = -1;

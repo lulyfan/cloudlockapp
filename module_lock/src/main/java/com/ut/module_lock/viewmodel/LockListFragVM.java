@@ -65,13 +65,15 @@ public class LockListFragVM extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(lockKeyResults -> {
-                    List<LockKey> list = lockKeyResults.getData();
-                    LockKey[] lockKeys = new LockKey[list.size()];
-                    //TODO 先清除数据,后面再做优化
-                    if (isReset) {
-                        LockKeyDaoImpl.get().deleteAll();
+                    if (lockKeyResults.isSuccess()) {
+                        List<LockKey> list = lockKeyResults.getData();
+                        LockKey[] lockKeys = new LockKey[list.size()];
+                        //TODO 先清除数据,后面再做优化
+                        if (isReset) {
+                            LockKeyDaoImpl.get().deleteAll();
+                        }
+                        LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                     }
-                    LockKeyDaoImpl.get().insertAll(list.toArray(lockKeys));
                     if (isReset)
                         refreshStatus.postValue(true);
                 }, new ErrorHandler() {
@@ -91,13 +93,15 @@ public class LockListFragVM extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(lockGroupResult -> {
-                    List<LockGroup> list = lockGroupResult.getData();
-                    if (list == null) return;
-                    LockGroup[] lockGroups = new LockGroup[list.size()];
-                    if (isReset) {//刷新时清除所有组数据
-                        LockGroupDaoImpl.get().deleteAll();
+                    if (lockGroupResult.isSuccess()) {
+                        List<LockGroup> list = lockGroupResult.getData();
+                        if (list == null) return;
+                        LockGroup[] lockGroups = new LockGroup[list.size()];
+                        if (isReset) {//刷新时清除所有组数据
+                            LockGroupDaoImpl.get().deleteAll();
+                        }
+                        LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                     }
-                    LockGroupDaoImpl.get().insertAll(list.toArray(lockGroups));
                     if (isReset)
                         refreshStatus.postValue(true);
                 }, new ErrorHandler() {

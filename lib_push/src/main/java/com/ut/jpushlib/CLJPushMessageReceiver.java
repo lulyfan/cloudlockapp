@@ -1,9 +1,6 @@
-package com.ut.base.jpush;
+package com.ut.jpushlib;
 
 import android.content.Context;
-
-import com.alibaba.fastjson.JSON;
-import com.ut.unilink.util.Log;
 
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
@@ -20,26 +17,21 @@ public class CLJPushMessageReceiver extends JPushMessageReceiver {
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         super.onAliasOperatorResult(context, jPushMessage);
-
-        Log.e(TAG, "onAliasOperatorResult " + jPushMessage.getAlias() + " " + JSON.toJSONString(jPushMessage.getTags()));
-
+        AliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);//当
     }
 
     @Override
     public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
         super.onCheckTagOperatorResult(context, jPushMessage);
-        Log.e(TAG, "onCheckTagOperatorResult");
     }
 
     @Override
     public void onMobileNumberOperatorResult(Context context, JPushMessage jPushMessage) {
         super.onMobileNumberOperatorResult(context, jPushMessage);
-        Log.e(TAG, "onMobileNumberOperatorResult");
     }
 
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         super.onTagOperatorResult(context, jPushMessage);
-        Log.e(TAG, "onTagOperatorResult");
     }
 }

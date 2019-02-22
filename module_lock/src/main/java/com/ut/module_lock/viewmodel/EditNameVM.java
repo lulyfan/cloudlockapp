@@ -46,7 +46,7 @@ public class EditNameVM extends BaseViewModel {
                         setDeviceNameResult.postValue(true);
                         getApplication().sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_RELOAD_WEB_DEVICEKEY));
                     } else {
-                        getShowTip().postValue(getApplication().getString(R.string.operate_success));
+                        getShowTip().postValue(getApplication().getString(R.string.operate_failed));
                     }
                 }, new ErrorHandler());
         mCompositeDisposable.add(disposable);

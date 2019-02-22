@@ -119,6 +119,7 @@ public class NearLockVM extends AndroidViewModel {
 
     /**
      * 绑定锁
+     *
      * @param lock
      * @param password 锁的认证密码
      */
@@ -162,7 +163,8 @@ public class NearLockVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).initLock(scanDevice, lockBindPassword, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
-                Disposable disposable = CommonApi.bindLock(cloudLock.getAddress(), lock.getName(), cloudLock.getAdminPasswordString(),
+                Disposable disposable = CommonApi.bindLock(cloudLock.getAddress(),
+                        lock.getName(), cloudLock.getAdminPasswordString(),
                         cloudLock.getOpenLockPasswordString(), String.valueOf(cloudLock.getEncryptType())
                         , cloudLock.getEntryptKeyString(), String.valueOf(scanDevice.getVersion()))
                         .subscribe(voidResult -> {

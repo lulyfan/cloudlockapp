@@ -8,17 +8,15 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class ExampleUtil {
+public class Utils {
     public static final String PREFS_NAME = "JPUSH_EXAMPLE";
     public static final String PREFS_DAYS = "JPUSH_EXAMPLE_DAYS";
     public static final String PREFS_START_TIME = "PREFS_START_TIME";
@@ -84,18 +82,6 @@ public class ExampleUtil {
         }
     }
 
-    public static void showToast(final String toast, final Context context) {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                Looper.prepare();
-                Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).start();
-    }
-
     public static boolean isConnected(Context context) {
         ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = conn.getActiveNetworkInfo();
@@ -108,7 +94,7 @@ public class ExampleUtil {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             ret = telephonyManager.getDeviceId();
         } catch (Exception e) {
-            Logger.e(ExampleUtil.class.getSimpleName(), e.getMessage());
+            Logger.e(Utils.class.getSimpleName(), e.getMessage());
         }
         if (isReadableASCII(ret)) {
             return ret;

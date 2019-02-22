@@ -14,6 +14,7 @@ import com.orhanobut.logger.Logger;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.User;
+import com.ut.jpushlib.AliasOperatorHelper;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CloudLock;
 
@@ -63,7 +64,7 @@ public class BaseApplication extends MultiDexApplication {
         initBaidu();
 
         initLeakCanary();
-        
+
     }
 
     private void initLeakCanary() {
@@ -117,14 +118,16 @@ public class BaseApplication extends MultiDexApplication {
         if (user == null) {
             return;
         }
-        JPushInterface.setAlias(getAppContext(), sequence++, String.valueOf(mUser.getId()));
+//        JPushInterface.setAlias(getAppContext(), sequence++, String.valueOf(mUser.getId()));
+        AliasOperatorHelper.getInstance().setAlias(getAppContext(), String.valueOf(mUser.getId()));
         MyRetrofit.get().setWebSocketListener(new WebSocketDataHandler());
         MyRetrofit.get().sendUserId((int) user.getId(), WEBSOCKET_APP_ID);
     }
 
     //TODO 临时用极光
     public static void deleteJpushAlias() {
-        JPushInterface.deleteAlias(getAppContext(), sequence++);
+//        JPushInterface.deleteAlias(getAppContext(), sequence++);
+        AliasOperatorHelper.getInstance().deleteAlias(getAppContext());
     }
 
     public static User getUser() {
@@ -145,7 +148,7 @@ public class BaseApplication extends MultiDexApplication {
         MyRetrofit.get().closeWebSocket();
     }
 
-    public static void clearDataBase(){
+    public static void clearDataBase() {
         CloudLockDatabaseHolder.get().clear();
     }
 }
