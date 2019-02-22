@@ -88,9 +88,6 @@ public class SearchLockActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                mSearchRecords.add(0, s.toString());
-                mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
-                PreferenceUtil.getInstance(getBaseContext()).setString(EXTRA_SEARCH_DATA, JSON.toJSONString(mSearchRecords));
             }
         });
         mBinding.lvSearchLock.setOnItemClickListener((parent, view, position, id) -> {
