@@ -47,24 +47,6 @@ android {
         }
     }
 
-    productFlavors {
-        main_ {
-            //默认大众普通版本
-            manifestPlaceholders = [APP_NAME: "UNILINK", BUILD_DATE: releaseTime(), PACKNAME: "com.ut.cloudlock"]
-            flavorDimensions "versionCode"
-            versionCode 10104
-            versionName "v1.1.4 unilink" + releaseTime()
-        }
-        proApp {
-            //工程项目版本
-            applicationIdSuffix ".pro"
-            manifestPlaceholders = [APP_NAME: "UNILINK(工程)", BUILD_DATE: releaseTime(), PACKNAME: "com.ut.cloudlock.pro"]
-            flavorDimensions "versionCode"
-            versionCode 10005
-            versionName "v1.0.5 build" + releaseTime()
-        }
-
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
