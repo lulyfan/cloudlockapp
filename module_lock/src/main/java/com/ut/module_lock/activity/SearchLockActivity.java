@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.ut.base.BaseActivity;
+import com.ut.base.BaseApplication;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.Utils.PreferenceUtil;
@@ -49,7 +50,7 @@ public class SearchLockActivity extends BaseActivity {
     private void initData() {
         currentGroupId = getIntent().getLongExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_CURRENT_GROUPID, 0);
 
-        String json = PreferenceUtil.getInstance(getBaseContext()).getString(EXTRA_SEARCH_DATA);
+        String json = PreferenceUtil.getInstance(getBaseContext()).getString(EXTRA_SEARCH_DATA + "_of_" + BaseApplication.getUser().account);
         if (!TextUtils.isEmpty(json)) {
             mSearchRecords = JSON.parseArray(json, String.class);
             mSearchRecords = mSearchRecords.subList(0, mSearchRecords.size() > 9 ? 10 : mSearchRecords.size());
@@ -102,7 +103,7 @@ public class SearchLockActivity extends BaseActivity {
             if (!ifHad) {
                 mSearchRecords.add(lockKey.getName());
                 mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
-                PreferenceUtil.getInstance(getBaseContext()).setString(EXTRA_SEARCH_DATA, JSON.toJSONString(mSearchRecords));
+                PreferenceUtil.getInstance(getBaseContext()).setString(EXTRA_SEARCH_DATA + "_of_" + BaseApplication.getUser().account, JSON.toJSONString(mSearchRecords));
             }
             ARouter.getInstance().build(RouterUtil.LockModulePath.LOCK_DETAIL)
                     .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
