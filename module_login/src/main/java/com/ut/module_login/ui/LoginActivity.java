@@ -49,21 +49,11 @@ public class LoginActivity extends BaseActivity {
         if (msg.what == CHECK_PHONE_PASSWORD) {
             boolean result = verifyPhoneAndPassword(phoneEdt.getPhoneText(), passwordEdt.getText().toString());
             findViewById(R.id.btn_login).setEnabled(result);
-            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
-                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
-            }
-
-            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
-                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
-            }
+            ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
+            ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
         }
         return false;
     });
-
-    @Override
-    protected void initNoLoginListener() {
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,11 +159,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     private boolean verifyPhoneAndPassword(String phone, String password) {
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(phone)) {
             return false;
         }
 
-        return LoginUtil.isPhone(phone) && LoginUtil.isPassword(password);
+        return LoginUtil.isPhone(phone) && !TextUtils.isEmpty(password);
     }
 
     private void onLogin() {
@@ -186,7 +176,9 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 
+    @Override
+    protected synchronized void overDateLogin() {
+    }
 }

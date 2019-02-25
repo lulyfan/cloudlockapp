@@ -2,36 +2,56 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    
+
     <data>
+
         <variable
             name="lockGroupData"
-            type="com.ut.module_mine.activity.LockGroupActivity.LockGroupData"/>
+            type="com.ut.module_mine.activity.LockGroupActivity.LockGroupData" />
     </data>
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/base_56dp"
-    android:background="@drawable/select_gray_e">
 
-    <TextView
-        android:id="@+id/lockGroupName"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/base_16dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/base_16dp"
-        android:textSize="@dimen/s"
-        android:textColor="@color/gray3"
-        android:text='@{lockGroupData.name}'
-        android:drawableRight="@drawable/right_triangle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_56dp"
+        android:background="@drawable/select_gray_e">
 
-    <View
-        android:id="@+id/divider21"
-        style="@style/dividerStyle"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/lockGroupName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/base_16dp"
+            android:text='@{lockGroupData.name}'
+            android:textColor="@color/gray3"
+            android:textSize="@dimen/s"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/base_16dp"
+            android:text="@{lockGroupData.lockCount}"
+            android:textColor="@color/gray6"
+            android:textSize="@dimen/base_12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/iv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="@dimen/base_20dp"
+            android:layout_height="@dimen/base_20dp"
+            android:layout_marginEnd="@dimen/base_16dp"
+            android:src="@drawable/right_triangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider21"
+            style="@style/dividerStyle"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 </layout>

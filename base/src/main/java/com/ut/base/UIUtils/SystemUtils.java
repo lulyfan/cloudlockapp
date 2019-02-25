@@ -146,4 +146,15 @@ public class SystemUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 用正则表达式判断字符串中是否仅包含英文字母、数字和汉字
+     * @param str
+     * @return
+     */
+
+    public static boolean isLetterDigitOrChinese(String str) {
+        String regex = "^[a-z0-9A-Z\u4e00-\u9fa5]+$";
+        return str.matches(regex);
+    }
 }

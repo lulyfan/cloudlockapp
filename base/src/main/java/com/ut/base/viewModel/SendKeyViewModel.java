@@ -81,12 +81,12 @@ public class SendKeyViewModel extends AndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(voidResult -> {
-                    if (voidResult.code == 400) {
-                        CLToast.showAtCenter(getApplication(), voidResult.msg);
-                        isSendKeySuccess.setValue(false);
-                    } else {
+                    if (voidResult.isSuccess()) {
                         tip.postValue(voidResult.msg);
                         isSendKeySuccess.setValue(true);
+                    } else {
+                        CLToast.showAtCenter(getApplication(), voidResult.msg);
+                        isSendKeySuccess.setValue(false);
                     }
                 }, new ErrorHandler() {
                     @Override

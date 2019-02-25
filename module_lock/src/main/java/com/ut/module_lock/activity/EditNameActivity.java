@@ -116,6 +116,12 @@ public class EditNameActivity extends BaseActivity {
 
         if (nameType == RouterUtil.LockModuleConstParams.NAMETYPE_LOCK) {
             if (TextUtils.isEmpty(mac)) return;
+
+            if(!SystemUtils.isLetterDigitOrChinese(nameEdt.getText().toString().trim())) {
+                CLToast.showAtCenter(getBaseContext(), "锁名称不能含有符号");
+                return;
+            }
+
             Intent intent = new Intent();
             intent.putExtra(Constance.EDIT_NAME, nameEdt.getText().toString());
             setResult(RESULT_OK, intent);

@@ -22,7 +22,6 @@ public class Record {
     private String time;
     private String userName;
     private String headPic;
-    private String date;
 
     private int openLockType; //手机开锁、无感开锁、指纹开锁、IC卡开锁、电子钥匙开锁、密码开锁
 
@@ -49,14 +48,6 @@ public class Record {
 
     public void setHeadPic(String headPic) {
         this.headPic = headPic;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getIcon() {

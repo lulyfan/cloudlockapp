@@ -157,13 +157,8 @@ public class ForgetPasswordActivity extends BaseActivity {
             boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
             sureBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
             getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
-            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
-                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
-            }
-
-            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
-                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
-            }
+            ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
+            ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;

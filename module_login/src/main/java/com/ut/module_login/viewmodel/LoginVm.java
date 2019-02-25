@@ -5,6 +5,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
@@ -59,6 +60,8 @@ public class LoginVm extends AndroidViewModel {
                         AppManager.getAppManager().finishActivity(RegisterActivity.class);
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
+                        AppManager.getAppManager().finishActivity(LoginActivity.class);
+                        AppManager.getAppManager().finishActivity(RegisterActivity.class);
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
@@ -130,16 +133,22 @@ public class LoginVm extends AndroidViewModel {
     }
 
     public int checkPhoneBg(String phone) {
-        if (LoginUtil.isPhone(phone)) {
+        if (LoginUtil.isPhone(phone) || TextUtils.isEmpty(phone)) {
             return R.drawable.selector_highlight_case;
         }
         return R.drawable.selector_highlight_red;
     }
 
     public int checkPwdBg(String pwd) {
-        if (LoginUtil.isPassword(pwd)) {
+        if (LoginUtil.isPassword(pwd) || TextUtils.isEmpty(pwd)) {
             return R.drawable.selector_highlight_case;
         }
         return R.drawable.selector_highlight_red;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        compositeDisposable.dispose();
     }
 }

@@ -140,18 +140,6 @@ public class RegisterActivity extends BaseActivity {
             register(phone, password, verifyCode);
         });
 
-//        findViewById(R.id.tel_belong_of_place).setOnClickListener(v -> {
-//                    ViewGroup parent = (ViewGroup) v.getParent();
-//                    parent.requestFocus();
-//                    ARouter.getInstance()
-//                            .build(RouterUtil
-//                                    .LoginModulePath.SELECT_COUNTRY_AREA_CODE)
-//                            .navigation(RegisterActivity.this, REQ_COUNTRY_AREA_CODE);
-//                }
-//        );
-
-//        findViewById(R.id.location_layout).setOnFocusChangeListener(View::setSelected);
-
         findViewById(R.id.root).setOnClickListener(v -> {
             SystemUtils.hideKeyboard(getBaseContext(), v);
         });
@@ -172,13 +160,9 @@ public class RegisterActivity extends BaseActivity {
             boolean verifyResult = LoginUtil.isPhone(phoneEdt.getPhoneText()) && LoginUtil.isPassword(passwordEdt.getText().toString());
             registerBtn.setEnabled(verifyResult && verifyCodeEdt.getText().length() > 0);
             getVerifyCodeTv.setEnabled(!isReciprocal && verifyResult);
-            if (!TextUtils.isEmpty(phoneEdt.getPhoneText())) {
-                ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
-            }
+            ((ViewGroup) phoneEdt.getParent()).setBackgroundResource(loginVm.checkPhoneBg(phoneEdt.getPhoneText()));
 
-            if (!TextUtils.isEmpty(passwordEdt.getText().toString())) {
-                ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
-            }
+            ((ViewGroup) passwordEdt.getParent()).setBackgroundResource(loginVm.checkPwdBg(passwordEdt.getText().toString()));
         } else if (RECIPROCAL == msg.what) {
             timeCount--;
             isReciprocal = timeCount > 0;

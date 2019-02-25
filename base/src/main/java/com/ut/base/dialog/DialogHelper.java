@@ -24,50 +24,72 @@ public class DialogHelper {
     private static DialogHelper instance;
 
     public static DialogHelper getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             synchronized (DialogHelper.class) {
                 instance = new DialogHelper();
             }
         }
+
+        if (!instance.isShowing()) {
+            instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
+        }
+
+        return instance;
+    }
+
+
+    public DialogHelper newDialog() {
         if (instance.isShowing()) {
             instance.alertDialog.dismiss();
-            instance.alertDialog = null;
         }
         instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
         return instance;
     }
 
+
     public DialogHelper setTitle(String title) {
-        sBuilder.setTitle(title);
+        if (!isShowing()) {
+            sBuilder.setTitle(title);
+        }
         return instance;
     }
 
     public DialogHelper setMessage(String message) {
-        sBuilder.setMessage(message);
+        if (!isShowing()) {
+            sBuilder.setMessage(message);
+        }
         return instance;
     }
 
     public DialogHelper setContentView(View contentView) {
-        sBuilder.setView(contentView);
+        if (!isShowing()) {
+            sBuilder.setView(contentView);
+        }
         return instance;
     }
 
     public DialogHelper setPositiveButton(String positiveBtnText, DialogInterface.OnClickListener clickListener) {
-        sBuilder.setPositiveButton(positiveBtnText, clickListener);
+        if (!isShowing()) {
+            sBuilder.setPositiveButton(positiveBtnText, clickListener);
+        }
         return instance;
     }
 
     public DialogHelper setNegativeButton(String positiveBtnText, DialogInterface.OnClickListener clickListener) {
-        sBuilder.setNegativeButton(positiveBtnText, clickListener);
+        if (!isShowing()) {
+            sBuilder.setNegativeButton(positiveBtnText, clickListener);
+        }
         return instance;
     }
 
     public boolean isShowing() {
-        return sBuilder != null && alertDialog != null && alertDialog.isShowing();
+        return alertDialog != null && alertDialog.isShowing();
     }
 
     public DialogHelper setCanCancelOutSide(boolean can) {
-        sBuilder.setCancelable(can);
+        if (!isShowing()) {
+            sBuilder.setCancelable(can);
+        }
         return instance;
     }
 

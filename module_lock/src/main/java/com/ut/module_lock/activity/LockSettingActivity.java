@@ -215,6 +215,7 @@ public class LockSettingActivity extends BaseActivity {
         edtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         edtPwd.setHint(getString(R.string.lock_verify_user_password_hint));
         DialogHelper.getInstance()
+                .newDialog()
                 .setContentView(contentView)
                 .setTitle(getString(R.string.lock_safe_verify))
                 .setPositiveButton(getString(R.string.lock_btn_confirm), (dialog, which) -> {

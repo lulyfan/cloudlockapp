@@ -76,7 +76,7 @@ public class LockUserItemActivity extends BaseActivity {
 
                         default:
                     }
-                    Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus, Color.parseColor(EnumCollection.KeyStatus.isKeyValid(key.getKeyStatus()) ? "#999999" : "#F55D54"));
+                    Data data = new Data(key.getLockName(), key.getKeyId(), keyType, keyStatus, Color.parseColor(EnumCollection.KeyStatus.isKeyValid(key.getKeyStatus()) ? "#999999" : "#F55D54"),key.getUserType());
                     dataList.add(data);
                 }
                 adapter.setData(dataList);
@@ -153,15 +153,20 @@ public class LockUserItemActivity extends BaseActivity {
         public String keyType;
         public long keyId;
         public String keyStatus;
-
         public int keyStatusColor;
+        public int userType;
 
-        public Data(String lockName, long keyId, String keyType, String keyStatus, int keyStatusColor) {
+        public Data(String lockName, long keyId, String keyType, String keyStatus, int keyStatusColor, int userType) {
             this.lockName = lockName;
             this.keyType = keyType;
             this.keyId = keyId;
             this.keyStatus = keyStatus;
             this.keyStatusColor = keyStatusColor;
+            this.userType = userType;
+        }
+
+        public boolean isAuth(){
+            return userType == EnumCollection.UserType.AUTH.ordinal();
         }
     }
 }

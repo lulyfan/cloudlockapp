@@ -20,6 +20,7 @@ public class LockUserKey {
     private String lockName;
     private String mac;
     private int keyStatus;
+    private int userType;
 
 
     public int getRuleType() {
@@ -60,5 +61,13 @@ public class LockUserKey {
 
     public void setKeyStatus(int keyStatus) {
         this.keyStatus = keyStatus;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 }
