@@ -135,7 +135,9 @@ public class KeyInfoActivity extends BaseActivity {
                 TextView item1 = getView(R.id.item1);
                 if (managerUserType == EnumCollection.UserType.ADMIN.ordinal()
                         && keyInfo.getUserType() != EnumCollection.UserType.ADMIN.ordinal()
-                        && keyInfo.getRuleType() == EnumCollection.KeyRuleType.FOREVER.ordinal()) {
+                        && keyInfo.getRuleType() == EnumCollection.KeyRuleType.FOREVER.ordinal()
+                        && (keyInfo.getStatus() != EnumCollection.KeyStatus.HAS_FREEZE.ordinal() || keyInfo.getStatus() != EnumCollection.KeyStatus.FREEZING.ordinal())
+                ) {
                     item1.setText(keyInfo.getUserType() == EnumCollection.UserType.AUTH.ordinal() ? getString(R.string.lock_cancel_auth) : getString(R.string.lock_to_auth));
                     item1.setOnClickListener(v -> {
                         getPopupWindow().dismiss();
