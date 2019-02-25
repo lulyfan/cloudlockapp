@@ -92,7 +92,6 @@ public class LimitTimeFragment extends BaseFragment {
 
         binding.tvInvalidTime.setText(limitEndTime);
         binding.tvInvalidTime.setTextColor(getResources().getColor(R.color.gray3));
-
     }
 
     private void initUI() {
@@ -137,6 +136,11 @@ public class LimitTimeFragment extends BaseFragment {
                 et_name.setText(s);
                 et_name.setSelection(s.length());
             }
+        });
+
+
+        viewModel.sendingKey.observe(this, isSending-> {
+            binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending);
         });
     }
 

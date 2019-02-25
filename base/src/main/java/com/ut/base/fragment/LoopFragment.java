@@ -157,6 +157,9 @@ public class LoopFragment extends BaseFragment {
         checkBox5.setOnCheckedChangeListener(weekListener);
         checkBox6.setOnCheckedChangeListener(weekListener);
         checkBox7.setOnCheckedChangeListener(weekListener);
+
+
+        viewModel.sendingKey.observe(this, isSending-> binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending));
     }
 
     private void handleEnDate() {

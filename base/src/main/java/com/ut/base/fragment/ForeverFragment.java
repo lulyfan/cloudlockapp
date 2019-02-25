@@ -79,6 +79,8 @@ public class ForeverFragment extends BaseFragment {
         if (viewModel.userType != EnumCollection.UserType.ADMIN.ordinal()) {
             binding.swIsAdmin.setVisibility(View.GONE);
         }
+
+        viewModel.sendingKey.observe(this, isSending-> binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending));
     }
 
     @Override

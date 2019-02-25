@@ -34,6 +34,7 @@ public class SendKeyViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> tip = new MutableLiveData<>();
     public MutableLiveData<Boolean> isSendKeySuccess = new MutableLiveData<>();
+    public MutableLiveData<Boolean> sendingKey = new MutableLiveData<>();
     public MutableLiveData<String> receiverPhoneNum = new MutableLiveData<>();
     public MutableLiveData<String> keyName = new MutableLiveData<>();
     public boolean isAdmin;
@@ -77,6 +78,7 @@ public class SendKeyViewModel extends AndroidViewModel {
     @SuppressLint("CheckResult")
     public void sendKey(String phoneNum, String mac, String keyName, int keyType, String isAdmin, String startTime, String endTime,
                         String weeks, String startTimeRange, String endTimeRange) {
+        sendingKey.postValue(true);
         service.sendKey(phoneNum, mac, keyType, keyName, isAdmin, startTime, endTime, weeks, startTimeRange, endTimeRange)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -88,11 +90,13 @@ public class SendKeyViewModel extends AndroidViewModel {
                         CLToast.showAtCenter(getApplication(), voidResult.msg);
                         isSendKeySuccess.setValue(false);
                     }
+                    sendingKey.postValue(false);
                 }, new ErrorHandler() {
                     @Override
                     public void accept(Throwable throwable) {
                         super.accept(throwable);
                         isSendKeySuccess.setValue(false);
+                        sendingKey.postValue(false);
                     }
                 });
     }

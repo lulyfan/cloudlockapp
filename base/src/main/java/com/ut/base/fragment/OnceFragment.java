@@ -69,6 +69,10 @@ public class OnceFragment extends BaseFragment {
                 et_name.setSelection(s.length());
             }
         });
+
+        viewModel.sendingKey.observe(this, isSending-> {
+            binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending);
+        });
     }
 
     @Override
