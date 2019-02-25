@@ -54,7 +54,7 @@ public class LockGroupActivity extends BaseActivity {
             public void onChange(List<LockGroup> lockGroups) {
                 List<LockGroupData> lockGroupDataList = new ArrayList<>();
                 for (LockGroup lockGroup : lockGroups) {
-                    LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), 0);
+                    LockGroupData item = new LockGroupData(lockGroup.getId(), lockGroup.getName(), lockGroup.getLockCount());
                     lockGroupDataList.add(item);
                 }
                 adapter.setData(lockGroupDataList);
@@ -108,6 +108,10 @@ public class LockGroupActivity extends BaseActivity {
             this.groupId = groupId;
             this.name = name;
             this.lockCount = lockCount;
+        }
+
+        public String lockCountStr(){
+            return String.valueOf(lockCount);
         }
     }
 

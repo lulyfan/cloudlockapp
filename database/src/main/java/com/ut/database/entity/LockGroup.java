@@ -18,6 +18,7 @@ public class LockGroup {
     private long createTime;
     private long userId;
     private int current = 0;
+    private int lockCount;
 
     public long getId() {
         return id;
@@ -57,6 +58,14 @@ public class LockGroup {
 
     public void setCurrent(int current) {
         this.current = current;
+    }
+
+    public int getLockCount() {
+        return lockCount;
+    }
+
+    public void setLockCount(int lockCount) {
+        this.lockCount = lockCount;
     }
 
     @Override
