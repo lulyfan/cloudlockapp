@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,14 +40,12 @@ import io.reactivex.schedulers.Schedulers;
  * desc   :
  * version: 1.0
  */
-public class NearLockVM extends AndroidViewModel {
+public class NearLockVM extends BaseViewModel {
     private MutableLiveData<List<NearScanLock>> nearScanLocks = new MutableLiveData<>();//显示搜索到的数据
-    private MutableLiveData<String> errorMsg = new MutableLiveData<>();//出错提示
     private MutableLiveData<Boolean> operating = new MutableLiveData<>();//提示是否正在搜索
     private MutableLiveData<CloudLock> mBindLock = new MutableLiveData<>();//绑定成功的锁，用于修改名称
     private Map<String, ScanDevice> mStringScanDeviceMap = new HashMap<>();//缓存原始搜索数据
     private List<NearScanLock> nearLockList = new ArrayList<>();//存放后台放回的对象
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private boolean hasConnected = false;
     private String lockBindPassword;
 
@@ -63,9 +63,6 @@ public class NearLockVM extends AndroidViewModel {
         return operating;
     }
 
-    public MutableLiveData<String> getErrorCode() {
-        return errorMsg;
-    }
 
     public MutableLiveData<CloudLock> getBindLock() {
         return mBindLock;
@@ -145,7 +142,7 @@ public class NearLockVM extends AndroidViewModel {
             @Override
             public void onDisconnect(int i, String s) {
                 if (!hasConnected) {
-                    errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                    showTip.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                 }
                 UTLog.i("ble has been disconnected");
             }
@@ -157,7 +154,7 @@ public class NearLockVM extends AndroidViewModel {
     private void actBind(NearScanLock lock) {
         ScanDevice scanDevice = mStringScanDeviceMap.get(lock.getMac());
         if (scanDevice == null) {
-            errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+            showTip.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
             return;
         }
         UnilinkManager.getInstance(getApplication()).initLock(scanDevice, lockBindPassword, new CallBack() {
@@ -170,10 +167,11 @@ public class NearLockVM extends AndroidViewModel {
                         .subscribe(voidResult -> {
                             if (voidResult.isSuccess()) {
                                 confirmInitLock(cloudLock);
+                            } else {
+                                showTip.postValue(voidResult.msg);
                             }
-                            errorMsg.postValue(voidResult.msg);
                         }, throwable -> {
-                            errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                            showTip.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                         });
                 mCompositeDisposable.add(disposable);
             }
@@ -185,7 +183,7 @@ public class NearLockVM extends AndroidViewModel {
                 if (errcode == ErrCode.ERR_BIND_PASSWORD) {
                     errMessage = errInfo;
                 }
-                errorMsg.postValue(errMessage);
+                showTip.postValue(errMessage);
                 UTLog.i("ble initLockKey failed:" + errInfo);
             }
         });
@@ -196,14 +194,14 @@ public class NearLockVM extends AndroidViewModel {
         UnilinkManager.getInstance(getApplication()).confirmInit(cloudLock, new CallBack() {
             @Override
             public void onSuccess(CloudLock cloudLock) {
+                showTip.postValue(getApplication().getString(R.string.lock_tip_bind_succed));
                 mBindLock.postValue(cloudLock);
-                UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
             }
 
             @Override
             public void onFailed(int i, String s) {
                 UTLog.i("ble confirm initLockKey failed");
-                errorMsg.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
+                showTip.postValue(getApplication().getString(R.string.lock_tip_bind_failed));
                 Disposable disposable = CommonApi.delAdminKey(cloudLock.getAddress())
                         .subscribe(voidResult -> {
                         });
@@ -213,9 +211,9 @@ public class NearLockVM extends AndroidViewModel {
         });
     }
 
+
     @Override
     protected void onCleared() {
         super.onCleared();
-        mCompositeDisposable.dispose();
     }
 }

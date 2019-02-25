@@ -110,7 +110,7 @@ public class NearLockActivity extends BaseActivity {
                 mEmptyTip2.setVisibility(View.VISIBLE);
             }
         });
-        mNearLockVM.getErrorCode().observe(this, errorMsg -> {
+        mNearLockVM.getShowTip().observe(this, errorMsg -> {
             endLoad();
             toastShort(errorMsg);
         });

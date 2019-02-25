@@ -78,6 +78,7 @@
     <string name="lock_tip_have_key">您当前已获取该锁钥匙，请到首页查看。</string>
 
     <string name="lock_tip_bind_failed">锁绑定失败</string>
+    <string name="lock_tip_bind_succed">锁绑定成功</string>
 
     <string name="lock_tip_setname_failed">修改锁名称失败</string>
     <string name="lock_tip_ble_not_support">蓝牙不支持</string>

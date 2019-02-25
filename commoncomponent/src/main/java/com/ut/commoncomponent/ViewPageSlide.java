@@ -32,4 +32,10 @@ public class ViewPageSlide extends ViewPager {
         if (!canSlide) return false;
         return super.onInterceptTouchEvent(ev);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (!canSlide) return false;
+        return super.onTouchEvent(ev);
+    }
 }
