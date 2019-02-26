@@ -9,9 +9,11 @@ import com.ut.base.AppManager;
 import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
-import com.ut.module_mine.R;
-import com.ut.module_mine.activity.MainActivity;
 import com.ut.module_mine.activity.SystemSettingActivity;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class SystemSettingViewModel extends BaseViewModel {
@@ -23,22 +25,14 @@ public class SystemSettingViewModel extends BaseViewModel {
     }
 
     public void logout() {
-        service.logout()
-                .doOnNext(stringResult -> {
-                    if (stringResult == null) {
-                        throw new NullPointerException(getApplication().getString(R.string.serviceErr));
-                    }
-
-                    if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
-                    }
-                })
+        Disposable subscribe = service.logout()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
                             logoutSuccess.postValue(null);
                             BaseApplication.clearDataBase();
                             BaseApplication.clearDataWhenLogout();
-//                            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).navigation();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
                         },

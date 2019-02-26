@@ -24,9 +24,8 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     public void notifyData(List<T> list) {
-//        this.mDatas.clear();
-//        this.mDatas.addAll(list);
-        this.mDatas = new ArrayList<>(list);
+        this.mDatas.clear();
+        this.mDatas.addAll(list);
         notifyDataSetChanged();
     }
 

@@ -21,6 +21,8 @@ import com.ut.module_login.common.LoginUtil;
 import com.ut.module_login.ui.LoginActivity;
 import com.ut.module_login.ui.RegisterActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -56,17 +58,20 @@ public class LoginVm extends AndroidViewModel {
                 .subscribe(result -> {
                     if (result.isSuccess()) {
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                        AppManager.getAppManager().finishActivity(LoginActivity.class);
-                        AppManager.getAppManager().finishActivity(RegisterActivity.class);
+                        finishLoginActs();
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
-                        AppManager.getAppManager().finishActivity(LoginActivity.class);
-                        AppManager.getAppManager().finishActivity(RegisterActivity.class);
+                       finishLoginActs();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
                 }, new ErrorHandler());
         compositeDisposable.add(subscribe);
+    }
+
+    private void finishLoginActs() {
+        AppManager.getAppManager().finishActivity(LoginActivity.class);
+        AppManager.getAppManager().finishActivity(RegisterActivity.class);
     }
 
     private void deleteAllOldData() {
