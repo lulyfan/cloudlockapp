@@ -301,4 +301,7 @@
     <string name="input_bind_password">请输入门锁的管理员密码</string>
     <string name="lock_detail_dialog_msg_reset">该锁已重置，请删除锁后重新绑定</string>
     <string name="currentLockTime">当前锁时间</string>
+
+    <string name="lock_connected">已连接</string>
+    <string name="lock_unConnected">待连接</string>
 </resources>

@@ -189,6 +189,10 @@ public class BleOperateManager {
                     isConnectSuccessed = false;
                     mOperateCallback.onConnectFailed(i, s);
                 }
+            } else {
+                if (mOperateCallback != null) {
+                    mOperateCallback.onDisconnect();
+                }
             }
         }
     };
@@ -458,6 +462,8 @@ public class BleOperateManager {
         void onConnectSuccess();
 
         void onConnectFailed(int errorcode, String errorMsg);
+
+        void onDisconnect();
 
         void onElectric(int elect);
 

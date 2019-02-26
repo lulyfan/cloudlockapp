@@ -19,7 +19,7 @@ import java.util.concurrent.locks.Lock;
  */
 @Dao
 public interface LockKeyDao {
-    @Query("SELECT * FROM lock_key ORDER BY userType ASC")
+    @Query("SELECT * FROM lock_key ORDER BY userType ASC , createTime DESC")
     LiveData<List<LockKey>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

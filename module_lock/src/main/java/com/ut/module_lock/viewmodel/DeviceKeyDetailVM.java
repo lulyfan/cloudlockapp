@@ -147,6 +147,11 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
     }
 
     @Override
+    public void onDisconnect() {
+
+    }
+
+    @Override
     public void onElectric(int elect) {
 
     }

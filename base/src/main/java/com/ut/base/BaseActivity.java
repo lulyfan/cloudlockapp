@@ -100,15 +100,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected synchronized void overDateLogin() {
-        Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         try {
+            BaseApplication.clearDataWhenLogout();
             String message = getString(R.string.base_over_data_login);
             DialogHelper.getInstance()
                     .setCanCancelOutSide(false)
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
-                        Schedulers.io().scheduleDirect(BaseApplication::clearDataBase, 500L, TimeUnit.MILLISECONDS);
                         ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
+                        BaseApplication.clearDataBase();
                     })
                     .show();
         } catch (Exception e) {
@@ -121,9 +121,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public synchronized void remoteLogin() {
-        //暂时在这个地方删除所有数据库内容，后期加个判断是否换账号
-        Schedulers.io().scheduleDirect(BaseApplication::clearDataWhenLogout);
         try {
+            BaseApplication.clearDataWhenLogout();
             String message = getString(R.string.base_auto_login_time_out);
             message = message.replace("##", new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
             DialogHelper.getInstance()
@@ -131,7 +130,7 @@ public class BaseActivity extends AppCompatActivity {
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
                         ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
-                        Schedulers.io().scheduleDirect(BaseApplication::clearDataBase, 500L, TimeUnit.MILLISECONDS);
+                        BaseApplication.clearDataBase();
                     })
                     .show();
         } catch (Exception e) {

@@ -12,22 +12,21 @@ import java.util.List;
  * Created by ZYB on 2016/7/5.
  */
 public abstract class CommonAdapter<T> extends BaseAdapter {
-    private List<T> mDatas = null;
+    private List<T> mDatas = new ArrayList<>();
     private Context mContext = null;
     private int mLayoutId = 0;
 
 
     public CommonAdapter(Context context, List<T> datas, int layoutId) {
         this.mContext = context;
-        this.mDatas = datas;
+        this.mDatas.addAll(datas);
         this.mLayoutId = layoutId;
     }
 
     public void notifyData(List<T> list) {
-//        this.mDatas.clear();
-//        this.mDatas.addAll(list);
-        this.mDatas = new ArrayList<>(list);
-        notifyDataSetChanged();
+        this.mDatas.clear();
+        this.mDatas.addAll(list);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -54,7 +53,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
 
     public abstract void convert(CommonViewHolder commonViewHolder, int position, T item);
 
-    public List<T> getData(){
+    public List<T> getData() {
         return mDatas;
     }
 }

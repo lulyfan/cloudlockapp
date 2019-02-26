@@ -46,7 +46,9 @@ import com.ut.module_lock.adapter.LockListAdapter;
 import com.ut.module_lock.databinding.FragmentLocklistBinding;
 import com.ut.module_lock.viewmodel.LockListFragVM;
 import com.ut.unilink.UnilinkManager;
+import com.ut.unilink.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,15 +111,14 @@ public class LockListFragment extends BaseFragment {
                 autoOpenLock();
             }
         });
-        mLockListFragVM.getLockGroupList().observe(this, this::refreshGroupList);
+        mLockListFragVM.getLockGroupList().observe(this, lockGroups -> {
+            Log.d("mLockListFragVM", " group update !!!! " + (lockGroups == null ? "null" : lockGroups.size()));
+            refreshGroupList(lockGroups);
+        });
         mLockListFragVM.getRefreshStatus().observe(this, isRefresh -> {
             if (mFragmentLocklistBinding.swfLockList.isRefreshing()) {
                 mFragmentLocklistBinding.swfLockList.setRefreshing(false);
             }
-            //TODO 提示刷新错误
-//            if (isRefresh) {
-//                CLToast.showAtBottom(getContext(), getString(R.string.refresh_success));
-//            }
         });
         mLockListFragVM.toGetAllGroupList(false);
     }
@@ -129,6 +130,7 @@ public class LockListFragment extends BaseFragment {
         mFragmentLocklistBinding.swfLockList.setColorSchemeResources(R.color.color_tv_blue);
         mFragmentLocklistBinding.swfLockList.setOnRefreshListener(() -> {
             mLockListFragVM.toGetLockAllList(true);
+            mLockListFragVM.toGetAllGroupList(true);
         });
     }
 
@@ -139,20 +141,12 @@ public class LockListFragment extends BaseFragment {
             mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
                 if (datas1.size() <= 0) return;
                 LockKey lockKey = (LockKey) datas1.get(position);
-//                if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.NORMAL.ordinal()) {
                 ARouter.getInstance()
                         .build(RouterUtil.LockModulePath.LOCK_DETAIL)
                         .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
                         .navigation();
 
                 finish();
-//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_INVALID.ordinal()) {
-//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_invalid));
-//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_FREEZE.ordinal()) {
-//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_freeze));
-//                } else if (lockKey.getKeyStatus() == EnumCollection.KeyStatus.HAS_OVERDUE.ordinal()) {
-//                    CLToast.showAtCenter(getContext(), getString(R.string.lock_go_lock_detail_fail_has_overdue));
-//                }
             });
         } else {
             mLockListAdapter.notifyData(datas);
@@ -160,8 +154,13 @@ public class LockListFragment extends BaseFragment {
     }
 
     private synchronized void refreshGroupList(List<LockGroup> lockGroups) {
-        if (popupWindow == null || lockGroups == null) return;
+        if (popupWindow == null) {
+            initPopupWindow();
+        }
+        if (lockGroups == null) lockGroups = new ArrayList<>();
+
         if (mLockGroupCommonAdapter == null) {
+            Log.d("mLockListFragVM", "adapter init");
             allGroup.setId(-1);
             allGroup.setCurrent(1);
             allGroup.setName(getString(R.string.lock_group_all));
@@ -170,20 +169,20 @@ public class LockListFragment extends BaseFragment {
             ListView listView = popupWindow.getView(R.id.lv_group_list);
 
             mLockGroupCommonAdapter = new CommonAdapter<LockGroup>(getContext(), lockGroups, R.layout.item_goup_list) {
+
                 @Override
                 public void notifyData(List<LockGroup> list) {
                     super.notifyData(list);
                     long currentGroupId = mLockListFragVM.getCurrentGroupId();
                     boolean hasDeleted = true;
-                    for (LockGroup lockGroup: list) {
-                        if(currentGroupId == lockGroup.getId() && currentGroupId != allGroup.getId()) {
+                    for (LockGroup lockGroup : list) {
+                        if (currentGroupId == lockGroup.getId() && currentGroupId != allGroup.getId()) {
                             hasDeleted = false;
                         }
                     }
-                    //如果之前选的分组已删除，则需要页面默认全部分组查询
-                    if(hasDeleted) {
+                    if (hasDeleted) {
                         mLockListFragVM.getGroupLockList(allGroup);
-//                        ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(allGroup.getName());
+                        ((TextView) popupWindow.getView(R.id.lock_tv_group)).setText(allGroup.getName());
                     }
                 }
 
@@ -214,9 +213,11 @@ public class LockListFragment extends BaseFragment {
                 popupWindow.getPopupWindow().dismiss();
             });
             listView.setAdapter(mLockGroupCommonAdapter);
+            mLockGroupCommonAdapter.notifyData(lockGroups);
         } else {
             lockGroups.add(0, allGroup);
             mLockGroupCommonAdapter.notifyData(lockGroups);
+            Log.d("mLockListFragVM", "group notifyData");
         }
 
     }

@@ -167,6 +167,11 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
     }
 
     @Override
+    public void onDisconnect() {
+
+    }
+
+    @Override
     public void onElectric(int elect) {
 
     }

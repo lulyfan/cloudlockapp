@@ -145,10 +145,15 @@ public class BaseApplication extends MultiDexApplication {
 
     public static void clearDataWhenLogout() {//退出登录时做清除数据操作
         BaseApplication.deleteJpushAlias();
-        MyRetrofit.get().closeWebSocket();
+        Schedulers.newThread().scheduleDirect(()->{
+            MyRetrofit.get().closeWebSocket();
+        });
+        clearDataBase();
     }
 
     public static void clearDataBase() {
-        CloudLockDatabaseHolder.get().clear();
+        Schedulers.newThread().scheduleDirect(()->{
+            CloudLockDatabaseHolder.get().clear();
+        });
     }
 }

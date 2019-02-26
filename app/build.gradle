@@ -11,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "V1.1.0 build" + releaseTime() + "beta"
+        versionName "V1.1.1 build" + releaseTime() + "beta"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -47,13 +47,25 @@ android {
         }
     }
 
+//    productFlavors {
+//        main_ {
+//            //默认大众普通版本
+//            flavorDimensions "versionCode"
+//        }
+//        local_ {
+//            //工程项目版本
+//            applicationIdSuffix rootProject.ext.localAppidSuffix
+//            flavorDimensions "versionCode"
+//            versionName "v1.0.5 local build" + releaseTime()
+//        }
+//
+//    }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-
 }
 
 dependencies {
