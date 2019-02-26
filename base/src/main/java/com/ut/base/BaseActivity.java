@@ -62,7 +62,6 @@ public class BaseActivity extends AppCompatActivity {
     private DialogPlus loadDialog;
     private WebSocketHelper.WebSocketStateListener webSocketStateListener;
     private AutoOpenLockService autoOpenLockService;
-    protected boolean isResumed = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +85,6 @@ public class BaseActivity extends AppCompatActivity {
         StatService.onPageStart(this, this.getClass().getSimpleName());
         MyRetrofit.get().addWebSocketStateListener(webSocketStateListener);
         AppManager.getAppManager().addActivity(this);
-        isResumed = true;
     }
 
     public AutoOpenLockService getAutoOpenLockService() {
@@ -102,9 +100,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected synchronized void overDateLogin() {
-        if(!isResumed) {
-            return;
-        }
         try {
             BaseApplication.clearDataWhenLogout();
             String message = getString(R.string.base_over_data_login);
@@ -309,8 +304,6 @@ public class BaseActivity extends AppCompatActivity {
         StatService.onPageEnd(this, this.getClass().getSimpleName());
 
         MyRetrofit.get().removeWebSocketStateListener(webSocketStateListener);
-
-        isResumed = false;
     }
 
     @Override
