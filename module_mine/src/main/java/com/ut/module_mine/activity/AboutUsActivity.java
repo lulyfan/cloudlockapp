@@ -45,9 +45,9 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     private void initData(Cloudlockenterpriseinfo cloudlockenterpriseinfo) {
-        binding.textView41.setText(cloudlockenterpriseinfo.getMobile());
-        binding.textView44.setText(cloudlockenterpriseinfo.getUrl());
-        binding.textView48.setText(cloudlockenterpriseinfo.getEmail());
+        binding.phoneNum.setText(cloudlockenterpriseinfo.getMobile());
+        binding.officeWebAddress.setText(cloudlockenterpriseinfo.getUrl());
+        binding.companyEmail.setText(cloudlockenterpriseinfo.getEmail());
     }
 
     private void initUI() {
