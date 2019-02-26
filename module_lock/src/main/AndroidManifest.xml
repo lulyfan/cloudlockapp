@@ -27,11 +27,11 @@
         <activity android:name=".activity.DeviceKeyRuleActivity"/>
         <activity android:name=".activity.TimeAdjustActivity"/>
 
-        <service
-            android:name=".OpenLockService"
-            android:enabled="true"
-            android:exported="true">
-        </service>
+        <!--<service-->
+            <!--android:name=".OpenLockService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+        <!--</service>-->
     </application>
 
 </manifest>

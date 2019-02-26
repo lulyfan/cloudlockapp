@@ -34,6 +34,8 @@ import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -246,7 +248,6 @@ public class LockSettingVM extends BaseViewModel {
                     @Override
                     public void onSuccess(CloudLock cloudLock) {
                         deleteAdminLock(lockKey);
-                        UnilinkManager.getInstance(getApplication()).disconnect(cloudLock.getAddress());
                         endLoad();
                     }
 
@@ -266,9 +267,9 @@ public class LockSettingVM extends BaseViewModel {
                 .observeOn(Schedulers.io())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        //删除数据库相应的锁数据
                         deleteLockKey(lockKey);
                         isDeleteSuccess.postValue(true);
-                        //删除数据库相应的锁数据
                     }
                     showTip.postValue(result.msg);
                 }, new ErrorHandler());
@@ -442,7 +443,9 @@ public class LockSettingVM extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        mCompositeDisposable.clear();
+        if (lockKey != null) {
+            UnilinkManager.getInstance(getApplication()).disconnect(lockKey.getMac());
+        }
     }
 
     private void endLoad() {

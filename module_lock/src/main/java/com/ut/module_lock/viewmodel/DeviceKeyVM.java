@@ -51,9 +51,14 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
     private List<DeviceKeyAuth> mAllDeviceKeyAuth = new ArrayList<>();
     private Observer<List<DeviceKey>> observer1 = null;
 
+    private MutableLiveData<Boolean> mConnectState = new MutableLiveData<>();
 
     public LockKey getLockKey() {
         return mLockKey;
+    }
+
+    public LiveData<Boolean> getConnectState() {
+        return mConnectState;
     }
 
     private LockKey mLockKey = null;
@@ -169,7 +174,7 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
             long time = System.currentTimeMillis();
             mBleOperateManager.updateTime(mLockKey.getMac(), mLockKey.getEncryptType(), mLockKey.getEncryptKey(), time);
         }, 100, TimeUnit.MILLISECONDS);
-
+        mConnectState.postValue(true);
     }
 
     @Override
@@ -177,6 +182,12 @@ public class DeviceKeyVM extends BaseViewModel implements BleOperateManager.Oper
         UTLog.i("i:" + errorcode + " msg:" + errorMsg);
         processTick.postValue(-1);
         showTip.postValue(getApplication().getString(R.string.lock_device_key_connect_failed));
+        mConnectState.postValue(false);
+    }
+
+    @Override
+    public void onDisconnect() {
+        mConnectState.postValue(false);
     }
 
     @Override

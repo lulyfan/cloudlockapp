@@ -26,8 +26,6 @@ import com.ut.base.Utils.UTLog;
 import com.ut.base.Utils.Util;
 import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.commoncomponent.CLToast;
-import com.ut.database.entity.DeviceKey;
-import com.ut.database.entity.DeviceKeyAuth;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.module_lock.R;
@@ -47,6 +45,8 @@ public class DeviceKeyActivity extends BaseActivity {
     private LockKey mLockKey = null;
     private DeviceKeyVM mDeviceKeyVM = null;
 
+    private TextView mOperateButton = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +63,12 @@ public class DeviceKeyActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         mDeviceKeyVM.mBleOperateManager.onActivityOnpause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        changeOperateButtonText(mDeviceKeyVM.mBleOperateManager.isConnected(mLockKey.getMac()));
     }
 
     private void initVM() {
@@ -91,6 +97,18 @@ public class DeviceKeyActivity extends BaseActivity {
                         .hideCancel()
                         .show();
         });
+
+        mDeviceKeyVM.getConnectState().observe(this, isConnected -> {
+            changeOperateButtonText(isConnected);
+        });
+    }
+
+    private void changeOperateButtonText(Boolean isConnected) {
+        if (isConnected) {
+            mOperateButton.setText(R.string.lock_connected);
+        } else {
+            mOperateButton.setText(R.string.lock_unConnected);
+        }
     }
 
     private void initData() {
@@ -107,6 +125,8 @@ public class DeviceKeyActivity extends BaseActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        mOperateButton = findViewById(R.id.tv_connectLock);
     }
 
     private void initToolbar() {
