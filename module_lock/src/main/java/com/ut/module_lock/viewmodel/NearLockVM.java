@@ -48,6 +48,7 @@ public class NearLockVM extends BaseViewModel {
     private List<NearScanLock> nearLockList = new ArrayList<>();//存放后台放回的对象
     private boolean hasConnected = false;
     private String lockBindPassword;
+    private String bindedLockMac = null;
 
 
     public NearLockVM(@NonNull Application application) {
@@ -196,6 +197,7 @@ public class NearLockVM extends BaseViewModel {
             public void onSuccess(CloudLock cloudLock) {
                 showTip.postValue(getApplication().getString(R.string.lock_tip_bind_succed));
                 mBindLock.postValue(cloudLock);
+                NearLockVM.this.bindedLockMac = cloudLock.getAddress();
             }
 
             @Override
@@ -215,5 +217,8 @@ public class NearLockVM extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+        if (this.bindedLockMac != null) {
+            UnilinkManager.getInstance(getApplication()).disconnect(bindedLockMac);
+        }
     }
 }

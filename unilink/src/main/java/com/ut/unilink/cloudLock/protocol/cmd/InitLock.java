@@ -7,14 +7,14 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Random;
 
-public class InitLock extends BleCmdBase<InitLock.Data>{
+public class InitLock extends BleCmdBase<InitLock.Data> {
 
     private static final byte CODE = 0x20;
     private byte[] adminPassword = new byte[6];
     private byte[] openLockPassword = new byte[6];
     private byte[] secretKey = new byte[8];     //密钥
     private byte encryptVersion;         //加密版本
-    private String checkCode;
+    private String checkCode;//门锁管理密码
 
     public InitLock(String checkCode) {
         this.checkCode = checkCode;
@@ -84,7 +84,7 @@ public class InitLock extends BleCmdBase<InitLock.Data>{
     }
 
     public static class Data {
-       public byte[] softwareVersion = new byte[3];
-       public byte[] protocolVersion = new byte[2];
+        public byte[] softwareVersion = new byte[3];
+        public byte[] protocolVersion = new byte[2];
     }
 }

@@ -49,7 +49,8 @@ public class ReceiverSettingViewModel extends BaseViewModel {
                     }
 
                     if (!stringResult.isSuccess()) {
-                        throw new Exception(stringResult.msg);
+//                        throw new Exception(stringResult.msg);
+                        tip.postValue(stringResult.msg);
                     }
                 })
                 .subscribe(userResult -> {
