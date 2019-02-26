@@ -17,8 +17,6 @@ public class TimePicker extends FrameLayout {
 
     private WheelPicker hourPicker;
     private WheelPicker minutePicker;
-    private int selectedHour;
-    private int selectedMinute;
 
     public TimePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,18 +26,22 @@ public class TimePicker extends FrameLayout {
         minutePicker = view.findViewById(R.id.minutePicker);
         addView(view);
 
-        setData();
+        init();
     }
 
-    private void setData() {
+    private void init() {
+        init(0, 0);
+    }
+
+    public void init(int startHour, int startMinute) {
         List<String> hours = new ArrayList<>();
-        for (int i=0; i<24; i++) {
+        for (int i=startHour; i<24; i++) {
             hours.add(String.format("%02d", i));
         }
         hourPicker.setData(hours);
 
         List<String> minutes = new ArrayList<>();
-        for (int i=0; i<60; i++) {
+        for (int i=startMinute; i<60; i++) {
             minutes.add(String.format("%02d", i));
         }
         minutePicker.setData(minutes);
@@ -52,10 +54,9 @@ public class TimePicker extends FrameLayout {
         hourPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelPicker picker, Object data, int position) {
-                selectedHour = Integer.parseInt((String) data);
 
                 if (timeSelectListener != null) {
-                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
+                    timeSelectListener.onTimeSelected(getSelectedHour(), getSelectedMinute());
                 }
             }
         });
@@ -63,53 +64,89 @@ public class TimePicker extends FrameLayout {
         minutePicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelPicker picker, Object data, int position) {
-                selectedMinute =  Integer.parseInt((String) data);
 
                 if (timeSelectListener != null) {
-                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
+                    timeSelectListener.onTimeSelected(getSelectedHour(), getSelectedMinute());
 
                 }
             }
         });
     }
 
-    public void reset(int hour, int minute) {
+    public void adjustHour(boolean isStartFromCurrentHour) {
+
+        String lastSelectedHour = getSelectedHourString();
+
+        Calendar now = Calendar.getInstance();
+        int start = 0;
+
+        if (isStartFromCurrentHour) {
+            start = now.get(Calendar.HOUR_OF_DAY);
+        }
+
         List<String> hours = new ArrayList<>();
-        for (int i=0; i<24; i++) {
+        for (int i = start; i<24; i++) {
             hours.add(String.format("%02d", i));
         }
         hourPicker.setData(hours);
 
+        int hourPos = hours.indexOf(lastSelectedHour);
+        if (hourPos != -1) {
+            hourPicker.setSelectedItemPosition(hourPos);
+        } else {
+            hourPicker.setSelectedItemPosition(0);
+        }
+    }
+
+    public void adjustMinute(boolean isStartFromCurrentMinute) {
+
+        String lastSelectedMinute = getSelectedMinuteString();
+
+        Calendar now = Calendar.getInstance();
+        int start = 0;
+
+        if (isStartFromCurrentMinute) {
+            start = now.get(Calendar.MINUTE);
+        }
+
         List<String> minutes = new ArrayList<>();
-        for (int i=0; i<60; i++) {
+        for (int i = start; i<60; i++) {
             minutes.add(String.format("%02d", i));
         }
         minutePicker.setData(minutes);
 
-        setTime(hour, minute);
+        int minutePos = minutes.indexOf(lastSelectedMinute);
+        if (minutePos != -1) {
+            minutePicker.setSelectedItemPosition(minutePos);
+        } else {
+            minutePicker.setSelectedItemPosition(0);
+        }
+    }
 
-        hourPicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(WheelPicker picker, Object data, int position) {
-                selectedHour = Integer.parseInt((String) data);
+    /**
+     * 设置小时轮子是否循环
+     * @param isCyclic
+     */
+    public void setHourCyclic(boolean isCyclic) {
+        hourPicker.setCyclic(isCyclic);
+    }
 
-                if (timeSelectListener != null) {
-                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
-                }
-            }
-        });
+    /**
+     * 设置分钟轮子是否循环
+     * @param isCyclic
+     */
+    public void setMinutePicker(boolean isCyclic) {
+        minutePicker.setCyclic(isCyclic);
+    }
 
-        minutePicker.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(WheelPicker picker, Object data, int position) {
-                selectedMinute =  Integer.parseInt((String) data);
-
-                if (timeSelectListener != null) {
-                    timeSelectListener.onTimeSelected(selectedHour, selectedMinute);
-
-                }
-            }
-        });
+    /**
+     * 设置时间轮子是否循环
+     * @param isHourCyclic
+     * @param isMinuteCyclic
+     */
+    public void setCyclic(boolean isHourCyclic, boolean isMinuteCyclic) {
+        hourPicker.setCyclic(isHourCyclic);
+        minutePicker.setCyclic(isMinuteCyclic);
     }
 
     public void setTime(int hour, int minute) {
@@ -122,25 +159,36 @@ public class TimePicker extends FrameLayout {
             return;
         }
 
-        hourPicker.setSelectedItemPosition(hour);
-        minutePicker.setSelectedItemPosition(minute);
-        selectedHour = hour;
-        selectedMinute = minute;
+        String sHour = String.format("%02d", hour);
+        String sMinute = String.format("%02d", minute);
+        List hourDatas = hourPicker.getData();
+        List minuteDatas = minutePicker.getData();
+
+        int hourPos = hourDatas.indexOf(sHour);
+        if (hourPos != -1) {
+            hourPicker.setSelectedItemPosition(hourPos);
+        }
+
+        int minutePos = minuteDatas.indexOf(sMinute);
+        if (minutePos != -1) {
+            minutePicker.setSelectedItemPosition(minutePos);
+        }
     }
 
     public int getSelectedHour() {
-        return selectedHour;
+        return Integer.parseInt((String) hourPicker.getData().get(hourPicker.getCurrentItemPosition()));
+    }
+
+    public String getSelectedHourString() {
+        return (String) hourPicker.getData().get(hourPicker.getCurrentItemPosition());
     }
 
     public int getSelectedMinute() {
-        return selectedMinute;
+        return Integer.parseInt((String) minutePicker.getData().get(minutePicker.getCurrentItemPosition()));
     }
 
-    public Calendar getTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-        calendar.set(Calendar.MINUTE, selectedMinute);
-        return calendar;
+    public String getSelectedMinuteString() {
+        return (String) minutePicker.getData().get(minutePicker.getCurrentItemPosition());
     }
 
     private TimeSelectListener timeSelectListener;
