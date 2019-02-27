@@ -400,4 +400,11 @@ public class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    protected boolean isUsable(BaseActivity activity) {
+        if ((null == activity) || activity.isFinishing() || activity.isRestricted()) {
+            return false;
+        }
+        return !activity.isDestroyed();
+    }
+
 }
