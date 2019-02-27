@@ -12,6 +12,8 @@ import com.ut.base.customView.DatePicker;
 import com.ut.base.customView.DateTimePicker;
 import com.ut.base.customView.TimePicker;
 
+import java.util.Calendar;
+
 import javax.security.auth.callback.Callback;
 
 public class DialogUtil {
@@ -54,14 +56,69 @@ public class DialogUtil {
         dialog.show();
     }
 
+    /**
+     * 在发送限时钥匙页面的选择时间
+     *
+     * @param context
+     * @param title
+     * @param dateTimeSelectListener
+     */
+    public static void chooseDateTimeInSendLimitKey(Context context, String title, DateTimePicker.DateTimeSelectListener dateTimeSelectListener,
+                                                    int year, int month, int day, int hour, int minute) {
+        View view = LayoutInflater.from(context).inflate(R.layout.choose_datetime, null);
+        TextView tv_title = view.findViewById(R.id.title);
+        tv_title.setText(title);
+        DateTimePicker dateTimePicker = view.findViewById(R.id.dateTimePicker);
+        dateTimePicker.setTimeCyclic(false, false);
+
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+        dateTimePicker.init(currentYear, now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
+                now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
+
+        if (context.getString(R.string.validTime).equals(title) ||
+                context.getString(R.string.lock_key_vaild_time).equals(title)) {
+            dateTimePicker.setYearEnd(currentYear + 1);
+        } else {
+            dateTimePicker.setYearEnd(currentYear + 60);
+        }
+
+        dateTimePicker.setDateTime(year, month, day, hour, minute);
+
+        View confirm = view.findViewById(R.id.confirm);
+        View close = view.findViewById(R.id.close);
+
+        DialogPlus dialog = DialogPlus.newDialog(context)
+                .setContentHolder(new ViewHolder(view))
+                .create();
+
+        confirm.setOnClickListener(v -> {
+            if (dateTimeSelectListener != null) {
+                dateTimeSelectListener.onDateTimeSelected(
+                        dateTimePicker.getSelectedYear(),
+                        dateTimePicker.getSelectedMonth(),
+                        dateTimePicker.getSelectedDay(),
+                        dateTimePicker.getSelectedHour(),
+                        dateTimePicker.getSelectedMinute());
+            }
+
+            dialog.dismiss();
+        });
+
+        close.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
     public static void chooseDateTime(Context context, String title, DateTimePicker.DateTimeSelectListener dateTimeSelectListener,
                                       boolean isReset, int year, int month, int day, int hour, int minute) {
         View view = LayoutInflater.from(context).inflate(R.layout.choose_datetime, null);
         TextView tv_title = view.findViewById(R.id.title);
         tv_title.setText(title);
         DateTimePicker dateTimePicker = view.findViewById(R.id.dateTimePicker);
+        dateTimePicker.setTimeCyclic(false, false);
         if (isReset) {
-            dateTimePicker.reset(year, month, day, hour, minute);
+            dateTimePicker.init(year, month, day, hour, minute);
         }
         View confirm = view.findViewById(R.id.confirm);
         View close = view.findViewById(R.id.close);
@@ -137,10 +194,19 @@ public class DialogUtil {
         View view = LayoutInflater.from(context).inflate(R.layout.choose_date, null);
         TextView tv_title = view.findViewById(R.id.title);
         tv_title.setText(title);
+
         DatePicker datePicker = view.findViewById(R.id.datePicker);
-        if (isReset) {
-            datePicker.reset(year, month, day);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        if (context.getString(R.string.startDate).equals(title)) {
+            datePicker.initYear(currentYear, currentYear + 1);
+        } else if (context.getString(R.string.endDate).equals(title)) {
+            datePicker.initYear(currentYear, currentYear + 60);
         }
+
+        if (isReset) {
+            datePicker.init(year, month, day);
+        }
+
         View confirm = view.findViewById(R.id.confirm);
         View close = view.findViewById(R.id.close);
 
@@ -214,7 +280,7 @@ public class DialogUtil {
         TimePicker timePicker = view.findViewById(R.id.timePicker);
 
         if (isReset) {
-            timePicker.reset(hour, minute);
+            timePicker.init(hour, minute);
         }
 
         View confirm = view.findViewById(R.id.confirm);

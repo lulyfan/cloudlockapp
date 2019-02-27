@@ -8,17 +8,14 @@ import android.widget.FrameLayout;
 
 import com.ut.base.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class DateTimePicker extends FrameLayout {
 
     private DatePicker datePicker;
     private TimePicker timePicker;
-    private int selectedYear;
-    private int selectedMonth;
-    private int selectedDay;
-    private int selectedHour;
-    private int selectedMinute;
 
     public DateTimePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,21 +30,16 @@ public class DateTimePicker extends FrameLayout {
     }
 
     private void init() {
-        selectedYear = datePicker.getSelectedYear();
-        selectedMonth = datePicker.getSelectedMonth();
-        selectedDay = datePicker.getSelectedDay();
-        selectedHour = timePicker.getSelectedHour();
-        selectedMinute = timePicker.getSelectedMinute();
 
         datePicker.setDateSelectListener(new DatePicker.DateSelectListener() {
             @Override
             public void onDateSelected(int year, int month, int day) {
-                selectedYear = year;
-                selectedMonth = month - 1;
-                selectedDay = day;
+
+                adjustHour();
 
                 if (dateTimeSelectListener != null) {
-                    dateTimeSelectListener.onDateTimeSelected(selectedYear, month, selectedDay, selectedHour, selectedMinute);
+                    dateTimeSelectListener.onDateTimeSelected(getSelectedYear(), month, getSelectedDay(),
+                            getSelectedHour(), getSelectedMinute());
                 }
             }
         });
@@ -55,85 +47,100 @@ public class DateTimePicker extends FrameLayout {
         timePicker.setTimeSelectListener(new TimePicker.TimeSelectListener() {
             @Override
             public void onTimeSelected(int hour, int minute) {
-                selectedHour = hour;
-                selectedMinute = minute;
+
+                adjustMinute();
 
                 if (dateTimeSelectListener != null) {
-                    dateTimeSelectListener.onDateTimeSelected(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute);
+                    dateTimeSelectListener.onDateTimeSelected(getSelectedYear(), getSelectedMonth(), getSelectedDay(),
+                            getSelectedHour(), getSelectedMinute());
                 }
             }
         });
     }
 
-    public void reset(int year, int month, int day, int hour, int minute) {
-        selectedYear = year;
-        selectedMonth = month;
-        selectedDay = day;
-        selectedHour = hour;
-        selectedMinute = minute;
-
-        datePicker.reset(year, month, day);
-        timePicker.reset(hour, minute);
-
-        datePicker.setDateSelectListener(new DatePicker.DateSelectListener() {
-            @Override
-            public void onDateSelected(int year, int month, int day) {
-                selectedYear = year;
-                selectedMonth = month - 1;
-                selectedDay = day;
-
-                if (dateTimeSelectListener != null) {
-                    dateTimeSelectListener.onDateTimeSelected(selectedYear, month, selectedDay, selectedHour, selectedMinute);
-                }
-            }
-        });
-
-        timePicker.setTimeSelectListener(new TimePicker.TimeSelectListener() {
-            @Override
-            public void onTimeSelected(int hour, int minute) {
-                selectedHour = hour;
-                selectedMinute = minute;
-
-                if (dateTimeSelectListener != null) {
-                    dateTimeSelectListener.onDateTimeSelected(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute);
-                }
-            }
-        });
+    public void init(int startYear, int startMonth, int startDay, int startHour, int startMinute) {
+        datePicker.init(startYear, startMonth, startDay);
+        timePicker.init(startHour, startMinute);
+        init();
     }
 
-    public Calendar getDateTime() {
+    private void adjustHour() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, selectedYear);
-        calendar.set(Calendar.MONTH, selectedMonth);
-        calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
-        calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-        calendar.set(Calendar.MINUTE, selectedMinute);
 
-        return calendar;
+        boolean isFromCurrentHour = getSelectedYear() == calendar.get(Calendar.YEAR) &&
+                                    getSelectedMonth() - 1 == calendar.get(Calendar.MONTH) &&
+                                    getSelectedDay() == calendar.get(Calendar.DAY_OF_MONTH);
+
+        timePicker.adjustHour(isFromCurrentHour);
+        adjustMinute();
+    }
+
+    private void adjustMinute() {
+        adjustMinuteByHour(getSelectedHour());
+    }
+
+    private void adjustMinuteByHour(int hour) {
+        Calendar calendar = Calendar.getInstance();
+
+        boolean isFromCurrentMinute =   getSelectedYear() == calendar.get(Calendar.YEAR) &&
+                                        getSelectedMonth() - 1 == calendar.get(Calendar.MONTH) &&
+                                        getSelectedDay() == calendar.get(Calendar.DAY_OF_MONTH) &&
+                                        hour == calendar.get(Calendar.HOUR_OF_DAY);
+
+        timePicker.adjustMinute(isFromCurrentMinute);
+    }
+
+    /**
+     * 设置时间轮子是否循环
+     * @param isHourCyclic    时钟轮子是否循环
+     * @param isMinuteCyclic  分钟轮子是否循环
+     */
+    public void setTimeCyclic(boolean isHourCyclic, boolean isMinuteCyclic) {
+        timePicker.setCyclic(isHourCyclic, isMinuteCyclic);
+    }
+
+    public void setDateTime(int year, int month, int day, int hour, int minute) {
+
+        setDate(year, month, day);
+        adjustHour();
+        adjustMinuteByHour(hour);
+        setTime(hour, minute);
+    }
+
+    public void setDate(int year, int month, int day) {
+        datePicker.setDate(year, month, day);
+    }
+
+    public void setTime(int hour, int minute) {
+        timePicker.setTime(hour, minute);
+    }
+
+    public void setYearEnd(int endYear) {
+        datePicker.setYearEnd(endYear);
     }
 
     public int getSelectedYear() {
-        return selectedYear;
+        return datePicker.getSelectedYear();
     }
 
     public int getSelectedMonth() {
-        return selectedMonth;
+        return datePicker.getSelectedMonth();
     }
 
     public int getRealMonth() {
-        return selectedMonth + 1;
+        return datePicker.getRealMonth();
     }
 
     public int getSelectedDay() {
-        return selectedDay;
+        return datePicker.getSelectedDay();
     }
 
     public int getSelectedHour() {
-        return selectedHour;
+        return timePicker.getSelectedHour();
     }
 
     public int getSelectedMinute() {
-        return selectedMinute;
+        return timePicker.getSelectedMinute();
     }
 
     private DateTimeSelectListener dateTimeSelectListener;

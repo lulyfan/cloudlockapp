@@ -217,7 +217,7 @@ public class LoopFragment extends BaseFragment {
                 String endTimeRange = textView.getText().toString().concat(":00");
                 viewModel.endTimeRange.setValue(endTimeRange);
             }
-        }, true, mHour, mMin);
+        });
     }
 
     private CompoundButton.OnCheckedChangeListener weekListener = new CompoundButton.OnCheckedChangeListener() {

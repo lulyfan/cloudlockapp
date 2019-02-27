@@ -33,6 +33,9 @@ public interface DeviceKeyDao {
     @Query("SELECT * FROM device_key ORDER BY keyID ASC")
     LiveData<List<DeviceKey>> getAll();
 
+    @Query("SELECT * FROM device_key where deviceId = :deviceId")
+    LiveData<DeviceKey> getDeviceKeyByDeviceId(int deviceId);
+
 
     @Query("DELETE FROM device_key")
     void deleteAll();

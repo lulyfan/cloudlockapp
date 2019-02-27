@@ -27,6 +27,7 @@ import com.ut.unilink.cloudLock.protocol.data.GateLockOperateRecord;
 import com.ut.unilink.cloudLock.protocol.data.LockState;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * author : zhouyubin
@@ -54,6 +55,14 @@ public class BleOperateManager {
     private int lockType = -1;
 
     private CustomerAlertDialog mPermissionDialog = null;
+
+    private AtomicInteger mOperateStatus = new AtomicInteger(OperateStatus.STATUS_SCAN_INSTIAL);
+
+    private class OperateStatus {
+        public static final int STATUS_SCAN_INSTIAL = 0;
+        public static final int STATUS_SCANING = 1;
+        public static final int STATUS_SCANED = 2;
+    }
 
     public void setOperateDeviceKeyDetailCallback(OperateDeviceKeyDetailCallback operateDeviceKeyDetailCallback) {
         mOperateDeviceKeyDetailCallback = operateDeviceKeyDetailCallback;
@@ -100,6 +109,7 @@ public class BleOperateManager {
         if (RomUtils.isFlymeRom()//当为魅族手机时需要提醒用户打开定位服务
                 && !checkGpsAndOpenLock())
             return;
+        if (mOperateStatus.get() != OperateStatus.STATUS_SCAN_INSTIAL) return;
         int scanResult = toScanDevice(type);
         switch (scanResult) {
             case UnilinkManager.BLE_NOT_SUPPORT:
@@ -120,25 +130,27 @@ public class BleOperateManager {
                 }
                 break;
         }
+        if (scanResult == UnilinkManager.SCAN_SUCCESS) {
+            mOperateStatus.set(OperateStatus.STATUS_SCANING);
+        }
     }
 
     private int toScanDevice(int type) {
         UTLog.i("to scan 1");
         if (type == -1) return ERROR_SCANTIMEOUT;
-        canScan = true;
         return UnilinkManager.getInstance(mContext).scan(new ScanListener() {
             @Override
             public void onScan(ScanDevice scanDevice) {
-                if (!canScan) return;
                 if (mOperateCallback != null
                         && mOperateCallback.checkScanResult(scanDevice)) {
-                    canScan = false;
-                    UnilinkManager.getInstance(mContext).stopScan();
-                    if (mOperateCallback != null) {
-                        if (!scanDevice.isActive()) {
-                            mOperateCallback.onScanFaile(ERROR_LOCKRESET);
-                        } else {
-                            mOperateCallback.onScanSuccess(scanDevice);
+                    if (mOperateStatus.compareAndSet(OperateStatus.STATUS_SCANING, OperateStatus.STATUS_SCANED)) {
+                        UnilinkManager.getInstance(mContext).stopScan();
+                        if (mOperateCallback != null) {
+                            if (!scanDevice.isActive()) {
+                                mOperateCallback.onScanFaile(ERROR_LOCKRESET);
+                            } else {
+                                mOperateCallback.onScanSuccess(scanDevice);
+                            }
                         }
                     }
                 }
@@ -147,8 +159,8 @@ public class BleOperateManager {
             @Override
             public void onFinish(List<ScanDevice> scanDevices) {
                 UTLog.i("onScanFinish");
-                if (!canScan) return;
-                if (mOperateCallback != null) {
+                if (mOperateStatus.get() != OperateStatus.STATUS_SCANED
+                        && mOperateCallback != null) {
                     UTLog.i("onScanTimeout 1");
                     mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
                 }
@@ -161,6 +173,7 @@ public class BleOperateManager {
                     UTLog.i("onScanTimeout 1");
                     mOperateCallback.onScanFaile(ERROR_SCANTIMEOUT);
                 }
+                mOperateStatus.set(OperateStatus.STATUS_SCAN_INSTIAL);
             }
         }, 5);
     }
@@ -179,11 +192,13 @@ public class BleOperateManager {
             if (mOperateCallback != null) {
                 mOperateCallback.onConnectSuccess();
             }
+            mOperateStatus.set(OperateStatus.STATUS_SCAN_INSTIAL);
         }
 
         @Override
         public void onDisconnect(int i, String s) {
             UTLog.i("onDisconnect:" + i + " s:" + s);
+            mOperateStatus.set(OperateStatus.STATUS_SCAN_INSTIAL);
             if (!isConnectSuccessed) {
                 if (mOperateCallback != null) {
                     isConnectSuccessed = false;

@@ -11,6 +11,7 @@
     <string name="invalidTime">失效时间</string>
     <string name="chooseTime">请选择时间</string>
     <string name="validTime">生效时间</string>
+    <string name="lock_key_vaild_time">有效时间</string>
     <string name="repeat">重复</string>
     <string name="startDate">启用日期</string>
     <string name="endDate">停止日期</string>

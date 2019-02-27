@@ -55,7 +55,7 @@ public class SendKeyActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Util.setTabWidth(binding.tabLayout);
+//        Util.setTabWidth(binding.tabLayout);
     }
 
     private void initViewModel() {
@@ -274,7 +274,7 @@ public class SendKeyActivity extends BaseActivity {
                 int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 String number = cursor.getString(numberIndex).replace(" ", "");
                 String name = cursor.getString(nameIndex);
-                if(number.contains("+")) {
+                if (number.contains("+")) {
                     number = number.substring(number.indexOf("1"));
                 }
                 viewModel.receiverPhoneNum.setValue(number);
@@ -296,7 +296,7 @@ public class SendKeyActivity extends BaseActivity {
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, REQUEST_SELECT_PHONE_NUMBER);
                     }
-                } else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     new AlertDialog.Builder(this)//todo 中文
                             .setMessage(R.string.lock_contact_request_tips)
                             .setPositiveButton(getString(R.string.lock_setting), (dialogInterface, i) -> {
@@ -334,9 +334,9 @@ public class SendKeyActivity extends BaseActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    public  boolean isShouldHideInput(View v, MotionEvent event) {
+    public boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && (v instanceof EditText)) {
-            int[] leftTop = { 0, 0 };
+            int[] leftTop = {0, 0};
             //获取输入框当前的location位置
             v.getLocationInWindow(leftTop);
             int left = leftTop[0];
