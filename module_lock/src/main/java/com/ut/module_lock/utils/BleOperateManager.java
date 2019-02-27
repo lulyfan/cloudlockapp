@@ -175,7 +175,7 @@ public class BleOperateManager {
                 }
                 mOperateStatus.set(OperateStatus.STATUS_SCAN_INSTIAL);
             }
-        }, 5);
+        }, 10);
     }
 
     public void connect(ScanDevice scanDevice, int enctyptType, String enctyptKey) {
