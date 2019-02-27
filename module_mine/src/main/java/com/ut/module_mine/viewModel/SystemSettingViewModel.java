@@ -31,10 +31,10 @@ public class SystemSettingViewModel extends BaseViewModel {
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
                             logoutSuccess.postValue(null);
-                            BaseApplication.clearDataBase();
                             BaseApplication.clearDataWhenLogout();
                             ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
                             AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
+                            BaseApplication.clearDataBase();
                         },
                         new ErrorHandler());
     }
