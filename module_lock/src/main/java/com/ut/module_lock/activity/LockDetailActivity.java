@@ -102,6 +102,7 @@ public class LockDetailActivity extends BaseActivity {
             if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
                 mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
             }
+            mLockDetailVM.setIsAutoOpen(true);
             toOpenLock();
             UTLog.i(LockDetailVM.TAG, "toOpenLock 1");
         }

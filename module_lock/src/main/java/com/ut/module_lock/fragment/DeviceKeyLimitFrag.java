@@ -21,8 +21,12 @@ import com.ut.module_lock.utils.PickerDialogUtils;
 import com.ut.module_lock.utils.StringUtils;
 import com.ut.module_lock.viewmodel.DeviceKeyRuleVM;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,20 +106,24 @@ public class DeviceKeyLimitFrag extends BaseFragment {
     }
 
     private void chooseTime(View v, String title) {
-        DialogUtil.chooseDateTime(getContext(), title, (year, month, day, hour, minute) -> {
-            String timeString = getString(R.string.dateTime_format, year, month, day, hour, minute);
+        String timeStr = mBinding.tvLockKeyVaildTime.getText().toString();
+        long timeStamp = StringUtils.getTimeStampFromString(timeStr);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(timeStamp));
+        DialogUtil.chooseDateTimeInSendLimitKey(getContext(), title, (year, month, day, hour, minute) -> {
+                    String timeString = getString(R.string.dateTime_format, year, month, day, hour, minute);
+                    if (getString(R.string.lock_key_vaild_time).equals(title)) {
+                        mBinding.tvLockKeyVaildTime.setText(timeString);
+                        mDeviceKey.setTimeStart(StringUtils.getTimeStampFromString(timeString));
+                        mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
 
-            if (getString(R.string.lock_key_vaild_time).equals(title)) {
-                mBinding.tvLockKeyVaildTime.setText(timeString);
-                mDeviceKey.setTimeStart(StringUtils.getTimeStampFromString(timeString));
-                mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
-
-            } else if (getString(R.string.lock_key_invaild_time).equals(title)) {
-                mBinding.tvLockKeyInvaildTime.setText(timeString);
-                mDeviceKey.setTimeEnd(StringUtils.getTimeStampFromString(timeString));
-                mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
-            }
-        });
+                    } else if (getString(R.string.lock_key_invaild_time).equals(title)) {
+                        mBinding.tvLockKeyInvaildTime.setText(timeString);
+                        mDeviceKey.setTimeEnd(StringUtils.getTimeStampFromString(timeString));
+                        mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
     }
 
