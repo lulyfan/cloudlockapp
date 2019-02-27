@@ -47,6 +47,8 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private LoginVm loginVm;
 
+    private String mAction = null;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +68,14 @@ public class ForgetPasswordActivity extends BaseActivity {
         getVerifyCodeTv = findViewById(R.id.tv_get_verify_code);
         getVerifyCodeTv.setEnabled(false);
         verifyCodeEdt = findViewById(R.id.edt_verify_code);
-        String action = getIntent().getAction();
+        mAction = getIntent().getAction();
 
         passwordEdt.setOnFocusChangeListener((v, hasFocus) -> {
             ViewGroup parent = (ViewGroup) passwordEdt.getParent();
             parent.setSelected(hasFocus);
         });
 
-        if (RouterUtil.LoginModuleAction.action_login_resetPW.equals(action)) {
+        if (RouterUtil.LoginModuleAction.action_login_resetPW.equals(mAction)) {
             setTitle(getString(R.string.reset_password));
             phoneEdt.setText(getIntent().getStringExtra("phone"));
             phoneEdt.setSelected(false);
@@ -193,7 +195,8 @@ public class ForgetPasswordActivity extends BaseActivity {
             return;
         }
         sureBtn.startLoading();
-        loginVm.resetPassword(phone, password, verifyCode);
+        loginVm.resetPassword(phone, password, verifyCode,
+                RouterUtil.LoginModuleAction.action_login_resetPW.equals(mAction));
         mainHandler.postDelayed(() -> sureBtn.endLoading(), 500L);
     }
 

@@ -68,6 +68,7 @@ public class AliasOperatorHelper {
     }
 
     public void deleteAlias(Context context) {
+        JPushInterface.clearAllNotifications(context);
         delaySendHandler.removeMessages(DELAY_SEND_ACTION);
         handleAction(context, sequence, new TagAliasBean(ACTION_DELETE, null));
     }

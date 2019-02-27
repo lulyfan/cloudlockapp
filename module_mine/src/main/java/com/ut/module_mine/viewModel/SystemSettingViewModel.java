@@ -30,11 +30,12 @@ public class SystemSettingViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(voidResult -> {
                             tip.postValue(voidResult.msg);
-                            logoutSuccess.postValue(null);
-                            BaseApplication.clearDataWhenLogout();
-                            ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
-                            AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
-                            BaseApplication.clearDataBase();
+                            if (voidResult.isSuccess()) {
+                                logoutSuccess.postValue(null);
+                                BaseApplication.clearDataWhenLogout();
+                                ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
+                                AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
+                            }
                         },
                         new ErrorHandler());
     }
