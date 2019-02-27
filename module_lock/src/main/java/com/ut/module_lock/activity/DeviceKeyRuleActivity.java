@@ -107,6 +107,15 @@ public class DeviceKeyRuleActivity extends BaseActivity {
                         .hideCancel()
                         .show();
         });
+        mDeviceKeyRuleVM.getDeviceKeyByDeviceId(mDeviceKey.getDeviceId()).observe(this, deviceKey -> {
+            this.mDeviceKey = deviceKey;
+            if (this.mDeviceKey != null) {
+                initView();
+                mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
+                mDeviceKeyRuleVM.setFirstDeviceAuthType(mDeviceKey.getKeyAuthType());
+                switchFragemnt(mDeviceKey.getKeyAuthType());
+            }
+        });
     }
 
     private void initData() {
@@ -128,6 +137,10 @@ public class DeviceKeyRuleActivity extends BaseActivity {
             choosePermission(v);
         });
         mBinding.btnSave.setOnClickListener(v -> {
+            if (mDeviceKey == null) {
+                CLToast.showAtBottom(this, getString(R.string.lock_key_had_deleted_tips));
+                return;
+            }
             DeviceKey deviceKey = mDeviceKeyRuleVM.getDeviceKey();
             if (deviceKey.getKeyAuthType() == EnumCollection.DeviceKeyAuthType.TIMELIMIT.ordinal()) {
                 if (deviceKey.getTimeEnd() <= deviceKey.getTimeStart()) {

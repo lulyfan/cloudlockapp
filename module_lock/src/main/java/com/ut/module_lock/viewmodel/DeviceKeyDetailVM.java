@@ -74,6 +74,10 @@ public class DeviceKeyDetailVM extends BaseViewModel implements BleOperateManage
         return freezeResult;
     }
 
+    public LiveData<DeviceKey> getDeviceKeyByDeviceId(int id) {
+        return DeviceKeyDaoImpl.get().getDeviceKeyByDeviceId(id);
+    }
+
     public void freezeOrUnfreeze(boolean isFreeze, Activity activity) {
         operateType = OPERATETYPE_FREEZE;
         mGateLockKeys.clear();

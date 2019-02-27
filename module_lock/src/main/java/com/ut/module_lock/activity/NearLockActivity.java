@@ -287,16 +287,17 @@ public class NearLockActivity extends BaseActivity {
                 .setOnClickListener((dialog1, view1) -> {
                     int i = view1.getId();
                     if (i == R.id.cancel) {
+                        SystemUtils.hideKeyboard(getBaseContext(), view1);
                         dialog1.dismiss();
 
                     } else if (i == R.id.confirm) {
-
                         String bindPassword = et_password.getText().toString();
                         if ("".equals(bindPassword.trim())) {
                             toastShort(getString(R.string.input_bind_password));
                             return;
                         }
                         mBindPassword = bindPassword;
+                        SystemUtils.hideKeyboard(getBaseContext(), view1);
                         dialog1.dismiss();
                     }
                 })
@@ -304,7 +305,6 @@ public class NearLockActivity extends BaseActivity {
                     if (mBindPassword != null) {
                         startLoad();
                         mNearLockVM.bindLock(lock, mBindPassword);
-                        SystemUtils.hideKeyboard(getBaseContext(), et_password);
                     }
                 })
                 .create();

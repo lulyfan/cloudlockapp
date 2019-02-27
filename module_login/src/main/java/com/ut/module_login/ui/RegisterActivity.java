@@ -218,7 +218,7 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     public void finish() {
+        SystemUtils.hideKeyboard(getBaseContext(), registerBtn);
         super.finish();
-        SystemUtils.hideKeyboard(getBaseContext(), getWindow().getDecorView());
     }
 }

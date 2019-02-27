@@ -48,6 +48,11 @@ public class DeviceKeyDaoImpl implements DeviceKeyDao {
     }
 
     @Override
+    public LiveData<DeviceKey> getDeviceKeyByDeviceId(int deviceId) {
+        return mDeviceKeyDao.getDeviceKeyByDeviceId(deviceId);
+    }
+
+    @Override
     public void deleteAll() {
         mDeviceKeyDao.deleteAll();
     }

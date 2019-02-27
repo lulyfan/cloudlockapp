@@ -282,7 +282,7 @@
     <string name="lock_gps_open_tips">APP需要您打开GPS位置定位开关，前往设置？</string>
     <string name="lock_ok">好的</string>
     <string name="lock_location_need_tips">APP需要您在应用详情中打开定位权限，前往设置？</string>
-    <string name="lock_key_had_deleted_tips">钥匙已被删除，无法开锁，请联系钥匙发送者</string>
+    <string name="lock_key_had_deleted_tips">该钥匙已被删除，不能进行操作</string>
     <string name="lock_yi">一</string>
     <string name="lock_er">二</string>
     <string name="lock_san">三</string>
@@ -295,6 +295,8 @@
     <string name="lock_device_key_tip_validtime">失效时间不能早于生效时间</string>
     <string name="lock_device_key_tip_validdate">停止日期不能早于启用日期</string>
     <string name="lock_deivce_key_tip_del">确定删除该钥匙吗？删除后不可恢复</string>
+    <string name="lock_deivce_key_tip_freeze">确定冻结该钥匙吗？冻结后立即生效</string>
+    <string name="lock_deivce_key_tip_freeze1">操作成功后，解除冻结立即生效</string>
     <string name="delete">删除</string>
     <string name="lock_void_time_edit_error">生效时间不能晚于失效时间</string>
     <string name="bind_check">身份认证</string>

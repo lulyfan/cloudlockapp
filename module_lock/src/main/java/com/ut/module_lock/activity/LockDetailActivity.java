@@ -102,6 +102,7 @@ public class LockDetailActivity extends BaseActivity {
             if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
                 mLockDetailVM.getReAutoOpen().observe(this, mReOpenObserver);
             }
+            mLockDetailVM.setIsAutoOpen(true);
             toOpenLock();
             UTLog.i(LockDetailVM.TAG, "toOpenLock 1");
         }
@@ -166,7 +167,11 @@ public class LockDetailActivity extends BaseActivity {
                 mIsShowDialogAndTip.set(false);
                 mLockDetailVM.setIsAutoOpen(true);
                 AudioPlayUtil.get(this).play(0, true);
-                new UnlockSuccessDialog(this, false).show();
+
+                //todo 弹出窗体前，做了当前activity是否可用处理，不然会报 error：View not attached to window manager，解决jra上的bug-669
+                if(isUsable(this)) {
+                    new UnlockSuccessDialog(this, false).show();
+                }
             } else if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_LOCKRESET) {
                 new CustomerAlertDialog(LockDetailActivity.this, false)
                         .setMsg(getString(R.string.lock_detail_dialog_msg_reset))

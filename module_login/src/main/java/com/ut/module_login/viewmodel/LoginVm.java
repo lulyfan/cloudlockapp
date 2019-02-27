@@ -61,7 +61,6 @@ public class LoginVm extends AndroidViewModel {
                         finishLoginActs();
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
-                       finishLoginActs();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
@@ -70,8 +69,8 @@ public class LoginVm extends AndroidViewModel {
     }
 
     private void finishLoginActs() {
-        AppManager.getAppManager().finishActivity(LoginActivity.class);
         AppManager.getAppManager().finishActivity(RegisterActivity.class);
+        AppManager.getAppManager().finishActivity(LoginActivity.class);
     }
 
     private void deleteAllOldData() {

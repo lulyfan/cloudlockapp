@@ -58,6 +58,7 @@ public class DialogUtil {
 
     /**
      * 在发送限时钥匙页面的选择时间
+     *
      * @param context
      * @param title
      * @param dateTimeSelectListener
@@ -75,7 +76,8 @@ public class DialogUtil {
         dateTimePicker.init(currentYear, now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
                 now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
 
-        if (context.getString(R.string.validTime).equals(title)) {
+        if (context.getString(R.string.validTime).equals(title) ||
+                context.getString(R.string.lock_key_vaild_time).equals(title)) {
             dateTimePicker.setYearEnd(currentYear + 1);
         } else {
             dateTimePicker.setYearEnd(currentYear + 60);

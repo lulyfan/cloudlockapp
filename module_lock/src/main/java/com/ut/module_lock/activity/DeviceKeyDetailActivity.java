@@ -95,12 +95,16 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                         .hideCancel()
                         .show();
         });
+        mDeviceKeyDetailVM.getDeviceKeyByDeviceId(mDeviceKey.getDeviceId()).observe(this, deviceKey -> {
+            initAllData(deviceKey);
+        });
     }
 
     private void initTitle() {
         setTitle(R.string.lock_detail_key_detail);
         initDarkToolbar();
         initMore(() -> {
+            if (!checkKeyValid()) return;
             setLightStatusBar();
             mCommonPopupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
             SystemUtils.setWindowAlpha(this, 0.5f);
@@ -156,8 +160,13 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                     textView.setText(R.string.lock_freeze_key);
                 }
                 textView.setOnClickListener(v -> {
-                    mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen, DeviceKeyDetailActivity.this);
                     getPopupWindow().dismiss();
+                    new CustomerAlertDialog(DeviceKeyDetailActivity.this, false)
+                            .setMsg(getString(isFreezen ? R.string.lock_deivce_key_tip_freeze1 : R.string.lock_deivce_key_tip_freeze))
+                            .setConfirmText(getString(isFreezen ? R.string.lock_freeze_key : R.string.lock_frozen))
+                            .setConfirmListener(v1 -> {
+                                mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen, DeviceKeyDetailActivity.this);
+                            }).show();
                 });
             }
 
@@ -181,10 +190,15 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         mDeviceKeyDetailVM.mBleOperateManager.onActivityResult(this, requestCode, resultCode, data);
         if ((requestCode == REQUEST_CODE_EDIT_PERMISSION || requestCode == REQUEST_CODE_EDIT_NAME) && resultCode == RESULT_OK) {
             DeviceKey deviceKey = data.getParcelableExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_DEVICE_KEY);
-            this.mDeviceKey = deviceKey;
-            initView();
-            mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
+            initAllData(deviceKey);
         }
+    }
+
+    private void initAllData(DeviceKey deviceKey) {
+        this.mDeviceKey = deviceKey;
+        if (mDeviceKey == null) return;
+        initView();
+        mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
     }
 
     @Override
@@ -195,6 +209,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
 
     public class Present {
         public void onNameClick(View view) {
+            if (!checkKeyValid()) return;
             ARouter.getInstance().build(RouterUtil.LockModulePath.EDIT_NAME)
                     .withString(RouterUtil.LockModuleExtraKey.EDIT_NAME_TITLE, getString(R.string.key_name))
                     .withString(RouterUtil.LockModuleExtraKey.NAME, mDeviceKey.getName())
@@ -204,6 +219,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
 
         public void onPermissionClick(View view) {
+            if (!checkKeyValid()) return;
             if (mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.FROZEN.ordinal()) {
                 CLToast.showAtBottom(DeviceKeyDetailActivity.this, getString(R.string.lock_device_key_tip_auth_type));
                 return;
@@ -215,6 +231,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
         }
 
         public void onRecordClick(View view) {
+            if (!checkKeyValid()) return;
             ARouter.getInstance().build(RouterUtil.LockModulePath.OPERATION_RECORD)
                     .withBoolean(Constance.FIND_GATE_RECORD, true)
                     .withString(Constance.RECORD_TYPE, Constance.BY_KEY)
@@ -223,6 +240,13 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                     .navigation();
         }
 
+    }
 
+    private boolean checkKeyValid() {
+        if (mDeviceKey == null) {
+            CLToast.showAtBottom(DeviceKeyDetailActivity.this, getString(R.string.lock_key_had_deleted_tips));
+            return false;
+        }
+        return true;
     }
 }

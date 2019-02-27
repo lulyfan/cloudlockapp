@@ -119,7 +119,7 @@ public class KeyInfoActivity extends BaseActivity {
     }
 
     private void deleteKey() {
-        DialogHelper.getInstance().setMessage(getString(R.string.lock_delete_key_tips))
+        DialogHelper.getInstance().newDialog().setMessage(getString(R.string.lock_delete_key_tips))
                 .setPositiveButton(getString(R.string.lock_delete), ((dialog1, which) -> keyManagerVM.deleteKey(keyInfo.getKeyId())))
                 .setNegativeButton(getString(R.string.lock_cancel), null)
                 .show();

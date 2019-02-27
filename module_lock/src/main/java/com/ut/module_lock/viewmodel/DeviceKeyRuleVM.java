@@ -79,6 +79,10 @@ public class DeviceKeyRuleVM extends BaseViewModel implements BleOperateManager.
         return mDeviceKey;
     }
 
+    public LiveData<DeviceKey> getDeviceKeyByDeviceId(int id) {
+        return DeviceKeyDaoImpl.get().getDeviceKeyByDeviceId(id);
+    }
+
     public String openCntTimeStringByDeviceKey(int cnt) {
         if (cnt == 255) {
             return getApplication().getString(R.string.device_key_time_unlimit);

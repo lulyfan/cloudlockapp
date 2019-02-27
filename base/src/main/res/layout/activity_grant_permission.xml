@@ -56,6 +56,7 @@
                     app:tabIndicatorColor="@android:color/white"
                     app:tabIndicatorHeight="3dp"
                     app:tabPaddingBottom="10dp"
+                    app:tabIndicatorFullWidth="false"
                     app:tabTextAppearance="@style/tabStyle"
                     app:tabTextColor="@android:color/white">
 
