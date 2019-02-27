@@ -59,8 +59,8 @@ public class SafeVerifyVm extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
                     if (result.isSuccess()) {
+                        AppManager.getAppManager().finishAllActivity();
                         ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();
-                        AppManager.getAppManager().finishActivity(SafeVerifyActivity.class);
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }

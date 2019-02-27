@@ -61,7 +61,6 @@ public class LoginVm extends AndroidViewModel {
                         finishLoginActs();
                     } else if (result.code == 411) {
                         ARouter.getInstance().build(RouterUtil.BaseModulePath.SAFEVERIFY).withString("phone", phone).navigation();
-                       finishLoginActs();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);
                     }
