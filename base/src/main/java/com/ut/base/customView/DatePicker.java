@@ -127,7 +127,7 @@ public class DatePicker extends FrameLayout {
     }
 
     private void setDayStart(int start) {
-        updateDay(start, getSelectedYear(), getSelectedMonth());
+        updateDay(start, getSelectedYear(), getSelectedMonth() - 1);
     }
 
     private void updateMouth(int start) {
