@@ -97,9 +97,7 @@ public class SetNameActivity extends BaseActivity {
                         } else {
                             toastShort(voidResult.msg);
                         }
-                    }, throwable -> {
-                        toastShort(getString(R.string.lock_tip_setname_failed));
-                    });
+                    }, new ErrorHandler());
         }
     }
 
@@ -107,7 +105,7 @@ public class SetNameActivity extends BaseActivity {
     private void goToLockDetail() {
         CommonApi.pageUserLock(1, -1)
                 .subscribeOn(Schedulers.io())
-                .map(results->{
+                .map(results -> {
                     LockKey lk = null;
                     if (results.isSuccess()) {
                         List<LockKey> lockKeyList = results.getData();
