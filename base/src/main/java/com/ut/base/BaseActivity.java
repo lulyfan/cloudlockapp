@@ -126,6 +126,7 @@ public class BaseActivity extends AppCompatActivity {
             String message = getString(R.string.base_auto_login_time_out);
             message = message.replace("##", new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
             DialogHelper.getInstance()
+                    .newDialog()
                     .setCanCancelOutSide(false)
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
