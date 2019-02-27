@@ -33,24 +33,28 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         init(context);
     }
 
+    private int footViewHeight = 0;
     private void init(Context context) {
         this.mContext = context;
         mFootView = LayoutInflater.from(context).inflate(R.layout.view_loading, null);
+        mFootView.measure(0,0);
+        footViewHeight = mFootView.getMeasuredHeight();
+        hideFootView();
+        addFooterView(mFootView);
         setOnScrollListener(this);
     }
+
 
 
     @Override
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         // 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
         int lastVisibleIndex = listView.getLastVisiblePosition();
-        if (!mIsLoading && scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
-                && lastVisibleIndex == mTotalItemCount - 1) {
+        if (!mIsLoading && scrollState == OnScrollListener.SCROLL_STATE_IDLE
+                && lastVisibleIndex == mTotalItemCount - 1 && getChildAt(lastVisibleIndex).getBottom() == getBottom()) {
             mIsLoading = true;
-            addFooterView(mFootView);
-//            post(()->{
-//                smoothScrollToPosition(getAdapter().getCount());
-//            });
+            showFootView();
+            setSelection(getCount() - 1);
             if (mLoadMoreListener != null) {
                 mLoadMoreListener.onloadMore();
             }
@@ -73,10 +77,18 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     public void setLoadCompleted() {
         mIsLoading = false;
-        removeFooterView(mFootView);
+        hideFootView();
     }
 
     public boolean isLoading() {
         return mIsLoading;
+    }
+
+    private void hideFootView(){
+        mFootView.setPadding(0, -footViewHeight, 0 , 0);
+    }
+
+    private void showFootView(){
+        mFootView.setPadding(0, 0, 0 , 0);
     }
 }

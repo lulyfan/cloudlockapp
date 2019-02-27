@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class Record {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long id;//1,
     private String icon;
     private String operator;

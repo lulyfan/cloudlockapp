@@ -59,8 +59,10 @@ public class AppManager {
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public BaseActivity currentActivity() {
-        BaseActivity activity = activityStack.lastElement();
-        return activity;
+        if (!activityStack.empty()) {
+            return activityStack.lastElement();
+        }
+        return null;
     }
 
     /**

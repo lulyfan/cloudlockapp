@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.ut.base.AppManager;
+import com.ut.base.BaseActivity;
 import com.ut.jpushlib.CLJPushReceiver;
 
 public class UTCLReceiver extends BroadcastReceiver {
@@ -13,7 +14,10 @@ public class UTCLReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (CLJPushReceiver.REMOTELOGIN_ACTION.equals(intent.getAction())) {
-            AppManager.getAppManager().currentActivity().remoteLogin();
+            BaseActivity baseActivity = AppManager.getAppManager().currentActivity();
+            if (baseActivity != null) {
+                baseActivity.remoteLogin();
+            }
         }
     }
 }
