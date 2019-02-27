@@ -82,8 +82,8 @@ public class DialogHelper {
         return instance;
     }
 
-    public boolean isShowing() {
-        return alertDialog != null && alertDialog.isShowing();
+    private boolean isShowing() {
+        return instance.alertDialog != null && instance.alertDialog.isShowing();
     }
 
     public DialogHelper setCanCancelOutSide(boolean can) {
@@ -94,16 +94,15 @@ public class DialogHelper {
     }
 
     public void show() {
-        if (isShowing()) {
+        if (instance.isShowing()) {
             return;
         }
-
-        sBuilder.setOnDismissListener(dialog -> {
-            sBuilder = null;
+        instance.sBuilder.setOnDismissListener(dialog -> {
+            instance.sBuilder = null;
         });
-        alertDialog = sBuilder.create();
-        alertDialog.show();
-        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(alertDialog.getContext().getResources().getDrawable(R.drawable.shape_bg_corner));
+        instance.alertDialog = instance.sBuilder.create();
+        instance.alertDialog.show();
+        Objects.requireNonNull(instance.alertDialog.getWindow()).setBackgroundDrawable(instance.alertDialog.getContext().getResources().getDrawable(R.drawable.shape_bg_corner));
     }
 
 }

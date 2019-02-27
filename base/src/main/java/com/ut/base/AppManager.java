@@ -89,11 +89,14 @@ public class AppManager {
      * 结束指定类名的Activity
      */
     public void finishActivity(Class<?> cls) {
-        for (Activity activity : activityStack) {
+        Stack<BaseActivity> tmp = new Stack<>();
+        tmp.addAll(activityStack);
+        for (Activity activity : tmp) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);
             }
         }
+        tmp.clear();
     }
 
     /**
