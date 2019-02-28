@@ -100,9 +100,10 @@ public class LockDetailVM extends BaseViewModel {
             return -3;
         } else if (UnilinkManager.getInstance(getApplication()).isConnect(mLockKey.getMac())) {//已连接
             connectStatus.postValue(true);
-            UTLog.i(TAG, "锁已连接");
-            toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
             UnilinkManager.getInstance(getApplication()).setConnectListener(mConnectListener);
+            UTLog.i(TAG, "锁已连接");
+            mOpenStatus.set(EnumCollection.OpenLockState.CONNECTED);
+            toCheckPermissionOrOpenLock(getCloucLockFromLockKey());
             return 0;
         } else {
             if (mOpenStatus.get() != EnumCollection.OpenLockState.INITIAL) return 0;

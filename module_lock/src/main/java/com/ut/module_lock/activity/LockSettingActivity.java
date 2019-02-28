@@ -134,6 +134,7 @@ public class LockSettingActivity extends BaseActivity {
             lockKey = lk;
             setBindingLockKey();
             loadGroupName();
+            mBinding.switchCanOpen.setEnabled(lockKey.isKeyValid());
         });
         mLockSettingVM.getSetCanOpenSwitchResult().observe(this, operateSuccess -> {
             if (!operateSuccess.result) {

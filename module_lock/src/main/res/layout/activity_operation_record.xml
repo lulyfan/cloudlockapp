@@ -22,6 +22,9 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
+            <include android:id="@+id/nodata" layout="@layout/layout_no_data" android:visibility="gone"/>
+
+
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/refresh_layout"
                 android:layout_width="match_parent"
@@ -37,9 +40,6 @@
                     android:listSelector="@android:color/transparent" />
 
             </android.support.v4.widget.SwipeRefreshLayout>
-
-            <include android:id="@+id/nodata" layout="@layout/layout_no_data" android:visibility="gone"/>
-
         </FrameLayout>
 
     </LinearLayout>

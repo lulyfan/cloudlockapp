@@ -17,6 +17,7 @@ import java.util.Objects;
 public class DialogHelper {
     private AlertDialog.Builder sBuilder = null;
     private AlertDialog alertDialog;
+    private boolean isShowing;
 
     private DialogHelper() {
     }
@@ -39,7 +40,8 @@ public class DialogHelper {
 
 
     public DialogHelper newDialog() {
-        if (instance.isShowing()) {
+        instance.isShowing = false;
+        if(instance.alertDialog != null) {
             instance.alertDialog.dismiss();
         }
         instance.sBuilder = new AlertDialog.Builder(AppManager.getAppManager().currentActivity());
@@ -83,7 +85,7 @@ public class DialogHelper {
     }
 
     private boolean isShowing() {
-        return instance.alertDialog != null && instance.alertDialog.isShowing();
+        return instance.isShowing;
     }
 
     public DialogHelper setCanCancelOutSide(boolean can) {
@@ -97,11 +99,14 @@ public class DialogHelper {
         if (instance.isShowing()) {
             return;
         }
-        instance.sBuilder.setOnDismissListener(dialog -> {
-            instance.sBuilder = null;
-        });
         instance.alertDialog = instance.sBuilder.create();
+        instance.alertDialog.setOnDismissListener(dialog -> {
+            instance.sBuilder = null;
+            instance.alertDialog = null;
+            instance.isShowing = false;
+        });
         instance.alertDialog.show();
+        instance.isShowing = true;
         Objects.requireNonNull(instance.alertDialog.getWindow()).setBackgroundDrawable(instance.alertDialog.getContext().getResources().getDrawable(R.drawable.shape_bg_corner));
     }
 
