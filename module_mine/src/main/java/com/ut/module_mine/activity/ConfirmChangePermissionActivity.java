@@ -51,7 +51,7 @@ public class ConfirmChangePermissionActivity extends BaseActivity {
 
     private void initUI() {
         initLightToolbar();
-
+        binding.textView10.setText(getString(R.string.transformLockTip, GlobalData.getInstance().changeLockCounts));
         binding.checkCodeView.setInputListener(new CheckCodeView.InputListener() {
             @Override
             public void onInput(String checkCOde) {

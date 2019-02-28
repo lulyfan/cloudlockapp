@@ -14,4 +14,5 @@ public class GlobalData {
 
     public String changeLockMacs;
     public String receiverPhone;
+    public int changeLockCounts;
 }

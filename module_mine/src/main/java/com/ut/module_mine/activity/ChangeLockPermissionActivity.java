@@ -76,6 +76,7 @@ public class ChangeLockPermissionActivity extends BaseActivity {
                 }
             }
             GlobalData.getInstance().changeLockMacs = changeLockMacs;
+            GlobalData.getInstance().changeLockCounts = dataList.size();
         });
     }
 
