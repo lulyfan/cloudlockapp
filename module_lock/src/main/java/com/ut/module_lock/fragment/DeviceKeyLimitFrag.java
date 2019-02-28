@@ -107,9 +107,9 @@ public class DeviceKeyLimitFrag extends BaseFragment {
 
     private void chooseTime(View v, String title) {
         String timeStr = mBinding.tvLockKeyVaildTime.getText().toString();
-        long timeStamp = StringUtils.getTimeStampFromString(timeStr);
+//        long timeStamp = StringUtils.getTimeStampFromString(timeStr);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(timeStamp));
+//        calendar.setTime(new Date(timeStamp));
         DialogUtil.chooseDateTimeInSendLimitKey(getContext(), title, (year, month, day, hour, minute) -> {
                     String timeString = getString(R.string.dateTime_format, year, month, day, hour, minute);
                     if (getString(R.string.lock_key_vaild_time).equals(title)) {
@@ -122,7 +122,7 @@ public class DeviceKeyLimitFrag extends BaseFragment {
                         mDeviceKey.setTimeEnd(StringUtils.getTimeStampFromString(timeString));
                         mDeviceKeyRuleVM.setDeviceKey(mDeviceKey);
                     }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
     }
