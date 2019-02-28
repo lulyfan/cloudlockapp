@@ -144,15 +144,14 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public static void clearDataWhenLogout() {//退出登录时做清除数据操作
-        JPushInterface.clearAllNotifications(INSTANCE);  //清空当前所有极光推送
         BaseApplication.deleteJpushAlias();
-        Schedulers.newThread().scheduleDirect(()->{
+        Schedulers.newThread().scheduleDirect(() -> {
             MyRetrofit.get().closeWebSocket();
         });
     }
 
     public static void clearDataBase() {
-        Schedulers.newThread().scheduleDirect(()->{
+        Schedulers.newThread().scheduleDirect(() -> {
             CloudLockDatabaseHolder.get().clear();
         });
     }

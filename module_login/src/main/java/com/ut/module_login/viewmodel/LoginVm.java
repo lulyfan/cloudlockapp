@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.entity.base.Result;
 import com.example.operation.MyRetrofit;
 import com.ut.base.AppManager;
+import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -108,7 +109,7 @@ public class LoginVm extends AndroidViewModel {
         compositeDisposable.add(subscribe);
     }
 
-    public void resetPassword(String phone, String password, String verifyCode) {
+    public void resetPassword(String phone, String password, String verifyCode, boolean isResetPwd) {
         Disposable subscribe = MyRetrofit.get()
                 .getCommonApiService()
                 .resetPassword(phone, password, verifyCode)
@@ -118,7 +119,13 @@ public class LoginVm extends AndroidViewModel {
                     if (result.isSuccess()) {
                         new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
                                 .setMessage(getApplication().getString(R.string.login_pwd_modify_success))
-                                .setPositiveButton(getApplication().getString(R.string.login_sure), ((dialog, which) -> AppManager.getAppManager().currentActivity().finish()))
+                                .setPositiveButton(getApplication().getString(R.string.login_sure), ((dialog, which) -> {
+                                    AppManager.getAppManager().currentActivity().finish();
+                                    if (isResetPwd) {
+                                        BaseApplication.clearDataWhenLogout();
+                                        ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
+                                    }
+                                }))
                                 .show();
                     } else {
                         CLToast.showAtCenter(getApplication(), result.msg);

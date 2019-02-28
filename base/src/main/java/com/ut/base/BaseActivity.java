@@ -102,14 +102,13 @@ public class BaseActivity extends AppCompatActivity {
 
     protected synchronized void overDateLogin() {
         try {
-            BaseApplication.clearDataWhenLogout();
             String message = getString(R.string.base_over_data_login);
             DialogHelper.getInstance()
                     .setCanCancelOutSide(false)
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
                         ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
-                        BaseApplication.clearDataBase();
+                        BaseApplication.clearDataWhenLogout();
                     })
                     .show();
         } catch (Exception e) {
@@ -123,7 +122,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public synchronized void remoteLogin() {
         try {
-            BaseApplication.clearDataWhenLogout();
             String message = getString(R.string.base_auto_login_time_out);
             message = message.replace("##", new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
             DialogHelper.getInstance()
@@ -132,7 +130,7 @@ public class BaseActivity extends AppCompatActivity {
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
                         ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
-                        BaseApplication.clearDataBase();
+                        BaseApplication.clearDataWhenLogout();
                     })
                     .show();
         } catch (Exception e) {
