@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
@@ -120,7 +121,31 @@ public class EditLimitedTimeActivity extends BaseActivity {
     }
 
     private void dateChoose(View v, String title) {
-        DialogUtil.chooseDateTime(v.getContext(), title, (year, month, day, hour, minute) -> {
+        int tv_year = 0;
+        int tv_month = 0;
+        int tv_day = 0;
+        int tv_hour = 0;
+        int tv_minute = 0;
+
+        if (v != null) {
+            String timeStr = ((TextView) v.findViewWithTag("time")).getText().toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = null;
+            try {
+                date = dateFormat.parse(timeStr);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                tv_year = calendar.get(Calendar.YEAR);
+                tv_month = calendar.get(Calendar.MONTH) + 1;
+                tv_day = calendar.get(Calendar.DAY_OF_MONTH);
+                tv_hour = calendar.get(Calendar.HOUR_OF_DAY);
+                tv_minute = calendar.get(Calendar.MINUTE);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        DialogUtil.chooseDateTimeInSendLimitKey(v.getContext(), title, (year, month, day, hour, minute) -> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month - 1, day, hour, minute);
@@ -152,7 +177,7 @@ public class EditLimitedTimeActivity extends BaseActivity {
                 keyInfo.setEndTime(sdf.format(new Date(calendar.getTimeInMillis())));
             }
             mBinding.setKeyItem(keyInfo);
-        }, mYear != mMonth, mYear, mMonth, mDay, mHour, mMinute);
+        }, tv_year, tv_month, tv_day, tv_hour, tv_minute);
     }
 
     private void save() {
