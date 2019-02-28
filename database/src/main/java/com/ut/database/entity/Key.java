@@ -8,6 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -239,6 +243,26 @@ public class Key implements Serializable, Cloneable {
 
     public void setRuleTypeDrawableId(int ruleTypeDrawableId) {
         this.ruleTypeDrawableId = ruleTypeDrawableId;
+    }
+
+    public String getTimeStr(String source) {
+        if(source.contains(":00")) {
+            return source.replace(":00","");
+        }
+        return source;
+    }
+
+    public String getDateStr(String parseSource) {
+        try {
+            String parseMatcher = "yyyy-MM-dd HH:mm:ss";
+            SimpleDateFormat sdf = new SimpleDateFormat(parseMatcher, Locale.getDefault());
+            Date parse = sdf.parse(parseSource);
+            sdf.applyPattern("yyyy/MM/dd");
+            return sdf.format(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
