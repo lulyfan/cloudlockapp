@@ -20,6 +20,11 @@ public class DatePicker extends FrameLayout {
     private WheelPicker monthPicker;
     private WheelPicker dayPicker;
     private boolean isInited;
+    private boolean isEndLimit;  //是否有最后日期显示限制
+
+    private int endYear;   //显示的最后一年
+    private int endMonth;  //显示的最后一个月
+    private int endDay;    //显示的最后一天
 
     public DatePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -70,10 +75,35 @@ public class DatePicker extends FrameLayout {
         });
     }
 
+    /**
+     * 设置显示的开始日期
+     * @param year
+     * @param month
+     * @param day
+     */
+    public void setStartDate(int year, int month, int day) {
+        init(year, month, day);
+    }
+
+    /**
+     * 设置显示的最后日期
+     * @param year
+     * @param month
+     * @param day
+     */
+    public void setEndDate(int year, int month, int day) {
+        isEndLimit = true;
+        setYearEnd(year);
+
+        endYear = year;
+        endMonth = month;
+        endDay = day;
+    }
+
     public void setDate(int year, int month, int day) {
         yearPicker.setSelectedYear(year);
         adjustMouthByYear();
-        adjustDayByYearAndMonth();
+        adjustDayByYearAndMonth(year, month);
 
         setSelectedMonth(month);
         setSelectedDay(day);
@@ -134,7 +164,12 @@ public class DatePicker extends FrameLayout {
         String lastSelectedMonth = getSelectedMonthString();
 
         List<String> months = new ArrayList<>();
-        for (int i = start; i < 12; i++) {
+        int end = 12;
+        if (isEndLimit && getSelectedYear() == endYear) {
+            end = endMonth;
+        }
+
+        for (int i = start; i < end; i++) {
             months.add(String.format("%02d", i + 1));
         }
         monthPicker.setData(months);
@@ -156,6 +191,10 @@ public class DatePicker extends FrameLayout {
         calendar.set(Calendar.MONTH, month);
 
         int dayCount = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        if (isEndLimit && getSelectedYear() == endYear && getSelectedMonth() == endMonth) {
+            dayCount = endDay;
+        }
+
         List<String> days = new ArrayList<>();
         for (int i = start; i <= dayCount; i++) {
             days.add(String.format("%02d", i));
@@ -174,19 +213,23 @@ public class DatePicker extends FrameLayout {
         }
     }
 
+    private void adjustDayByYearAndMonth() {
+        adjustDayByYearAndMonth(getSelectedYear(), getSelectedMonth());
+    }
+
     /**
      * 根据年份和月份调整日期
      */
-    private void adjustDayByYearAndMonth() {
+    private void adjustDayByYearAndMonth(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if (getSelectedYear() == currentYear && getSelectedMonth() - 1 == currentMonth) {
+        if (year == currentYear && month - 1 == currentMonth) {
             updateDay(currentDay, currentYear, currentMonth);
         } else {
-            updateDay(1, getSelectedYear(), getSelectedMonth() - 1);
+            updateDay(1, year, month - 1);
         }
     }
 

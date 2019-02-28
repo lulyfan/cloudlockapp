@@ -112,7 +112,7 @@ public class EditLoopKeyActivity extends BaseActivity {
         }
 
 
-        if(mKey.getKeyId() > 0) {
+        if (mKey.getKeyId() > 0) {
             setRightArrow(mBinding.validTime);
             setRightArrow(mBinding.invalidTime);
             setRightArrow(mBinding.startDate);
@@ -242,7 +242,7 @@ public class EditLoopKeyActivity extends BaseActivity {
                 eD = day;
             }
             mBinding.setKeyItem(mKey);
-        }, mY != mM, mY, mM, mD);
+        }, mY, mM, mD);
     }
 
     private void setRightArrow(TextView textView) {

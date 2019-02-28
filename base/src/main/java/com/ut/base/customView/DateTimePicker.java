@@ -111,6 +111,16 @@ public class DateTimePicker extends FrameLayout {
         datePicker.setDate(year, month, day);
     }
 
+    /**
+     * 设置显示的最后日期
+     * @param year
+     * @param month
+     * @param day
+     */
+    public void setEndDate(int year, int month, int day) {
+        datePicker.setEndDate(year, month, day);
+    }
+
     public void setTime(int hour, int minute) {
         timePicker.setTime(hour, minute);
     }

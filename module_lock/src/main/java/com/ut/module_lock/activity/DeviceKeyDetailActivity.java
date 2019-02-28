@@ -103,12 +103,17 @@ public class DeviceKeyDetailActivity extends BaseActivity {
     private void initTitle() {
         setTitle(R.string.lock_detail_key_detail);
         initDarkToolbar();
-        initMore(() -> {
+        initMore(getOnCustomerClickListener());
+    }
+
+    @NonNull
+    private OnCustomerClickListener getOnCustomerClickListener() {
+        return () -> {
             if (!checkKeyValid()) return;
             setLightStatusBar();
             mCommonPopupWindow.showAtLocationWithAnim(mBinding.getRoot(), Gravity.TOP, 0, 0, R.style.animTranslate);
             SystemUtils.setWindowAlpha(this, 0.5f);
-        });
+        };
     }
 
     private void initData() {
@@ -146,6 +151,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
     }
 
     private void initPopupwindow() {
+        if (mCommonPopupWindow != null) return;
         mCommonPopupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
@@ -163,7 +169,7 @@ public class DeviceKeyDetailActivity extends BaseActivity {
                     getPopupWindow().dismiss();
                     new CustomerAlertDialog(DeviceKeyDetailActivity.this, false)
                             .setMsg(getString(isFreezen ? R.string.lock_deivce_key_tip_freeze1 : R.string.lock_deivce_key_tip_freeze))
-                            .setConfirmText(getString(isFreezen ? R.string.lock_freeze_key : R.string.lock_frozen))
+                            .setConfirmText(getString(isFreezen ? R.string.lock_unFreeze_key : R.string.lock_frozen))
                             .setConfirmListener(v1 -> {
                                 mDeviceKeyDetailVM.freezeOrUnfreeze(!isFreezen, DeviceKeyDetailActivity.this);
                             }).show();
@@ -197,6 +203,14 @@ public class DeviceKeyDetailActivity extends BaseActivity {
     private void initAllData(DeviceKey deviceKey) {
         this.mDeviceKey = deviceKey;
         if (mDeviceKey == null) return;
+        if (mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.EXPIRED.ordinal() ||
+                mDeviceKey.getKeyStatus() == EnumCollection.DeviceKeyStatus.INVALID.ordinal()) {
+            initMore(null);
+            invalidateOptionsMenu();
+        } else {
+            initMore(getOnCustomerClickListener());
+            invalidateOptionsMenu();
+        }
         initView();
         mDeviceKeyDetailVM.setDeviceKey(mDeviceKey);
     }

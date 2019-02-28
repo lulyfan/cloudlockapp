@@ -129,7 +129,7 @@ public class DeviceKeyCycleFrag extends BaseFragment {
             } else if (getString(R.string.lock_cycle_endDate).equals(title)) {
                 initTime(false);
             }
-        }, false, 0, 0, 0);
+        }, 0, 0, 0);
     }
 
     private void chooseTime(View v, String title) {
