@@ -22,7 +22,10 @@ import com.ut.base.activity.SendKeyActivity;
 import com.ut.base.databinding.FragmentLoopBinding;
 import com.ut.base.viewModel.SendKeyViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -178,6 +181,27 @@ public class LoopFragment extends BaseFragment {
 
     private void chooseDate(View v, String title) {
         SystemUtils.hideKeyboard(getContext(), v);
+
+        int tv_year = -1;
+        int tv_month = -1;
+        int tv_day = -1;
+
+        if (v != null) {
+            String timeStr = ((TextView) v).getText().toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Date date = null;
+            try {
+                date = dateFormat.parse(timeStr);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                tv_year = calendar.get(Calendar.YEAR);
+                tv_month = calendar.get(Calendar.MONTH) + 1;
+                tv_day = calendar.get(Calendar.DAY_OF_MONTH);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         DialogUtil.chooseDate(getContext(), title, (year, month, day) -> {
             TextView textView = (TextView) v;
             textView.setText(year + "/" + String.format("%02d", month) + "/" + String.format("%02d", day));
@@ -196,7 +220,7 @@ public class LoopFragment extends BaseFragment {
                 String endTime = textView.getText().toString().replace("/", "-");
                 viewModel.loopEndTime.setValue(endTime);
             }
-        }, mY != mM, mY, mM, mD);
+        }, tv_year, tv_month, tv_day);
     }
 
     private void chooseTime(View v, String title) {

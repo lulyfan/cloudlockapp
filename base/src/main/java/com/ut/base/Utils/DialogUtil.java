@@ -73,14 +73,16 @@ public class DialogUtil {
 
         Calendar now = Calendar.getInstance();
         int currentYear = now.get(Calendar.YEAR);
+        int currentMonth = now.get(Calendar.MONTH);
+        int currentDay = now.get(Calendar.DAY_OF_MONTH);
         dateTimePicker.init(currentYear, now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH),
                 now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
 
         if (context.getString(R.string.validTime).equals(title) ||
                 context.getString(R.string.lock_key_vaild_time).equals(title)) {
-            dateTimePicker.setYearEnd(currentYear + 1);
+            dateTimePicker.setEndDate(currentYear + 1, currentMonth + 1, currentDay);
         } else {
-            dateTimePicker.setYearEnd(currentYear + 60);
+            dateTimePicker.setEndDate(currentYear + 60, currentMonth + 1, currentDay);
         }
 
         dateTimePicker.setDateTime(year, month, day, hour, minute);
@@ -153,11 +155,28 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void chooseDate(Context context, String title, DatePicker.DateSelectListener dateSelectListener) {
+    public static void chooseDate(Context context, String title, DatePicker.DateSelectListener dateSelectListener,
+                                  int year, int month, int day) {
         View view = LayoutInflater.from(context).inflate(R.layout.choose_date, null);
         TextView tv_title = view.findViewById(R.id.title);
         tv_title.setText(title);
+
         DatePicker datePicker = view.findViewById(R.id.datePicker);
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+        int currentMonth = now.get(Calendar.MONTH);
+        int currentDay = now.get(Calendar.DAY_OF_MONTH);
+
+        if (context.getString(R.string.startDate).equals(title)) {
+            datePicker.setEndDate(currentYear + 1, currentMonth + 1, currentDay);
+        } else if (context.getString(R.string.endDate).equals(title)) {
+            datePicker.setEndDate(currentYear + 60, currentMonth + 1, currentDay);
+        }
+
+        if (year > 0 && month > 0 && day > 0) {
+            datePicker.setDate(year, month, day);
+        }
+
         View confirm = view.findViewById(R.id.confirm);
         View close = view.findViewById(R.id.close);
 
@@ -196,11 +215,15 @@ public class DialogUtil {
         tv_title.setText(title);
 
         DatePicker datePicker = view.findViewById(R.id.datePicker);
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+        int currentMonth = now.get(Calendar.MONTH);
+        int currentDay = now.get(Calendar.DAY_OF_MONTH);
+
         if (context.getString(R.string.startDate).equals(title)) {
-            datePicker.initYear(currentYear, currentYear + 1);
+            datePicker.setEndDate(currentYear + 1, currentMonth + 1, currentDay);
         } else if (context.getString(R.string.endDate).equals(title)) {
-            datePicker.initYear(currentYear, currentYear + 60);
+            datePicker.setEndDate(currentYear + 60, currentMonth + 1, currentDay);
         }
 
         if (isReset) {
