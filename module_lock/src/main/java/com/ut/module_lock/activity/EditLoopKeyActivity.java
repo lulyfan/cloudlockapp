@@ -182,7 +182,7 @@ public class EditLoopKeyActivity extends BaseActivity {
                 mKey.setEndTimeRange(dateTime);
             }
             mBinding.setKeyItem(mKey);
-        }, true, mHour, mMin);
+        }, getString(R.string.invalid_time).equals(title));
     }
 
     private void save() {
@@ -228,7 +228,7 @@ public class EditLoopKeyActivity extends BaseActivity {
             try {
                 date = dateFormat.parse(timeStr);
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
+//                calendar.setTime(date);
                 tv_year = calendar.get(Calendar.YEAR);
                 tv_month = calendar.get(Calendar.MONTH) + 1;
                 tv_day = calendar.get(Calendar.DAY_OF_MONTH);
