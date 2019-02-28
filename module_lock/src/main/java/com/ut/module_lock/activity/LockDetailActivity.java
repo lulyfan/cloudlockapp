@@ -97,7 +97,7 @@ public class LockDetailActivity extends BaseActivity {
 
     private void autoOpen() {
         if (!isNotManager() && (mLockKey.getCanOpen() == 1)
-                && EnumCollection.KeyStatus.isKeyValid(mLockKey.getStatus())
+                && EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())
                 && isAllowAutoOpen.get() && ifCanAutoOpen()) {
             //todo 自动开锁
             if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
@@ -397,6 +397,7 @@ public class LockDetailActivity extends BaseActivity {
     private void endAutoOpenLock() {
         mLockDetailVM.getReAutoOpen().removeObserver(mReOpenObserver);
         mIsShowDialogAndTip.set(false);
+        mLockDetailVM.reSetStatus();
         UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
         UnilinkManager.getInstance(this.getApplicationContext()).disconnect(mLockKey.getMac());
     }
