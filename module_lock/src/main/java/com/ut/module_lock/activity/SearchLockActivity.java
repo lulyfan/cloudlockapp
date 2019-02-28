@@ -25,6 +25,7 @@ import com.ut.module_lock.databinding.ActivitySearchLockBinding;
 import com.ut.module_lock.viewmodel.SearchLockVM;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchLockActivity extends BaseActivity {
@@ -53,6 +54,7 @@ public class SearchLockActivity extends BaseActivity {
         String json = PreferenceUtil.getInstance(getBaseContext()).getString(EXTRA_SEARCH_DATA + "_of_" + BaseApplication.getUser().account);
         if (!TextUtils.isEmpty(json)) {
             mSearchRecords = JSON.parseArray(json, String.class);
+            Collections.reverse(mSearchRecords); //倒叙
             mSearchRecords = mSearchRecords.subList(0, mSearchRecords.size() > 9 ? 10 : mSearchRecords.size());
             mSearchLockVM.getSearchRecords().postValue(mSearchRecords);
         }
