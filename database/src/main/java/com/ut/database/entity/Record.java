@@ -15,7 +15,7 @@ public class Record {
     private long userId;//1,
     private long lockId;//0,
     private long keyId;//0,
-    private int type;//0,
+    private int type;//0,在设备钥匙上传时做为openlocktype,实际是1表示开成功
     private String keyName;//钥匙名称
     private String description;//"开锁啦",
     private long createTime;//1542937352000
@@ -145,12 +145,12 @@ public class Record {
         Record record = (Record) o;
         return lockId == record.lockId &&
                 keyId == record.keyId &&
-                type == record.type &&
-                createTime == record.createTime;
+                createTime == record.createTime &&
+                openLockType == record.openLockType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lockId, keyId, type, createTime);
+        return Objects.hash(lockId, keyId, createTime, openLockType);
     }
 }

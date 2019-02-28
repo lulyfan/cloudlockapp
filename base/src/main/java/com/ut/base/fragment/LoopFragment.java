@@ -128,10 +128,10 @@ public class LoopFragment extends BaseFragment {
                 et_phoneNum.setText(s);
                 et_phoneNum.setSelection(s.length());
 
-                if(getActivity()!= null) {
+                if (getActivity() != null) {
                     String extraPhone = getActivity().getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
-                    boolean cantEdit = getActivity().getIntent().getBooleanExtra(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE,false);
-                    if(s.equals(extraPhone) && cantEdit) {
+                    boolean cantEdit = getActivity().getIntent().getBooleanExtra(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE, false);
+                    if (s.equals(extraPhone) && cantEdit) {
                         et_phoneNum.setEnabled(false);
                     }
                 }
@@ -162,7 +162,7 @@ public class LoopFragment extends BaseFragment {
         checkBox7.setOnCheckedChangeListener(weekListener);
 
 
-        viewModel.sendingKey.observe(this, isSending-> binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending));
+        viewModel.sendingKey.observe(this, isSending -> binding.getRoot().findViewById(R.id.contact).setEnabled(!isSending));
     }
 
     private void handleEnDate() {
@@ -241,7 +241,7 @@ public class LoopFragment extends BaseFragment {
                 String endTimeRange = textView.getText().toString().concat(":00");
                 viewModel.endTimeRange.setValue(endTimeRange);
             }
-        });
+        }, getString(R.string.invalidTime).equals(title));
     }
 
     private CompoundButton.OnCheckedChangeListener weekListener = new CompoundButton.OnCheckedChangeListener() {

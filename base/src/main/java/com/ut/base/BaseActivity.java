@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -126,6 +127,7 @@ public class BaseActivity extends AppCompatActivity {
             String message = getString(R.string.base_auto_login_time_out);
             message = message.replace("##", new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
             DialogHelper.getInstance()
+                    .newDialog()
                     .setCanCancelOutSide(false)
                     .setMessage(message)
                     .setPositiveButton(getString(R.string.fine), (dialog1, which) -> {
@@ -281,19 +283,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void toastShort(String msg) {
-        if (msg == null || "".equals(msg) || "未登录".equals(msg)) {
+        if (TextUtils.isEmpty(msg) || "未登录".equals(msg) || "未携带appid".equals(msg)) {
             return;
         }
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
-    public void toastLong(String msg) {
-        if (msg == null || "".equals(msg)) {
-            return;
-        }
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
-
 
     @Override
     protected void onPause() {

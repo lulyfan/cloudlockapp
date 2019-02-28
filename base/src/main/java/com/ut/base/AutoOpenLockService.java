@@ -66,7 +66,8 @@ public class AutoOpenLockService extends Service {
         }
 
         for (LockKey lockKey : lockKeys) {
-            if (lockKey.getCanOpen() == 1) {
+            if (lockKey.getCanOpen() == 1
+                    && EnumCollection.KeyStatus.isKeyValid(lockKey.getKeyStatus())) {
                 return true;
             }
         }
@@ -109,7 +110,8 @@ public class AutoOpenLockService extends Service {
                 }
 
                 for (LockKey lockKey : lockKeys) {
-                    if (scanDevice.getAddress().equalsIgnoreCase(lockKey.getMac()) && lockKey.getCanOpen() == 1) {
+                    if (scanDevice.getAddress().equalsIgnoreCase(lockKey.getMac()) && lockKey.getCanOpen() == 1
+                            && EnumCollection.KeyStatus.isKeyValid(lockKey.getKeyStatus())) {
                         isFindDevice = true;
                         mLockKey = lockKey;
                         UnilinkManager.getInstance(getApplication()).stopScan();

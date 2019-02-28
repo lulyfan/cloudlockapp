@@ -23,7 +23,7 @@ public class CLToast {
         if (TextUtils.isEmpty(message)) {
             return;
         }
-        if("还未登录".equals(message)) return;
+        if("还未登录".equals(message) || "未携带appid".equals(message)) return;
         if (sToast != null) {
             sToast.cancel();
         }
@@ -42,7 +42,7 @@ public class CLToast {
         if (TextUtils.isEmpty(message)) {
             return;
         }
-        if("还未登录".equals(message)) return;
+        if("还未登录".equals(message) || "未携带appid".equals(message)) return;
         if (sToast != null) {
             sToast.cancel();
         }

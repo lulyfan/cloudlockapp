@@ -24,6 +24,7 @@ public class AppManager {
     public static AppManager getAppManager() {
         if (instance == null) {
             instance = new AppManager();
+            activityStack = new Stack<BaseActivity>();
         }
         return instance;
     }
@@ -32,10 +33,6 @@ public class AppManager {
      * 添加Activity到堆栈
      */
     public void addActivity(BaseActivity activity) {
-        if (activityStack == null) {
-            activityStack = new Stack<BaseActivity>();
-        }
-
         boolean findOut = false;
         BaseActivity tmp = null;
         for (BaseActivity act : activityStack) {
@@ -59,8 +56,10 @@ public class AppManager {
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public BaseActivity currentActivity() {
-        BaseActivity activity = activityStack.lastElement();
-        return activity;
+        if (!activityStack.empty()) {
+            return activityStack.lastElement();
+        }
+        return null;
     }
 
     /**

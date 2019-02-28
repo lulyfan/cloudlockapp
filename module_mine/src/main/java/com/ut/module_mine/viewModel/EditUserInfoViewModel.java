@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.example.api.CommonApiService;
 import com.example.entity.base.Result;
@@ -16,6 +17,7 @@ import com.ut.module_mine.R;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
@@ -40,9 +42,11 @@ public class EditUserInfoViewModel extends BaseViewModel {
         userName.set(user.getName());
         headImgUrl.setValue(user.getHeadPic());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        String str = dateFormat.format(new Date(Long.parseLong(user.getCreateTime())));
-        registTime.set(str);
+        if(!TextUtils.isEmpty(user.createTime)) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+            String str = dateFormat.format(new Date(Long.parseLong(user.getCreateTime())));
+            registTime.set(str);
+        }
     }
 
     public void editUserName(String name) {

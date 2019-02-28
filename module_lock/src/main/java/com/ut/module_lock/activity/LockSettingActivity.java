@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.ut.base.AppManager;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.UIUtils.SystemUtils;
@@ -109,6 +110,7 @@ public class LockSettingActivity extends BaseActivity {
         mLockSettingVM = ViewModelProviders.of(this).get(LockSettingVM.class);
         mLockSettingVM.isDeleteSuccess().observe(this, isUnlockSuccess -> {
             if (isUnlockSuccess) {
+                AppManager.getAppManager().finishActivity(LockDetailActivity.class);
                 finish();
                 lockKey = null;
                 ARouter.getInstance().build(RouterUtil.MainModulePath.Main_Module).navigation();

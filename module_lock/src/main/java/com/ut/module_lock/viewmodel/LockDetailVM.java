@@ -306,6 +306,10 @@ public class LockDetailVM extends BaseViewModel {
         return cloudLock;
     }
 
+    public void reSetStatus() {
+        this.mOpenStatus.set(EnumCollection.OpenLockState.INITIAL);
+    }
+
     private LockStateListener mLockStateListener = lockState -> {
 //        mLockKey.setElectric(lockState.getElect());
 //        rx.Observable.just(mLockKey)

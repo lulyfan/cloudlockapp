@@ -97,6 +97,7 @@ public class LockDetailActivity extends BaseActivity {
 
     private void autoOpen() {
         if (!isNotManager() && (mLockKey.getCanOpen() == 1)
+                && EnumCollection.KeyStatus.isKeyValid(mLockKey.getKeyStatus())
                 && isAllowAutoOpen.get() && ifCanAutoOpen()) {
             //todo 自动开锁
             if (!mLockDetailVM.getReAutoOpen().hasObservers()) {
@@ -169,7 +170,7 @@ public class LockDetailActivity extends BaseActivity {
                 AudioPlayUtil.get(this).play(0, true);
 
                 //todo 弹出窗体前，做了当前activity是否可用处理，不然会报 error：View not attached to window manager，解决jra上的bug-669
-                if(isUsable(this)) {
+                if (isUsable(this)) {
                     new UnlockSuccessDialog(this, false).show();
                 }
             } else if (type == LockDetailVM.SHOWTIPDIALOG_TYPE_LOCKRESET) {
@@ -396,6 +397,7 @@ public class LockDetailActivity extends BaseActivity {
     private void endAutoOpenLock() {
         mLockDetailVM.getReAutoOpen().removeObserver(mReOpenObserver);
         mIsShowDialogAndTip.set(false);
+        mLockDetailVM.reSetStatus();
         UnilinkManager.getInstance(this.getApplicationContext()).stopScan();
         UnilinkManager.getInstance(this.getApplicationContext()).disconnect(mLockKey.getMac());
     }
