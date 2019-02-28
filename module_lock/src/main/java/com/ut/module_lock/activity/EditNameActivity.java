@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -82,7 +84,14 @@ public class EditNameActivity extends BaseActivity {
         initDarkToolbar();
         nameEdt = findViewById(R.id.edt_name);
         nameEdt.setOnEditorActionListener((v, actionId, event) -> {
-            saveName();
+            if(event != null) {
+                //当event不为null，多次触发（点击，移动）
+                if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                    saveName();
+                }
+            } else if(actionId == EditorInfo.IME_ACTION_DONE) {
+                saveName();
+            }
             return false;
         });
         nameEdt.addTextChangedListener(new SimpleTextWatcher() {
