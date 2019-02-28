@@ -18,6 +18,10 @@ public class TimePicker extends FrameLayout {
     private WheelPicker hourPicker;
     private WheelPicker minutePicker;
 
+    private boolean isSetNo00_00 = false;
+
+    private List<String> minuteList = null;
+
     public TimePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -35,13 +39,13 @@ public class TimePicker extends FrameLayout {
 
     public void init(int startHour, int startMinute) {
         List<String> hours = new ArrayList<>();
-        for (int i=startHour; i<24; i++) {
+        for (int i = startHour; i < 24; i++) {
             hours.add(String.format("%02d", i));
         }
         hourPicker.setData(hours);
 
         List<String> minutes = new ArrayList<>();
-        for (int i=startMinute; i<60; i++) {
+        for (int i = startMinute; i < 60; i++) {
             minutes.add(String.format("%02d", i));
         }
         minutePicker.setData(minutes);
@@ -58,6 +62,7 @@ public class TimePicker extends FrameLayout {
                 if (timeSelectListener != null) {
                     timeSelectListener.onTimeSelected(getSelectedHour(), getSelectedMinute());
                 }
+                adjustSetNo00_00();
             }
         });
 
@@ -73,6 +78,32 @@ public class TimePicker extends FrameLayout {
         });
     }
 
+    public void setNo00_00() {
+        isSetNo00_00 = true;
+    }
+
+    private void adjustSetNo00_00() {
+        if (isSetNo00_00) {
+            if (minuteList == null) {
+                minuteList = new ArrayList<>();
+                for (int i = 0; i < 60; i++) {
+                    minuteList.add(String.format("%02d", i));
+                }
+            }
+            if (getSelectedHour() == 0) {
+                if (minutePicker.getData().size() == 60) {
+                    minuteList.remove(0);
+                    minutePicker.setData(minuteList);
+                }
+            } else {
+                if (minutePicker.getData().size() != 60) {
+                    minuteList.add(0, String.format("%02d", 0));
+                    minutePicker.setData(minuteList);
+                }
+            }
+        }
+    }
+
     public void adjustHour(boolean isStartFromCurrentHour) {
 
         String lastSelectedHour = getSelectedHourString();
@@ -85,7 +116,7 @@ public class TimePicker extends FrameLayout {
         }
 
         List<String> hours = new ArrayList<>();
-        for (int i = start; i<24; i++) {
+        for (int i = start; i < 24; i++) {
             hours.add(String.format("%02d", i));
         }
         hourPicker.setData(hours);
@@ -110,7 +141,7 @@ public class TimePicker extends FrameLayout {
         }
 
         List<String> minutes = new ArrayList<>();
-        for (int i = start; i<60; i++) {
+        for (int i = start; i < 60; i++) {
             minutes.add(String.format("%02d", i));
         }
         minutePicker.setData(minutes);
@@ -125,6 +156,7 @@ public class TimePicker extends FrameLayout {
 
     /**
      * 设置小时轮子是否循环
+     *
      * @param isCyclic
      */
     public void setHourCyclic(boolean isCyclic) {
@@ -133,6 +165,7 @@ public class TimePicker extends FrameLayout {
 
     /**
      * 设置分钟轮子是否循环
+     *
      * @param isCyclic
      */
     public void setMinutePicker(boolean isCyclic) {
@@ -141,6 +174,7 @@ public class TimePicker extends FrameLayout {
 
     /**
      * 设置时间轮子是否循环
+     *
      * @param isHourCyclic
      * @param isMinuteCyclic
      */

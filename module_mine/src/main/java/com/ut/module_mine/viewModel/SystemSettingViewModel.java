@@ -33,6 +33,7 @@ public class SystemSettingViewModel extends BaseViewModel {
                             if (voidResult.isSuccess()) {
                                 logoutSuccess.postValue(null);
                                 BaseApplication.clearDataWhenLogout();
+                                BaseApplication.clearDataBase();
                                 ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
                                 AppManager.getAppManager().finishActivity(SystemSettingActivity.class);
                             }

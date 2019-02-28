@@ -238,11 +238,15 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void chooseTime(Context context, String title, TimePicker.TimeSelectListener timeSelectListener) {
+    public static void chooseTime(Context context, String title, TimePicker.TimeSelectListener timeSelectListener, boolean isSetNo00_00) {
         View view = LayoutInflater.from(context).inflate(R.layout.choose_time, null);
         TextView tv_title = view.findViewById(R.id.title);
         tv_title.setText(title);
         TimePicker timePicker = view.findViewById(R.id.timePicker);
+        timePicker.setCyclic(false, false);
+        if (isSetNo00_00) {
+            timePicker.setNo00_00();
+        }
         View confirm = view.findViewById(R.id.confirm);
         View close = view.findViewById(R.id.close);
 

@@ -143,7 +143,7 @@ public class DeviceKeyCycleFrag extends BaseFragment {
             } else if (getString(R.string.lock_key_invaild_time).equals(title)) {
                 initTime(false);
             }
-        });
+        }, getString(R.string.lock_key_invaild_time).equals(title));
     }
 
     private void initTime(boolean isStart) {

@@ -123,6 +123,7 @@ public class LoginVm extends AndroidViewModel {
                                     AppManager.getAppManager().currentActivity().finish();
                                     if (isResetPwd) {
                                         BaseApplication.clearDataWhenLogout();
+                                        BaseApplication.clearDataBase();
                                         ARouter.getInstance().build(RouterUtil.LoginModulePath.Login).withString("phone", BaseApplication.getUser().account).navigation();
                                     }
                                 }))
