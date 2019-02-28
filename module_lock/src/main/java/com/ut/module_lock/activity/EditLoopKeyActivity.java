@@ -217,6 +217,26 @@ public class EditLoopKeyActivity extends BaseActivity {
     }
 
     private void chooseDate(View v, String title) {
+        int tv_year = -1;
+        int tv_month = -1;
+        int tv_day = -1;
+
+        if (v != null) {
+            String timeStr = ((TextView) v).getText().toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Date date = null;
+            try {
+                date = dateFormat.parse(timeStr);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                tv_year = calendar.get(Calendar.YEAR);
+                tv_month = calendar.get(Calendar.MONTH) + 1;
+                tv_day = calendar.get(Calendar.DAY_OF_MONTH);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         DialogUtil.chooseDate(v.getContext(), title, (year, month, day) -> {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -242,7 +262,7 @@ public class EditLoopKeyActivity extends BaseActivity {
                 eD = day;
             }
             mBinding.setKeyItem(mKey);
-        }, mY, mM, mD);
+        }, tv_year, tv_month, tv_day);
     }
 
     private void setRightArrow(TextView textView) {
