@@ -49,16 +49,15 @@ android {
 
 //    productFlavors {
 //        main_ {
-//            //默认大众普通版本
+//            //外网版本
 //            flavorDimensions "versionCode"
 //        }
 //        local_ {
-//            //工程项目版本
+//            //内测版本
 //            applicationIdSuffix rootProject.ext.localAppidSuffix
 //            flavorDimensions "versionCode"
 //            versionName "v1.0.5 local build" + releaseTime()
 //        }
-//
 //    }
 
 
