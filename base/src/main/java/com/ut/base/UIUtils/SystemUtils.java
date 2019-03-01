@@ -116,7 +116,11 @@ public class SystemUtils {
     public static void setWindowAlpha(Activity activity, float alpha) {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.alpha = alpha;
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        if (alpha==1){
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,可能出现黑屏的bug
+        }else{
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+        }
         activity.getWindow().setAttributes(lp);
     }
 

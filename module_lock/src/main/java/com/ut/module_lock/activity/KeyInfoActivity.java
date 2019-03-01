@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.dialog.CustomerAlertDialog;
 import com.ut.base.dialog.DialogHelper;
@@ -126,7 +127,7 @@ public class KeyInfoActivity extends BaseActivity {
     }
 
     private void popupMoreWindow() {
-        setWindowAlpha(0.5f);
+        SystemUtils.setWindowAlpha(this,0.5f);
         CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -192,7 +193,7 @@ public class KeyInfoActivity extends BaseActivity {
             protected void initWindow() {
                 super.initWindow();
                 getPopupWindow().setOnDismissListener(() -> {
-                    setWindowAlpha(1f);
+                    SystemUtils.setWindowAlpha(KeyInfoActivity.this,1f);
                     initDarkToolbar();
                 });
             }

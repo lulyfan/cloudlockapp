@@ -18,6 +18,7 @@ import com.example.operation.MyRetrofit;
 import com.example.operation.WebSocketHelper;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.base.UIUtils.SystemUtils;
 import com.ut.base.adapter.ListAdapter;
 import com.ut.base.common.CommonPopupWindow;
 import com.ut.base.dialog.DialogHelper;
@@ -115,7 +116,7 @@ public class KeysManagerActivity extends BaseActivity {
     }
 
     private void popupMoreWindow() {
-        setWindowAlpha(0.5f);
+        SystemUtils.setWindowAlpha(this,0.5f);
         CommonPopupWindow popupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
@@ -150,7 +151,7 @@ public class KeysManagerActivity extends BaseActivity {
             protected void initWindow() {
                 super.initWindow();
                 getPopupWindow().setOnDismissListener(() -> {
-                            setWindowAlpha(1f);
+                    SystemUtils.setWindowAlpha(KeysManagerActivity.this,1f);
                             setDarkStatusBar();
                         }
                 );

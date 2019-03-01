@@ -70,13 +70,15 @@ public class ChangeLockPermissionActivity extends BaseActivity {
             //保存要转移的锁mac地址
             List<Data> dataList = adapter.getData();
             String changeLockMacs = "";
+            int changeCount = 0;
             for (Data data : dataList) {
                 if (data.isChangePermission.get()) {
+                    changeCount++;
                     changeLockMacs += data.lockMac + ",";
                 }
             }
             GlobalData.getInstance().changeLockMacs = changeLockMacs;
-            GlobalData.getInstance().changeLockCounts = dataList.size();
+            GlobalData.getInstance().changeLockCounts = changeCount;
         });
     }
 

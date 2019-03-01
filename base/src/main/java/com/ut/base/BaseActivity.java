@@ -230,13 +230,6 @@ public class BaseActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(null);
     }
 
-    public void setWindowAlpha(float alpha) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = alpha;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().setAttributes(lp);
-    }
-
 
     public interface OnCustomerClickListener {
         void onClick();
