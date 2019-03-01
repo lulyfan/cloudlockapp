@@ -11,7 +11,7 @@ public interface ApiUrl {
     String SUFFIX = "?json";
 
     //登录
-    String loginUrl = "/api/user/login?json";
+    String loginUrl = "/api/user/login?json&mobileType=android";
 
     //注册
     String registerUrl = "/api/user/registerUser?json";
