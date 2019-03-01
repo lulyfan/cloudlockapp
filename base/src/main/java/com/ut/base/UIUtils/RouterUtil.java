@@ -113,6 +113,8 @@ public class RouterUtil {
 
     public static class BrocastReceiverAction {
         public static final String ACTION_RELOAD_WEB_DEVICEKEY = "action_reload_web_devicekey";
+
+        public static final String ACTION_FINISH_MAINACTIVITY = "action_finish_mainactivity";
     }
 
 

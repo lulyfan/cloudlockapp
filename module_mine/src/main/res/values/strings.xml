@@ -33,7 +33,7 @@
     <string name="account">账号</string>
     <string name="inputReceiverPhone">请输入接收者手机号</string>
     <string name="receiverTip">* 选中的锁设备将会转移到您输入的账号中，您将失去锁管理权。</string>
-    <string name="transformLockTip">* 本次共转移1把智能锁</string>
+    <string name="transformLockTip">* 本次共转移%d把智能锁</string>
     <string name="ensure">确认</string>
     <string name="SystemSetting">系统设置</string>
     <string name="resetPW">重置密码</string>

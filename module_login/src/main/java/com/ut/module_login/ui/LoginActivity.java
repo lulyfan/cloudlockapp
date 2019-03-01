@@ -2,6 +2,7 @@ package com.ut.module_login.ui;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -68,7 +69,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!NetWorkUtil.isNetworkAvailable(getBaseContext())) {
+        sendBroadcast(new Intent(RouterUtil.BrocastReceiverAction.ACTION_FINISH_MAINACTIVITY));
+        if (!NetWorkUtil.isNetworkAvailable(getBaseContext())) {
             CLToast.showAtCenter(getBaseContext(), "当前网络不可用， 请连接网络");
         }
     }

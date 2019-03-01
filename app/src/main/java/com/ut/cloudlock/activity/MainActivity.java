@@ -1,6 +1,10 @@
 package com.ut.cloudlock.activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,6 +50,7 @@ public class MainActivity extends BaseActivity {
             UTLog.d("observe", "user update ----> " + JSON.toJSONString(user));
         });
         UserRepository.getInstance().refreshUser();
+        regBrocastReceiver();
     }
 
     private void initNavigationItemSelectListener() {
@@ -156,5 +161,26 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unRegBrocastReceiver();
     }
+
+    private void regBrocastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RouterUtil.BrocastReceiverAction.ACTION_FINISH_MAINACTIVITY);
+        registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    private void unRegBrocastReceiver() {
+        unregisterReceiver(mBroadcastReceiver);
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (RouterUtil.BrocastReceiverAction.ACTION_FINISH_MAINACTIVITY.equals(intent.getAction())
+                    && !isFinishing()) {
+                finish();
+            }
+        }
+    };
 }
