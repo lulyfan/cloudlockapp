@@ -121,7 +121,7 @@ public class KeysManagerActivity extends BaseActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
-            protected void initView() {
+            public void initView() {
 
                 if (lockKey.getUserType() == EnumCollection.UserType.ADMIN.ordinal() || lockKey.getUserType() == EnumCollection.UserType.AUTH.ordinal()) {
                     getView(R.id.item1).setOnClickListener(v -> {

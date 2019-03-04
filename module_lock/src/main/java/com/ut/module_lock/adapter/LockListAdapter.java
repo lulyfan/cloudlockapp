@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 
 import com.ut.base.BaseApplication;
-import com.ut.base.Utils.TxtUtils;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
@@ -54,7 +53,6 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
         this.datas = datas;
         notifyDataSetChanged();
     }
-
 
     public void setOnRcvItemClickListener(OnRcvItemClickListener listener) {
         this.mOnRcvItemClickListener = listener;
@@ -161,9 +159,15 @@ public class LockListAdapter extends RecyclerView.Adapter<LockListAdapter.LockKe
 //        }
     }
 
+    private long lastClickTime = 0L;
+
     @Override
     public void onClick(View v) {
-        mOnRcvItemClickListener.onItemClick(v, datas, (Integer) v.getTag());
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastClickTime >= 800) {
+            mOnRcvItemClickListener.onItemClick(v, datas, (Integer) v.getTag());
+            lastClickTime = currentTime;
+        }
     }
 
     public static class LockKeyViewHolder extends RecyclerView.ViewHolder {

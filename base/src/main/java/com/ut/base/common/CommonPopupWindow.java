@@ -32,7 +32,7 @@ public abstract class CommonPopupWindow {
         initView();
     }
 
-    protected abstract void initView();
+    public abstract void initView();
 
     protected void initWindow() {
         fitPopupWindowOverStatusBar(true);

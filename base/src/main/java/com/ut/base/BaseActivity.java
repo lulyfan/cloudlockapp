@@ -301,6 +301,7 @@ public class BaseActivity extends AppCompatActivity {
         }
         unbindService(serviceConnection);
         AppManager.getAppManager().finishActivity(this);
+//        overridePendingTransition(R.anim.translate_leftin, R.anim.translate_rightout);
     }
 
     public void startLoad(String msg) {

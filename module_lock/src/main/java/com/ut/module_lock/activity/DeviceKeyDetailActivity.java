@@ -151,11 +151,14 @@ public class DeviceKeyDetailActivity extends BaseActivity {
     }
 
     private void initPopupwindow() {
-        if (mCommonPopupWindow != null) return;
+        if (mCommonPopupWindow != null) {
+            mCommonPopupWindow.initView();
+            return;
+        }
         mCommonPopupWindow = new CommonPopupWindow(this, R.layout.layout_popup_two_selections,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
-            protected void initView() {
+            public void initView() {
                 getView(R.id.item2).setVisibility(View.GONE);
                 getView(R.id.line1).setVisibility(View.GONE);
                 TextView textView = getView(R.id.item1);

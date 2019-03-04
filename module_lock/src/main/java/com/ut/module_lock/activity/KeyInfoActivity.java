@@ -132,7 +132,7 @@ public class KeyInfoActivity extends BaseActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
-            protected void initView() {
+            public void initView() {
                 TextView item1 = getView(R.id.item1);
                 if (managerUserType == EnumCollection.UserType.ADMIN.ordinal()
                         && keyInfo.getUserType() != EnumCollection.UserType.ADMIN.ordinal()

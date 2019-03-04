@@ -41,6 +41,7 @@ import com.ut.database.entity.LockKey;
 import com.ut.base.AutoOpenLockService;
 import com.ut.module_lock.R;
 import com.ut.module_lock.activity.AddGuideActivity;
+import com.ut.module_lock.activity.LockDetailActivity;
 import com.ut.module_lock.activity.SearchLockActivity;
 import com.ut.module_lock.adapter.LockListAdapter;
 import com.ut.module_lock.databinding.FragmentLocklistBinding;
@@ -141,11 +142,13 @@ public class LockListFragment extends BaseFragment {
             mLockListAdapter.setOnRcvItemClickListener((view, datas1, position) -> {
                 if (datas1.size() <= 0) return;
                 LockKey lockKey = (LockKey) datas1.get(position);
-                ARouter.getInstance()
-                        .build(RouterUtil.LockModulePath.LOCK_DETAIL)
-                        .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
-                        .navigation();
-
+//                ARouter.getInstance()
+//                        .build(RouterUtil.LockModulePath.LOCK_DETAIL)
+//                        .withParcelable(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey)
+//                        .navigation();
+                Intent intent = new Intent(LockListFragment.this.getActivity(), LockDetailActivity.class);
+                intent.putExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_KEY, lockKey);
+                startActivity(intent);
                 finish();
             });
         } else {
@@ -226,7 +229,7 @@ public class LockListFragment extends BaseFragment {
         popupWindow = new CommonPopupWindow(getContext(), R.layout.popupwindow_lock_group_list,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) {
             @Override
-            protected void initView() {
+            public void initView() {
             }
 
             @Override

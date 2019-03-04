@@ -41,7 +41,7 @@ import com.ut.database.entity.User;
  */
 @Database(entities = {LockKey.class, User.class, UUID.class, NotificationMessage.class, LockGroup.class,
         LockUser.class, LockUserKey.class, SearchRecord.class, LockMessage.class, LockMessageInfo.class,
-        Key.class, Record.class, DeviceKey.class, ApplyMessage.class}, version = 24)
+        Key.class, Record.class, DeviceKey.class, ApplyMessage.class}, version = 25)
 public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public abstract LockKeyDao lockKeyDao();
