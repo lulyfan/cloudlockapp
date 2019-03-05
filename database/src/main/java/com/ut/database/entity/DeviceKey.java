@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @Entity(tableName = "device_key")
 public class DeviceKey implements Parcelable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int deviceId;//主键
 
     private int keyID;//钥匙编号；
@@ -56,8 +56,8 @@ public class DeviceKey implements Parcelable {
     public DeviceKey() {
     }
 
-    public DeviceKey(int id, int keyID, String name, int keyType, int keyCfg, int keyInId) {
-        this.deviceId = id;
+    public DeviceKey(int deviceId, int keyID, String name, int keyType, int keyCfg, int keyInId) {
+        this.deviceId = deviceId;
         this.keyID = keyID;
         this.name = name;
         this.keyType = keyType;
@@ -71,14 +71,6 @@ public class DeviceKey implements Parcelable {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
-    }
-
-    public int getId() {
-        return deviceId;
-    }
-
-    public void setId(int id) {
-        this.deviceId = id;
     }
 
 

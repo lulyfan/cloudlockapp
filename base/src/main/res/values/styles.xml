@@ -16,8 +16,14 @@
         <!--&lt;!&ndash; 虚拟按键不透明 &ndash;&gt;-->
         <!--<item name="android:windowTranslucentNavigation">false</item>-->
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/animation_translucent_translate</item>
+
     </style>
 
+    <style name="animation_translucent_translate" parent="@android:style/Animation.Translucent">
+        <item name="android:windowEnterAnimation">@anim/translate_leftin</item>
+        <item name="android:windowExitAnimation">@anim/translate_rightout</item>
+    </style>
 
     <style name="tabStyle">
         <item name="android:textSize">@dimen/m</item>
@@ -29,7 +35,7 @@
     </style>
 
     <style name="DialogStyle" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground"> @android:color/transparent </item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
