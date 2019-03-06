@@ -127,7 +127,7 @@ public class EditNameActivity extends BaseActivity {
             if (TextUtils.isEmpty(mac)) return;
 
             if(!SystemUtils.isLetterDigitOrChinese(nameEdt.getText().toString().trim())) {
-                CLToast.showAtCenter(getBaseContext(), "锁名称不能含有符号");
+                CLToast.showAtCenter(getBaseContext(), getString(R.string.lock_lock_name_cant_include_symbol));
                 return;
             }
 

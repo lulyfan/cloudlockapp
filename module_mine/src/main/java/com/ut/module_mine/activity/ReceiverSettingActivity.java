@@ -10,6 +10,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -111,13 +112,13 @@ public class ReceiverSettingActivity extends BaseActivity {
                     }
                 } else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     new AlertDialog.Builder(this)
-                            .setMessage("APP需要你的允许获取联系人权限")
-                            .setPositiveButton("设置", (dialogInterface, i) -> {
-                                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            .setMessage(R.string.mine_app_need_contact_permission)
+                            .setPositiveButton(R.string.mine_setting, (dialogInterface, i) -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                 intent.setData(Uri.parse("package:" + getPackageName()));
                                 startActivity(intent);
                             })
-                            .setNegativeButton("取消", null)
+                            .setNegativeButton(R.string.mine_cancel, null)
                             .create()
                             .show();
 

@@ -306,4 +306,5 @@
 
     <string name="lock_connected">已连接</string>
     <string name="lock_unConnected">待连接</string>
+    <string name="lock_lock_name_cant_include_symbol">锁名称不能含有符号</string>
 </resources>

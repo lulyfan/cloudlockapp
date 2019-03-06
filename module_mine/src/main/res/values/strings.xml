@@ -88,6 +88,9 @@
     <string name="status_has_invailed">已失效</string>
     <string name="status_out_of_date">已过期</string>
     <string name="status_normal">正常</string>
+    <string name="mine_app_need_contact_permission">APP需要你的允许获取联系人权限</string>
+    <string name="mine_setting">设置</string>
+    <string name="mine_cancel">取消</string>
 
     <string-array name="key_status">
         <item>未知</item>
