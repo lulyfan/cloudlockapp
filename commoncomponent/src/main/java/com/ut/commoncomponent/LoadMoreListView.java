@@ -34,10 +34,11 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
     }
 
     private int footViewHeight = 0;
+
     private void init(Context context) {
         this.mContext = context;
         mFootView = LayoutInflater.from(context).inflate(R.layout.view_loading, null);
-        mFootView.measure(0,0);
+        mFootView.measure(0, 0);
         footViewHeight = mFootView.getMeasuredHeight();
         hideFootView();
         addFooterView(mFootView);
@@ -45,14 +46,13 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
     }
 
 
-
     @Override
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         // 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
         int lastVisibleIndex = listView.getLastVisiblePosition();
-        View lastView = getChildAt(lastVisibleIndex);
         if (!mIsLoading && scrollState == OnScrollListener.SCROLL_STATE_IDLE
-                && lastVisibleIndex == mTotalItemCount - 1 &&  lastView != null && lastView.getBottom() == getBottom()) {
+                && lastVisibleIndex == mTotalItemCount - 1 && getChildAt(lastVisibleIndex) != null
+                && getChildAt(lastVisibleIndex).getBottom() == getBottom()) {
             mIsLoading = true;
             showFootView();
             setSelection(getCount() - 1);
@@ -85,11 +85,11 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         return mIsLoading;
     }
 
-    private void hideFootView(){
-        mFootView.setPadding(0, -footViewHeight, 0 , 0);
+    private void hideFootView() {
+        mFootView.setPadding(0, -footViewHeight, 0, 0);
     }
 
-    private void showFootView(){
-        mFootView.setPadding(0, 0, 0 , 0);
+    private void showFootView() {
+        mFootView.setPadding(0, 0, 0, 0);
     }
 }
