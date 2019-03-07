@@ -1,4 +1,4 @@
-package com.ut.module_lock.utils;
+package com.ut.base.Utils;
 
 import com.ut.database.dao.OfflineRecordDao;
 import com.ut.database.database.CloudLockDatabaseHolder;
@@ -18,6 +18,7 @@ import androidx.work.WorkManager;
 public class UploadOfflineRecordUtil {
 
     private static Executor executor = Executors.newSingleThreadExecutor();
+    private static final String TAG = "uploadOfflineRecord";
 
     public static void upload(OfflineRecord record) {
 
@@ -38,6 +39,7 @@ public class UploadOfflineRecordUtil {
                             .setConstraints(myConstraints)
                             .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
                             .setInputData(data)
+                            .addTag(TAG)
                             .build();
             WorkManager.getInstance().enqueue(uploadWork);
         });
@@ -57,10 +59,11 @@ public class UploadOfflineRecordUtil {
                     new OneTimeWorkRequest.Builder(UploadBatchOfflineRecordWorker.class)
                             .setConstraints(myConstraints)
                             .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+                            .addTag(TAG)
                             .build();
 
             WorkManager workManager = WorkManager.getInstance();
-            workManager.cancelAllWork();
+            workManager.cancelAllWorkByTag(TAG);
             workManager.enqueue(uploadWork);
         });
     }

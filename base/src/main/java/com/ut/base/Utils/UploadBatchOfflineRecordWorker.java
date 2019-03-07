@@ -1,4 +1,4 @@
-package com.ut.module_lock.utils;
+package com.ut.base.Utils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

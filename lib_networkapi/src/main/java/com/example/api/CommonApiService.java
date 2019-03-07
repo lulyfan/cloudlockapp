@@ -275,7 +275,7 @@ public interface CommonApiService {
 
     @POST(ApiUrl.addLog)
     @FormUrlEncoded
-    Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
+    Observable<Result<Void>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
             , @Field("type") int type, @Field("openLockType") int openLockType, @Field("electric") int electric);
 
     @POST(ApiUrl.addLog)
