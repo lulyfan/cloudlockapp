@@ -50,8 +50,9 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
     public void onScrollStateChanged(AbsListView listView, int scrollState) {
         // 滑到底部后自动加载，判断listview已经停止滚动并且最后可视的条目等于adapter的条目
         int lastVisibleIndex = listView.getLastVisiblePosition();
+        View lastView = getChildAt(lastVisibleIndex);
         if (!mIsLoading && scrollState == OnScrollListener.SCROLL_STATE_IDLE
-                && lastVisibleIndex == mTotalItemCount - 1 && getChildAt(lastVisibleIndex).getBottom() == getBottom()) {
+                && lastVisibleIndex == mTotalItemCount - 1 &&  lastView != null && lastView.getBottom() == getBottom()) {
             mIsLoading = true;
             showFootView();
             setSelection(getCount() - 1);
