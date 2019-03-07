@@ -282,7 +282,7 @@ public class LockDetailVM extends BaseViewModel {
                     offlineRecord.setOpenLockType(openLockType);
                     offlineRecord.setElectric(electric);
                     offlineRecord.setCreateTime(new Date().getTime());
-                    UploadOfflineRecordUtil.upload(offlineRecord);
+                    UploadOfflineRecordUtil.uploadBatch(offlineRecord);
                     //TODO 将未成功提交的记录保存在本地，后面继续提交
                 });
         mCompositeDisposable.add(disposable);

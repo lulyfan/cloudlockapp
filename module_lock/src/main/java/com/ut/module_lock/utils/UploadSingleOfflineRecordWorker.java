@@ -20,11 +20,11 @@ import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class UploadOfflineRecordWorker extends Worker {
+public class UploadSingleOfflineRecordWorker extends Worker {
 
     static final String KEY_ID = "recordId";
 
-    public UploadOfflineRecordWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public UploadSingleOfflineRecordWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 

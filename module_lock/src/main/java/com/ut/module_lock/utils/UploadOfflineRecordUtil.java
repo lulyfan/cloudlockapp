@@ -30,11 +30,11 @@ public class UploadOfflineRecordUtil {
                     .build();
 
             Data data = new Data.Builder()
-                    .putLong(UploadOfflineRecordWorker.KEY_ID, id)
+                    .putLong(UploadSingleOfflineRecordWorker.KEY_ID, id)
                     .build();
 
             OneTimeWorkRequest uploadWork =
-                    new OneTimeWorkRequest.Builder(UploadOfflineRecordWorker.class)
+                    new OneTimeWorkRequest.Builder(UploadSingleOfflineRecordWorker.class)
                             .setConstraints(myConstraints)
                             .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
                             .setInputData(data)
@@ -42,5 +42,26 @@ public class UploadOfflineRecordUtil {
             WorkManager.getInstance().enqueue(uploadWork);
         });
 
+    }
+
+    public static void uploadBatch(OfflineRecord record) {
+        executor.execute(() -> {
+            OfflineRecordDao dao = CloudLockDatabaseHolder.get().getOfflineRecordDao();
+            dao.insert(record);
+
+            Constraints myConstraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            OneTimeWorkRequest uploadWork =
+                    new OneTimeWorkRequest.Builder(UploadBatchOfflineRecordWorker.class)
+                            .setConstraints(myConstraints)
+                            .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+                            .build();
+
+            WorkManager workManager = WorkManager.getInstance();
+            workManager.cancelAllWork();
+            workManager.enqueue(uploadWork);
+        });
     }
 }
