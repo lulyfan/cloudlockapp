@@ -11,7 +11,6 @@ import com.example.operation.MyRetrofit;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.SystemUtils;
 import com.ut.database.dao.ORecordDao;
-import com.ut.database.dao.OfflineRecordDao;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.database.entity.OfflineRecord;
 import com.ut.module_lock.common.Constance;
@@ -26,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -55,10 +55,10 @@ public class OperationVm extends BaseViewModel {
         super(application);
     }
 
-    public LiveData<List<OfflineRecord>> getOfflineRecords(long keyId) {
-        OfflineRecordDao dao = CloudLockDatabaseHolder.get().getOfflineRecordDao();
-        return dao.getRecordsByKeyId(keyId);
-    }
+//    public LiveData<List<OfflineRecord>> getOfflineRecords(long lockId) {
+//        OfflineRecordDao dao = CloudLockDatabaseHolder.get().getOfflineRecordDao();
+//        return dao.getRecordsByLockId(lockId);
+//    }
 
     public LiveData<List<Record>> getRecords(String recordType, long id) {
         if (id != currentId) {
@@ -190,11 +190,30 @@ public class OperationVm extends BaseViewModel {
         return oprs;
     }
 
+    public List<Record> parseData(List<OperationRecord> oprs) {
+        List<Record> list = new ArrayList<>();
+        for (OperationRecord or : oprs) {
+            list.addAll(or.getRecords());
+        }
+
+        return list;
+    }
+
+
     public void clear() {
         if (handlerMap != null) {
             handlerMap.clear();
             handlerMap = null;
         }
+    }
+
+
+    public void getOfflineRecords(long lockId, Consumer<List<OfflineRecord>> subscriber) {
+        Observable.just(lockId)
+                .subscribeOn(Schedulers.io())
+                .map(value -> CloudLockDatabaseHolder.get().getOfflineRecordDao().getRecordsByLockId(value))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber, Throwable::printStackTrace);
     }
 
     public void setGateRecord(boolean isGateRecord) {

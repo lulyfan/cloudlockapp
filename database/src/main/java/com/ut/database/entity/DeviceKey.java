@@ -56,6 +56,7 @@ public class DeviceKey implements Parcelable {
     public DeviceKey() {
     }
 
+    @Ignore
     public DeviceKey(int deviceId, int keyID, String name, int keyType, int keyCfg, int keyInId) {
         this.deviceId = deviceId;
         this.keyID = keyID;

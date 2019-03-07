@@ -58,6 +58,7 @@ public class OnceFragment extends BaseFragment {
                     String extraPhone = getActivity().getIntent().getStringExtra(RouterUtil.LockModuleExtraKey.EXTRA_LOCK_SENDKEY_MOBILE);
                     boolean cantEdit = getActivity().getIntent().getBooleanExtra(RouterUtil.LockModuleExtraKey.EXTRA_CANT_EDIT_PHONE,false);
                     if(s.equals(extraPhone) && cantEdit) {
+                        et_phoneNum.setEnabled(false);
                         binding.getRoot().findViewById(R.id.contact).setEnabled(false);
                     }
                 }
