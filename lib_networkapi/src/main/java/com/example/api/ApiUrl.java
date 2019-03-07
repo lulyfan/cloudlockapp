@@ -133,8 +133,8 @@ public interface ApiUrl {
     //添加日志
     String addLog = PREFIX + "/log/addLog" + SUFFIX;
 
-    //添加本地日志
-    String addLocalLog = PREFIX + "/log/addLog" + SUFFIX;
+    //批量添加本地日志
+    String addLogs = PREFIX + "/log/addLogs" + SUFFIX;
 
     //设置是否触摸开
     String setCanOpen = PREFIX + "/key/setCanOpen" + SUFFIX;

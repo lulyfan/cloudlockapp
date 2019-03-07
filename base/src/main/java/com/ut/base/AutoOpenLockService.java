@@ -1,5 +1,6 @@
 package com.ut.base;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -7,11 +8,15 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
+import com.example.entity.base.Result;
 import com.example.operation.CommonApi;
 import com.example.operation.MyRetrofit;
+import com.google.gson.JsonElement;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.Utils.UploadOfflineRecordUtil;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.OfflineRecord;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack2;
 import com.ut.unilink.cloudLock.ConnectListener;
@@ -20,9 +25,11 @@ import com.ut.unilink.cloudLock.ScanListener;
 import com.ut.unilink.util.Base64;
 import com.ut.unilink.util.Log;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 public class AutoOpenLockService extends Service {
 
@@ -232,14 +239,37 @@ public class AutoOpenLockService extends Service {
         UnilinkManager.getInstance(getApplication()).stopScan();
     }
 
+    @SuppressLint("CheckResult")
     private void addOpenLockLog(int type) {
-        Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type,
-                EnumCollection.OpenLockType.BLEAUTO.ordinal(), mLockKey.getElectric())
+
+        long lockId = Long.parseLong(mLockKey.getId());
+        long keyId = mLockKey.getKeyId();
+        int openLockType = EnumCollection.OpenLockType.BLEAUTO.ordinal();
+        int electric = mLockKey.getElectric();
+
+        CommonApi.addLog(lockId, keyId, type, openLockType, electric)
+                .doOnNext(voidResult -> {
+                    if (voidResult == null) {
+                        throw new NullPointerException(getApplicationContext().getString(R.string.serviceErr));
+                    }
+
+                    if (!voidResult.isSuccess()) {
+                        throw new Exception(voidResult.msg);
+                    }
+                })
                 .subscribe(jsonElementResult -> {
                     UTLog.i(jsonElementResult.toString());
                 }, throwable -> {
                     throwable.printStackTrace();
-                    //TODO 将未成功提交的记录保存在本地，后面继续提交
+
+                    OfflineRecord offlineRecord = new OfflineRecord();
+                    offlineRecord.setLockId(lockId);
+                    offlineRecord.setKeyId(keyId);
+                    offlineRecord.setType(type);
+                    offlineRecord.setOpenLockType(openLockType);
+                    offlineRecord.setElectric(electric);
+                    offlineRecord.setCreateTime(new Date().getTime());
+                    UploadOfflineRecordUtil.uploadBatch(offlineRecord);
                 });
     }
 }

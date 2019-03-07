@@ -16,6 +16,7 @@ import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockGroup;
 import com.ut.database.entity.LockUser;
 import com.ut.database.entity.LockUserKey;
+import com.ut.database.entity.OfflineRecord;
 import com.ut.database.entity.Record;
 import com.ut.database.entity.User;
 
@@ -274,7 +275,7 @@ public interface CommonApiService {
 
     @POST(ApiUrl.addLog)
     @FormUrlEncoded
-    Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
+    Observable<Result<Void>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
             , @Field("type") int type, @Field("openLockType") int openLockType, @Field("electric") int electric);
 
     @POST(ApiUrl.addLog)
@@ -282,6 +283,10 @@ public interface CommonApiService {
     Call<Result<Void>> addLocalLogSync(@Field("lockId") long lockId, @Field("keyId") long keyId
             , @Field("type") int type, @Field("openLockType") int openLockType, @Field("electric") int electric,
                                        @Field("createTime") long createTime);
+
+    @POST(ApiUrl.addLogs)
+    @FormUrlEncoded
+    Call<Result<Void>> addLocalLogsSync(@Field("volist") String records);
 
     @GET(ApiUrl.updateAppVersion)
     Observable<Result<JsonObject>> updateVersion();

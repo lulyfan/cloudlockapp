@@ -19,9 +19,18 @@ public interface OfflineRecordDao {
     @Delete
     void delete(OfflineRecord offlineRecord);
 
+    @Delete
+    void deleteList(List<OfflineRecord> offlineRecords);
+
     @Query("select * from offlinerecord where id = :id")
     OfflineRecord query(long id);
 
     @Query("select * from offlinerecord where lockId = :lockId ORDER BY createTime desc limit 10")
     List<OfflineRecord> getRecordsByLockId(long lockId);
+
+    @Query("select * from offlinerecord where keyId = :keyId ORDER BY createTime desc limit 10")
+    LiveData<List<OfflineRecord>> getRecordsByKeyId(long keyId);
+
+    @Query("select * from offlinerecord")
+    List<OfflineRecord> getAll();
 }

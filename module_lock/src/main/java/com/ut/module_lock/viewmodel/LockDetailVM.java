@@ -6,7 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
-import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
@@ -14,7 +13,7 @@ import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
 import com.ut.database.entity.OfflineRecord;
 import com.ut.module_lock.R;
-import com.ut.module_lock.utils.UploadOfflineRecordUtil;
+import com.ut.base.Utils.UploadOfflineRecordUtil;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
 import com.ut.unilink.cloudLock.CallBack2;
@@ -282,7 +281,7 @@ public class LockDetailVM extends BaseViewModel {
                     offlineRecord.setOpenLockType(openLockType);
                     offlineRecord.setElectric(electric);
                     offlineRecord.setCreateTime(new Date().getTime());
-                    UploadOfflineRecordUtil.upload(offlineRecord);
+                    UploadOfflineRecordUtil.uploadBatch(offlineRecord);
                     //TODO 将未成功提交的记录保存在本地，后面继续提交
                 });
         mCompositeDisposable.add(disposable);
