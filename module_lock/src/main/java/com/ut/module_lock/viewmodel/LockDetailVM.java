@@ -6,12 +6,15 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.operation.CommonApi;
+import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.Utils.UTLog;
 import com.ut.database.daoImpl.LockKeyDaoImpl;
 import com.ut.database.entity.EnumCollection;
 import com.ut.database.entity.LockKey;
+import com.ut.database.entity.OfflineRecord;
 import com.ut.module_lock.R;
+import com.ut.module_lock.utils.UploadOfflineRecordUtil;
 import com.ut.unilink.UnilinkManager;
 import com.ut.unilink.cloudLock.CallBack;
 import com.ut.unilink.cloudLock.CallBack2;
@@ -22,6 +25,7 @@ import com.ut.unilink.cloudLock.ScanDevice;
 import com.ut.unilink.cloudLock.ScanListener;
 import com.ut.unilink.util.Log;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -260,11 +264,25 @@ public class LockDetailVM extends BaseViewModel {
     }
 
     private void toAddLog(int type, int openLockType) {
+
+        long lockId = Long.parseLong(mLockKey.getId());
+        long keyId = mLockKey.getKeyId();
+        int electric = mLockKey.getElectric();
+
         Disposable disposable = CommonApi.addLog(Long.parseLong(mLockKey.getId()), mLockKey.getKeyId(), type, openLockType, mLockKey.getElectric())
                 .subscribe(jsonElementResult -> {
                     UTLog.i(jsonElementResult.toString());
                 }, throwable -> {
                     throwable.printStackTrace();
+
+                    OfflineRecord offlineRecord = new OfflineRecord();
+                    offlineRecord.setLockId(lockId);
+                    offlineRecord.setKeyId(keyId);
+                    offlineRecord.setType(type);
+                    offlineRecord.setOpenLockType(openLockType);
+                    offlineRecord.setElectric(electric);
+                    offlineRecord.setCreateTime(new Date().getTime());
+                    UploadOfflineRecordUtil.upload(offlineRecord);
                     //TODO 将未成功提交的记录保存在本地，后面继续提交
                 });
         mCompositeDisposable.add(disposable);

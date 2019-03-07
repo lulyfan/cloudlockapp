@@ -16,6 +16,7 @@ import com.ut.database.dao.LockMessageDao;
 import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
 import com.ut.database.dao.ORecordDao;
+import com.ut.database.dao.OfflineRecordDao;
 import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
@@ -85,6 +86,10 @@ public class CloudLockDatabaseHolder {
 
     public ORecordDao recordDao() {
         return mDb.recordDao();
+    }
+
+    public OfflineRecordDao getOfflineRecordDao() {
+        return mDb.offlineRecordDao();
     }
 
     public DeviceKeyDao getDeviceKeyDao() {

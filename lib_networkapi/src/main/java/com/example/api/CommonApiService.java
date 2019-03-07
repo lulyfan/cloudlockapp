@@ -277,6 +277,12 @@ public interface CommonApiService {
     Observable<Result<JsonElement>> addLog(@Field("lockId") long lockId, @Field("keyId") long keyId
             , @Field("type") int type, @Field("openLockType") int openLockType, @Field("electric") int electric);
 
+    @POST(ApiUrl.addLog)
+    @FormUrlEncoded
+    Call<Result<Void>> addLocalLogSync(@Field("lockId") long lockId, @Field("keyId") long keyId
+            , @Field("type") int type, @Field("openLockType") int openLockType, @Field("electric") int electric,
+                                       @Field("createTime") long createTime);
+
     @GET(ApiUrl.updateAppVersion)
     Observable<Result<JsonObject>> updateVersion();
 

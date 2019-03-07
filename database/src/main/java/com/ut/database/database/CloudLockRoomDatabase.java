@@ -14,6 +14,7 @@ import com.ut.database.dao.LockUserDao;
 import com.ut.database.dao.LockUserKeyDao;
 import com.ut.database.dao.NotifyDao;
 import com.ut.database.dao.ORecordDao;
+import com.ut.database.dao.OfflineRecordDao;
 import com.ut.database.dao.SearchRecordDao;
 import com.ut.database.dao.UUIDDao;
 import com.ut.database.dao.UserDao;
@@ -28,6 +29,7 @@ import com.ut.database.entity.LockMessageInfo;
 import com.ut.database.entity.LockUser;
 import com.ut.database.entity.LockUserKey;
 import com.ut.database.entity.NotificationMessage;
+import com.ut.database.entity.OfflineRecord;
 import com.ut.database.entity.Record;
 import com.ut.database.entity.SearchRecord;
 import com.ut.database.entity.UUID;
@@ -41,7 +43,7 @@ import com.ut.database.entity.User;
  */
 @Database(entities = {LockKey.class, User.class, UUID.class, NotificationMessage.class, LockGroup.class,
         LockUser.class, LockUserKey.class, SearchRecord.class, LockMessage.class, LockMessageInfo.class,
-        Key.class, Record.class, DeviceKey.class, ApplyMessage.class}, version = 25)
+        Key.class, Record.class, OfflineRecord.class, DeviceKey.class, ApplyMessage.class}, version = 26)
 public abstract class CloudLockRoomDatabase extends RoomDatabase {
 
     public abstract LockKeyDao lockKeyDao();
@@ -67,6 +69,8 @@ public abstract class CloudLockRoomDatabase extends RoomDatabase {
     public abstract KeyDao keyDao();
 
     public abstract ORecordDao recordDao();
+
+    public abstract OfflineRecordDao offlineRecordDao();
 
     public abstract DeviceKeyDao deviceDeyDao();
 

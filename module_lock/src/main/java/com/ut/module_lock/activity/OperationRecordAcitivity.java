@@ -1,5 +1,6 @@
 package com.ut.module_lock.activity;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ut.base.BaseActivity;
 import com.ut.base.UIUtils.RouterUtil;
+import com.ut.database.entity.OfflineRecord;
 import com.ut.module_lock.R;
 import com.ut.module_lock.adapter.ORListAdapter;
 import com.ut.module_lock.common.Constance;
@@ -44,6 +46,16 @@ public class OperationRecordAcitivity extends BaseActivity {
         setTitle(R.string.lock_operation_record);
         handlerIntent();
         initView();
+
+        if (!operationVm.isGateRecord()) {
+            operationVm.getOfflineRecords(currentId).observe(this, new Observer<List<OfflineRecord>>() {
+                @Override
+                public void onChanged(@Nullable List<OfflineRecord> offlineRecords) {
+
+                }
+            });
+        }
+
         operationVm.getRecords(recordType, currentId).observe(this, records -> {
             oprs.clear();
             if (mBinding.operationRecordList.isLoading()) {
