@@ -177,7 +177,7 @@
     <string name="lock_to_frozen_or_not">冻结/解除冻结</string>
     <string name="lock_unfrozen">解除冻结</string>
     <string name="lock_unfrozen_tips">解除冻结会在用户APP联网后生效。</string>
-    <string name="lock_frozen_tips">确定删除该钥匙吗？冻结会在用户APP联网后生效。</string>
+    <string name="lock_frozen_tips">确定冻结该钥匙吗？冻结会在用户APP联网后生效。</string>
     <string name="lock_frozen">冻结</string>
     <string name="lock_delete_lock_tips">确定删除该锁吗？删除后所有的钥匙都将失效。</string>
     <string name="lock_verify_user_password_hint">请输入账号的密码</string>
@@ -190,7 +190,7 @@
     <string name="lock_auth">授权</string>
     <string name="lock_key_auth_tips">授权用户拥有管理员的权限，可发送及管理钥匙。</string>
     <string name="lock_key_auth_title">确定授权该钥匙吗？</string>
-    <string name="lock_key_cancel_auth_title">确定删除该钥匙吗？</string>
+    <string name="lock_key_cancel_auth_title">确定取消该钥匙的授权吗？</string>
     <string name="lock_key_cancel_auth_tips">取消授权会在用户APP联网后生效。</string>
     <string name="lock_to_auth">授权</string>
     <string name="lock_cancel_auth">取消授权</string>
@@ -307,4 +307,6 @@
     <string name="lock_connected">已连接</string>
     <string name="lock_unConnected">待连接</string>
     <string name="lock_lock_name_cant_include_symbol">锁名称不能含有符号</string>
+    <string name="lock_bt_open_lock">蓝牙手动开锁</string>
+    <string name="lock_bt_auto_open_lock">蓝牙无感开锁</string>
 </resources>

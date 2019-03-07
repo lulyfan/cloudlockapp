@@ -112,9 +112,9 @@ public class OperationRecordAcitivity extends BaseActivity {
             record.setTime(sdf.format(new Date(offlineRecord.getCreateTime())));
             record.setCreateTime(offlineRecord.getCreateTime());
             if (offlineRecord.getOpenLockType() == 0) {
-                record.setDescription("蓝牙手动开锁");
+                record.setDescription(getString(R.string.lock_bt_open_lock));
             } else if (offlineRecord.getOpenLockType() == 1) {
-                record.setDescription("蓝牙无感开锁");
+                record.setDescription(getString(R.string.lock_bt_auto_open_lock));
             }
             record.setKeyId(offlineRecord.getKeyId());
             record.setKeyName(BaseApplication.getUser().name);
