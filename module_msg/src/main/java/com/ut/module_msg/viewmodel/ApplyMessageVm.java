@@ -17,6 +17,7 @@ import com.ut.base.BaseApplication;
 import com.ut.base.ErrorHandler;
 import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
+import com.ut.base.dialog.DialogHelper;
 import com.ut.commoncomponent.CLToast;
 import com.ut.database.database.CloudLockDatabaseHolder;
 import com.ut.module_msg.R;
@@ -100,11 +101,10 @@ public class ApplyMessageVm extends AndroidViewModel {
                             ARouter.getInstance().build(RouterUtil.MsgModulePath.APPLY_INFO).withBoolean("hasDealt", true).withSerializable("applyMessage", message).navigation();
                         } else {
                             String format = new SimpleDateFormat("yyyy/MM/dd hh:mm", Locale.getDefault()).format(new Date(dealTime));
-                            //TODO
-                            new AlertDialog.Builder(AppManager.getAppManager().currentActivity())
-                                    .setTitle("提示")
-                                    .setMessage(dealer + " 已于 " + format + " 处理这条申请")
-                                    .setPositiveButton("好的", null)
+                            DialogHelper.getInstance()
+                                    .setTitle(getApplication().getString(R.string.msg_tip))
+                                    .setMessage(dealer + getApplication().getString(R.string.msg_has_at) + format + getApplication().getString(R.string.mg_handle_this_message))
+                                    .setPositiveButton(getApplication().getString(R.string.msg_ok), null)
                                     .show();
                         }
 

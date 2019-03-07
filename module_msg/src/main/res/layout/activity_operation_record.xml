@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="操作记录"
+            android:text="@string/msg_operation_record"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/base_17sp" />
 

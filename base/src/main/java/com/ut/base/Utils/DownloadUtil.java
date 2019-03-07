@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.ut.base.R;
+
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class DownloadUtil {
@@ -84,7 +86,7 @@ public class DownloadUtil {
                     break;
                 //下载失败
                 case DownloadManager.STATUS_FAILED:
-                    Toast.makeText(mContext, "下载失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.base_download_fail), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

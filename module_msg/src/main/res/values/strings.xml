@@ -19,4 +19,9 @@
     <string name="apply_desc">该用户向您申请%s%s的钥匙，请及时处理</string>
     <string name="notify_title">notify_title</string>
     <string name="lock_name">锁名称</string>
+    <string name="msg_tip">提示</string>
+    <string name="msg_has_at">已于</string>
+    <string name="mg_handle_this_message">处理这条申请</string>
+    <string name="msg_ok">好的</string>
+    <string name="msg_operation_record">操作记录</string>
 </resources>

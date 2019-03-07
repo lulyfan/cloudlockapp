@@ -321,7 +321,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void changeLoadText(String text) {
         TextView textView = (TextView) loadDialog.findViewById(R.id.tip);
-        textView.setText("正在加载.. " + text + "%");
+        textView.setText(getString(R.string.base_loading) + text + "%");
 
         if (text == null || "".equals(text)) {
             textView.setVisibility(View.GONE);
@@ -335,11 +335,11 @@ public class BaseActivity extends AppCompatActivity {
 
     public void startLoad() {
         //TODO 中文
-        startLoad("请稍候...");
+        startLoad(getString(R.string.base_waiting));
     }
 
     public void startProcess() {
-        startLoad("正在加载.. 5%");
+        startLoad(getString(R.string.base_loading_5_par));
     }
 
     public void endLoad() {

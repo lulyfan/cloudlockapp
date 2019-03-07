@@ -20,10 +20,10 @@ public class ErrorHandler implements Consumer<Throwable> {
     @Override
     public void accept(Throwable throwable) {
         if (throwable instanceof SocketTimeoutException) {
-            CLToast.showAtBottom(BaseApplication.getAppContext(), "网络连接超时");
+            CLToast.showAtBottom(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(R.string.base_connect_over_time));
         } else if (throwable instanceof ConnectException
                 || throwable instanceof UnknownHostException) {
-            CLToast.showAtBottom(BaseApplication.getAppContext(), "操作失败，请检查网络连接");
+            CLToast.showAtBottom(BaseApplication.getAppContext(), BaseApplication.getAppContext().getString(R.string.base_network_connect_fail));
         }
 
         throwable.printStackTrace();

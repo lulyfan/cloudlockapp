@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.ut.base.BaseApplication;
 import com.ut.base.BaseFragment;
+import com.ut.base.R;
 import com.ut.base.fragment.ForeverFragment;
 import com.ut.base.fragment.LimitTimeFragment;
 import com.ut.base.fragment.LoopFragment;
@@ -41,16 +43,16 @@ public class GrantPermissionAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {//todo 中文
             case 0:
-                return "永久";
+                return BaseApplication.getAppContext().getString(R.string.mine_forever);
 
             case 1:
-                return "限时";
+                return BaseApplication.getAppContext().getString(R.string.mine_limitTime);
 
             case 2:
-                return "单次";
+                return BaseApplication.getAppContext().getString(R.string.mine_once);
 
             case 3:
-                return "循环";
+                return BaseApplication.getAppContext().getString(R.string.mine_loop);
 
             default:
                 return "";

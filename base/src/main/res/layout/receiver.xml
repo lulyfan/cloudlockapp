@@ -29,7 +29,7 @@
         android:ems="11"
         android:minWidth="@dimen/base_160dp"
         android:gravity="right|center_vertical"
-        android:hint="请输入接收者手机号"
+        android:hint="@string/base_input_revicer_number"
         android:inputType="phone"
         android:maxLength="11"
         android:textColorHint="@color/grayC"
