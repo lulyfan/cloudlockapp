@@ -1,6 +1,7 @@
 package com.ut.module_msg.fragment;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -19,6 +21,9 @@ import com.ut.base.UIUtils.RouterUtil;
 import com.ut.base.Utils.UTLog;
 import com.ut.module_msg.R;
 import com.ut.module_msg.databinding.FragmentMsgBinding;
+
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 /**
  * author : zhouyubin
@@ -36,6 +41,7 @@ public class MsgFragment extends BaseFragment {
     ViewPager mViewPager;
 
     FragmentPagerAdapter mAdapter = null;
+    private Badge tab1Badge, tab2Badge;
 
     @Nullable
     @Override
@@ -53,23 +59,6 @@ public class MsgFragment extends BaseFragment {
         mViewPager = mMsgBinding.viewpager;
 
         String[] titles = new String[]{getString(R.string.msg_notification), getString(R.string.msg_apply)};
-        mTabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-
         final Fragment[] fragments = {new NotificationFragment(), new ApplyFragment()};
         mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
@@ -95,5 +84,27 @@ public class MsgFragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager, true);
+
+        for (int i =0; i < titles.length; i++) {
+            TabLayout.Tab tab = mTabLayout.getTabAt(i);
+            if(tab != null) {
+                View view = View.inflate(getContext(), R.layout.view_msg_tab, null);
+                TextView textView = view.findViewById(R.id.textview);
+                textView.setText(titles[i]);
+                Badge badge = new QBadgeView(getContext());
+                badge.bindTarget(textView).setBadgeBackgroundColor(Color.parseColor("#F55D54"))
+                        .setGravityOffset(0,1, true)
+                        .setBadgeTextColor(Color.WHITE)
+                        .setShowShadow(false)
+                        .setBadgeTextSize(8, true)
+                        .setBadgeNumber(1);
+                if(i == 0) {
+                    tab1Badge = badge;
+                } else {
+                    tab2Badge = badge;
+                }
+                tab.setCustomView(view);
+            }
+        }
     }
 }

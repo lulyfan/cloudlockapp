@@ -8,10 +8,9 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.CompoundButton;
+import android.view.View;
 
 import com.ut.base.BaseActivity;
-import com.ut.database.entity.Lock;
 import com.ut.database.entity.LockKey;
 import com.ut.module_mine.BR;
 import com.ut.module_mine.GlobalData;
@@ -35,10 +34,10 @@ public class ChangeLockPermissionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_change_lock_permission);
         initUI();
-        initViewMOdel();
+        initViewModel();
     }
 
-    private void initViewMOdel() {
+    private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ChangeLockPermissionViewModel.class);
         viewModel.locks.observe(this, locks -> {
             List<Data> dataList = new ArrayList<>();
@@ -46,6 +45,7 @@ public class ChangeLockPermissionActivity extends BaseActivity {
                 Data data = new Data(lock.getName(), lock.getMac(), false);
                 dataList.add(data);
             }
+            mBinding.viewNoData.setVisibility(locks.isEmpty() ?  View.VISIBLE: View.GONE);
             adapter.setData(dataList);
         });
     }

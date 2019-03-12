@@ -6,12 +6,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.ChangeLockPermissionActivity"
-        android:background="@android:color/white">
-
-        <include
-            android:id="@+id/include10"
-            layout="@layout/toolbar_white" />
+        android:background="@android:color/white"
+        tools:context=".activity.ChangeLockPermissionActivity">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_lockList"
@@ -24,19 +20,29 @@
 
         <Button
             android:id="@+id/nextStep"
+            style="?android:borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/base_16dp"
             android:layout_marginEnd="@dimen/base_16dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/select_bg_bt"
-            style="?android:borderlessButtonStyle"
+            android:enabled="false"
             android:text="@string/nextStep"
             android:textColor="@android:color/white"
-            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/view_no_data"
+            layout="@layout/layout_no_data"
+            app:layout_constraintTop_toBottomOf="@+id/include10"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <include
+            android:id="@+id/include10"
+            layout="@layout/toolbar_white" />
     </android.support.constraint.ConstraintLayout>
 </layout>
